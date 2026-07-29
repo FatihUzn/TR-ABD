@@ -506,6 +506,52 @@ footer{
     </div>
   </header>
 
+  <!-- YENİ: CHECKPOINT & OYUNLAŞTIRMA (KOMUTA MERKEZİ) -->
+  <section id="command-center">
+    <div class="sec-label">Günlük Operasyon Raporu</div>
+    
+    <div class="daily-alert" id="dailyAlert">
+      <span>⚠ DİKKAT: Bugün hedefin için henüz sisteme hiçbir rapor girmedin. Zinciri kırma!</span>
+    </div>
+
+    <div class="cmd-center">
+      <div class="cmd-top">
+        <div class="streak-box">
+          <span class="streak-fire" id="streakIcon">🔥</span>
+          <div>
+            <span class="streak-text"><span id="streakCount">0</span> Günlük Seri</span>
+            <span class="streak-sub">Operasyon Disiplini</span>
+          </div>
+        </div>
+        <div class="xp-box">
+          <div class="xp-level">Seviye <span id="levelCount">1</span></div>
+          <div class="xp-bar-bg"><div class="xp-bar-fill" id="xpFill"></div></div>
+          <div class="streak-sub" style="margin-top:4px;"><span id="xpCount">0</span>/100 XP</div>
+        </div>
+      </div>
+
+      <div class="cp-form">
+        <select id="cpTag">
+          <option value="Dil">DİL</option>
+          <option value="YKS">YKS</option>
+          <option value="Kasa">KASA</option>
+          <option value="İş">İŞ</option>
+          <option value="Genel">GENEL</option>
+        </select>
+        <input type="text" id="cpNote" placeholder="Bugün operasyon için ne yaptın?" maxlength="140">
+        <button type="button" onclick="addCheckpoint()">Raporla</button>
+      </div>
+      
+      <div class="cp-list" id="cpList">
+        <!-- Loglar buraya gelecek -->
+      </div>
+      
+      <div style="margin-top:14px; font-family:var(--mono); font-size:9.5px; color:var(--text-faint); text-align:right;">
+        *Bulut Senkronizasyonu (Faz-5) bekleniyor. Şu an geçici cihaz hafızasına kaydediliyor.
+      </div>
+    </div>
+  </section>
+
   <section>
     <div class="sec-label"><span class="i18n" data-tr="Günlük Ritim" data-de="Täglicher Rhythmus">Günlük Ritim</span> <span style="color:var(--amber); font-size:10px; margin-left:4px;">— TASLAK, İŞVERENLE NETLEŞTİRİLECEK</span></div>
     <div class="daily-timeline">
