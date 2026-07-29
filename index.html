@@ -437,6 +437,41 @@ footer{
   padding:3px 8px; margin:0 5px 5px 0;
 }
 .cert-source{font-family:var(--mono); font-size:9.5px; color:var(--text-faint); margin-top:8px;}
+
+/* ===== YENİ: KOMUTA MERKEZİ & CANLI SAAT (FAZ 3-4) ===== */
+.cmd-center{background:var(--panel); border:2px solid var(--purple); border-radius:12px; padding:20px; position:relative; overflow:hidden;}
+.cmd-center::after{content:""; position:absolute; inset:0; pointer-events:none; background:radial-gradient(circle at top right, var(--purple-glow), transparent 40%);}
+.cmd-top{display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:14px; margin-bottom:16px;}
+.streak-box{display:flex; align-items:center; gap:8px;}
+.streak-fire{font-size:24px; filter:drop-shadow(0 0 8px rgba(168,99,26,0.6)); transition: 0.3s;}
+.streak-text{font-family:var(--mono); font-weight:800; font-size:16px; color:var(--text);}
+.streak-sub{font-size:10px; color:var(--text-faint); text-transform:uppercase; letter-spacing:0.05em; display:block;}
+.xp-box{text-align:right;}
+.xp-level{font-family:var(--mono); font-weight:800; font-size:16px; color:var(--purple);}
+.xp-bar-bg{width:120px; height:6px; background:var(--panel-2); border-radius:3px; margin-top:4px; overflow:hidden; border:1px solid var(--line);}
+.xp-bar-fill{height:100%; background:var(--purple); width:0%; transition:width 0.5s ease;}
+.daily-alert{background:rgba(178,58,58,0.1); border:1px solid var(--red); color:var(--red); font-family:var(--mono); font-size:12px; padding:10px 14px; border-radius:8px; margin-bottom:16px; display:none; align-items:center; gap:8px; font-weight:600;}
+.daily-alert.active{display:flex;}
+.yks-clock-wrapper{display:flex; gap:10px; margin-bottom:12px; justify-content:center; flex-wrap:wrap;}
+.yks-unit{background:rgba(11,13,18,0.7); border:1px solid rgba(255,255,255,0.1); border-radius:8px; padding:12px 14px; text-align:center; min-width:68px; backdrop-filter:blur(4px);}
+.yks-num{font-family:var(--mono); font-weight:800; font-size:26px; color:#fffdf7; font-variant-numeric:tabular-nums; line-height:1;}
+.yks-label{font-family:var(--mono); font-size:9px; color:var(--text-faint); text-transform:uppercase; letter-spacing:0.1em; margin-top:6px;}
+
+/* ===== YENİ: MOBİL DİKEY KART DÜZELTMESİ (FAZ 2) ===== */
+@media(max-width: 640px) {
+  .roadmap-scroll{overflow:visible; padding:0; margin:0;}
+  .scroll-hint, .dim-row{display:none;}
+  .roadmap{flex-direction:column; padding:10px 0;}
+  .node{width:100%; padding:0 0 0 32px; margin-bottom:16px; scroll-snap-align:none; display:flex; align-items:center;}
+  .node::before{left:13px !important; top:0 !important; bottom:-16px; width:2px; height:auto; right:auto;}
+  .node:last-child::before{display:none;}
+  .dot{position:absolute; left:8px; top:50%; transform:translateY(-50%); margin:0;}
+  .node-card{flex:1; display:flex; justify-content:space-between; align-items:center; text-align:left; padding:12px 16px;}
+  .node-month{margin-bottom:0; font-size:11px;}
+  .node-cash{font-size:15px; margin-top:2px;}
+  .node-gold{margin-top:0; text-align:right;}
+  .node-flag{position:absolute; right:12px; top:-8px; font-size:16px; background:var(--panel); border-radius:50%;}
+}  
 </style>
 </head>
 <body>
