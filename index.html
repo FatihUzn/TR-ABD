@@ -821,61 +821,41 @@ footer{
     </div>
   </section>
 
+  <!-- CANLI YKS SAYACI (GÜN:SAAT:DK:SN) -->
   <section class="section-academic-bg">
-    <img class="academic-bg-img" src="https://commons.wikimedia.org/wiki/Special:FilePath/Johnston%20Gate%20(Harvard%20Yard)%20-%20IMG%208974.JPG" alt="" onerror="if(!this.dataset.fb){this.dataset.fb='1'; this.src='https://commons.wikimedia.org/wiki/Special:FilePath/Harvard%20Yard%20(23693124052).jpg';} else if(this.dataset.fb==='1'){this.dataset.fb='2'; this.src='https://commons.wikimedia.org/wiki/Special:FilePath/USA-Harvard%20University%20Yard1.jpg';} else {this.remove();}">
+    <img class="academic-bg-img" src="https://commons.wikimedia.org/wiki/Special:FilePath/Johnston%20Gate%20(Harvard%20Yard)%20-%20IMG%208974.JPG" alt="">
+    
     <div class="sec-label" style="display:flex;align-items:center;gap:10px;">
-      <span class="i18n" data-tr="YKS Sayaç &amp; Hedef Net" data-de="YKS-Countdown &amp; Ziel-Nettopunkte">YKS Sayaç &amp; Hedef Net</span>
-      <span style="color:var(--amber); font-size:10px;">— 2027 TAKVİMİ HENÜZ AÇIKLANMADI, TAHMİNİ</span>
+      <span style="color:#fffdf7;">2027 YKS Canlı Geri Sayım</span>
+      <span style="color:var(--amber); font-size:10px;">— HEDEF: İLK 100</span>
     </div>
-    <div class="hero-progress" style="margin-top:0;">
+
+    <!-- TİKK TAK SAAT KISMI -->
+    <div class="yks-clock-wrapper" id="yksClock">
+      <div class="yks-unit"><div class="yks-num" id="tDays">00</div><div class="yks-label">Gün</div></div>
+      <div class="yks-unit"><div class="yks-num" id="tHours">00</div><div class="yks-label">Saat</div></div>
+      <div class="yks-unit"><div class="yks-num" id="tMins">00</div><div class="yks-label">Dakika</div></div>
+      <div class="yks-unit"><div class="yks-num" id="tSecs">00</div><div class="yks-label">Saniye</div></div>
+    </div>
+
+    <div class="hero-progress" style="margin-top:14px;">
       <div class="hero-progress-top">
-        <span class="hero-progress-label">2027-YKS'YE KALAN SÜRE (TAHMİNİ SINAV: HAZİRAN 2027)</span>
-        <span class="hero-progress-pct" id="yksPct">–%</span>
+        <span class="hero-progress-label" style="color:rgba(255,255,255,0.7);">Genel Zaman Dilimi (Azalan)</span>
+        <span class="hero-progress-pct" id="yksPct" style="color:#fffdf7;">%100</span>
       </div>
-      <div class="hero-progress-track"><div class="hero-progress-fill" id="yksFill"></div></div>
-      <div class="hero-progress-sub" id="yksSub">hesaplanıyor…</div>
+      <div class="hero-progress-track" style="background:rgba(255,255,255,0.1); border-color:rgba(255,255,255,0.2);"><div class="hero-progress-fill" id="yksFill"></div></div>
     </div>
-    <div class="risk-panel" style="margin-top:14px;">
-      <div class="risk-item">
-        <div class="risk-icon">!</div>
-        <div class="risk-text"><b>2026-YKS zaten yapıldı</b> (20-21 Haziran 2026, sonuç 22 Temmuz 2026) — hedefin bir sonraki, 2027-YKS. ÖSYM 2027 takvimini genelde bir önceki yılın Kasım ayında açıklıyor; aşağıdaki tarihler 2026 takviminin aynı desenle ileri alınmış <b>tahminidir</b>, resmileşince güncelle.</div>
-      </div>
-    </div>
-    <div class="table-wrap" style="margin-top:14px;">
-      <table>
-        <thead><tr><th>Aşama</th><th>Tahmini Tarih (2027)</th><th>Not</th></tr></thead>
-        <tbody>
-          <tr><td>Başvuru başlangıç</td><td class="cash">~Şubat 2027 ilk haftası</td><td>2026'da 6 Şubat'tı</td></tr>
-          <tr><td>Başvuru bitiş</td><td class="cash">~Mart 2027 başı</td><td>2026'da 2 Mart'tı</td></tr>
-          <tr><td>Geç başvuru</td><td class="cash">~Mart 2027 (2. hafta)</td><td>ek ücretli</td></tr>
-          <tr class="milestone"><td>TYT</td><td class="cash">~Haziran 2027, 3. Cumartesi</td><td>2026'da 20 Haziran'dı</td></tr>
-          <tr class="milestone"><td>AYT / YDT</td><td class="cash">~Haziran 2027, ertesi Pazar</td><td>2026'da 21 Haziran'dı</td></tr>
-          <tr><td>Sonuç</td><td class="cash">~Temmuz 2027 sonu</td><td>2026'da 22 Temmuz'du</td></tr>
-        </tbody>
-      </table>
-    </div>
-    <div class="scenario" style="margin-top:14px;">
+    
+    <div class="scenario" style="margin-top:20px; background:rgba(11,13,18,0.75); border-color:rgba(255,255,255,0.1);">
       <div class="scen-row">
         <div class="scen-top">
-          <span class="scen-name">Barajı Zar Zor Geçen</span>
-          <span class="scen-nums">TYT ~75 net<span class="g">AYT (Say) ~35 net</span></span>
+          <span class="scen-name" style="color:#fffdf7;">Güvenli Marj (Türkiye İlk 100 Hedefi)</span>
+          <span class="scen-nums" style="color:#fffdf7;">TYT 115/120<span class="g" style="color:var(--purple-dim);">AYT (Say) 78-80</span></span>
         </div>
-        <div class="bar-track"><div class="bar-fill base" style="width:60%;"></div></div>
-        <div class="scen-prob">Son yıllarda ~25 bin civarı sırayla zar zor giriliyor (Mekatronik, 55 kişilik kontenjan) — marj neredeyse yok.</div>
-      </div>
-      <div class="scen-row">
-        <div class="scen-top">
-          <span class="scen-name">Güvenli Marj (Hedef · TR ilk 99–999)</span>
-          <span class="scen-nums">TYT 107-115/120<span class="g">AYT (Say) 76-79/80</span></span>
+        <div class="bar-track" style="background:rgba(255,255,255,0.1); border:none;"><div class="bar-fill max"></div></div>
+        <div class="scen-prob" style="color:rgba(255,255,255,0.6);">
+          Mekatronik (TU Berlin) için Türkiye'de ~99. sıraya tekabül eden, tartışmasız bir mükemmellik bandı. Şansa yer bırakmaz.
         </div>
-        <div class="bar-track"><div class="bar-fill max"></div></div>
-        <div class="scen-prob">Türkiye genelinde ~999. ile ~99. sıralar arası bir bant hedefleniyor — Mekatronik'in taban sırasının (~25 bin) çok üzerinde, gerçek bir güvenlik tamponu. ⚠ Bu kadar üst bir dilim için ÖSYM/rehberlik siteleri ayrı bir net tablosu yayınlamıyor — rakamlar geçmiş yıl "ilk 1000" verisinden ve bu dilimde net farkının çok az olduğu gözleminden türetilmiş kaba bir tahmindir, resmi değildir.</div>
-      </div>
-    </div>
-    <div class="risk-panel" style="margin-top:14px;">
-      <div class="risk-item">
-        <div class="risk-icon">!</div>
-        <div class="risk-text">Net→puan dönüşümü ÖSYM'nin o yılki katsayılarına göre her yıl değişir — yukarıdaki netler <b>kesin garanti değil, güvenlik payı bırakmak için kaba bir hedef bandıdır</b>. Konu bitirme hedefi: TYT+AYT (Say) müfredatını ~Şubat 2027'de bitirip Mart-Haziran 2027'yi tamamen deneme sınavı + eksik tekrarına ayırmak, ~10 aylık bir çalışma takvimi anlamına geliyor (bugünden itibaren).</div>
       </div>
     </div>
   </section>
