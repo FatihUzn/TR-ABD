@@ -964,7 +964,7 @@ footer{
 </div>
 
 <script>
-  // --- Dil değiştirme (TR/DE) ---
+  // --- Dil değiştirme (TR/DE) (Mevcut kodun korundu) ---
   function setLang(lang) {
     document.querySelectorAll('.i18n').forEach(el => {
       const val = el.getAttribute('data-' + lang);
@@ -976,35 +976,137 @@ footer{
     document.documentElement.setAttribute('lang', lang);
   }
 
-  // --- Checkpoint günlüğü (localStorage) ---
-  const CP_KEY = 'almanyaPaneli_checkpoints_v1';
+  // --- Sabit Tarihler ---
+  const JOB_START = new Date('2026-10-01T00:00:00');
+  const JOB_END   = new Date('2027-09-30T23:59:59');
+  const YKS_COUNT_START = new Date('2026-07-29T00:00:00'); 
+  const YKS_EXAM_DAY  = new Date('2027-06-19T10:15:00');
 
-  function loadCheckpoints() {
-    try {
-      const raw = localStorage.getItem(CP_KEY);
-      return raw ? JSON.parse(raw) : [];
-    } catch (e) { return []; }
-  }
-  function saveCheckpoints(list) {
-    try { localStorage.setItem(CP_KEY, JSON.stringify(list)); } catch (e) {
-      alert('Kaydedilemedi: tarayıcı deposu bu ortamda kullanılamıyor olabilir. Dosyayı indirip kendi tarayıcında açtığında çalışacaktır.');
+  // --- CANLI SAAT VE GERİ SAYIMLAR ---
+  function updateClocks() {
+    const now = new Date();
+    
+    // 1. Ana Operasyon Barı (Azalan)
+    const opTotal = JOB_END - JOB_START;
+    const opElapsed = now - JOB_START;
+    let opRemainingPct = 100 - ((opElapsed / opTotal) * 100);
+    opRemainingPct = Math.max(0, Math.min(100, opRemainingPct));
+    
+    const fillEl = document.getElementById('progressFill');
+    if(fillEl) {
+        fillEl.style.width = opRemainingPct + '%';
+        document.getElementById('progressPct').textContent = '%' + Math.round(opRemainingPct);
+        fillEl.className = 'hero-progress-fill ' + (opRemainingPct >= 50 ? 'lvl-safe' : opRemainingPct >= 20 ? 'lvl-watch' : 'lvl-critical');
+    }
+
+    // 2. YKS TikTak Saat & Bar (Azalan)
+    const yksDiff = YKS_EXAM_DAY - now;
+    if (yksDiff > 0) {
+      const d = Math.floor(yksDiff / (1000 * 60 * 60 * 24));
+      const h = Math.floor((yksDiff / (1000 * 60 * 60)) % 24);
+      const m = Math.floor((yksDiff / 1000 / 60) % 60);
+      const s = Math.floor((yksDiff / 1000) % 60);
+      
+      document.getElementById('tDays').textContent = d.toString().padStart(2, '0');
+      document.getElementById('tHours').textContent = h.toString().padStart(2, '0');
+      document.getElementById('tMins').textContent = m.toString().padStart(2, '0');
+      document.getElementById('tSecs').textContent = s.toString().padStart(2, '0');
+
+      const yksTotal = YKS_EXAM_DAY - YKS_COUNT_START;
+      const yksElapsed = now - YKS_COUNT_START;
+      let yksRemainingPct = 100 - ((yksElapsed / yksTotal) * 100);
+      yksRemainingPct = Math.max(0, Math.min(100, yksRemainingPct));
+      
+      const yFill = document.getElementById('yksFill');
+      if(yFill) {
+          yFill.style.width = yksRemainingPct + '%';
+          document.getElementById('yksPct').textContent = '%' + Math.round(yksRemainingPct);
+          yFill.className = 'hero-progress-fill ' + (yksRemainingPct >= 50 ? 'lvl-safe' : yksRemainingPct >= 20 ? 'lvl-watch' : 'lvl-critical');
+      }
     }
   }
+  setInterval(updateClocks, 1000);
+  updateClocks();
+
+  // --- CHECKPOINT & GAMIFICATION LOKAL HAFIZA ---
+  const CP_KEY = 'almanya_cmd_v2';
+
+  function loadCheckpoints() {
+    try { return JSON.parse(localStorage.getItem(CP_KEY)) || []; } catch (e) { return []; }
+  }
+  function saveCheckpoints(list) {
+    localStorage.setItem(CP_KEY, JSON.stringify(list));
+  }
+
+  function checkDailyAlert(list) {
+    // Bugün girilmiş kayıt var mı kontrolü
+    const now = new Date();
+    const todayStr = now.toDateString();
+    const hasLogToday = list.some(cp => new Date(cp.ts).toDateString() === todayStr);
+    const alertBox = document.getElementById('dailyAlert');
+    if (!hasLogToday) {
+      alertBox.classList.add('active');
+    } else {
+      alertBox.classList.remove('active');
+    }
+  }
+
+  function calculateGamification(list) {
+    // Toplam XP (Her kayıt 15 XP)
+    const totalXP = list.length * 15;
+    const level = Math.floor(totalXP / 100) + 1;
+    const currentXP = totalXP % 100;
+    
+    document.getElementById('levelCount').textContent = level;
+    document.getElementById('xpCount').textContent = currentXP;
+    document.getElementById('xpFill').style.width = currentXP + '%';
+
+    // Streak (Seri) Hesaplama
+    let streak = 0;
+    if (list.length > 0) {
+      const dates = [...new Set(list.map(cp => new Date(cp.ts).toDateString()))].sort((a,b) => new Date(b) - new Date(a));
+      const today = new Date();
+      today.setHours(0,0,0,0);
+      let expectedDate = new Date(today);
+      
+      // Eğer en son kayıt dün veya bugünse seriyi say
+      const lastLogDate = new Date(dates[0]);
+      const diffDays = Math.floor((today - lastLogDate) / 86400000);
+      
+      if (diffDays <= 1) {
+        for (let i = 0; i < dates.length; i++) {
+          if (new Date(dates[i]).getTime() === expectedDate.getTime() || (i===0 && diffDays===1)) {
+            streak++;
+            expectedDate.setDate(expectedDate.getDate() - 1);
+          } else { break; }
+        }
+      }
+    }
+    document.getElementById('streakCount').textContent = streak;
+    const fire = document.getElementById('streakIcon');
+    fire.style.filter = streak > 2 ? 'drop-shadow(0 0 12px red)' : 'drop-shadow(0 0 4px rgba(168,99,26,0.6))';
+    fire.style.opacity = streak === 0 ? '0.3' : '1';
+  }
+
   function renderCheckpoints() {
     const list = loadCheckpoints().sort((a, b) => b.ts - a.ts);
     const el = document.getElementById('cpList');
+    
+    checkDailyAlert(list);
+    calculateGamification(list);
+
     if (!list.length) {
-      el.innerHTML = '<div class="cp-empty">Henüz checkpoint yok. İlk kaydını yukarıdan ekle.</div>';
+      el.innerHTML = '<div class="cp-empty">Komuta merkezinde henüz rapor yok. İlk raporunu ilet.</div>';
       return;
     }
-    el.innerHTML = list.map(cp => {
+    el.innerHTML = list.slice(0, 10).map(cp => {
       const d = new Date(cp.ts);
-      const dateStr = d.toLocaleDateString('tr-TR', { day: '2-digit', month: 'short', year: 'numeric' });
+      const dateStr = d.toLocaleDateString('tr-TR', { day: '2-digit', month: 'short', hour: '2-digit', minute:'2-digit' });
       return '<div class="cp-item">' +
         '<span class="cp-tag">' + escapeHtml(cp.tag) + '</span>' +
         '<div class="cp-body"><div class="cp-date">' + dateStr + '</div>' +
         '<div class="cp-note">' + escapeHtml(cp.note) + '</div></div>' +
-        '<button class="cp-del" title="Sil" onclick="deleteCheckpoint(' + cp.id + ')">✕</button>' +
+        '<button class="cp-del" onclick="deleteCheckpoint(' + cp.id + ')">✕</button>' +
         '</div>';
     }).join('');
   }
@@ -1017,7 +1119,7 @@ footer{
     const noteEl = document.getElementById('cpNote');
     const tagEl = document.getElementById('cpTag');
     const note = noteEl.value.trim();
-    if (!note) { noteEl.focus(); return; }
+    if (!note) return;
     const list = loadCheckpoints();
     list.push({ id: Date.now(), ts: Date.now(), tag: tagEl.value, note: note });
     saveCheckpoints(list);
@@ -1029,140 +1131,28 @@ footer{
     saveCheckpoints(list);
     renderCheckpoints();
   }
-  function exportCheckpoints() {
-    const list = loadCheckpoints();
-    const blob = new Blob([JSON.stringify(list, null, 2)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'almanya-checkpoints-' + new Date().toISOString().slice(0, 10) + '.json';
-    a.click();
-    URL.revokeObjectURL(url);
-  }
-  function importCheckpoints(evt) {
-    const file = evt.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = () => {
-      try {
-        const imported = JSON.parse(reader.result);
-        if (!Array.isArray(imported)) throw new Error('geçersiz format');
-        const existing = loadCheckpoints();
-        const existingIds = new Set(existing.map(c => c.id));
-        const merged = existing.concat(imported.filter(c => !existingIds.has(c.id)));
-        saveCheckpoints(merged);
-        renderCheckpoints();
-      } catch (e) {
-        alert('Dosya okunamadı — geçerli bir yedek JSON dosyası seç.');
-      }
-      evt.target.value = '';
-    };
-    reader.readAsText(file);
-  }
   document.getElementById('cpNote').addEventListener('keydown', e => {
     if (e.key === 'Enter') addCheckpoint();
   });
+  
   renderCheckpoints();
 
-  // Tek satır: gerçek iş başlama tarihin farklıysa burayı güncelle.
-  const JOB_START = new Date('2026-10-01T00:00:00');
-  const JOB_END   = new Date('2027-09-30T23:59:59');
-  const today = new Date();
-
-  // --- Hero ilerleme yüzdesi ---
-  const pctEl = document.getElementById('progressPct');
-  const fillEl = document.getElementById('progressFill');
-  const subEl = document.getElementById('progressSub');
-  const totalMs = JOB_END - JOB_START;
-  const elapsedMs = today - JOB_START;
-  let pct = Math.round((elapsedMs / totalMs) * 100);
-  pct = Math.max(0, Math.min(100, pct));
-  let remainingPct = 100 - pct;
-
-  if (today < JOB_START) {
-    const daysLeft = Math.ceil((JOB_START - today) / 86400000);
-    remainingPct = 100;
-    pctEl.textContent = '%100';
-    subEl.textContent = 'başlangıca ' + daysLeft + ' gün · 01.10.2026';
-  } else if (today > JOB_END) {
-    remainingPct = 0;
-    pctEl.textContent = '%0';
-    subEl.textContent = 'operasyon tamamlandı 🎓';
-  } else {
-    const daysLeft = Math.ceil((JOB_END - today) / 86400000);
-    pctEl.textContent = '%' + remainingPct;
-    subEl.textContent = daysLeft + ' gün kaldı · başlangıç: 01.10.2026';
-  }
-  const setFillLevel = (el, remaining) => {
-    el.classList.remove('lvl-safe', 'lvl-watch', 'lvl-critical');
-    el.classList.add(remaining >= 50 ? 'lvl-safe' : remaining >= 20 ? 'lvl-watch' : 'lvl-critical');
-  };
-  setFillLevel(fillEl, remainingPct);
-  requestAnimationFrame(() => { fillEl.style.width = remainingPct + '%'; });
-
-  // --- YKS 2027 sayaç (tahmini tarihler — resmi takvim açıklanınca güncelle) ---
-  // Not: yüzde/ilerleme çubuğu, planın başladığı günden (bugünden) sınav gününe kadarki
-  // TÜM süreyi baz alır — sadece dar başvuru penceresini değil. Böylece sayaç ilk günden
-  // itibaren gerçek bir ilerleme gösterir, "başvuru başlamadı" diye 0'da takılı kalmaz.
-  const YKS_COUNT_START = new Date('2026-07-29T00:00:00'); // planın başlangıç referansı
-  const YKS_APP_START = new Date('2027-02-05T14:30:00');
-  const YKS_EXAM_DAY  = new Date('2027-06-19T10:15:00');
-  const yksPctEl = document.getElementById('yksPct');
-  const yksFillEl = document.getElementById('yksFill');
-  const yksSubEl = document.getElementById('yksSub');
-  if (yksPctEl) {
-    const yksTotal = YKS_EXAM_DAY - YKS_COUNT_START;
-    const yksElapsed = today - YKS_COUNT_START;
-    let yksPct = Math.round((yksElapsed / yksTotal) * 100);
-    yksPct = Math.max(0, Math.min(100, yksPct));
-    let yksRemainingPct = 100 - yksPct;
-    if (today > YKS_EXAM_DAY) {
-      yksRemainingPct = 0;
-      yksPctEl.textContent = '%0';
-      yksSubEl.textContent = 'sınav tarihi geçti — takvimi kontrol et';
-    } else {
-      const d = Math.ceil((YKS_EXAM_DAY - today) / 86400000);
-      const appD = Math.ceil((YKS_APP_START - today) / 86400000);
-      yksPctEl.textContent = '%' + yksRemainingPct;
-      yksSubEl.textContent = 'tahmini sınava ' + d + ' gün' + (appD > 0 ? ' · başvuruya ' + appD + ' gün' : '');
-    }
-    setFillLevel(yksFillEl, yksRemainingPct);
-    requestAnimationFrame(() => { yksFillEl.style.width = yksRemainingPct + '%'; });
-  }
-
-
-  // --- Roadmap node durumları (done / now) ---
+  // --- NODE DURUMLARI (Yol haritaları için now/done) ---
   document.querySelectorAll('.roadmap').forEach(roadmap => {
     const nodes = Array.from(roadmap.querySelectorAll('.node[data-date]'));
     let determined = false;
+    const now = new Date();
     nodes.forEach(node => {
       const nodeDate = new Date(node.dataset.date + 'T23:59:59');
       node.classList.remove('done', 'now');
-      if (today > nodeDate) {
+      if (now > nodeDate) {
         node.classList.add('done');
       } else if (!determined) {
         node.classList.add('now');
         determined = true;
       }
     });
-    if (!determined && nodes.length) {
-      nodes[nodes.length - 1].classList.add('now');
-    }
-  });
-
-  // --- Yatay kaydırılabilir roadmap'ler için kenar ipucu (mobil) ---
-  document.querySelectorAll('.roadmap-outer').forEach(outer => {
-    const scroller = outer.querySelector('.roadmap-scroll');
-    if (!scroller) return;
-    const update = () => {
-      const canScroll = scroller.scrollWidth > scroller.clientWidth + 4;
-      const atEnd = scroller.scrollLeft + scroller.clientWidth >= scroller.scrollWidth - 4;
-      outer.classList.toggle('can-scroll', canScroll);
-      outer.classList.toggle('at-end', atEnd);
-    };
-    scroller.addEventListener('scroll', update, { passive: true });
-    window.addEventListener('resize', update);
-    update();
+    if (!determined && nodes.length) nodes[nodes.length - 1].classList.add('now');
   });
 </script>
 </body>
