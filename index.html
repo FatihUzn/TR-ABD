@@ -48,54 +48,32 @@
     </div>
   </header>
 
-  <!-- CANLI KUR TABLOSU (key gerektirmez: Frankfurter/ECB + goldprice.org) -->
+  <!-- CANLI KUR (key gerektirmez: Frankfurter/ECB, yedek: open.er-api.com + goldprice.org) -->
   <section id="live-rates">
-    <div class="sec-label">💱 Anlık Kur Tablosu <span class="rate-updated" id="rateUpdatedAt"></span></div>
+    <div class="sec-label">💱 Anlık Kur <span class="rate-updated" id="rateUpdatedAt"></span></div>
 
-    <div class="rate-table">
-      <div class="rate-row">
-        <div class="rate-left"><span class="rate-flag">🇺🇸</span><div class="rate-name"><span class="rate-code">USD</span><span class="rate-full">Amerikan Doları</span></div></div>
-        <div class="rate-right">
-          <div class="rate-pill rate-al"><span class="rate-pill-label">AL</span><span class="rate-pill-val" id="rate-USD-al">–</span></div>
-          <div class="rate-pill rate-sat"><span class="rate-pill-label">SAT</span><span class="rate-pill-val" id="rate-USD-sat">–</span></div>
-        </div>
+    <div class="rate-hero">
+      <div class="rate-hero-item">
+        <span class="rate-hero-flag">🇪🇺</span>
+        <span class="rate-hero-eq">1 € =</span>
+        <span class="rate-hero-val" id="rate-EUR-mid">–</span>
+        <span class="rate-hero-cur">₺</span>
       </div>
-      <div class="rate-row">
-        <div class="rate-left"><span class="rate-flag">🇪🇺</span><div class="rate-name"><span class="rate-code">EUR</span><span class="rate-full">Avrupa Para Birimi</span></div></div>
-        <div class="rate-right">
-          <div class="rate-pill rate-al"><span class="rate-pill-label">AL</span><span class="rate-pill-val" id="rate-EUR-al">–</span></div>
-          <div class="rate-pill rate-sat"><span class="rate-pill-label">SAT</span><span class="rate-pill-val" id="rate-EUR-sat">–</span></div>
-        </div>
-      </div>
-      <div class="rate-row">
-        <div class="rate-left"><span class="rate-flag">🥇</span><div class="rate-name"><span class="rate-code">XAU</span><span class="rate-full">Gram Altın</span></div></div>
-        <div class="rate-right">
-          <div class="rate-pill rate-al"><span class="rate-pill-label">AL</span><span class="rate-pill-val" id="rate-XAU-al">–</span></div>
-          <div class="rate-pill rate-sat"><span class="rate-pill-label">SAT</span><span class="rate-pill-val" id="rate-XAU-sat">–</span></div>
-        </div>
-      </div>
-      <div class="rate-row">
-        <div class="rate-left"><span class="rate-flag">🇬🇧</span><div class="rate-name"><span class="rate-code">GBP</span><span class="rate-full">İngiliz Sterlini</span></div></div>
-        <div class="rate-right">
-          <div class="rate-pill rate-al"><span class="rate-pill-label">AL</span><span class="rate-pill-val" id="rate-GBP-al">–</span></div>
-          <div class="rate-pill rate-sat"><span class="rate-pill-label">SAT</span><span class="rate-pill-val" id="rate-GBP-sat">–</span></div>
-        </div>
-      </div>
-      <div class="rate-row">
-        <div class="rate-left"><span class="rate-flag">🇨🇭</span><div class="rate-name"><span class="rate-code">CHF</span><span class="rate-full">İsviçre Frangı</span></div></div>
-        <div class="rate-right">
-          <div class="rate-pill rate-al"><span class="rate-pill-label">AL</span><span class="rate-pill-val" id="rate-CHF-al">–</span></div>
-          <div class="rate-pill rate-sat"><span class="rate-pill-label">SAT</span><span class="rate-pill-val" id="rate-CHF-sat">–</span></div>
-        </div>
-      </div>
-      <div class="rate-row">
-        <div class="rate-left"><span class="rate-flag">🇦🇺</span><div class="rate-name"><span class="rate-code">AUD</span><span class="rate-full">Avustralya Doları</span></div></div>
-        <div class="rate-right">
-          <div class="rate-pill rate-al"><span class="rate-pill-label">AL</span><span class="rate-pill-val" id="rate-AUD-al">–</span></div>
-          <div class="rate-pill rate-sat"><span class="rate-pill-label">SAT</span><span class="rate-pill-val" id="rate-AUD-sat">–</span></div>
-        </div>
+      <div class="rate-hero-item">
+        <span class="rate-hero-flag">🇺🇸</span>
+        <span class="rate-hero-eq">1 $ =</span>
+        <span class="rate-hero-val" id="rate-USD-mid">–</span>
+        <span class="rate-hero-cur">₺</span>
       </div>
     </div>
+
+    <div class="rate-mini-row">
+      <div class="rate-mini"><span class="rate-mini-label">🥇 gr altın</span><span class="rate-mini-val" id="rate-XAU-mid">–</span></div>
+      <div class="rate-mini"><span class="rate-mini-label">🇬🇧 GBP</span><span class="rate-mini-val" id="rate-GBP-mid">–</span></div>
+      <div class="rate-mini"><span class="rate-mini-label">🇨🇭 CHF</span><span class="rate-mini-val" id="rate-CHF-mid">–</span></div>
+      <div class="rate-mini"><span class="rate-mini-label">🇦🇺 AUD</span><span class="rate-mini-val" id="rate-AUD-mid">–</span></div>
+    </div>
+    <div class="rate-error" id="rateError" style="display:none;">Kur verisi alınamadı — sayfayı yenile ya da birazdan tekrar dene.</div>
 
     <div class="net-form" style="margin-top:14px;">
       <div class="net-group-label">Kasandaki Toplam Tutar (EUR)</div>
@@ -106,7 +84,7 @@
     </div>
 
     <div style="margin-top:10px; font-family:var(--mono); font-size:9.5px; color:var(--text-faint); text-align:right;">
-      *Orta kur Avrupa Merkez Bankası (Frankfurter API) ve goldprice.org anlık verisinden çekilir; AL/SAT değerleri bu orta kur üzerine yaklaşık bir marj eklenerek gösterilir, belirli bir bankanın kesin fiyatı değildir — birkaç dakika gecikmeli olabilir, yatırım tavsiyesi değildir.
+      *Orta kur Avrupa Merkez Bankası (Frankfurter API, yedek: open.er-api.com) ve goldprice.org anlık verisinden çekilir; belirli bir bankanın kesin fiyatı değildir — birkaç dakika gecikmeli olabilir, yatırım tavsiyesi değildir.
     </div>
   </section>
 

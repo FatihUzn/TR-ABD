@@ -399,61 +399,88 @@
     if (!determined && nodes.length) nodes[nodes.length - 1].classList.add('now');
   });
 
-  // --- ANLIK KUR TABLOSU (key gerektirmez) ---
+  // --- ANLIK KUR (key gerektirmez) ---
   // Orta kur: Frankfurter API (Avrupa Merkez Bankası verisi, CORS açık, key gerekmez)
+  // Frankfurter engellenir/başarısız olursa yedek: open.er-api.com (o da key gerektirmez)
   // Altın: goldprice.org'un herkese açık, key gerektirmeyen veri akışı (resmi olmayan ama yaygın kullanılan bir kaynak)
-  // AL/SAT: gerçek bir bankanın kesin fiyatı değil, orta kur üzerine yaklaşık bir marj eklenerek üretilir.
-  const RATE_SPREAD = 0.006;  // dövizler için ~%0.6 AL-SAT farkı
-  const GOLD_SPREAD = 0.012;  // fiziki altın için biraz daha geniş marj
-
   function fmtRate(n, decimals) {
     return n.toLocaleString('tr-TR', { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
   }
 
-  function setRatePill(code, mid, spread, decimals) {
-    const alEl = document.getElementById('rate-' + code + '-al');
-    const satEl = document.getElementById('rate-' + code + '-sat');
-    if (mid === null || isNaN(mid)) {
-      if (alEl) alEl.textContent = '—';
-      if (satEl) satEl.textContent = '—';
-      return;
+  function setRateMid(code, mid, decimals) {
+    const el = document.getElementById('rate-' + code + '-mid');
+    if (!el) return;
+    el.textContent = (mid === null || isNaN(mid)) ? '—' : fmtRate(mid, decimals);
+  }
+
+  async function fetchFxRates() {
+    // 1. deneme: Frankfurter (ECB)
+    try {
+      const r = await fetch('https://api.frankfurter.app/latest?from=EUR&to=USD,TRY,GBP,CHF,AUD');
+      if (!r.ok) throw new Error('frankfurter http ' + r.status);
+      const d = await r.json();
+      if (!d.rates || !d.rates.TRY) throw new Error('frankfurter: TRY yok');
+      const eurTry = d.rates.TRY;
+      return {
+        EURTRY: eurTry,
+        USDTRY: eurTry / d.rates.USD,
+        GBPTRY: eurTry / d.rates.GBP,
+        CHFTRY: eurTry / d.rates.CHF,
+        AUDTRY: eurTry / d.rates.AUD
+      };
+    } catch (e) {
+      console.warn('Frankfurter başarısız, yedek kaynağa geçiliyor:', e);
     }
-    if (alEl) alEl.textContent = fmtRate(mid * (1 - spread / 2), decimals);
-    if (satEl) satEl.textContent = fmtRate(mid * (1 + spread / 2), decimals);
+    // 2. deneme (yedek): open.er-api.com
+    try {
+      const r = await fetch('https://open.er-api.com/v6/latest/EUR');
+      if (!r.ok) throw new Error('open.er-api http ' + r.status);
+      const d = await r.json();
+      if (!d.rates || !d.rates.TRY) throw new Error('open.er-api: TRY yok');
+      const eurTry = d.rates.TRY;
+      return {
+        EURTRY: eurTry,
+        USDTRY: eurTry / d.rates.USD,
+        GBPTRY: eurTry / d.rates.GBP,
+        CHFTRY: eurTry / d.rates.CHF,
+        AUDTRY: eurTry / d.rates.AUD
+      };
+    } catch (e) {
+      console.warn('Yedek kur kaynağı da başarısız:', e);
+      return null;
+    }
   }
 
   async function loadLiveRates() {
     const updEl = document.getElementById('rateUpdatedAt');
-    if (!document.getElementById('rate-USD-al')) return; // bu bölüm sayfada yoksa çık
+    const errEl = document.getElementById('rateError');
+    if (!document.getElementById('rate-USD-mid')) return; // bu bölüm sayfada yoksa çık
 
-    try {
-      const r = await fetch('https://api.frankfurter.app/latest?from=EUR&to=USD,TRY,GBP,CHF,AUD');
-      const d = await r.json();
-      const eurTry = d.rates.TRY;
-      _liveRates.EURTRY = eurTry;
-      _liveRates.USDTRY = eurTry / d.rates.USD;
-      _liveRates.GBPTRY = eurTry / d.rates.GBP;
-      _liveRates.CHFTRY = eurTry / d.rates.CHF;
-      _liveRates.AUDTRY = eurTry / d.rates.AUD;
-
-      setRatePill('USD', _liveRates.USDTRY, RATE_SPREAD, 4);
-      setRatePill('EUR', _liveRates.EURTRY, RATE_SPREAD, 4);
-      setRatePill('GBP', _liveRates.GBPTRY, RATE_SPREAD, 4);
-      setRatePill('CHF', _liveRates.CHFTRY, RATE_SPREAD, 4);
-      setRatePill('AUD', _liveRates.AUDTRY, RATE_SPREAD, 4);
-    } catch (e) {
-      ['USD', 'EUR', 'GBP', 'CHF', 'AUD'].forEach(code => setRatePill(code, null));
+    const fx = await fetchFxRates();
+    if (fx) {
+      Object.assign(_liveRates, fx);
+      setRateMid('USD', fx.USDTRY, 4);
+      setRateMid('EUR', fx.EURTRY, 4);
+      setRateMid('GBP', fx.GBPTRY, 4);
+      setRateMid('CHF', fx.CHFTRY, 4);
+      setRateMid('AUD', fx.AUDTRY, 4);
+      if (errEl) errEl.style.display = 'none';
+    } else {
+      ['USD', 'EUR', 'GBP', 'CHF', 'AUD'].forEach(code => setRateMid(code, null));
+      if (errEl) errEl.style.display = 'block';
     }
 
     try {
       const r2 = await fetch('https://data-asg.goldprice.org/dbXRates/TRY');
+      if (!r2.ok) throw new Error('goldprice http ' + r2.status);
       const d2 = await r2.json();
       const ounceTry = d2.items[0].xauPrice; // TRY / ons
       _liveRates.goldTRY = ounceTry / 31.1035; // TRY / gram
       _liveRates.goldEUR = _liveRates.EURTRY ? _liveRates.goldTRY / _liveRates.EURTRY : null;
-      setRatePill('XAU', _liveRates.goldTRY, GOLD_SPREAD, 2);
+      setRateMid('XAU', _liveRates.goldTRY, 2);
     } catch (e) {
-      setRatePill('XAU', null);
+      console.warn('Altın kuru alınamadı:', e);
+      setRateMid('XAU', null);
     }
 
     if (updEl) {
