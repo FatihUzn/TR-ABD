@@ -314,8 +314,8 @@
       {
         label: 'Plan (sabit 114,08 €/gr)',
         data: planPoints,
-        borderColor: '#a996ea',
-        backgroundColor: 'rgba(109,79,224,0.08)',
+        borderColor: '#fde68a', /* Eski mor yerine açık altın */
+        backgroundColor: 'rgba(253, 230, 138, 0.08)',
         borderDash: [5, 4],
         pointRadius: 2,
         borderWidth: 2,
@@ -325,10 +325,10 @@
       {
         label: 'Bugünün Kuruyla (canlı)',
         data: todayPoints,
-        borderColor: '#147a55',
-        backgroundColor: 'rgba(20,122,85,0.12)',
+        borderColor: '#fbbf24', /* Eski mor yerine koyu altın/amber */
+        backgroundColor: 'rgba(251, 191, 36, 0.12)',
         pointRadius: 3,
-        pointBackgroundColor: '#147a55',
+        pointBackgroundColor: '#fbbf24',
         borderWidth: 2.5,
         tension: 0.15,
         fill: false
