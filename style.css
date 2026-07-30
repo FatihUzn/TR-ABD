@@ -262,24 +262,32 @@ details.acc-section[open] > .acc-summary .acc-chevron{transform:rotate(180deg);}
 .stat-value.purple{color:var(--purple);}
 .stat-value.green{color:var(--green);}
 
-.rate-hero{display:flex; gap:10px; flex-wrap:wrap;}
-.rate-hero-item{flex:1; min-width:150px; background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:14px 16px;}
-.rate-hero-top{display:flex; align-items:baseline; justify-content:space-between; gap:8px; margin-bottom:6px;}
+.rate-panel{border:1px solid var(--line); border-radius:12px; overflow:hidden; background:var(--panel);}
+.rate-row-top{display:flex;}
+.rate-row-bottom{display:flex; border-top:1px solid var(--line);}
+.rate-cell{flex:1; min-width:0;}
+.rate-cell + .rate-cell{border-left:1px solid var(--line);}
+.rate-cell-lg{padding:16px 20px;}
+.rate-cell-top{display:flex; align-items:baseline; justify-content:space-between; gap:8px; margin-bottom:6px;}
 .rate-hero-code{font-family:var(--mono); font-weight:800; font-size:11px; color:var(--purple); letter-spacing:0.08em;}
 .rate-hero-eq{font-family:var(--mono); font-size:11px; color:var(--text-faint);}
 .rate-hero-main{display:flex; align-items:baseline; gap:6px;}
 .rate-hero-val{font-family:var(--mono); font-weight:800; font-size:26px; color:var(--text); font-variant-numeric:tabular-nums; line-height:1;}
 .rate-hero-cur{font-family:var(--mono); font-size:14px; color:var(--text-dim);}
 
-.rate-mini-row{display:flex; gap:8px; flex-wrap:wrap; margin-top:10px;}
-.rate-mini{flex:1; min-width:90px; display:flex; flex-direction:column; align-items:center; gap:3px; background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:9px 6px;}
+.rate-cell-sm{display:flex; flex-direction:column; align-items:center; gap:3px; padding:10px 6px;}
 .rate-mini-label{font-family:var(--mono); font-size:9.5px; color:var(--text-faint); text-transform:uppercase; letter-spacing:0.05em;}
 .rate-mini-val{font-family:var(--mono); font-weight:700; font-size:13px; color:var(--text); font-variant-numeric:tabular-nums;}
 
 .rate-error{margin-top:10px; font-family:var(--mono); font-size:11px; color:var(--red); text-align:center;}
 
 @media(max-width:420px){
-  .rate-hero-val{font-size:21px;}
+  .rate-hero-val{font-size:20px;}
+  .rate-cell-lg{padding:12px 14px;}
+  .rate-row-bottom{flex-wrap:wrap;}
+  .rate-cell-sm{flex:1 1 50%; min-width:50%;}
+  .rate-cell-sm:nth-child(3){border-left:none; border-top:1px solid var(--line);}
+  .rate-cell-sm:nth-child(4){border-top:1px solid var(--line);}
 }
 .stat-sub{font-size:11px; color:var(--text-dim); margin-top:4px;}
 
@@ -417,11 +425,12 @@ footer{
   background:var(--purple); color:#faf7ef; font-weight:700; border:none; border-radius:8px;
   padding:0 16px; cursor:pointer;
 }
-.cp-list{display:flex; flex-direction:column; gap:8px;}
+.cp-list{display:flex; flex-direction:column;}
 .cp-item{
-  display:flex; gap:12px; align-items:flex-start; background:var(--panel); border:1px solid var(--line);
-  border-radius:10px; padding:10px 14px;
+  display:flex; gap:12px; align-items:flex-start; border-bottom:1px solid var(--line);
+  padding:11px 2px;
 }
+.cp-item:last-child{border-bottom:none;}
 .cp-tag{
   font-family:var(--mono); font-size:9.5px; text-transform:uppercase; letter-spacing:0.05em;
   color:var(--purple); background:rgba(109,79,224,0.1); border:1px solid var(--purple-dim);
@@ -553,17 +562,22 @@ footer{
 
 /* ===== YENİ: KOMUTA MERKEZİ & CANLI SAAT (FAZ 3-4) ===== */
 .cmd-center{background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:20px;}
-.cmd-top{display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:16px;}
-.streak-box{display:flex; align-items:center; gap:10px; background:var(--panel-2); border:1px solid var(--line); border-radius:10px; padding:10px 14px; flex:1; min-width:150px;}
+.cmd-top{display:flex; border:1px solid var(--line); border-radius:10px; margin-bottom:16px; overflow:hidden;}
+.streak-box{display:flex; align-items:center; gap:10px; padding:12px 16px; flex:1; min-width:0;}
 .streak-fire{font-size:20px;}
 .streak-text{font-family:var(--mono); font-weight:800; font-size:15px; color:var(--text);}
 .streak-sub{font-size:10px; color:var(--text-faint); text-transform:uppercase; letter-spacing:0.05em; display:block;}
-.xp-box{text-align:right; background:var(--panel-2); border:1px solid var(--line); border-radius:10px; padding:10px 14px; flex:1; min-width:130px;}
+.xp-box{text-align:right; padding:12px 16px; flex:1; min-width:0; border-left:1px solid var(--line);}
 .xp-level{font-family:var(--mono); font-weight:700; font-size:14px; color:var(--text);}
-.xp-bar-bg{width:100%; max-width:120px; height:5px; background:var(--panel); border-radius:3px; margin:4px 0 0 auto; overflow:hidden; border:1px solid var(--line);}
+.xp-bar-bg{width:100%; max-width:120px; height:5px; background:var(--panel-2); border-radius:3px; margin:4px 0 0 auto; overflow:hidden; border:1px solid var(--line);}
 .xp-bar-fill{height:100%; background:var(--purple-dim); width:0%; transition:width 0.5s ease;}
 .daily-alert{background:rgba(178,58,58,0.1); border:1px solid var(--red); color:var(--red); font-family:var(--mono); font-size:12px; padding:10px 14px; border-radius:8px; margin-bottom:16px; display:none; align-items:center; gap:8px; font-weight:600;}
 .daily-alert.active{display:flex;}
+@media(max-width:420px){
+  .cmd-top{flex-direction:column;}
+  .xp-box{border-left:none; border-top:1px solid var(--line); text-align:left;}
+  .xp-bar-bg{margin-left:0;}
+}
 .yks-clock-wrapper{display:flex; gap:10px; margin-bottom:12px; justify-content:center; flex-wrap:wrap;}
 .yks-unit{background:rgba(11,13,18,0.7); border:1px solid rgba(255,255,255,0.1); border-radius:8px; padding:12px 14px; text-align:center; min-width:68px; backdrop-filter:blur(4px);}
 .yks-num{font-family:var(--mono); font-weight:800; font-size:26px; color:#fffdf7; font-variant-numeric:tabular-nums; line-height:1;}

@@ -52,28 +52,29 @@
   <section id="live-rates">
     <div class="sec-label">💱 Anlık Kur <span class="rate-updated" id="rateUpdatedAt"></span></div>
 
-    <div class="rate-hero">
-      <div class="rate-hero-item">
-        <div class="rate-hero-top">
-          <span class="rate-hero-code">EUR</span>
-          <span class="rate-hero-eq">1 € =</span>
+    <div class="rate-panel">
+      <div class="rate-row-top">
+        <div class="rate-cell rate-cell-lg">
+          <div class="rate-cell-top">
+            <span class="rate-hero-code">EUR</span>
+            <span class="rate-hero-eq">1 € =</span>
+          </div>
+          <div class="rate-hero-main"><span class="rate-hero-val" id="rate-EUR-mid">–</span><span class="rate-hero-cur">₺</span></div>
         </div>
-        <div class="rate-hero-main"><span class="rate-hero-val" id="rate-EUR-mid">–</span><span class="rate-hero-cur">₺</span></div>
-      </div>
-      <div class="rate-hero-item">
-        <div class="rate-hero-top">
-          <span class="rate-hero-code">USD</span>
-          <span class="rate-hero-eq">1 $ =</span>
+        <div class="rate-cell rate-cell-lg">
+          <div class="rate-cell-top">
+            <span class="rate-hero-code">USD</span>
+            <span class="rate-hero-eq">1 $ =</span>
+          </div>
+          <div class="rate-hero-main"><span class="rate-hero-val" id="rate-USD-mid">–</span><span class="rate-hero-cur">₺</span></div>
         </div>
-        <div class="rate-hero-main"><span class="rate-hero-val" id="rate-USD-mid">–</span><span class="rate-hero-cur">₺</span></div>
       </div>
-    </div>
-
-    <div class="rate-mini-row">
-      <div class="rate-mini"><span class="rate-mini-label">gr altın</span><span class="rate-mini-val" id="rate-XAU-mid">–</span></div>
-      <div class="rate-mini"><span class="rate-mini-label">GBP</span><span class="rate-mini-val" id="rate-GBP-mid">–</span></div>
-      <div class="rate-mini"><span class="rate-mini-label">CHF</span><span class="rate-mini-val" id="rate-CHF-mid">–</span></div>
-      <div class="rate-mini"><span class="rate-mini-label">AUD</span><span class="rate-mini-val" id="rate-AUD-mid">–</span></div>
+      <div class="rate-row-bottom">
+        <div class="rate-cell rate-cell-sm"><span class="rate-mini-label">gr altın</span><span class="rate-mini-val" id="rate-XAU-mid">–</span></div>
+        <div class="rate-cell rate-cell-sm"><span class="rate-mini-label">GBP</span><span class="rate-mini-val" id="rate-GBP-mid">–</span></div>
+        <div class="rate-cell rate-cell-sm"><span class="rate-mini-label">CHF</span><span class="rate-mini-val" id="rate-CHF-mid">–</span></div>
+        <div class="rate-cell rate-cell-sm"><span class="rate-mini-label">AUD</span><span class="rate-mini-val" id="rate-AUD-mid">–</span></div>
+      </div>
     </div>
     <div class="rate-error" id="rateError" style="display:none;">Kur verisi alınamadı — sayfayı yenile ya da birazdan tekrar dene.</div>
 
