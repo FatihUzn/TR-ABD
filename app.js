@@ -350,23 +350,23 @@
             x: {
               type: 'linear',
               ticks: {
-                color: '#6b6250',
+                color: '#d1d5db', /* YENİ: Açık gri metin */
                 font: { family: 'JetBrains Mono', size: 10 },
                 callback: v => new Date(v).toLocaleDateString('tr-TR', { month: 'short', year: '2-digit' })
               },
-              grid: { color: '#d9d0b8' }
+              grid: { color: '#374151' } /* YENİ: Koyu gri kılavuz çizgileri */
             },
             y: {
               ticks: {
-                color: '#6b6250',
+                color: '#d1d5db', /* YENİ: Açık gri metin */
                 font: { family: 'JetBrains Mono', size: 10 },
                 callback: v => v + ' gr'
               },
-              grid: { color: '#d9d0b8' }
+              grid: { color: '#374151' } /* YENİ: Koyu gri kılavuz çizgileri */
             }
           },
           plugins: {
-            legend: { labels: { color: '#221d14', font: { family: 'Inter', size: 11 }, boxWidth: 14 } },
+            legend: { labels: { color: '#f9fafb', font: { family: 'Inter', size: 11 }, boxWidth: 14 } }, /* YENİ: Beyaz başlık metni */
             tooltip: {
               callbacks: {
                 title: items => new Date(items[0].parsed.x).toLocaleDateString('tr-TR', { day: '2-digit', month: 'short', year: 'numeric' }),
