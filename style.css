@@ -21,28 +21,12 @@
 *{box-sizing:border-box; margin:0; padding:0;}
 html{scroll-behavior:smooth;}
 body{
-  background:
-    radial-gradient(ellipse at top left, rgba(109,79,224,0.07), transparent 55%),
-    radial-gradient(ellipse at bottom right, rgba(20,122,85,0.05), transparent 50%),
-    var(--void);
+  background:var(--void);
   color:var(--text);
   font-family:var(--sans);
   line-height:1.5;
   min-height:100vh;
   padding-bottom:60px;
-}
-
-/* faint circuit grid backdrop */
-body::before{
-  content:"";
-  position:fixed; inset:0;
-  background-image:
-    linear-gradient(var(--line) 1px, transparent 1px),
-    linear-gradient(90deg, var(--line) 1px, transparent 1px);
-  background-size:42px 42px;
-  opacity:0.35;
-  pointer-events:none;
-  z-index:0;
 }
 
 .wrap{position:relative; z-index:1; max-width:960px; margin:0 auto; padding:0 18px;}
@@ -54,15 +38,6 @@ body::before{
 ::-webkit-scrollbar-thumb:hover{background:var(--purple);}
 *{scrollbar-color:var(--purple-dim) var(--void); scrollbar-width:thin;}
 
-/* oscilloscope waveform, header backdrop */
-.scope-wave{
-  position:absolute; top:0; left:0; right:0; height:100%;
-  opacity:0.35; pointer-events:none;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='80' viewBox='0 0 400 80'%3E%3Cpath d='M0 40 L20 40 L30 8 L45 72 L60 40 L100 40 L110 20 L125 60 L140 40 L200 40 L210 8 L225 72 L240 40 L280 40 L290 20 L305 60 L320 40 L400 40' fill='none' stroke='%236d4fe0' stroke-width='1.5'/%3E%3C/svg%3E");
-  background-repeat:repeat-x; background-size:400px 80px; background-position:0 center;
-  animation:scope-scroll 7s linear infinite;
-}
-@keyframes scope-scroll{ from{background-position:0 center;} to{background-position:-400px center;} }
 header{position:relative; overflow:hidden;}
 
 /* hero progress */
@@ -98,7 +73,6 @@ section:nth-of-type(9){animation-delay:.72s;}
 section:nth-of-type(10){animation-delay:.80s;}
 @media(prefers-reduced-motion: reduce){
   section, header, details.acc-section{animation:none;}
-  .scope-wave{animation:none;}
   .hero-progress-fill{transition:none;}
 }
 
@@ -115,31 +89,6 @@ section:nth-of-type(10){animation-delay:.80s;}
   position:absolute; top:2px; left:50%; transform:translateX(-50%);
   font-family:var(--mono); font-size:8.5px; color:var(--text-faint); white-space:nowrap; letter-spacing:0.03em;
 }
-
-/* academic goal backdrop — Harvard Yard photo behind the YKS section */
-.section-academic-bg{
-  position:relative;
-  overflow:hidden;
-  border-radius:14px;
-  padding:20px 18px 24px;
-  border:1px solid var(--line);
-}
-.academic-bg-img{
-  position:absolute; inset:0;
-  width:100%; height:100%;
-  object-fit:cover; object-position:center 38%;
-  filter:grayscale(25%) contrast(1.08) brightness(0.85);
-  opacity:0.28;
-  z-index:0;
-  pointer-events:none;
-}
-.section-academic-bg::after{
-  content:"";
-  position:absolute; inset:0;
-  background:linear-gradient(180deg, var(--void) 0%, rgba(11,13,18,0.55) 30%, rgba(11,13,18,0.9) 100%);
-  z-index:0;
-}
-.section-academic-bg > *:not(.academic-bg-img){ position:relative; z-index:1; }
 
 /* ===== HEADER ===== */
 header{
@@ -391,23 +340,17 @@ footer{
 }
 .lang-toggle button.active{background:var(--purple); color:#faf7ef; font-weight:700;}
 
-/* ===== PHOTO GALLERY ===== */
-.photo-grid{display:grid; grid-template-columns:repeat(auto-fill, minmax(140px,1fr)); gap:12px;}
-.photo-card{
-  background:var(--panel); border:1px solid var(--line); border-radius:12px; overflow:hidden;
-  aspect-ratio:4/3; position:relative; display:flex; align-items:center; justify-content:center;
+/* ===== KASA TABLOSU: KOMPAKT/TAM GEÇİŞİ ===== */
+.cash-log-full{margin-top:10px;}
+.cash-log-toggle{
+  cursor:pointer; list-style:none; user-select:none; -webkit-tap-highlight-color:transparent;
+  font-family:var(--mono); font-size:11px; color:var(--text-faint); text-transform:uppercase;
+  letter-spacing:0.05em; display:inline-flex; align-items:center; gap:6px;
 }
-.photo-card img{width:100%; height:100%; object-fit:cover; display:block;}
-.photo-placeholder{
-  display:flex; flex-direction:column; align-items:center; gap:6px; color:var(--text-faint);
-  font-family:var(--mono); font-size:10.5px; text-align:center; padding:10px;
-}
-.photo-placeholder .icon{font-size:20px; opacity:0.6;}
-.photo-caption{
-  position:absolute; left:0; right:0; bottom:0; padding:6px 10px;
-  background:linear-gradient(0deg, rgba(11,13,18,0.9), transparent);
-  font-family:var(--mono); font-size:10px; color:var(--text-dim);
-}
+.cash-log-toggle::-webkit-details-marker{display:none;}
+.cash-log-toggle::before{content:"▸"; transition:transform .2s ease;}
+.cash-log-full[open] .cash-log-toggle::before{transform:rotate(90deg);}
+.cash-log-toggle:hover{color:var(--purple);}
 
 /* ===== CHECKPOINT LOG ===== */
 .cp-form{
@@ -582,6 +525,8 @@ footer{
 .yks-unit{background:rgba(11,13,18,0.7); border:1px solid rgba(255,255,255,0.1); border-radius:8px; padding:12px 14px; text-align:center; min-width:68px; backdrop-filter:blur(4px);}
 .yks-num{font-family:var(--mono); font-weight:800; font-size:26px; color:#fffdf7; font-variant-numeric:tabular-nums; line-height:1;}
 .yks-label{font-family:var(--mono); font-size:9px; color:var(--text-faint); text-transform:uppercase; letter-spacing:0.1em; margin-top:6px;}
+.yks-clock-light .yks-unit{background:var(--panel); border-color:var(--line); backdrop-filter:none;}
+.yks-clock-light .yks-num{color:var(--purple);}
 
 /* ===== YENİ: MOBİL DİKEY KART DÜZELTMESİ (FAZ 2) ===== */
 @media(max-width: 640px) {

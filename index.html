@@ -20,7 +20,6 @@
 <div class="wrap">
 
   <header>
-    <div class="scope-wave"></div>
     <div class="tag-row">
       <span class="i18n" data-tr="REV 3.0 // GERÇEKLİK-KONTROLLÜ" data-de="REV 3.0 // REALITÄTSGEPRÜFT">REV 3.0 // GERÇEKLİK-KONTROLLÜ</span>
       <div style="display:flex; align-items:center; gap:12px;">
@@ -145,8 +144,9 @@
     </div>
   </section>
 
-  <section>
-    <div class="sec-label"><span class="i18n" data-tr="Günlük Ritim" data-de="Täglicher Rhythmus">Günlük Ritim</span> <span style="color:var(--amber); font-size:10px; margin-left:4px;">— TASLAK, İŞVERENLE NETLEŞTİRİLECEK</span></div>
+  <details class="acc-section">
+    <summary class="sec-label acc-summary"><span class="i18n" data-tr="Günlük Ritim" data-de="Täglicher Rhythmus">Günlük Ritim</span> <span style="color:var(--amber); font-size:10px; margin-left:4px;">— TASLAK, İŞVERENLE NETLEŞTİRİLECEK</span><span class="acc-chevron">▾</span></summary>
+    <div class="acc-body">
     <div class="daily-timeline">
       <div class="seg" style="width:25%; background:var(--amber);" title="00:00–06:00 Vardiya (Temel, devam)"></div>
       <div class="seg" style="width:2.1%; background:var(--line);" title="06:00–06:30 Yol"></div>
@@ -157,13 +157,13 @@
       <div class="seg" style="width:5.2%; background:var(--purple-dim);" title="18:00–19:15 Power Nap"></div>
       <div class="seg" style="width:2.1%; background:var(--line);" title="19:15–19:45 Hazırlık"></div>
       <div class="seg" style="width:1.0%; background:var(--line);" title="19:45–20:00 Yol"></div>
-      <div class="seg" style="width:8.3%; background:repeating-linear-gradient(45deg, var(--amber), var(--amber) 4px, rgba(168,99,26,0.45) 4px, rgba(168,99,26,0.45) 8px);" title="20:00–22:00 Mesai (İsteğe Bağlı — vergisiz gece primi penceresi)"></div>
+      <div class="seg" style="width:8.3%; background:rgba(168,99,26,0.45);" title="20:00–22:00 Mesai (İsteğe Bağlı — vergisiz gece primi penceresi)"></div>
       <div class="seg" style="width:8.3%; background:var(--amber);" title="22:00–24:00 Vardiya (Temel)"></div>
     </div>
     <div class="timeline-ticks"><span>00</span><span>06</span><span>12</span><span>18</span><span>24</span></div>
     <div class="legend">
       <div class="legend-item"><span class="legend-dot" style="background:var(--amber);"></span><span class="i18n" data-tr="Fırın Vardiyası — Temel (22:00–06:00, 8 sa)" data-de="Bäckerei-Schicht — Basis (22:00–06:00, 8 Std.)">Fırın Vardiyası — Temel (22:00–06:00, 8 sa)</span></div>
-      <div class="legend-item"><span class="legend-dot" style="background:repeating-linear-gradient(45deg, var(--amber), var(--amber) 2px, rgba(168,99,26,0.45) 2px, rgba(168,99,26,0.45) 4px);"></span><span class="i18n" data-tr="Mesai — İsteğe Bağlı (20:00–22:00)" data-de="Überstunden — Optional (20:00–22:00)">Mesai — İsteğe Bağlı (20:00–22:00)</span></div>
+      <div class="legend-item"><span class="legend-dot" style="background:rgba(168,99,26,0.45);"></span><span class="i18n" data-tr="Mesai — İsteğe Bağlı (20:00–22:00)" data-de="Überstunden — Optional (20:00–22:00)">Mesai — İsteğe Bağlı (20:00–22:00)</span></div>
       <div class="legend-item"><span class="legend-dot" style="background:var(--purple);"></span><span class="i18n" data-tr="Ana Uyku (06:30–13:00)" data-de="Hauptschlaf (06:30–13:00)">Ana Uyku (06:30–13:00)</span></div>
       <div class="legend-item"><span class="legend-dot" style="background:var(--green);"></span><span class="i18n" data-tr="VHS Kurs (13:30–17:45)" data-de="VHS-Kurs (13:30–17:45)">VHS Kurs (13:30–17:45)</span></div>
       <div class="legend-item"><span class="legend-dot" style="background:var(--purple-dim);"></span>Power Nap (18:00–19:15)</div>
@@ -172,7 +172,8 @@
     <div class="hero-progress-sub" style="margin-top:10px;">
       <span class="i18n" data-tr="Temel vardiya 8 sa × 6 gün = 48 sa/hafta (Almanya'daki yasal ortalama üst sınırla aynı hizada). 20:00–22:00 mesai penceresi isteğe bağlı ve gece primi vergisiz olduğu için ekonomik olarak cazip, ama her gün garanti değil — işverenin o gün seni yazıp yazmamasına bağlı." data-de="Basisschicht 8 Std. × 6 Tage = 48 Std./Woche (entspricht der gesetzlichen Durchschnittsobergrenze in Deutschland). Das Zeitfenster 20:00–22:00 ist optionale Mehrarbeit und wegen des steuerfreien Nachtzuschlags finanziell attraktiv, aber nicht täglich garantiert — abhängig davon, ob der Arbeitgeber dich einteilt.">Temel vardiya 8 sa × 6 gün = 48 sa/hafta (Almanya'daki yasal ortalama üst sınırla aynı hizada). 20:00–22:00 mesai penceresi isteğe bağlı ve gece primi vergisiz olduğu için ekonomik olarak cazip, ama her gün garanti değil — işverenin o gün seni yazıp yazmamasına bağlı.</span>
     </div>
-  </section>
+    </div>
+  </details>
 
   <details class="acc-section">
     <summary class="sec-label acc-summary"><span class="i18n" data-tr="Haftalık Yapı" data-de="Wochenstruktur">Haftalık Yapı</span> <span style="color:var(--amber); font-size:10px; margin-left:4px;">— TASLAK</span><span class="acc-chevron">▾</span></summary>
@@ -237,7 +238,7 @@
   </section>
 
   <section>
-    <div class="sec-label i18n" data-tr="Taban Senaryo Özeti" data-de="Basisszenario-Übersicht">Taban Senaryo Özeti</div>
+    <div class="sec-label i18n" data-tr="Senaryolar" data-de="Szenarien">Senaryolar</div>
     <div class="stat-grid">
       <div class="stat">
         <div class="stat-label i18n" data-tr="1 Yıl Sonu Nakit" data-de="Bargeld nach 1 Jahr">1 Yıl Sonu Nakit</div>
@@ -255,11 +256,7 @@
         <div class="stat-sub">Taksitler bittikten sonra</div>
       </div>
     </div>
-  </section>
-
-  <section>
-    <div class="sec-label i18n" data-tr="Temkinli vs. Maksimum" data-de="Vorsichtig vs. Maximal">Temkinli vs. Maksimum</div>
-    <div class="scenario">
+    <div class="scenario" style="margin-top:14px;">
       <div class="scen-row">
         <div class="scen-top">
           <span class="scen-name">Temkinli Master Plan</span>
@@ -275,6 +272,14 @@
         </div>
         <div class="bar-track"><div class="bar-fill max"></div></div>
         <div class="scen-prob">GERÇEKLEŞME İHTİMALİ: DÜŞÜK/ORTA — vergi iadesi &amp; işveren inisiyatifine koşullu</div>
+      </div>
+      <div class="scen-row">
+        <div class="scen-top">
+          <span class="scen-name">Güvenli Marj (Türkiye İlk 100 Hedefi)</span>
+          <span class="scen-nums">TYT 115/120<span class="g">AYT (Say) 78-80</span></span>
+        </div>
+        <div class="bar-track"><div class="bar-fill max"></div></div>
+        <div class="scen-prob">Mekatronik (TU Berlin) için Türkiye'de ~99. sıraya tekabül eden, tartışmasız bir mükemmellik bandı. Şansa yer bırakmaz.</div>
       </div>
     </div>
   </section>
@@ -423,16 +428,14 @@
   </details>
 
   <!-- CANLI YKS SAYACI (GÜN:SAAT:DK:SN) -->
-  <section class="section-academic-bg">
-    <img class="academic-bg-img" src="https://commons.wikimedia.org/wiki/Special:FilePath/Johnston%20Gate%20(Harvard%20Yard)%20-%20IMG%208974.JPG" alt="">
-    
-    <div class="sec-label" style="display:flex;align-items:center;gap:10px;">
-      <span style="color:#fffdf7;">2027 YKS Canlı Geri Sayım</span>
+  <section>
+    <div class="sec-label">
+      <span>2027 YKS Canlı Geri Sayım</span>
       <span style="color:var(--amber); font-size:10px;">— HEDEF: İLK 100</span>
     </div>
 
     <!-- TİKK TAK SAAT KISMI -->
-    <div class="yks-clock-wrapper" id="yksClock">
+    <div class="yks-clock-wrapper yks-clock-light" id="yksClock">
       <div class="yks-unit"><div class="yks-num" id="tDays">00</div><div class="yks-label">Gün</div></div>
       <div class="yks-unit"><div class="yks-num" id="tHours">00</div><div class="yks-label">Saat</div></div>
       <div class="yks-unit"><div class="yks-num" id="tMins">00</div><div class="yks-label">Dakika</div></div>
@@ -441,23 +444,10 @@
 
     <div class="hero-progress" style="margin-top:14px;">
       <div class="hero-progress-top">
-        <span class="hero-progress-label" style="color:rgba(255,255,255,0.7);">Genel Zaman Dilimi (Azalan)</span>
-        <span class="hero-progress-pct" id="yksPct" style="color:#fffdf7;">%100</span>
+        <span class="hero-progress-label">Genel Zaman Dilimi (Azalan)</span>
+        <span class="hero-progress-pct" id="yksPct">%100</span>
       </div>
-      <div class="hero-progress-track" style="background:rgba(255,255,255,0.1); border-color:rgba(255,255,255,0.2);"><div class="hero-progress-fill" id="yksFill"></div></div>
-    </div>
-    
-    <div class="scenario" style="margin-top:20px; background:rgba(11,13,18,0.75); border-color:rgba(255,255,255,0.1);">
-      <div class="scen-row">
-        <div class="scen-top">
-          <span class="scen-name" style="color:#fffdf7;">Güvenli Marj (Türkiye İlk 100 Hedefi)</span>
-          <span class="scen-nums" style="color:#fffdf7;">TYT 115/120<span class="g" style="color:var(--purple-dim);">AYT (Say) 78-80</span></span>
-        </div>
-        <div class="bar-track" style="background:rgba(255,255,255,0.1); border:none;"><div class="bar-fill max"></div></div>
-        <div class="scen-prob" style="color:rgba(255,255,255,0.6);">
-          Mekatronik (TU Berlin) için Türkiye'de ~99. sıraya tekabül eden, tartışmasız bir mükemmellik bandı. Şansa yer bırakmaz.
-        </div>
-      </div>
+      <div class="hero-progress-track"><div class="hero-progress-fill" id="yksFill"></div></div>
     </div>
   </section>
 
@@ -470,21 +460,36 @@
         </thead>
         <tbody>
           <tr><td>Kasım Başı</td><td>+ 1.200 €</td><td class="cash">1.200 €</td><td class="gold">10,52 gr</td></tr>
-          <tr><td>Kasım Sonu (cihaz alımı)</td><td>− 290 €</td><td class="cash">910 €</td><td class="gold">7,98 gr</td></tr>
-          <tr><td>Aralık Başı</td><td>+ 2.000 €</td><td class="cash">2.910 €</td><td class="gold">25,51 gr</td></tr>
-          <tr><td>Aralık Sonu</td><td>+ 1.710 €</td><td class="cash">4.620 €</td><td class="gold">40,50 gr</td></tr>
-          <tr><td>Ocak Sonu</td><td>+ 1.710 €</td><td class="cash">6.330 €</td><td class="gold">55,49 gr</td></tr>
-          <tr><td>Şubat Sonu</td><td>+ 1.710 €</td><td class="cash">8.040 €</td><td class="gold">70,48 gr</td></tr>
-          <tr><td>Mart Sonu</td><td>+ 1.710 €</td><td class="cash">9.750 €</td><td class="gold">85,47 gr</td></tr>
           <tr class="milestone"><td>Nisan Sonu (taksit biter)</td><td>+ 1.710 €</td><td class="cash">11.460 €</td><td class="gold">100,46 gr</td></tr>
-          <tr><td>Mayıs Sonu</td><td>+ 2.000 €</td><td class="cash">13.460 €</td><td class="gold">117,99 gr</td></tr>
-          <tr><td>Haziran Sonu</td><td>+ 2.000 €</td><td class="cash">15.460 €</td><td class="gold">135,52 gr</td></tr>
-          <tr><td>Temmuz Sonu</td><td>+ 2.000 €</td><td class="cash">17.460 €</td><td class="gold">153,05 gr</td></tr>
-          <tr><td>Ağustos Sonu</td><td>+ 2.000 €</td><td class="cash">19.460 €</td><td class="gold">170,58 gr</td></tr>
           <tr class="milestone"><td>Eylül Sonu (sözleşme biter)</td><td>+ 2.000 €</td><td class="cash">21.460 €</td><td class="gold">188,11 gr</td></tr>
         </tbody>
       </table>
     </div>
+    <details class="cash-log-full">
+      <summary class="cash-log-toggle">Tüm 13 ayı göster</summary>
+      <div class="table-wrap" style="margin-top:12px;">
+        <table>
+          <thead>
+            <tr><th>Dönem</th><th>Kalan/Eklenen</th><th>Kümülatif Kasa</th><th>Altın (114,08 €/gr)</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Kasım Başı</td><td>+ 1.200 €</td><td class="cash">1.200 €</td><td class="gold">10,52 gr</td></tr>
+            <tr><td>Kasım Sonu (cihaz alımı)</td><td>− 290 €</td><td class="cash">910 €</td><td class="gold">7,98 gr</td></tr>
+            <tr><td>Aralık Başı</td><td>+ 2.000 €</td><td class="cash">2.910 €</td><td class="gold">25,51 gr</td></tr>
+            <tr><td>Aralık Sonu</td><td>+ 1.710 €</td><td class="cash">4.620 €</td><td class="gold">40,50 gr</td></tr>
+            <tr><td>Ocak Sonu</td><td>+ 1.710 €</td><td class="cash">6.330 €</td><td class="gold">55,49 gr</td></tr>
+            <tr><td>Şubat Sonu</td><td>+ 1.710 €</td><td class="cash">8.040 €</td><td class="gold">70,48 gr</td></tr>
+            <tr><td>Mart Sonu</td><td>+ 1.710 €</td><td class="cash">9.750 €</td><td class="gold">85,47 gr</td></tr>
+            <tr class="milestone"><td>Nisan Sonu (taksit biter)</td><td>+ 1.710 €</td><td class="cash">11.460 €</td><td class="gold">100,46 gr</td></tr>
+            <tr><td>Mayıs Sonu</td><td>+ 2.000 €</td><td class="cash">13.460 €</td><td class="gold">117,99 gr</td></tr>
+            <tr><td>Haziran Sonu</td><td>+ 2.000 €</td><td class="cash">15.460 €</td><td class="gold">135,52 gr</td></tr>
+            <tr><td>Temmuz Sonu</td><td>+ 2.000 €</td><td class="cash">17.460 €</td><td class="gold">153,05 gr</td></tr>
+            <tr><td>Ağustos Sonu</td><td>+ 2.000 €</td><td class="cash">19.460 €</td><td class="gold">170,58 gr</td></tr>
+            <tr class="milestone"><td>Eylül Sonu (sözleşme biter)</td><td>+ 2.000 €</td><td class="cash">21.460 €</td><td class="gold">188,11 gr</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </details>
   </section>
 
   <section id="gold-actual-tracker">
@@ -499,50 +504,6 @@
     </div>
   </section>
 
-  <section>
-    <div class="sec-label i18n" data-tr="Fotoğraflar" data-de="Fotos">Fotoğraflar</div>
-    <div class="photo-grid">
-      <div class="photo-card">
-        <div class="photo-placeholder">
-          <span class="icon">📄</span>
-          <span class="i18n" data-tr="Belgeler / Vize" data-de="Dokumente / Visum">Belgeler / Vize</span>
-        </div>
-      </div>
-      <div class="photo-card">
-        <div class="photo-placeholder">
-          <span class="icon">🏫</span>
-          <span class="i18n" data-tr="VHS Kurs" data-de="VHS-Kurs">VHS Kurs</span>
-        </div>
-      </div>
-      <div class="photo-card">
-        <div class="photo-placeholder">
-          <span class="icon">🏙️</span>
-          <span class="i18n" data-tr="Berlin Keşif" data-de="Berlin-Erkundung">Berlin Keşif</span>
-        </div>
-      </div>
-      <div class="photo-card">
-        <div class="photo-placeholder">
-          <span class="icon">🏠</span>
-          <span class="i18n" data-tr="Ev / Wohnung Arama" data-de="Wohnungssuche">Ev / Wohnung Arama</span>
-        </div>
-      </div>
-      <div class="photo-card">
-        <div class="photo-placeholder">
-          <span class="icon">🎓</span>
-          <span class="i18n" data-tr="TU Berlin Kampüs" data-de="TU Berlin Campus">TU Berlin Kampüs</span>
-        </div>
-      </div>
-      <div class="photo-card">
-        <div class="photo-placeholder">
-          <span class="icon">➕</span>
-          <span class="i18n" data-tr="Yeni fotoğraf ekle" data-de="Neues Foto hinzufügen">Yeni fotoğraf ekle</span>
-        </div>
-      </div>
-    </div>
-    <div class="hero-progress-sub" style="margin-top:10px;">
-      <span class="i18n" data-tr="Bir kart doldurmak için karta &lt;img src=&quot;dosya.jpg&quot;&gt; ekleyin ve placeholder'ı kaldırın." data-de="Zum Befüllen einer Karte &lt;img src=&quot;datei.jpg&quot;&gt; einfügen und den Platzhalter entfernen.">Bir kart doldurmak için karta &lt;img src="dosya.jpg"&gt; ekleyin ve placeholder'ı kaldırın.</span>
-    </div>
-  </section>
 <script src="app.js"></script>
 </body>
 
