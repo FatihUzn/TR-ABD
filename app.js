@@ -1,21 +1,3 @@
-  // --- Supabase Bağlantısı (Bulut Hafıza) ---
-  // NOT: URL ve KEY girilene kadar bağlantı kurulmaz — ama sayfanın geri kalanı
-  // (saat, canlı kur widget'ı, YKS hesaplayıcı arayüzü vb.) yine de çalışmaya devam eder.
-  const SUPABASE_URL = 'https://eznrszomudtzgfusvghh.supabase.co';
-  const SUPABASE_KEY = 'sb_publishable_rk4vlzDfCOgzlUbRqyU47g_BEGi9Sa8';
-
-  let _supabase = null;
-  const SUPABASE_READY = SUPABASE_URL.indexOf('BURAYA_') === -1 && SUPABASE_KEY.indexOf('BURAYA_') === -1;
-  if (SUPABASE_READY) {
-    try {
-      _supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-    } catch (e) {
-      console.warn('Supabase bağlantısı kurulamadı:', e);
-      _supabase = null;
-    }
-  }
-  const SUPABASE_WARN = '<div class="cp-empty">Bulut bağlantısı henüz kurulmadı (Faz 5 tamamlanmadı). app.js içine Supabase URL/KEY eklenince burası aktifleşecek.</div>';
-
   // --- Dil değiştirme (TR/DE) ---
   function setLang(lang) {
     document.querySelectorAll('.i18n').forEach(el => {
@@ -26,6 +8,17 @@
       btn.classList.toggle('active', btn.dataset.lang === lang);
     });
     document.documentElement.setAttribute('lang', lang);
+  }
+
+  // --- Sekmeli (Tab) Navigasyon: ZAMAN / SİSTEM / FİNANS ---
+  function switchTab(name) {
+    document.querySelectorAll('.tab-panel').forEach(p => {
+      p.classList.toggle('active', p.id === 'tab-' + name);
+    });
+    document.querySelectorAll('.tab-btn').forEach(b => {
+      b.classList.toggle('active', b.dataset.tab === name);
+    });
+    window.scrollTo({ top: 0, behavior: 'instant' });
   }
 
   // Canlı kur tablosu verisi — gold chart bu objeyi kullandığı için erkenden tanımlanır
@@ -82,197 +75,6 @@
   }
   setInterval(updateClocks, 1000);
   updateClocks();
-
-  // --- SUPABASE ÇOKLU CİHAZ SENKRONİZASYONLU CHECKPOINT ---
-  function checkDailyAlert(list) {
-    const now = new Date();
-    const todayStr = now.toDateString();
-    const hasLogToday = list.some(cp => new Date(Number(cp.ts)).toDateString() === todayStr);
-    const alertBox = document.getElementById('dailyAlert');
-    if (alertBox) {
-      if (!hasLogToday) {
-        alertBox.classList.add('active');
-      } else {
-        alertBox.classList.remove('active');
-      }
-    }
-  }
-
-  function calculateGamification(list) {
-    const totalXP = list.length * 15;
-    const level = Math.floor(totalXP / 100) + 1;
-    const currentXP = totalXP % 100;
-    
-    document.getElementById('levelCount').textContent = level;
-    document.getElementById('xpCount').textContent = currentXP;
-    document.getElementById('xpFill').style.width = currentXP + '%';
-
-    let streak = 0;
-    if (list.length > 0) {
-      const dates = [...new Set(list.map(cp => new Date(Number(cp.ts)).toDateString()))].sort((a,b) => new Date(b) - new Date(a));
-      const today = new Date();
-      today.setHours(0,0,0,0);
-      let expectedDate = new Date(today);
-      
-      const lastLogDate = new Date(dates[0]);
-      const diffDays = Math.floor((today - lastLogDate) / 86400000);
-      
-      if (diffDays <= 1) {
-        for (let i = 0; i < dates.length; i++) {
-          if (new Date(dates[i]).getTime() === expectedDate.getTime() || (i===0 && diffDays===1)) {
-            streak++;
-            expectedDate.setDate(expectedDate.getDate() - 1);
-          } else { break; }
-        }
-      }
-    }
-    document.getElementById('streakCount').textContent = streak;
-    const fire = document.getElementById('streakIcon');
-    if(fire) {
-      fire.style.filter = streak > 2 ? 'drop-shadow(0 0 12px red)' : 'drop-shadow(0 0 4px rgba(168,99,26,0.6))';
-      fire.style.opacity = streak === 0 ? '0.3' : '1';
-    }
-  }
-
-  async function renderCheckpoints() {
-    const el = document.getElementById('cpList');
-    if(!el) return;
-    if (!_supabase) { el.innerHTML = SUPABASE_WARN; return; }
-
-    // Supabase'den verileri çek
-    const { data: list, error } = await _supabase
-      .from('checkpoints')
-      .select('*')
-      .order('ts', { ascending: false });
-
-    if (error) {
-      el.innerHTML = '<div class="cp-empty">Bağlantı hatası: Veriler yüklenemedi. API ayarlarını kontrol et.</div>';
-      return;
-    }
-
-    checkDailyAlert(list);
-    calculateGamification(list);
-
-    if (!list || !list.length) {
-      el.innerHTML = '<div class="cp-empty">Komuta merkezinde henüz rapor yok. İlk raporunu ilet.</div>';
-      return;
-    }
-
-    el.innerHTML = list.slice(0, 10).map(cp => {
-      const d = new Date(Number(cp.ts));
-      const dateStr = d.toLocaleDateString('tr-TR', { day: '2-digit', month: 'short', hour: '2-digit', minute:'2-digit' });
-      return '<div class="cp-item">' +
-        '<span class="cp-tag">' + escapeHtml(cp.tag) + '</span>' +
-        '<div class="cp-body"><div class="cp-date">' + dateStr + '</div>' +
-        '<div class="cp-note">' + escapeHtml(cp.note) + '</div></div>' +
-        batteryBadge(cp.battery) +
-        '<button class="cp-del" onclick="deleteCheckpoint(\'' + cp.id + '\')">✕</button>' +
-        '</div>';
-    }).join('');
-  }
-
-  function batteryBadge(val) {
-    if (val === null || val === undefined || val === '') return '';
-    const n = Number(val);
-    let cls = 'bat-mid', label = '🔋 %' + n;
-    if (n >= 75) { cls = 'bat-high'; label = '🔋 %' + n; }
-    else if (n <= 25 && n > 0) { cls = 'bat-low'; label = '🪫 %' + n; }
-    else if (n === 0) { cls = 'bat-low'; label = '🪫 Tükendim'; }
-    return '<span class="cp-battery ' + cls + '">' + label + '</span>';
-  }
-
-  function escapeHtml(str) {
-    const d = document.createElement('div');
-    d.textContent = str;
-    return d.innerHTML;
-  }
-
-  async function addCheckpoint() {
-    const noteEl = document.getElementById('cpNote');
-    const tagEl = document.getElementById('cpTag');
-    const batteryEl = document.getElementById('cpBattery');
-    const note = noteEl.value.trim();
-    if (!note) return;
-    if (!_supabase) { alert('Bulut bağlantısı henüz kurulmadı — Faz 5 tamamlanmadan raporlar kaydedilemez.'); return; }
-
-    const newCp = {
-      tag: tagEl.value,
-      note: note,
-      battery: batteryEl ? Number(batteryEl.value) : null,
-      ts: Date.now()
-    };
-
-    // Supabase'e gönder
-    const { error } = await _supabase.from('checkpoints').insert([newCp]);
-    if (error) {
-      alert('Kayıt başarısız oldu: ' + error.message);
-      return;
-    }
-
-    noteEl.value = '';
-    renderCheckpoints();
-  }
-
-  async function deleteCheckpoint(id) {
-    if (!_supabase) return;
-    // Supabase'den sil
-    const { error } = await _supabase.from('checkpoints').delete().eq('id', id);
-    if (error) {
-      alert('Silinemedi: ' + error.message);
-      return;
-    }
-    renderCheckpoints();
-  }
-
-  // --- ETİKETE GÖRE HAZIR NOT ÇİPLERİ ---
-  const QUICK_NOTES = {
-    'Dil':   ['VHS dersine gittim', 'Kelime/gramer tekrarı yaptım', 'Konuşma pratiği yaptım', 'Ders kaçırdım'],
-    'YKS':   ['Deneme çözdüm', 'Konu tekrarı yaptım', 'Soru bankası çalıştım', 'Bugün çalışamadım'],
-    'Kasa':  ['Maaş/gelir yattı', 'Harcama yaptım', 'Altına çevirdim', 'Bütçe kontrolü yaptım'],
-    'İş':    ['Vardiyaya gittim', 'Mesai yaptım', 'İzin kullandım', 'İşte bir sorun yaşadım'],
-    'Genel': ['Bugün iyi geçti', 'Yorgun/zor bir gündü', 'Motivasyon düştü', 'Planı gözden geçirdim']
-  };
-
-  function renderQuickNotes() {
-    const tagEl = document.getElementById('cpTag');
-    const container = document.getElementById('cpQuickNotes');
-    const noteInput = document.getElementById('cpNote');
-    if (!tagEl || !container || !noteInput) return;
-
-    const options = QUICK_NOTES[tagEl.value] || [];
-    container.innerHTML = options.map(opt =>
-      '<button type="button" class="quick-chip" data-note="' + escapeHtml(opt) + '">' + escapeHtml(opt) + '</button>'
-    ).join('') + '<button type="button" class="quick-chip quick-chip-custom" id="cpCustomToggle">✎ Diğer (yaz)</button>';
-
-    container.querySelectorAll('.quick-chip[data-note]').forEach(btn => {
-      btn.addEventListener('click', () => {
-        container.querySelectorAll('.quick-chip').forEach(b => b.classList.remove('selected'));
-        btn.classList.add('selected');
-        noteInput.value = btn.dataset.note;
-        noteInput.classList.remove('visible');
-      });
-    });
-
-    document.getElementById('cpCustomToggle')?.addEventListener('click', () => {
-      container.querySelectorAll('.quick-chip').forEach(b => b.classList.remove('selected'));
-      noteInput.classList.add('visible');
-      noteInput.value = '';
-      noteInput.focus();
-    });
-
-    noteInput.classList.remove('visible');
-    noteInput.value = '';
-  }
-
-  document.getElementById('cpTag')?.addEventListener('change', renderQuickNotes);
-  renderQuickNotes();
-
-  document.getElementById('cpNote')?.addEventListener('keydown', e => {
-    if (e.key === 'Enter') addCheckpoint();
-  });
-  
-  // Sayfa açıldığında verileri yükle
-  renderCheckpoints();
 
   // --- PLAN vs BUGÜNÜN KURUYLA ALTIN GRAFİĞİ (tamamen otomatik, elle giriş yok) ---
   // Her ay için: o ana kadarki kümülatif kasa (€) + planda kullanılan sabit 114,08 €/gr
