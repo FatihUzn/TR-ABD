@@ -20,13 +20,19 @@
 
 *{box-sizing:border-box; margin:0; padding:0;}
 html{scroll-behavior:smooth;}
-body{
-  background:var(--void);
-  color:var(--text);
-  font-family:var(--sans);
-  line-height:1.5;
-  min-height:100vh;
-  padding-bottom:60px;
+body {
+  background-image: 
+    linear-gradient(rgba(10, 18, 42, 0.85), rgba(10, 18, 42, 0.85)), /* %85 karartılmış lacivert filtre */
+    url('harvard.jpg'); /* Gece çekilmiş olan harvard fotoğrafı */
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed; /* Scroll yaparken fotoğraf sabit kalır */
+  
+  color: var(--text);
+  font-family: var(--sans);
+  line-height: 1.5;
+  min-height: 100vh;
+  padding-bottom: 60px;
 }
 
 .wrap{position:relative; z-index:1; max-width:960px; margin:0 auto; padding:0 18px;}
