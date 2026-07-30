@@ -263,22 +263,23 @@ details.acc-section[open] > .acc-summary .acc-chevron{transform:rotate(180deg);}
 .stat-value.green{color:var(--green);}
 
 .rate-hero{display:flex; gap:10px; flex-wrap:wrap;}
-.rate-hero-item{flex:1; min-width:150px; display:flex; align-items:baseline; gap:8px; background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:16px;}
-.rate-hero-flag{font-size:22px; line-height:1;}
-.rate-hero-eq{font-family:var(--mono); font-size:12px; color:var(--text-faint);}
-.rate-hero-val{font-family:var(--mono); font-weight:800; font-size:24px; color:var(--text); font-variant-numeric:tabular-nums; margin-left:auto;}
+.rate-hero-item{flex:1; min-width:150px; background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:14px 16px;}
+.rate-hero-top{display:flex; align-items:baseline; justify-content:space-between; gap:8px; margin-bottom:6px;}
+.rate-hero-code{font-family:var(--mono); font-weight:800; font-size:11px; color:var(--purple); letter-spacing:0.08em;}
+.rate-hero-eq{font-family:var(--mono); font-size:11px; color:var(--text-faint);}
+.rate-hero-main{display:flex; align-items:baseline; gap:6px;}
+.rate-hero-val{font-family:var(--mono); font-weight:800; font-size:26px; color:var(--text); font-variant-numeric:tabular-nums; line-height:1;}
 .rate-hero-cur{font-family:var(--mono); font-size:14px; color:var(--text-dim);}
 
 .rate-mini-row{display:flex; gap:8px; flex-wrap:wrap; margin-top:10px;}
-.rate-mini{flex:1; min-width:90px; display:flex; flex-direction:column; align-items:center; gap:2px; background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:8px 6px;}
-.rate-mini-label{font-family:var(--mono); font-size:10px; color:var(--text-faint);}
+.rate-mini{flex:1; min-width:90px; display:flex; flex-direction:column; align-items:center; gap:3px; background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:9px 6px;}
+.rate-mini-label{font-family:var(--mono); font-size:9.5px; color:var(--text-faint); text-transform:uppercase; letter-spacing:0.05em;}
 .rate-mini-val{font-family:var(--mono); font-weight:700; font-size:13px; color:var(--text); font-variant-numeric:tabular-nums;}
 
 .rate-error{margin-top:10px; font-family:var(--mono); font-size:11px; color:var(--red); text-align:center;}
 
 @media(max-width:420px){
-  .rate-hero-item{padding:12px;}
-  .rate-hero-val{font-size:20px;}
+  .rate-hero-val{font-size:21px;}
 }
 .stat-sub{font-size:11px; color:var(--text-dim); margin-top:4px;}
 
@@ -411,7 +412,7 @@ footer{
 }
 .cp-form select{font-family:var(--mono); font-size:11px; text-transform:uppercase; flex-shrink:0;}
 .cp-form input[type="text"]{flex:1; min-width:160px;}
-.cp-form button{
+.cp-form > button{
   font-family:var(--mono); font-size:11px; letter-spacing:0.04em; text-transform:uppercase;
   background:var(--purple); color:#faf7ef; font-weight:700; border:none; border-radius:8px;
   padding:0 16px; cursor:pointer;
@@ -440,12 +441,12 @@ footer{
 .cp-quick-notes{display:flex; flex-wrap:wrap; gap:6px; flex-basis:100%; margin-top:2px;}
 .quick-chip{
   font-family:var(--mono); font-size:11px; letter-spacing:0.02em;
-  background:var(--panel-2); border:1px solid var(--line); color:var(--text-dim);
+  background:var(--panel); border:1px solid var(--line); color:var(--text-dim);
   border-radius:999px; padding:7px 12px; cursor:pointer; transition:all 0.15s ease;
 }
-.quick-chip:hover{border-color:var(--purple-dim); color:var(--purple);}
+.quick-chip:hover{border-color:var(--purple-dim); color:var(--purple); background:var(--panel-2);}
 .quick-chip.selected{background:var(--purple); border-color:var(--purple); color:#faf7ef; font-weight:700;}
-.quick-chip.quick-chip-custom{color:var(--text-faint); border-style:dashed;}
+.quick-chip.quick-chip-custom{color:var(--text-faint); border-style:dashed; background:transparent;}
 .cp-form input#cpNote{flex-basis:100%; display:none;}
 .cp-form input#cpNote.visible{display:block;}
 .cp-del{background:none; border:none; color:var(--text-faint); cursor:pointer; font-size:14px; padding:0 4px; flex-shrink:0;}
