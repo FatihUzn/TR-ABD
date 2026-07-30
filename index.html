@@ -47,60 +47,6 @@
     </div>
   </header>
 
-  <!-- YENİ: CHECKPOINT & OYUNLAŞTIRMA (KOMUTA MERKEZİ) -->
-  <section id="command-center">
-    <div class="sec-label">Günlük Operasyon Raporu</div>
-    
-    <div class="daily-alert" id="dailyAlert">
-      <span>⚠ DİKKAT: Bugün hedefin için henüz sisteme hiçbir rapor girmedin. Zinciri kırma!</span>
-    </div>
-
-    <div class="cmd-center">
-      <div class="cmd-top">
-        <div class="streak-box">
-          <span class="streak-fire" id="streakIcon">🔥</span>
-          <div>
-            <span class="streak-text"><span id="streakCount">0</span> Günlük Seri</span>
-            <span class="streak-sub">Operasyon Disiplini</span>
-          </div>
-        </div>
-        <div class="xp-box">
-          <div class="xp-level">Seviye <span id="levelCount">1</span></div>
-          <div class="xp-bar-bg"><div class="xp-bar-fill" id="xpFill"></div></div>
-          <div class="streak-sub" style="margin-top:4px;"><span id="xpCount">0</span>/100 XP</div>
-        </div>
-      </div>
-
-      <div class="cp-form">
-        <select id="cpTag">
-          <option value="Dil">DİL</option>
-          <option value="YKS">YKS</option>
-          <option value="Kasa">KASA</option>
-          <option value="İş">İŞ</option>
-          <option value="Genel">GENEL</option>
-        </select>
-        <select id="cpBattery">
-          <option value="100">🔋 %100</option>
-          <option value="75">🔋 %75</option>
-          <option value="50" selected>🔋 %50</option>
-          <option value="25">🪫 %25</option>
-          <option value="0">🪫 Tükendim</option>
-        </select>
-        <div class="cp-quick-notes" id="cpQuickNotes"></div>
-        <input type="text" id="cpNote" placeholder="Özel not yaz..." maxlength="140">
-        <button type="button" onclick="addCheckpoint()">Raporla</button>
-      </div>
-      
-      <div class="cp-list" id="cpList">
-        <!-- Loglar buraya gelecek -->
-      </div>
-      
-      <div style="margin-top:14px; font-family:var(--mono); font-size:9.5px; color:var(--text-faint); text-align:right;">
-        *Bulut Senkronizasyonu (Faz-5) bekleniyor. Şu an geçici cihaz hafızasına kaydediliyor.
-      </div>
-    </div>
-  </section>
-
   <details class="acc-section">
     <summary class="sec-label acc-summary"><span class="i18n" data-tr="Günlük Ritim &amp; Haftalık Yapı" data-de="Täglicher Rhythmus &amp; Wochenstruktur">Günlük Ritim &amp; Haftalık Yapı</span> <span style="color:var(--amber); font-size:10px; margin-left:4px;">— TASLAK, İŞVERENLE NETLEŞTİRİLECEK</span><span class="acc-chevron">▾</span></summary>
     <div class="acc-body">
@@ -294,27 +240,6 @@
         </div>
       </div>
     </details>
-  </section>
-
-  <section>
-    <div class="sec-label i18n" data-tr="Haftalık Zaman Bütçesi" data-de="Wöchentliches Zeitbudget">Haftalık Zaman Bütçesi</div>
-    <div class="stat-grid">
-      <div class="stat">
-        <div class="stat-label i18n" data-tr="VHS Sınıf Saati" data-de="VHS-Unterrichtsstunden">VHS Sınıf Saati</div>
-        <div class="stat-value">~21 sa/hf</div>
-        <div class="stat-sub">13:30–17:45, hafta içi</div>
-      </div>
-      <div class="stat">
-        <div class="stat-label i18n" data-tr="Önerilen Öz-Çalışma" data-de="Empfohlenes Selbststudium">Önerilen Öz-Çalışma</div>
-        <div class="stat-value purple">6–8 sa/hf</div>
-        <div class="stat-sub">Anki, podcast, Tandem</div>
-      </div>
-      <div class="stat">
-        <div class="stat-label i18n" data-tr="Gerekli Tempo (Referans)" data-de="Erforderliches Tempo (Referenz)">Gerekli Tempo (Referans)</div>
-        <div class="stat-value green">~25 sa/hf</div>
-        <div class="stat-sub">Goethe süper-yoğun kurs baz</div>
-      </div>
-    </div>
   </section>
 
   <!-- CANLI YKS SAYACI (GÜN:SAAT:DK:SN) -->
