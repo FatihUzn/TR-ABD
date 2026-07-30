@@ -48,6 +48,68 @@
     </div>
   </header>
 
+  <!-- CANLI KUR TABLOSU (key gerektirmez: Frankfurter/ECB + goldprice.org) -->
+  <section id="live-rates">
+    <div class="sec-label">💱 Anlık Kur Tablosu <span class="rate-updated" id="rateUpdatedAt"></span></div>
+
+    <div class="rate-table">
+      <div class="rate-row">
+        <div class="rate-left"><span class="rate-flag">🇺🇸</span><div class="rate-name"><span class="rate-code">USD</span><span class="rate-full">Amerikan Doları</span></div></div>
+        <div class="rate-right">
+          <div class="rate-pill rate-al"><span class="rate-pill-label">AL</span><span class="rate-pill-val" id="rate-USD-al">–</span></div>
+          <div class="rate-pill rate-sat"><span class="rate-pill-label">SAT</span><span class="rate-pill-val" id="rate-USD-sat">–</span></div>
+        </div>
+      </div>
+      <div class="rate-row">
+        <div class="rate-left"><span class="rate-flag">🇪🇺</span><div class="rate-name"><span class="rate-code">EUR</span><span class="rate-full">Avrupa Para Birimi</span></div></div>
+        <div class="rate-right">
+          <div class="rate-pill rate-al"><span class="rate-pill-label">AL</span><span class="rate-pill-val" id="rate-EUR-al">–</span></div>
+          <div class="rate-pill rate-sat"><span class="rate-pill-label">SAT</span><span class="rate-pill-val" id="rate-EUR-sat">–</span></div>
+        </div>
+      </div>
+      <div class="rate-row">
+        <div class="rate-left"><span class="rate-flag">🥇</span><div class="rate-name"><span class="rate-code">XAU</span><span class="rate-full">Gram Altın</span></div></div>
+        <div class="rate-right">
+          <div class="rate-pill rate-al"><span class="rate-pill-label">AL</span><span class="rate-pill-val" id="rate-XAU-al">–</span></div>
+          <div class="rate-pill rate-sat"><span class="rate-pill-label">SAT</span><span class="rate-pill-val" id="rate-XAU-sat">–</span></div>
+        </div>
+      </div>
+      <div class="rate-row">
+        <div class="rate-left"><span class="rate-flag">🇬🇧</span><div class="rate-name"><span class="rate-code">GBP</span><span class="rate-full">İngiliz Sterlini</span></div></div>
+        <div class="rate-right">
+          <div class="rate-pill rate-al"><span class="rate-pill-label">AL</span><span class="rate-pill-val" id="rate-GBP-al">–</span></div>
+          <div class="rate-pill rate-sat"><span class="rate-pill-label">SAT</span><span class="rate-pill-val" id="rate-GBP-sat">–</span></div>
+        </div>
+      </div>
+      <div class="rate-row">
+        <div class="rate-left"><span class="rate-flag">🇨🇭</span><div class="rate-name"><span class="rate-code">CHF</span><span class="rate-full">İsviçre Frangı</span></div></div>
+        <div class="rate-right">
+          <div class="rate-pill rate-al"><span class="rate-pill-label">AL</span><span class="rate-pill-val" id="rate-CHF-al">–</span></div>
+          <div class="rate-pill rate-sat"><span class="rate-pill-label">SAT</span><span class="rate-pill-val" id="rate-CHF-sat">–</span></div>
+        </div>
+      </div>
+      <div class="rate-row">
+        <div class="rate-left"><span class="rate-flag">🇦🇺</span><div class="rate-name"><span class="rate-code">AUD</span><span class="rate-full">Avustralya Doları</span></div></div>
+        <div class="rate-right">
+          <div class="rate-pill rate-al"><span class="rate-pill-label">AL</span><span class="rate-pill-val" id="rate-AUD-al">–</span></div>
+          <div class="rate-pill rate-sat"><span class="rate-pill-label">SAT</span><span class="rate-pill-val" id="rate-AUD-sat">–</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="net-form" style="margin-top:14px;">
+      <div class="net-group-label">Kasandaki Toplam Tutar (EUR)</div>
+      <div class="net-form-row">
+        <input type="number" id="kasaEur" placeholder="Kasa (EUR)" step="0.01" min="0" style="flex:1; min-width:150px;">
+      </div>
+      <div class="net-live-result" id="kasaResult"></div>
+    </div>
+
+    <div style="margin-top:10px; font-family:var(--mono); font-size:9.5px; color:var(--text-faint); text-align:right;">
+      *Orta kur Avrupa Merkez Bankası (Frankfurter API) ve goldprice.org anlık verisinden çekilir; AL/SAT değerleri bu orta kur üzerine yaklaşık bir marj eklenerek gösterilir, belirli bir bankanın kesin fiyatı değildir — birkaç dakika gecikmeli olabilir, yatırım tavsiyesi değildir.
+    </div>
+  </section>
+
   <!-- YENİ: CHECKPOINT & OYUNLAŞTIRMA (KOMUTA MERKEZİ) -->
   <section id="command-center">
     <div class="sec-label">Günlük Operasyon Raporu</div>
@@ -87,7 +149,8 @@
           <option value="25">🪫 %25</option>
           <option value="0">🪫 Tükendim</option>
         </select>
-        <input type="text" id="cpNote" placeholder="Bugün operasyon için ne yaptın?" maxlength="140">
+        <div class="cp-quick-notes" id="cpQuickNotes"></div>
+        <input type="text" id="cpNote" placeholder="Özel not yaz..." maxlength="140">
         <button type="button" onclick="addCheckpoint()">Raporla</button>
       </div>
       
@@ -417,51 +480,6 @@
     </div>
   </section>
 
-  <!-- YKS NET GİRİŞİ & PUAN HESAPLAYICI -->
-  <section id="yks-net-tracker">
-    <div class="sec-label">YKS Net Girişi &amp; Puan Hesaplayıcı <span style="color:var(--amber); font-size:10px; margin-left:4px;">— TAHMİNİ, ÖSYM RESMİ SONUCU YERİNE GEÇMEZ</span></div>
-
-    <div class="net-form">
-      <div class="net-form-row">
-        <input type="text" id="dnYayin" placeholder="Yayın / Deneme adı (örn. 3D Yayınları TYT-3)">
-        <input type="date" id="dnTarih">
-      </div>
-
-      <div class="net-group-label">TYT</div>
-      <div class="net-grid">
-        <div class="net-field"><label>Türkçe (40)</label><div class="net-dy"><input type="number" id="trD" min="0" max="40" placeholder="D"><span>/</span><input type="number" id="trY" min="0" max="40" placeholder="Y"></div></div>
-        <div class="net-field"><label>Sosyal (20)</label><div class="net-dy"><input type="number" id="sbD" min="0" max="20" placeholder="D"><span>/</span><input type="number" id="sbY" min="0" max="20" placeholder="Y"></div></div>
-        <div class="net-field"><label>Matematik (40)</label><div class="net-dy"><input type="number" id="tmD" min="0" max="40" placeholder="D"><span>/</span><input type="number" id="tmY" min="0" max="40" placeholder="Y"></div></div>
-        <div class="net-field"><label>Fen (20)</label><div class="net-dy"><input type="number" id="fbD" min="0" max="20" placeholder="D"><span>/</span><input type="number" id="fbY" min="0" max="20" placeholder="Y"></div></div>
-      </div>
-
-      <div class="net-group-label">AYT — Sayısal</div>
-      <div class="net-grid">
-        <div class="net-field"><label>Matematik (40)</label><div class="net-dy"><input type="number" id="amD" min="0" max="40" placeholder="D"><span>/</span><input type="number" id="amY" min="0" max="40" placeholder="Y"></div></div>
-        <div class="net-field"><label>Fizik (14)</label><div class="net-dy"><input type="number" id="afD" min="0" max="14" placeholder="D"><span>/</span><input type="number" id="afY" min="0" max="14" placeholder="Y"></div></div>
-        <div class="net-field"><label>Kimya (13)</label><div class="net-dy"><input type="number" id="akD" min="0" max="13" placeholder="D"><span>/</span><input type="number" id="akY" min="0" max="13" placeholder="Y"></div></div>
-        <div class="net-field"><label>Biyoloji (13)</label><div class="net-dy"><input type="number" id="abD" min="0" max="13" placeholder="D"><span>/</span><input type="number" id="abY" min="0" max="13" placeholder="Y"></div></div>
-      </div>
-
-      <div class="net-obp-row">
-        <label for="dnObp">Diploma notu (opsiyonel, OBP katkısı için)</label>
-        <input type="number" id="dnObp" min="50" max="100" placeholder="örn. 85">
-      </div>
-
-      <button type="button" class="net-calc-btn" onclick="calculateAndSaveYks()">Hesapla &amp; Kaydet</button>
-
-      <div class="net-live-result" id="netLiveResult"></div>
-    </div>
-
-    <div class="yks-result-list" id="yksResultList">
-      <div class="yks-empty">Yükleniyor...</div>
-    </div>
-
-    <div style="margin-top:10px; font-family:var(--mono); font-size:9.5px; color:var(--text-faint); text-align:right;">
-      *Puan, yaygın kullanılan yaklaşık ÖSYM ağırlık katsayılarıyla hesaplanır; resmi sonuç belgesindeki puandan küçük farklar gösterebilir — sadece ilerleme takibi içindir.
-    </div>
-  </section>
-
   <section>
     <div class="sec-label i18n" data-tr="Ay Ay Kasa Kaydı" data-de="Monatliches Kassenbuch">Ay Ay Kasa Kaydı</div>
     <div class="table-wrap">
@@ -489,29 +507,14 @@
   </section>
 
   <section id="gold-actual-tracker">
-    <div class="sec-label">📊 Hedef vs. Gerçekleşen Altın Grafiği <span style="color:var(--amber); font-size:10px; margin-left:4px;">FAZ 6</span></div>
+    <div class="sec-label">📊 Plan vs. Bugünün Kuruyla Grafiği <span style="color:var(--amber); font-size:10px; margin-left:4px;">OTOMATİK</span></div>
 
     <div class="gold-chart-card">
       <canvas id="goldChart"></canvas>
     </div>
 
-    <div class="net-form" style="margin-top:16px;">
-      <div class="net-group-label">Yeni Gerçekleşen Kayıt Ekle</div>
-      <div class="net-form-row">
-        <input type="date" id="gdTarih" style="flex:1; min-width:130px;">
-        <input type="number" id="gdKasa" placeholder="Kümülatif kasa (€)" step="0.01" min="0" style="flex:1; min-width:150px;">
-        <input type="number" id="gdKur" placeholder="Güncel kur (€/gr)" step="0.01" min="0" style="flex:1; min-width:130px;">
-      </div>
-      <button type="button" class="net-calc-btn" onclick="addRealizedGold()">Kaydet &amp; Grafiğe Ekle</button>
-      <div class="net-live-result" id="goldLiveResult"></div>
-    </div>
-
-    <div class="gold-entry-list" id="goldEntryList">
-      <div class="gold-empty">Yükleniyor...</div>
-    </div>
-
-    <div style="margin-top:10px; font-family:var(--mono); font-size:9.5px; color:var(--text-faint); text-align:right;">
-      *Gram, girilen kasa / kur oranından anlık hesaplanır ve Supabase'e kaydedilir. Kesikli çizgi taban senaryo hedefi, düz yeşil çizgi gerçekleşen birikimdir.
+    <div class="hero-progress-sub" style="margin-top:12px; text-align:center;">
+      Aynı aylık kasa hedefleri; kesikli çizgide sabit plan varsayımıyla (114,08 €/gr), düz çizgide bugünün canlı altın kuruyla gösteriliyor. Elle bir şey girmene gerek yok — kur değiştikçe grafik kendiliğinden güncellenir.
     </div>
   </section>
 
