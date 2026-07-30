@@ -92,33 +92,34 @@ section:nth-of-type(10){animation-delay:.80s;}
 
 /* ===== HEADER ===== */
 header{
-  padding:28px 0 20px;
+  padding:24px 0 22px;
   border-bottom:1px solid var(--line);
-  margin-bottom:28px;
+  margin-bottom:32px;
 }
 .tag-row{
   display:flex; justify-content:space-between; align-items:center;
-  font-family:var(--mono); font-size:11px; letter-spacing:0.08em;
-  color:var(--text-faint); text-transform:uppercase; margin-bottom:14px;
-  flex-wrap:wrap; gap:8px;
+  font-family:var(--mono); font-size:10.5px; letter-spacing:0.08em;
+  color:var(--text-faint); text-transform:uppercase; margin-bottom:20px;
+  flex-wrap:wrap; gap:10px 16px;
+  padding-bottom:14px; border-bottom:1px solid var(--line);
 }
-.tag-row span.status{color:var(--green);}
+.tag-row span.status{color:var(--green); display:inline-flex; align-items:center;}
 .tag-row span.status::before{
   content:"●"; margin-right:6px; animation:pulse 2s infinite ease-in-out;
 }
 @keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.3;}}
 h1{
-  font-family:var(--mono); font-weight:800; font-size:clamp(22px,5vw,34px);
-  letter-spacing:-0.01em; color:var(--text);
+  font-family:var(--mono); font-weight:800; font-size:clamp(24px,5vw,36px);
+  letter-spacing:-0.01em; color:var(--text); line-height:1.1;
 }
-h1 .arrow{color:var(--purple); padding:0 6px;}
+h1 .arrow{color:var(--purple); padding:0 8px;}
 .subtitle{
-  color:var(--text-dim); font-size:14px; margin-top:8px; max-width:520px;
+  color:var(--text-dim); font-size:14px; margin-top:10px; max-width:520px; line-height:1.55;
 }
 
 /* ===== PHASE STRIP ===== */
 .phase-strip{
-  display:flex; gap:10px; margin-top:20px; flex-wrap:wrap;
+  display:flex; gap:10px; margin-top:22px; flex-wrap:wrap;
 }
 .phase-chip{
   font-family:var(--mono); font-size:11px; padding:6px 12px;
@@ -230,6 +231,15 @@ details.acc-section[open] > .acc-summary .acc-chevron{transform:rotate(180deg);}
 
 .rate-error{margin-top:10px; font-family:var(--mono); font-size:11px; color:var(--red); text-align:center;}
 
+/* ===== KOMPAKT CANLI KUR ROZETLERİ (Ay Ay Kasa Kaydı içine taşındı) ===== */
+.kasa-rate-strip{display:flex; gap:8px; flex-wrap:wrap;}
+.kasa-rate-chip{
+  display:flex; align-items:center; gap:7px; background:var(--panel); border:1px solid var(--line);
+  border-radius:999px; padding:6px 14px;
+}
+.kasa-rate-code{font-family:var(--mono); font-size:10px; color:var(--text-faint); text-transform:uppercase; letter-spacing:0.05em;}
+.kasa-rate-val{font-family:var(--mono); font-weight:800; font-size:14px; color:var(--purple); font-variant-numeric:tabular-nums;}
+
 @media(max-width:420px){
   .rate-hero-val{font-size:20px;}
   .rate-cell-lg{padding:12px 14px;}
@@ -265,6 +275,12 @@ details.acc-section[open] > .acc-summary .acc-chevron{transform:rotate(180deg);}
 .risk-icon{color:var(--amber); font-family:var(--mono); font-size:14px; flex-shrink:0;}
 .risk-text{font-size:13px; color:var(--text-dim); line-height:1.55;}
 .risk-text b{color:var(--text); font-weight:600;}
+
+/* ===== GÜNLÜK RİTİM + HAFTALIK YAPI (birleşik akordiyon) ===== */
+.rhythm-subhead{
+  font-family:var(--mono); font-size:10px; color:var(--text-faint); text-transform:uppercase;
+  letter-spacing:0.08em; margin-bottom:10px;
+}
 
 /* ===== DAILY TIMELINE ===== */
 .daily-timeline{
@@ -482,6 +498,14 @@ footer{
   .gold-entry-item{flex-wrap:wrap;}
   .gold-entry-gram{margin-left:auto;}
 }
+
+/* ===== KOMPAKT SERTİFİKA ÖZETİ (Dil Yol Haritası içine gömülü) ===== */
+.cert-mini-list{display:flex; flex-direction:column; gap:10px;}
+.cert-mini{background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:10px 14px;}
+.cert-mini-top{display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;}
+.cert-mini-name{font-family:var(--mono); font-weight:700; font-size:12.5px; color:var(--text);}
+.cert-mini-dates{display:flex; align-items:center; flex-wrap:wrap; gap:5px; margin-top:8px;}
+.cert-mini-note{font-family:var(--mono); font-size:10px; color:var(--text-faint); margin-left:2px;}
 
 /* ===== CERTIFICATE REQUIREMENT BOX (tek kutu) ===== */
 .cert-box{background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:4px 18px;}

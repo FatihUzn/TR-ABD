@@ -47,49 +47,6 @@
     </div>
   </header>
 
-  <!-- CANLI KUR (key gerektirmez: Frankfurter/ECB, yedek: open.er-api.com + goldprice.org) -->
-  <section id="live-rates">
-    <div class="sec-label">💱 Anlık Kur <span class="rate-updated" id="rateUpdatedAt"></span></div>
-
-    <div class="rate-panel">
-      <div class="rate-row-top">
-        <div class="rate-cell rate-cell-lg">
-          <div class="rate-cell-top">
-            <span class="rate-hero-code">EUR</span>
-            <span class="rate-hero-eq">1 € =</span>
-          </div>
-          <div class="rate-hero-main"><span class="rate-hero-val" id="rate-EUR-mid">–</span><span class="rate-hero-cur">₺</span></div>
-        </div>
-        <div class="rate-cell rate-cell-lg">
-          <div class="rate-cell-top">
-            <span class="rate-hero-code">USD</span>
-            <span class="rate-hero-eq">1 $ =</span>
-          </div>
-          <div class="rate-hero-main"><span class="rate-hero-val" id="rate-USD-mid">–</span><span class="rate-hero-cur">₺</span></div>
-        </div>
-      </div>
-      <div class="rate-row-bottom">
-        <div class="rate-cell rate-cell-sm"><span class="rate-mini-label">gr altın</span><span class="rate-mini-val" id="rate-XAU-mid">–</span></div>
-        <div class="rate-cell rate-cell-sm"><span class="rate-mini-label">GBP</span><span class="rate-mini-val" id="rate-GBP-mid">–</span></div>
-        <div class="rate-cell rate-cell-sm"><span class="rate-mini-label">CHF</span><span class="rate-mini-val" id="rate-CHF-mid">–</span></div>
-        <div class="rate-cell rate-cell-sm"><span class="rate-mini-label">AUD</span><span class="rate-mini-val" id="rate-AUD-mid">–</span></div>
-      </div>
-    </div>
-    <div class="rate-error" id="rateError" style="display:none;">Kur verisi alınamadı — sayfayı yenile ya da birazdan tekrar dene.</div>
-
-    <div class="net-form" style="margin-top:14px;">
-      <div class="net-group-label">Kasandaki Toplam Tutar (EUR)</div>
-      <div class="net-form-row">
-        <input type="number" id="kasaEur" placeholder="Kasa (EUR)" step="0.01" min="0" style="flex:1; min-width:150px;">
-      </div>
-      <div class="net-live-result" id="kasaResult"></div>
-    </div>
-
-    <div style="margin-top:10px; font-family:var(--mono); font-size:9.5px; color:var(--text-faint); text-align:right;">
-      *Orta kur Avrupa Merkez Bankası (Frankfurter API, yedek: open.er-api.com) ve goldprice.org anlık verisinden çekilir; belirli bir bankanın kesin fiyatı değildir — birkaç dakika gecikmeli olabilir, yatırım tavsiyesi değildir.
-    </div>
-  </section>
-
   <!-- YENİ: CHECKPOINT & OYUNLAŞTIRMA (KOMUTA MERKEZİ) -->
   <section id="command-center">
     <div class="sec-label">Günlük Operasyon Raporu</div>
@@ -145,8 +102,9 @@
   </section>
 
   <details class="acc-section">
-    <summary class="sec-label acc-summary"><span class="i18n" data-tr="Günlük Ritim" data-de="Täglicher Rhythmus">Günlük Ritim</span> <span style="color:var(--amber); font-size:10px; margin-left:4px;">— TASLAK, İŞVERENLE NETLEŞTİRİLECEK</span><span class="acc-chevron">▾</span></summary>
+    <summary class="sec-label acc-summary"><span class="i18n" data-tr="Günlük Ritim &amp; Haftalık Yapı" data-de="Täglicher Rhythmus &amp; Wochenstruktur">Günlük Ritim &amp; Haftalık Yapı</span> <span style="color:var(--amber); font-size:10px; margin-left:4px;">— TASLAK, İŞVERENLE NETLEŞTİRİLECEK</span><span class="acc-chevron">▾</span></summary>
     <div class="acc-body">
+    <div class="rhythm-subhead i18n" data-tr="Günlük döngü (24 sa)" data-de="Täglicher Zyklus (24 Std.)">Günlük döngü (24 sa)</div>
     <div class="daily-timeline">
       <div class="seg" style="width:25%; background:var(--amber);" title="00:00–06:00 Vardiya (Temel, devam)"></div>
       <div class="seg" style="width:2.1%; background:var(--line);" title="06:00–06:30 Yol"></div>
@@ -172,12 +130,8 @@
     <div class="hero-progress-sub" style="margin-top:10px;">
       <span class="i18n" data-tr="Temel vardiya 8 sa × 6 gün = 48 sa/hafta (Almanya'daki yasal ortalama üst sınırla aynı hizada). 20:00–22:00 mesai penceresi isteğe bağlı ve gece primi vergisiz olduğu için ekonomik olarak cazip, ama her gün garanti değil — işverenin o gün seni yazıp yazmamasına bağlı." data-de="Basisschicht 8 Std. × 6 Tage = 48 Std./Woche (entspricht der gesetzlichen Durchschnittsobergrenze in Deutschland). Das Zeitfenster 20:00–22:00 ist optionale Mehrarbeit und wegen des steuerfreien Nachtzuschlags finanziell attraktiv, aber nicht täglich garantiert — abhängig davon, ob der Arbeitgeber dich einteilt.">Temel vardiya 8 sa × 6 gün = 48 sa/hafta (Almanya'daki yasal ortalama üst sınırla aynı hizada). 20:00–22:00 mesai penceresi isteğe bağlı ve gece primi vergisiz olduğu için ekonomik olarak cazip, ama her gün garanti değil — işverenin o gün seni yazıp yazmamasına bağlı.</span>
     </div>
-    </div>
-  </details>
 
-  <details class="acc-section">
-    <summary class="sec-label acc-summary"><span class="i18n" data-tr="Haftalık Yapı" data-de="Wochenstruktur">Haftalık Yapı</span> <span style="color:var(--amber); font-size:10px; margin-left:4px;">— TASLAK</span><span class="acc-chevron">▾</span></summary>
-    <div class="acc-body">
+    <div class="rhythm-subhead i18n" data-tr="Haftalık yapı" data-de="Wochenstruktur" style="margin-top:22px;">Haftalık yapı</div>
     <div class="table-wrap weekly-table">
       <table>
         <thead><tr><th class="i18n" data-tr="Gün" data-de="Tag">Gün</th><th class="i18n" data-tr="Vardiya" data-de="Schicht">Vardiya</th><th class="i18n" data-tr="Kurs" data-de="Kurs">Kurs</th><th class="i18n" data-tr="Not" data-de="Notiz">Not</th></tr></thead>
@@ -284,26 +238,6 @@
     </div>
   </section>
 
-  <details class="acc-section">
-    <summary class="sec-label acc-summary i18n" data-tr="⚠ Risk Kayıtları" data-de="⚠ Risikoprotokoll">⚠ Risk Kayıtları<span class="acc-chevron">▾</span></summary>
-    <div class="acc-body">
-    <div class="risk-panel">
-      <div class="risk-item">
-        <div class="risk-icon">01</div>
-        <div class="risk-text"><b>Uyku düzeni kırılgan.</b> 06:30–13:00 + 18:00–19:15 bölünmüş uyku, 1 yıl kesintisiz sürdürülmesi gereken en riskli değişken. Hastalıkta mesai primleri kesilir, maaş taban rakamlara düşer.</div>
-      </div>
-      <div class="risk-item">
-        <div class="risk-icon">02</div>
-        <div class="risk-text"><b>Altın kuru donmuş değil.</b> Tablo 114,08 €/gr üzerinden dondurulmuş bir projeksiyon. Piyasa volatilitesi yüksek — Eylül'deki gerçek gramaj bu tablodan sapabilir.</div>
-      </div>
-      <div class="risk-item">
-        <div class="risk-icon">03</div>
-        <div class="risk-text"><b>28.980 € koşullu.</b> Vergi iadesi (Steuerberater onayı gerekir) ve resmî tatil primleri (işveren inisiyatifi) garanti değil.</div>
-      </div>
-    </div>
-    </div>
-  </details>
-
   <section>
     <div class="sec-label i18n" data-tr="Dil Yol Haritası: A1 → C1" data-de="Sprach-Roadmap: A1 → C1">Dil Yol Haritası: A1 → C1</div>
     <div class="roadmap-outer">
@@ -339,6 +273,27 @@
     </div>
     <div class="scroll-hint" aria-hidden="true"></div>
     </div>
+
+    <details class="cash-log-full" style="margin-top:16px;">
+      <summary class="cash-log-toggle i18n" data-tr="Kabul edilen belgeler &amp; sınav tarihleri (özet)" data-de="Anerkannte Zertifikate &amp; Prüfungstermine (Kurzfassung)">Kabul edilen belgeler &amp; sınav tarihleri (özet)</summary>
+      <div class="cert-mini-list" style="margin-top:12px;">
+        <div class="cert-mini">
+          <div class="cert-mini-top"><span class="cert-mini-name">telc Deutsch C1 Hochschule</span><span class="badge">DOĞRUDAN KABUL</span></div>
+          <div class="cert-mini-dates"><span class="cert-date-chip">27.07.2026</span><span class="cert-date-chip">03.11.2026</span><span class="cert-date-chip">18.12.2026</span><span class="cert-mini-note">Mannheim Abendakademie</span></div>
+        </div>
+        <div class="cert-mini">
+          <div class="cert-mini-top"><span class="cert-mini-name">TestDaF</span><span class="badge">TDN 4×4 ŞART</span></div>
+          <div class="cert-mini-dates"><span class="cert-date-chip">20.01</span><span class="cert-date-chip">14.04</span><span class="cert-date-chip">08.06</span><span class="cert-date-chip">15.09</span><span class="cert-date-chip">07.10</span><span class="cert-date-chip">11.11.2027</span></div>
+        </div>
+        <div class="cert-mini">
+          <div class="cert-mini-top"><span class="cert-mini-name">DSH-2 / DSH-3</span><span class="badge">DOĞRUDAN KABUL</span></div>
+          <div class="cert-mini-dates"><span class="cert-mini-note">Sabit takvim yok — kuruma sorulmalı</span></div>
+        </div>
+        <div class="cert-mini">
+          <div class="cert-mini-top"><span class="cert-mini-name">Goethe-Zertifikat C2 (GDS)</span><span class="badge" style="background:rgba(168,99,26,0.12); color:var(--amber); border-color:rgba(168,99,26,0.4);">C1 YETMİYOR</span></div>
+        </div>
+      </div>
+    </details>
   </section>
 
   <section>
@@ -361,71 +316,6 @@
       </div>
     </div>
   </section>
-
-  <details class="acc-section">
-    <summary class="sec-label acc-summary i18n" data-tr="⚠ Dil Planı Risk Notları" data-de="⚠ Risikohinweise Sprachplan">⚠ Dil Planı Risk Notları<span class="acc-chevron">▾</span></summary>
-    <div class="acc-body">
-    <div class="risk-panel">
-      <div class="risk-item">
-        <div class="risk-icon">01</div>
-        <div class="risk-text"><b>Sıfır tolerans zincir.</b> 12 ay boyunca her modül art arda planlandı — bir modülü tekrar etme ya da bir sınavı geçememe ihtimali C1'i Eylül'den kaydırabilir.</div>
-      </div>
-      <div class="risk-item">
-        <div class="risk-icon">02</div>
-        <div class="risk-text"><b>Standart C1 sertifikası yeterli değil.</b> TU Berlin, Goethe C1 dahil "sıradan" hiçbir C1 belgesini kabul etmiyor. Sadece aşağıdaki listedeki akademik sınavlar geçerli — VHS kursu seni hazırlar ama kendisi resmi belge sayılmaz, ayrıca bağımsız bir sınav merkezine girmen gerekir.</div>
-      </div>
-      <div class="risk-item">
-        <div class="risk-icon">03</div>
-        <div class="risk-text"><b>B planı gerekli.</b> C1'e Eylül'de yetişilemezse: (a) bir sonraki dönem başvurusu veya (b) B2/C1 arası seviyeyle Studienkolleg başlangıcı düşünülmeli.</div>
-      </div>
-    </div>
-    </div>
-  </details>
-
-  <details class="acc-section">
-    <summary class="sec-label acc-summary i18n" data-tr="Kabul Edilen Dil Belgeleri &amp; Sınav Tarihleri" data-de="Anerkannte Sprachzertifikate &amp; Prüfungstermine">Kabul Edilen Dil Belgeleri &amp; Sınav Tarihleri<span class="acc-chevron">▾</span></summary>
-    <div class="acc-body">
-    <div class="cert-box">
-      <div class="cert-entry accepted">
-        <div class="cert-name">telc Deutsch C1 Hochschule <span class="badge">DOĞRUDAN KABUL</span></div>
-        <div class="cert-detail">TU Berlin'de doğrudan kabul için geçerli. Standart "telc C1" yeterli değil — sertifikada mutlaka <b>"Hochschule"</b> ibaresi olmalı. Ücret: ~205–235 €.</div>
-        <div class="cert-dates">
-          <div class="cert-dates-label">En yakın merkez: Mannheim Abendakademie (~15 km)</div>
-          <span class="cert-date-chip">27.07.2026</span>
-          <span class="cert-date-chip">03.11.2026</span>
-          <span class="cert-date-chip">18.12.2026</span>
-        </div>
-        <div class="cert-source">Kaynak: abendakademie-mannheim.de — 2027 tarihleri henüz yayınlanmadı, ~4 ay önceden açılıyor.</div>
-      </div>
-
-      <div class="cert-entry accepted">
-        <div class="cert-name">TestDaF <span class="badge">TDN 4×4 ŞART</span></div>
-        <div class="cert-detail">4 bölümün (Okuma, Dinleme, Yazma, Konuşma) her birinden en az TDN 4 gerekir. ⚠ <b>Dijital TestDaF'ın "kombine sertifika" versiyonu TU Berlin tarafından kabul edilmiyor</b> — normal sonuç belgesini iste. Ücret: 210 € (dijital) / 215 € (kağıt).</div>
-        <div class="cert-dates">
-          <div class="cert-dates-label">Ulusal tarihler (tüm merkezlerde aynı gün)</div>
-          <span class="cert-date-chip">20.01.2027</span>
-          <span class="cert-date-chip">14.04.2027</span>
-          <span class="cert-date-chip">08.06.2027</span>
-          <span class="cert-date-chip">15.09.2027</span>
-          <span class="cert-date-chip">07.10.2027</span>
-          <span class="cert-date-chip">11.11.2027</span>
-        </div>
-        <div class="cert-source">Kaynak: testdaf.de. Sonuç süresi: dijital ~3 hf, kağıt ~6 hf — başvuru tarihiyle çakışmasın diye hesapla.</div>
-      </div>
-
-      <div class="cert-entry accepted">
-        <div class="cert-name">DSH-2 / DSH-3 <span class="badge">DOĞRUDAN KABUL</span></div>
-        <div class="cert-detail">Alman devletince tanınan (HRK listesi) herhangi bir üniversitenin DSH sınavından DSH-2 veya üstü. Genellikle üniversitelerin kendi bünyesinde, dönem başlamadan birkaç hafta önce yapılır — sabit ulusal takvim yoktur, tarihleri sınava gireceğin kuruma sormalısın.</div>
-        <div class="cert-source">Kaynak: tu.berlin — Studierendensekretariat, "Language skills" sayfası.</div>
-      </div>
-
-      <div class="cert-entry">
-        <div class="cert-name">Goethe-Zertifikat C2 (GDS) <span class="badge" style="background:rgba(168,99,26,0.12); color:var(--amber); border-color:rgba(168,99,26,0.4);">C1 YETMİYOR</span></div>
-        <div class="cert-detail">Goethe'nin standart <b>C1</b> sertifikası TU Berlin'de doğrudan lisansa başlamak için <b>yeterli değil</b> (sadece Studienkolleg/hazırlık için kabul edilebilir). Doğrudan kayıt için <b>C2</b> belgesi gerekir.</div>
-      </div>
-    </div>
-    </div>
-  </details>
 
   <!-- CANLI YKS SAYACI (GÜN:SAAT:DK:SN) -->
   <section>
@@ -451,45 +341,53 @@
     </div>
   </section>
 
-  <section>
-    <div class="sec-label i18n" data-tr="Ay Ay Kasa Kaydı" data-de="Monatliches Kassenbuch">Ay Ay Kasa Kaydı</div>
-    <div class="table-wrap">
+  <section id="kasa-section">
+    <div class="sec-label i18n" data-tr="Ay Ay Kasa Kaydı" data-de="Monatliches Kassenbuch">Ay Ay Kasa Kaydı<span class="rate-updated" id="rateUpdatedAt"></span></div>
+
+    <div class="kasa-rate-strip">
+      <div class="kasa-rate-chip"><span class="kasa-rate-code">USD/TL</span><span class="kasa-rate-val" id="rate-USD-mid">–</span></div>
+      <div class="kasa-rate-chip"><span class="kasa-rate-code">gr altın/TL</span><span class="kasa-rate-val" id="rate-XAU-mid">–</span></div>
+      <span class="rate-hero-code" id="rate-EUR-mid" style="display:none;">–</span>
+      <span class="rate-hero-code" id="rate-GBP-mid" style="display:none;">–</span>
+      <span class="rate-hero-code" id="rate-CHF-mid" style="display:none;">–</span>
+      <span class="rate-hero-code" id="rate-AUD-mid" style="display:none;">–</span>
+    </div>
+    <div class="rate-error" id="rateError" style="display:none;">Kur verisi alınamadı — sayfayı yenile ya da birazdan tekrar dene.</div>
+
+    <div class="net-form" style="margin-top:14px;">
+      <div class="net-group-label">Kasandaki Toplam Tutar (EUR)</div>
+      <div class="net-form-row">
+        <input type="number" id="kasaEur" placeholder="Kasa (EUR)" step="0.01" min="0" style="flex:1; min-width:150px;">
+      </div>
+      <div class="net-live-result" id="kasaResult"></div>
+    </div>
+
+    <div class="table-wrap" style="margin-top:16px;">
       <table>
         <thead>
           <tr><th class="i18n" data-tr="Dönem" data-de="Zeitraum">Dönem</th><th class="i18n" data-tr="Kalan/Eklenen" data-de="Verbleibend/Hinzugefügt">Kalan/Eklenen</th><th class="i18n" data-tr="Kümülatif Kasa" data-de="Kumulative Kasse">Kümülatif Kasa</th><th class="i18n" data-tr="Altın (114,08 €/gr)" data-de="Gold (114,08 €/g)">Altın (114,08 €/gr)</th></tr>
         </thead>
         <tbody>
           <tr><td>Kasım Başı</td><td>+ 1.200 €</td><td class="cash">1.200 €</td><td class="gold">10,52 gr</td></tr>
+          <tr><td>Kasım Sonu (cihaz alımı)</td><td>− 290 €</td><td class="cash">910 €</td><td class="gold">7,98 gr</td></tr>
+          <tr><td>Aralık Başı</td><td>+ 2.000 €</td><td class="cash">2.910 €</td><td class="gold">25,51 gr</td></tr>
+          <tr><td>Aralık Sonu</td><td>+ 1.710 €</td><td class="cash">4.620 €</td><td class="gold">40,50 gr</td></tr>
+          <tr><td>Ocak Sonu</td><td>+ 1.710 €</td><td class="cash">6.330 €</td><td class="gold">55,49 gr</td></tr>
+          <tr><td>Şubat Sonu</td><td>+ 1.710 €</td><td class="cash">8.040 €</td><td class="gold">70,48 gr</td></tr>
+          <tr><td>Mart Sonu</td><td>+ 1.710 €</td><td class="cash">9.750 €</td><td class="gold">85,47 gr</td></tr>
           <tr class="milestone"><td>Nisan Sonu (taksit biter)</td><td>+ 1.710 €</td><td class="cash">11.460 €</td><td class="gold">100,46 gr</td></tr>
+          <tr><td>Mayıs Sonu</td><td>+ 2.000 €</td><td class="cash">13.460 €</td><td class="gold">117,99 gr</td></tr>
+          <tr><td>Haziran Sonu</td><td>+ 2.000 €</td><td class="cash">15.460 €</td><td class="gold">135,52 gr</td></tr>
+          <tr><td>Temmuz Sonu</td><td>+ 2.000 €</td><td class="cash">17.460 €</td><td class="gold">153,05 gr</td></tr>
+          <tr><td>Ağustos Sonu</td><td>+ 2.000 €</td><td class="cash">19.460 €</td><td class="gold">170,58 gr</td></tr>
           <tr class="milestone"><td>Eylül Sonu (sözleşme biter)</td><td>+ 2.000 €</td><td class="cash">21.460 €</td><td class="gold">188,11 gr</td></tr>
         </tbody>
       </table>
     </div>
-    <details class="cash-log-full">
-      <summary class="cash-log-toggle">Tüm 13 ayı göster</summary>
-      <div class="table-wrap" style="margin-top:12px;">
-        <table>
-          <thead>
-            <tr><th>Dönem</th><th>Kalan/Eklenen</th><th>Kümülatif Kasa</th><th>Altın (114,08 €/gr)</th></tr>
-          </thead>
-          <tbody>
-            <tr><td>Kasım Başı</td><td>+ 1.200 €</td><td class="cash">1.200 €</td><td class="gold">10,52 gr</td></tr>
-            <tr><td>Kasım Sonu (cihaz alımı)</td><td>− 290 €</td><td class="cash">910 €</td><td class="gold">7,98 gr</td></tr>
-            <tr><td>Aralık Başı</td><td>+ 2.000 €</td><td class="cash">2.910 €</td><td class="gold">25,51 gr</td></tr>
-            <tr><td>Aralık Sonu</td><td>+ 1.710 €</td><td class="cash">4.620 €</td><td class="gold">40,50 gr</td></tr>
-            <tr><td>Ocak Sonu</td><td>+ 1.710 €</td><td class="cash">6.330 €</td><td class="gold">55,49 gr</td></tr>
-            <tr><td>Şubat Sonu</td><td>+ 1.710 €</td><td class="cash">8.040 €</td><td class="gold">70,48 gr</td></tr>
-            <tr><td>Mart Sonu</td><td>+ 1.710 €</td><td class="cash">9.750 €</td><td class="gold">85,47 gr</td></tr>
-            <tr class="milestone"><td>Nisan Sonu (taksit biter)</td><td>+ 1.710 €</td><td class="cash">11.460 €</td><td class="gold">100,46 gr</td></tr>
-            <tr><td>Mayıs Sonu</td><td>+ 2.000 €</td><td class="cash">13.460 €</td><td class="gold">117,99 gr</td></tr>
-            <tr><td>Haziran Sonu</td><td>+ 2.000 €</td><td class="cash">15.460 €</td><td class="gold">135,52 gr</td></tr>
-            <tr><td>Temmuz Sonu</td><td>+ 2.000 €</td><td class="cash">17.460 €</td><td class="gold">153,05 gr</td></tr>
-            <tr><td>Ağustos Sonu</td><td>+ 2.000 €</td><td class="cash">19.460 €</td><td class="gold">170,58 gr</td></tr>
-            <tr class="milestone"><td>Eylül Sonu (sözleşme biter)</td><td>+ 2.000 €</td><td class="cash">21.460 €</td><td class="gold">188,11 gr</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </details>
+
+    <div style="margin-top:10px; font-family:var(--mono); font-size:9.5px; color:var(--text-faint); text-align:right;">
+      *Orta kur Avrupa Merkez Bankası (Frankfurter API, yedek: open.er-api.com) ve goldprice.org anlık verisinden çekilir; belirli bir bankanın kesin fiyatı değildir — birkaç dakika gecikmeli olabilir, yatırım tavsiyesi değildir.
+    </div>
   </section>
 
   <section id="gold-actual-tracker">
