@@ -1,19 +1,19 @@
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=Inter:wght@400;500;600;700&display=swap');
 
-:root{
-  --void:#f5f2e8;
-  --panel:#fffdf7;
-  --panel-2:#ece6d5;
-  --line:#d9d0b8;
-  --purple:#6d4fe0;
-  --purple-dim:#a996ea;
-  --purple-glow: rgba(109,79,224,0.25);
-  --green:#147a55;
-  --amber:#a8631a;
-  --red:#b23a3a;
-  --text:#221d14;
-  --text-dim:#6b6250;
-  --text-faint:#96896c;
+:root {
+  --void: #0a122a;          /* Gece laciverti */
+  --panel: #111827;         /* Koyu panel arka planı */
+  --panel-2: #1f2937;       /* Daha açık panel */
+  --line: #374151;          /* Kenarlıklar */
+  --purple: #fbbf24;        /* Eski mor yerine YENİ ALTIN/AMBER vurgu */
+  --purple-dim: #fde68a;    /* Yumuşak altın */
+  --purple-glow: rgba(251,191,36,0.25);
+  --green: #10b981;         /* Daha canlı yeşil (dark mode için) */
+  --amber: #f59e0b;         /* Turuncu vurgu */
+  --red: #ef4444;           /* Canlı kırmızı */
+  --text: #f9fafb;          /* Açık krem metin */
+  --text-dim: #d1d5db;      /* İkincil metin */
+  --text-faint: #9ca3af;    /* Sönük metin */
   --mono: 'JetBrains Mono', 'SF Mono', monospace;
   --sans: 'Inter', -apple-system, sans-serif;
 }
