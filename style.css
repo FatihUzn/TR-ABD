@@ -218,6 +218,44 @@ details.acc-section[open] > .acc-summary .acc-chevron{transform:rotate(180deg);}
 .stat-value.purple{color:var(--purple);}
 .stat-value.green{color:var(--green);}
 
+/* ===== YKS ÇEKLİST (konu takibi) ===== */
+details.yks-subject{
+  margin-bottom:12px; background:var(--panel); border:1px solid var(--line);
+  border-radius:12px; padding:14px 16px;
+}
+details.yks-subject > .acc-summary{margin-bottom:0;}
+details.yks-subject .sec-label{margin-bottom:0;}
+.yks-subject-count{
+  font-family:var(--mono); font-size:11px; color:var(--text-faint); flex-shrink:0;
+}
+details.yks-subject[open] > .acc-summary .yks-subject-count{color:var(--purple);}
+.yks-mini-track{height:5px; margin:12px 0 10px;}
+.yks-mini-fill{transition:width .5s ease;}
+.yks-topic-list{display:flex; flex-direction:column; gap:2px;}
+.yks-topic-row{
+  display:flex; align-items:flex-start; gap:10px; padding:7px 4px;
+  cursor:pointer; border-radius:6px; font-family:var(--sans); font-size:13.5px;
+  color:var(--text-dim); transition:background .15s ease;
+}
+.yks-topic-row:hover{background:var(--panel-2);}
+.yks-topic-row input[type="checkbox"]{
+  appearance:none; -webkit-appearance:none; width:17px; height:17px; flex-shrink:0;
+  border:1.5px solid var(--line); border-radius:5px; background:var(--void);
+  margin-top:1px; cursor:pointer; position:relative; transition:all .15s ease;
+}
+.yks-topic-row input[type="checkbox"]:checked{
+  background:var(--purple); border-color:var(--purple);
+}
+.yks-topic-row input[type="checkbox"]:checked::after{
+  content:"✓"; position:absolute; inset:0; display:flex; align-items:center;
+  justify-content:center; font-size:12px; font-weight:800; color:#0a122a;
+}
+.yks-topic-row.checked .yks-topic-name{color:var(--text-faint); text-decoration:line-through; text-decoration-color:var(--line);}
+.yks-subtopics{margin-left:27px; display:flex; flex-direction:column; gap:2px; margin-top:2px; margin-bottom:4px;}
+.yks-subtopics .yks-topic-row{font-size:12.5px; padding:5px 4px;}
+.yks-subtopics .yks-topic-row input[type="checkbox"]{width:15px; height:15px;}
+.yks-topic-group{margin-bottom:2px;}
+
 .rate-panel{border:1px solid var(--line); border-radius:12px; overflow:hidden; background:var(--panel);}
 .rate-row-top{display:flex;}
 .rate-row-bottom{display:flex; border-top:1px solid var(--line);}

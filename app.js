@@ -313,3 +313,246 @@
 
   loadLiveRates();
   setInterval(loadLiveRates, 5 * 60 * 1000); // 5 dakikada bir tazele
+
+  // ============================================================
+  // --- YKS KONU TAKİBİ (checklist motoru) ---
+  // Veri (TYT/AYT konu listeleri) aşağıdaki YKS_DATA objesine
+  // eklenecek — bu adımda sadece motor kuruluyor, içerik boş.
+  // Her ders: { id, ad, konular: [ { id, ad, altKonular?: [ad,ad,...] } ] }
+  // Alt konusu olan bir konunun kendisi checkbox almaz; sadece
+  // alt konuları checkbox olur. Alt konusu olmayan konu tek
+  // checkbox'tır.
+  // ============================================================
+  const YKS_DATA = {
+    TYT: [
+      { id:'tyt-turkce', ad:'Türkçe (40)', konular:[
+        { id:'tyt-turkce-1', ad:'Sözcükte ve Cümlede Anlam' },
+        { id:'tyt-turkce-2', ad:'Paragraf (~%70 ağırlık — en yüksek getiri)' },
+        { id:'tyt-turkce-3', ad:'Dil Bilgisi', altKonular:['İsimler','Zamirler','Sıfatlar','Zarflar','Edat','Bağlaç','Ünlem'] },
+        { id:'tyt-turkce-4', ad:'Yazım Kuralları ve Noktalama İşaretleri' },
+        { id:'tyt-turkce-5', ad:'Anlatım Bozuklukları' }
+      ]},
+      { id:'tyt-mat', ad:'Matematik ve Geometri (40)', konular:[
+        { id:'tyt-mat-1', ad:'Temel Kavramlar, Sayı Basamakları, Rasyonel Sayılar' },
+        { id:'tyt-mat-2', ad:'Oran-Orantı ve Denklem Çözme' },
+        { id:'tyt-mat-3', ad:'Problemler (TYT matematiğin en önemli bölümü)' },
+        { id:'tyt-mat-4', ad:'Kümeler, Fonksiyonlar, Grafik ve Tablo Yorumlama' },
+        { id:'tyt-mat-5', ad:'Geometri', altKonular:['Doğruda ve Üçgende Açılar','Özel Üçgenler','Eşlik ve Benzerlik','Çokgenler','Dörtgenler','Çember ve Daire','Katı Cisimler','Analitik Geometri'] }
+      ]},
+      { id:'tyt-fizik', ad:'Fizik (7)', konular:[
+        { id:'tyt-fizik-1', ad:'Hareket ve Kuvvet' },
+        { id:'tyt-fizik-2', ad:'Enerji' },
+        { id:'tyt-fizik-3', ad:'Isı ve Sıcaklık' },
+        { id:'tyt-fizik-4', ad:'Basınç' },
+        { id:'tyt-fizik-5', ad:'Elektrik' },
+        { id:'tyt-fizik-6', ad:'Optik' }
+      ]},
+      { id:'tyt-kimya', ad:'Kimya (7)', konular:[
+        { id:'tyt-kimya-1', ad:'Kimya Bilimi' },
+        { id:'tyt-kimya-2', ad:'Atom ve Periyodik Sistem' },
+        { id:'tyt-kimya-3', ad:'Kimyasal Türler Arası Etkileşimler' },
+        { id:'tyt-kimya-4', ad:'Karışımlar' }
+      ]},
+      { id:'tyt-biyoloji', ad:'Biyoloji (6)', konular:[
+        { id:'tyt-biyoloji-1', ad:'Hücre' },
+        { id:'tyt-biyoloji-2', ad:'Canlıların Temel Bileşenleri' },
+        { id:'tyt-biyoloji-3', ad:'Ekoloji' },
+        { id:'tyt-biyoloji-4', ad:'Kalıtım' }
+      ]},
+      { id:'tyt-tarih', ad:'Tarih (5)', konular:[
+        { id:'tyt-tarih-1', ad:'Genel Tarih Akışı' },
+        { id:'tyt-tarih-2', ad:'Türk-İslam Devletleri' },
+        { id:'tyt-tarih-3', ad:'Osmanlı Tarihi' },
+        { id:'tyt-tarih-4', ad:'İnkılap Tarihi Temelleri' }
+      ]},
+      { id:'tyt-cografya', ad:'Coğrafya (5)', konular:[
+        { id:'tyt-cografya-1', ad:'Doğa ve İnsan' },
+        { id:'tyt-cografya-2', ad:'Harita Bilgisi' },
+        { id:'tyt-cografya-3', ad:'Yerin Şekli ve Hareketleri' },
+        { id:'tyt-cografya-4', ad:'İklim Bilgisi' },
+        { id:'tyt-cografya-5', ad:'Nüfus ve Yerleşme' },
+        { id:'tyt-cografya-6', ad:'Türkiye Coğrafyası' }
+      ]},
+      { id:'tyt-felsefe', ad:'Felsefe (5)', konular:[
+        { id:'tyt-felsefe-1', ad:'Bilgi Felsefesi' },
+        { id:'tyt-felsefe-2', ad:'Varlık Felsefesi' },
+        { id:'tyt-felsefe-3', ad:'Ahlak Felsefesi' },
+        { id:'tyt-felsefe-4', ad:'Siyaset Felsefesi' }
+      ]},
+      { id:'tyt-din', ad:'Din Kültürü (5)', konular:[
+        { id:'tyt-din-1', ad:"Kur'an'da Kavramlar" },
+        { id:'tyt-din-2', ad:'Hz. Muhammed\'in Hayatı' },
+        { id:'tyt-din-3', ad:'İslam ve İbadet' }
+      ]}
+    ],
+    AYT: [
+      { id:'ayt-mat', ad:'Matematik (40)', konular:[
+        { id:'ayt-mat-1', ad:'Polinomlar' },
+        { id:'ayt-mat-2', ad:'İkinci Dereceden Denklemler' },
+        { id:'ayt-mat-3', ad:'Trigonometri', altKonular:['Radyan-Derece','Birim Çember','Trigonometrik Fonksiyonlar ve Grafikleri'] },
+        { id:'ayt-mat-4', ad:'Logaritma' },
+        { id:'ayt-mat-5', ad:'Diziler' },
+        { id:'ayt-mat-6', ad:'Limit' },
+        { id:'ayt-mat-7', ad:'Türev' },
+        { id:'ayt-mat-8', ad:'İntegral' }
+      ]},
+      { id:'ayt-fizik', ad:'Fizik (14)', konular:[
+        { id:'ayt-fizik-1', ad:'Vektörler' },
+        { id:'ayt-fizik-2', ad:'Newton Yasaları' },
+        { id:'ayt-fizik-3', ad:'Elektrik ve Manyetizma' },
+        { id:'ayt-fizik-4', ad:'Modern Fizik' }
+      ]},
+      { id:'ayt-kimya', ad:'Kimya (13)', konular:[
+        { id:'ayt-kimya-1', ad:'Kimyasal Tepkimelerde Hız ve Denge' },
+        { id:'ayt-kimya-2', ad:'Elektrokimya' },
+        { id:'ayt-kimya-3', ad:'Organik Kimya (AYT kimyanın en belirleyici kısmı)' }
+      ]},
+      { id:'ayt-biyoloji', ad:'Biyoloji (13)', konular:[
+        { id:'ayt-biyoloji-1', ad:'İnsan Fizyolojisi ve Sistemler', altKonular:['Sinir Sistemi','Endokrin Sistem','Destek ve Hareket Sistemi','Diğer Sistemler'] },
+        { id:'ayt-biyoloji-2', ad:'Fotosentez ve Solunum' },
+        { id:'ayt-biyoloji-3', ad:'Bitki Biyolojisi' },
+        { id:'ayt-biyoloji-4', ad:'Genetik ve Evrim' }
+      ]}
+    ]
+  };
+
+  const YKS_STORAGE_KEY = 'yksChecklistState';
+
+  function yksLoadState() {
+    try {
+      const raw = localStorage.getItem(YKS_STORAGE_KEY);
+      return raw ? JSON.parse(raw) : {};
+    } catch (e) {
+      console.warn('YKS state okunamadı:', e);
+      return {};
+    }
+  }
+
+  function yksSaveState(state) {
+    try {
+      localStorage.setItem(YKS_STORAGE_KEY, JSON.stringify(state));
+    } catch (e) {
+      console.warn('YKS state kaydedilemedi:', e);
+    }
+  }
+
+  let _yksState = yksLoadState();
+
+  // Bir konunun leaf checkbox id'lerini döndürür (altKonular varsa hepsi, yoksa kendisi)
+  function yksLeafIds(konu) {
+    if (konu.altKonular && konu.altKonular.length) {
+      return konu.altKonular.map((_, i) => konu.id + '__' + i);
+    }
+    return [konu.id];
+  }
+
+  function yksTopicRowHTML(id, ad, extraClass) {
+    const checked = !!_yksState[id];
+    return '<label class="yks-topic-row' + (checked ? ' checked' : '') + (extraClass ? ' ' + extraClass : '') + '">' +
+      '<input type="checkbox" class="yks-checkbox" data-id="' + id + '"' + (checked ? ' checked' : '') + '>' +
+      '<span class="yks-topic-name">' + ad + '</span>' +
+      '</label>';
+  }
+
+  function yksKonuHTML(konu) {
+    if (konu.altKonular && konu.altKonular.length) {
+      const subRows = konu.altKonular.map((ad, i) => yksTopicRowHTML(konu.id + '__' + i, ad)).join('');
+      return '<div class="yks-topic-group">' +
+        '<div class="yks-topic-row" style="cursor:default; color:var(--text);"><span class="yks-topic-name"><b>' + konu.ad + '</b></span></div>' +
+        '<div class="yks-subtopics">' + subRows + '</div>' +
+        '</div>';
+    }
+    return yksTopicRowHTML(konu.id, konu.ad);
+  }
+
+  function yksDersProgress(ders) {
+    let done = 0, total = 0;
+    ders.konular.forEach(konu => {
+      yksLeafIds(konu).forEach(id => {
+        total++;
+        if (_yksState[id]) done++;
+      });
+    });
+    return { done, total };
+  }
+
+  function yksDersHTML(ders) {
+    const { done, total } = yksDersProgress(ders);
+    const pct = total ? Math.round((done / total) * 100) : 0;
+    const topicsHTML = ders.konular.map(yksKonuHTML).join('');
+    return '<details class="acc-section yks-subject" data-ders-id="' + ders.id + '">' +
+      '<summary class="sec-label acc-summary"><span>' + ders.ad + '</span>' +
+      '<span class="yks-subject-count" data-count-for="' + ders.id + '">' + done + '/' + total + '</span>' +
+      '<span class="acc-chevron">▾</span></summary>' +
+      '<div class="acc-body">' +
+      '<div class="hero-progress-track yks-mini-track"><div class="hero-progress-fill yks-mini-fill" data-fill-for="' + ders.id + '" style="width:' + pct + '%;"></div></div>' +
+      '<div class="yks-topic-list">' + topicsHTML + '</div>' +
+      '</div></details>';
+  }
+
+  function yksOverallProgress(dersListe) {
+    let done = 0, total = 0;
+    dersListe.forEach(ders => {
+      const p = yksDersProgress(ders);
+      done += p.done; total += p.total;
+    });
+    return { done, total };
+  }
+
+  function yksUpdateOverallBar(prefix, dersListe) {
+    const { done, total } = yksOverallProgress(dersListe);
+    const pct = total ? Math.round((done / total) * 100) : 0;
+    const fillEl = document.getElementById('yks' + prefix + 'Fill');
+    const pctEl = document.getElementById('yks' + prefix + 'Pct');
+    const subEl = document.getElementById('yks' + prefix + 'Sub');
+    if (fillEl) {
+      fillEl.style.width = pct + '%';
+      fillEl.className = 'hero-progress-fill ' + (pct >= 66 ? 'lvl-safe' : pct >= 33 ? 'lvl-watch' : 'lvl-critical');
+    }
+    if (pctEl) pctEl.textContent = '%' + pct;
+    if (subEl) subEl.textContent = done + ' / ' + total + ' konu';
+  }
+
+  function yksRenderSection(containerId, dersListe, prefix) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    if (!dersListe.length) {
+      container.innerHTML = '<p style="color:var(--text-faint); font-size:13px;">Konu listesi yakında eklenecek.</p>';
+    } else {
+      container.innerHTML = dersListe.map(yksDersHTML).join('');
+    }
+    yksUpdateOverallBar(prefix, dersListe);
+  }
+
+  function yksRenderAll() {
+    yksRenderSection('yksTytContainer', YKS_DATA.TYT, 'Tyt');
+    yksRenderSection('yksAytContainer', YKS_DATA.AYT, 'Ayt');
+  }
+
+  // Checkbox tıklamalarını event delegation ile yakala (yeniden render sonrası da çalışsın)
+  document.addEventListener('change', function (e) {
+    if (!e.target.classList || !e.target.classList.contains('yks-checkbox')) return;
+    const id = e.target.dataset.id;
+    _yksState[id] = e.target.checked;
+    yksSaveState(_yksState);
+    e.target.closest('.yks-topic-row')?.classList.toggle('checked', e.target.checked);
+    // İlgili dersin mini bar + sayaç + genel bar'ları güncelle
+    const dersEl = e.target.closest('details.yks-subject');
+    if (dersEl) {
+      const dersId = dersEl.dataset.dersId;
+      const allDersler = YKS_DATA.TYT.concat(YKS_DATA.AYT);
+      const ders = allDersler.find(d => d.id === dersId);
+      if (ders) {
+        const { done, total } = yksDersProgress(ders);
+        const pct = total ? Math.round((done / total) * 100) : 0;
+        const fillEl = dersEl.querySelector('[data-fill-for="' + dersId + '"]');
+        const countEl = dersEl.querySelector('[data-count-for="' + dersId + '"]');
+        if (fillEl) fillEl.style.width = pct + '%';
+        if (countEl) countEl.textContent = done + '/' + total;
+      }
+      const isTyt = YKS_DATA.TYT.includes(ders);
+      yksUpdateOverallBar(isTyt ? 'Tyt' : 'Ayt', isTyt ? YKS_DATA.TYT : YKS_DATA.AYT);
+    }
+  });
+
+  yksRenderAll();

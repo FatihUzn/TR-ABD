@@ -50,6 +50,7 @@
     <button type="button" class="tab-btn active" data-tab="zaman" onclick="switchTab('zaman')">⏱️ ZAMAN</button>
     <button type="button" class="tab-btn" data-tab="sistem" onclick="switchTab('sistem')">⚙️ SİSTEM</button>
     <button type="button" class="tab-btn" data-tab="finans" onclick="switchTab('finans')">💰 FİNANS</button>
+    <button type="button" class="tab-btn" data-tab="yks" onclick="switchTab('yks')">📚 YKS</button>
   </nav>
 
   <div class="tab-panel active" id="tab-zaman">
@@ -340,6 +341,43 @@
         <div class="scen-prob">Mekatronik (TU Berlin) için Türkiye'de ~99. sıraya tekabül eden, tartışmasız bir mükemmellik bandı. Şansa yer bırakmaz.</div>
       </div>
     </div>
+  </section>
+
+  </div>
+
+  <div class="tab-panel" id="tab-yks">
+
+  <section>
+    <div class="sec-label">
+      <span>Genel İlerleme</span>
+      <span style="color:var(--amber); font-size:10px;">— TYT + AYT</span>
+    </div>
+    <div class="hero-progress">
+      <div class="hero-progress-top">
+        <span class="hero-progress-label">TYT</span>
+        <span class="hero-progress-pct" id="yksTytPct">%0</span>
+      </div>
+      <div class="hero-progress-track"><div class="hero-progress-fill" id="yksTytFill"></div></div>
+      <div class="hero-progress-sub" id="yksTytSub">0 / 0 konu</div>
+    </div>
+    <div class="hero-progress" style="margin-top:14px;">
+      <div class="hero-progress-top">
+        <span class="hero-progress-label">AYT</span>
+        <span class="hero-progress-pct" id="yksAytPct">%0</span>
+      </div>
+      <div class="hero-progress-track"><div class="hero-progress-fill" id="yksAytFill"></div></div>
+      <div class="hero-progress-sub" id="yksAytSub">0 / 0 konu</div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-label"><span>TYT Konu Takibi</span></div>
+    <div id="yksTytContainer"></div>
+  </section>
+
+  <section>
+    <div class="sec-label"><span>AYT Konu Takibi</span></div>
+    <div id="yksAytContainer"></div>
   </section>
 
   </div>
