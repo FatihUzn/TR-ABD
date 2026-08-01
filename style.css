@@ -554,3 +554,99 @@ footer{
   .node-gold{margin-top:0; text-align:right;}
   .node-flag{position:absolute; right:12px; top:-8px; font-size:16px; background:var(--panel); border-radius:50%;}
 }  
+
+/* ==========================================================
+   BUSKİ İLHAMLI DÜZEN KATMANI
+   Kendi renk kimliğimiz (lacivert + amber) sabit kalıyor;
+   sadece Buski'nin "yuvarlak köşe + bol boşluk + yükselen kart"
+   düzen dilini üstüne bindiriyoruz. Mevcut selector'lara
+   dokunmadan, override olarak ekleniyor — hiçbir JS class'ı
+   (done/now/checked vb.) etkilenmiyor.
+   ========================================================== */
+:root{
+  --radius-lg: 18px;
+  --shadow-float: 0 10px 28px rgba(0,0,0,0.38), 0 1px 0 rgba(255,255,255,0.03) inset;
+  --shadow-float-hover: 0 14px 36px rgba(0,0,0,0.46), 0 1px 0 rgba(255,255,255,0.04) inset;
+}
+
+/* --- Kartların hepsi: daha yuvarlak köşe + yükselen (floating) gölge --- */
+.node-card, .stat, .table-wrap, .scenario, .risk-panel, .rate-panel,
+.net-form, .yks-result-item, .gold-entry-item, .gold-chart-card,
+.cert-mini, .cert-box, details.yks-subject, .yks-unit, .tab-nav,
+.acc-body > .yks-topic-group{
+  border-radius: var(--radius-lg) !important;
+  box-shadow: var(--shadow-float);
+  transition: transform .2s cubic-bezier(.2,.7,.3,1), box-shadow .2s ease, border-color .2s ease;
+}
+
+/* Hover'da hafif yükselme — Buski'nin kart-hover davranışı */
+.node-card:hover, .stat:hover, details.yks-subject:hover,
+.cert-mini:hover, .gold-entry-item:hover, .yks-result-item:hover,
+.scenario:hover, .risk-panel:hover, .rate-panel:hover{
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-float-hover);
+  border-color: var(--purple-dim);
+}
+@media(prefers-reduced-motion: reduce){
+  .node-card, .stat, .table-wrap, .scenario, .risk-panel, .rate-panel,
+  .net-form, .yks-result-item, .gold-entry-item, .gold-chart-card,
+  .cert-mini, .cert-box, details.yks-subject, .yks-unit, .tab-nav{
+    transition:none; transform:none !important;
+  }
+}
+
+/* --- Butonlar: Buski'deki tam pill (hap) şekli --- */
+.net-calc-btn, .kasa-rate-chip, .cert-date-chip{
+  border-radius: 999px !important;
+}
+
+/* --- Accordion chevron: düz ok yerine yuvarlak rozet --- */
+.acc-summary .acc-chevron{
+  display:inline-flex; align-items:center; justify-content:center;
+  width:22px; height:22px; border-radius:50%;
+  background:var(--panel-2); border:1px solid var(--line);
+  font-size:10px;
+}
+.acc-summary:hover .acc-chevron{border-color:var(--purple);}
+
+/* --- Header: hero-progress + phase-strip'i, Buski'nin hero'ya taşan
+   beyaz kart şeridi gibi, "floating" bir gruba dönüştür --- */
+header{
+  background: rgba(17,24,39,0.55);
+  backdrop-filter: blur(10px);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--line);
+  padding: 24px 22px 22px;
+  box-shadow: var(--shadow-float);
+}
+.phase-strip .phase-chip{
+  border-radius: 999px;
+  background: rgba(17,24,39,0.6);
+  backdrop-filter: blur(6px);
+}
+.hero-progress{
+  background: rgba(10,18,42,0.55);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: 16px 18px;
+  margin-top: 20px;
+  box-shadow: var(--shadow-float);
+}
+
+/* --- Bölüm başlıkları: Buski'deki kalın/net başlık hissi --- */
+.sec-label span:first-child{
+  font-size: 12.5px;
+}
+
+/* --- Tablo satırları: hover'da hafif amber parıltı, kartlar gibi hissettir --- */
+tr:hover td{ background: rgba(251,191,36,0.06) !important; }
+
+/* --- Bölümler arası nefes payını artır (Buski'nin bol boşluk mantığı) --- */
+section{ margin-bottom: 56px; }
+details.acc-section{ margin-bottom: 52px; }
+
+@media(max-width:640px){
+  header{padding:18px 16px 18px;}
+  .node-card, .stat, details.yks-subject, .cert-mini{box-shadow: var(--shadow-float);}
+  section{ margin-bottom: 40px; }
+}
