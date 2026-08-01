@@ -1,33 +1,30 @@
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=Inter:wght@400;500;600;700&display=swap');
 
 :root {
-  --void: #0a122a;          /* Gece laciverti */
-  --panel: #111827;         /* Koyu panel arka planı */
-  --panel-2: #1f2937;       /* Daha açık panel */
-  --line: #374151;          /* Kenarlıklar */
-  --purple: #fbbf24;        /* Eski mor yerine YENİ ALTIN/AMBER vurgu */
-  --purple-dim: #fde68a;    /* Yumuşak altın */
-  --purple-glow: rgba(251,191,36,0.25);
-  --green: #10b981;         /* Daha canlı yeşil (dark mode için) */
-  --amber: #f59e0b;         /* Turuncu vurgu */
-  --red: #ef4444;           /* Canlı kırmızı */
-  --text: #f9fafb;          /* Açık krem metin */
-  --text-dim: #d1d5db;      /* İkincil metin */
-  --text-faint: #9ca3af;    /* Sönük metin */
+  --void: #f4f6f9;          /* Buski tarzı açık gri sayfa zemini */
+  --panel: #ffffff;         /* Beyaz kart zemini */
+  --panel-2: #f1f5f9;       /* İkincil açık panel (tablo başlığı vb.) */
+  --line: #e2e8f0;          /* Açık kenarlık */
+  --purple: #d97706;        /* Amber/altın kimlik — açık zeminde okunur ton */
+  --purple-dim: #f59e0b;    /* Daha canlı altın (rozet/vurgu) */
+  --purple-glow: rgba(217,119,6,0.18);
+  --green: #059669;         /* Açık zeminde erişilebilir yeşil */
+  --amber: #ea580c;         /* Turuncu vurgu (uyarı/risk) */
+  --red: #dc2626;           /* Kırmızı */
+  --text: #0f172a;          /* Koyu lacivert-siyah metin */
+  --text-dim: #475569;      /* İkincil metin */
+  --text-faint: #94a3b8;    /* Sönük metin */
   --mono: 'JetBrains Mono', 'SF Mono', monospace;
   --sans: 'Inter', -apple-system, sans-serif;
+  --radius-lg: 18px;
+  --shadow-float: 0 8px 22px rgba(15,23,42,0.07), 0 1px 0 rgba(255,255,255,0.6) inset;
+  --shadow-float-hover: 0 14px 32px rgba(15,23,42,0.11), 0 1px 0 rgba(255,255,255,0.6) inset;
 }
 
 *{box-sizing:border-box; margin:0; padding:0;}
 html{scroll-behavior:smooth;}
 body {
-  background-image: 
-    linear-gradient(rgba(10, 18, 42, 0.85), rgba(10, 18, 42, 0.85)), /* %85 karartılmış lacivert filtre */
-    url('harvard.jpg'); /* Gece çekilmiş olan harvard fotoğrafı */
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed; /* Scroll yaparken fotoğraf sabit kalır */
-  
+  background: var(--void); /* Buski gibi açık gri/beyaz sayfa zemini — foto sadece header'da */
   color: var(--text);
   font-family: var(--sans);
   line-height: 1.5;
@@ -44,7 +41,28 @@ body {
 ::-webkit-scrollbar-thumb:hover{background:var(--purple);}
 *{scrollbar-color:var(--purple-dim) var(--void); scrollbar-width:thin;}
 
-header{position:relative; overflow:hidden;}
+/* ===== HERO / HEADER — fotoğraf burada sabit kalıyor, dokunmuyoruz ===== */
+header{
+  position:relative;
+  overflow:hidden;
+  isolation:isolate;
+  border-radius: var(--radius-lg);
+  background-image:
+    linear-gradient(180deg, rgba(8,14,32,0.55) 0%, rgba(8,14,32,0.75) 60%, rgba(8,14,32,0.88) 100%),
+    url('harvard.jpg'); /* Gece çekilmiş harvard fotoğrafı — olduğu gibi korunuyor */
+  background-size: cover;
+  background-position: center;
+  box-shadow: var(--shadow-float);
+  /* Header içindeki her şey bu skopta tanımlı "koyu zemin" değişkenlerini kullanır,
+     böylece geri kalan siteyi açık temaya çevirirken hero fotoğrafın üstündeki
+     metin/kartlar hâlâ okunur kalır. */
+  --text: #f9fafb;
+  --text-dim: #e2e8f0;
+  --text-faint: #cbd5e1;
+  --line: rgba(255,255,255,0.22);
+  --panel: rgba(255,255,255,0.12);
+  --panel-2: rgba(255,255,255,0.18);
+}
 
 /* hero progress */
 .hero-progress{margin-top:22px;}
@@ -98,9 +116,8 @@ section:nth-of-type(10){animation-delay:.80s;}
 
 /* ===== HEADER ===== */
 header{
-  padding:24px 0 22px;
-  border-bottom:1px solid var(--line);
-  margin-bottom:32px;
+  padding:26px 22px 24px;
+  margin-bottom:40px;
 }
 .tag-row{
   display:flex; justify-content:space-between; align-items:center;
@@ -132,7 +149,7 @@ h1 .arrow{color:var(--purple); padding:0 8px;}
   border:1px solid var(--line); border-radius:20px; color:var(--text-faint);
 }
 .phase-chip.active{
-  border-color:var(--purple); color:var(--purple); background:rgba(109,79,224,0.08);
+  border-color:var(--purple); color:var(--purple); background:rgba(217,119,6,0.12);
   box-shadow:0 0 0 1px var(--purple-glow) inset;
 }
 
@@ -197,7 +214,7 @@ details.acc-section[open] > .acc-summary .acc-chevron{transform:rotate(180deg);}
   position:relative; z-index:2; margin:10px auto 12px;
 }
 .node.done .dot{border-color:var(--purple); background:var(--purple); box-shadow:0 0 10px var(--purple-glow);}
-.node.now .dot{border-color:var(--green); background:var(--green); box-shadow:0 0 12px rgba(20,122,85,0.5);}
+.node.now .dot{border-color:var(--green); background:var(--green); box-shadow:0 0 12px rgba(5,150,105,0.4);}
 .node-card{
   background:var(--panel); border:1px solid var(--line); border-radius:10px;
   padding:10px 10px 12px; text-align:center;
@@ -240,7 +257,7 @@ details.yks-subject[open] > .acc-summary .yks-subject-count{color:var(--purple);
 .yks-topic-row:hover{background:var(--panel-2);}
 .yks-topic-row input[type="checkbox"]{
   appearance:none; -webkit-appearance:none; width:17px; height:17px; flex-shrink:0;
-  border:1.5px solid var(--line); border-radius:5px; background:var(--void);
+  border:1.5px solid var(--line); border-radius:5px; background:var(--panel-2);
   margin-top:1px; cursor:pointer; position:relative; transition:all .15s ease;
 }
 .yks-topic-row input[type="checkbox"]:checked{
@@ -248,7 +265,7 @@ details.yks-subject[open] > .acc-summary .yks-subject-count{color:var(--purple);
 }
 .yks-topic-row input[type="checkbox"]:checked::after{
   content:"✓"; position:absolute; inset:0; display:flex; align-items:center;
-  justify-content:center; font-size:12px; font-weight:800; color:#0a122a;
+  justify-content:center; font-size:12px; font-weight:800; color:#ffffff;
 }
 .yks-topic-row.checked .yks-topic-name{color:var(--text-faint); text-decoration:line-through; text-decoration-color:var(--line);}
 .yks-subtopics{margin-left:27px; display:flex; flex-direction:column; gap:2px; margin-top:2px; margin-bottom:4px;}
@@ -347,10 +364,10 @@ th{
 }
 td{padding:10px 14px; border-bottom:1px solid var(--line); color:var(--text-dim);}
 tr:last-child td{border-bottom:none;}
-tr:hover td{background:rgba(109,79,224,0.05);}
+tr:hover td{background:rgba(217,119,6,0.05);}
 td.cash{color:var(--text); font-weight:600;}
 td.gold{color:var(--purple);}
-tr.milestone td{background:rgba(20,122,85,0.06);}
+tr.milestone td{background:rgba(5,150,105,0.07);}
 tr.milestone td.cash{color:var(--green);}
 
 /* ===== FOOTER ===== */
@@ -499,15 +516,15 @@ footer{
 .cert-entry.accepted{border-left-color:var(--green);}
 .cert-name{font-family:var(--mono); font-weight:700; font-size:14px; color:var(--text); display:flex; align-items:center; gap:8px;}
 .cert-name .badge{
-  font-size:9px; font-family:var(--mono); background:rgba(20,122,85,0.12); color:var(--green);
-  border:1px solid rgba(20,122,85,0.4); border-radius:5px; padding:2px 6px; letter-spacing:0.04em;
+  font-size:9px; font-family:var(--mono); background:rgba(5,150,105,0.12); color:var(--green);
+  border:1px solid rgba(5,150,105,0.4); border-radius:5px; padding:2px 6px; letter-spacing:0.04em;
 }
 .cert-detail{font-size:12px; color:var(--text-dim); margin-top:8px; line-height:1.6;}
 .cert-dates{margin-top:10px; padding-top:10px; border-top:1px dashed var(--line);}
 .cert-dates-label{font-family:var(--mono); font-size:9.5px; color:var(--text-faint); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:6px;}
 .cert-date-chip{
   display:inline-block; font-family:var(--mono); font-size:10.5px; color:var(--purple);
-  background:rgba(109,79,224,0.08); border:1px solid var(--purple-dim); border-radius:6px;
+  background:rgba(217,119,6,0.1); border:1px solid var(--purple-dim); border-radius:6px;
   padding:3px 8px; margin:0 5px 5px 0;
 }
 .cert-source{font-family:var(--mono); font-size:9.5px; color:var(--text-faint); margin-top:8px;}
@@ -563,11 +580,7 @@ footer{
    dokunmadan, override olarak ekleniyor — hiçbir JS class'ı
    (done/now/checked vb.) etkilenmiyor.
    ========================================================== */
-:root{
-  --radius-lg: 18px;
-  --shadow-float: 0 10px 28px rgba(0,0,0,0.38), 0 1px 0 rgba(255,255,255,0.03) inset;
-  --shadow-float-hover: 0 14px 36px rgba(0,0,0,0.46), 0 1px 0 rgba(255,255,255,0.04) inset;
-}
+/* --radius-lg / --shadow-float artık :root'ta tanımlı, burada tekrar tanımlamıyoruz */
 
 /* --- Kartların hepsi: daha yuvarlak köşe + yükselen (floating) gölge --- */
 .node-card, .stat, .table-wrap, .scenario, .risk-panel, .rate-panel,
@@ -609,28 +622,21 @@ footer{
 }
 .acc-summary:hover .acc-chevron{border-color:var(--purple);}
 
-/* --- Header: hero-progress + phase-strip'i, Buski'nin hero'ya taşan
-   beyaz kart şeridi gibi, "floating" bir gruba dönüştür --- */
-header{
-  background: rgba(17,24,39,0.55);
-  backdrop-filter: blur(10px);
-  border-radius: var(--radius-lg);
-  border: 1px solid var(--line);
-  padding: 24px 22px 22px;
-  box-shadow: var(--shadow-float);
-}
+/* --- Header: fotoğrafın üstüne, Buski'nin hero'ya taşan beyaz kart şeridi
+   mantığıyla yarı saydam "cam" rozetler/kartlar bindiriyoruz --- */
 .phase-strip .phase-chip{
   border-radius: 999px;
-  background: rgba(17,24,39,0.6);
+  background: var(--panel);
   backdrop-filter: blur(6px);
 }
 .hero-progress{
-  background: rgba(10,18,42,0.55);
+  background: var(--panel);
   border: 1px solid var(--line);
   border-radius: var(--radius-lg);
   padding: 16px 18px;
   margin-top: 20px;
   box-shadow: var(--shadow-float);
+  backdrop-filter: blur(6px);
 }
 
 /* --- Bölüm başlıkları: Buski'deki kalın/net başlık hissi --- */
@@ -639,7 +645,7 @@ header{
 }
 
 /* --- Tablo satırları: hover'da hafif amber parıltı, kartlar gibi hissettir --- */
-tr:hover td{ background: rgba(251,191,36,0.06) !important; }
+tr:hover td{ background: rgba(217,119,6,0.06) !important; }
 
 /* --- Bölümler arası nefes payını artır (Buski'nin bol boşluk mantığı) --- */
 section{ margin-bottom: 56px; }

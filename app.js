@@ -116,8 +116,8 @@
       {
         label: 'Plan (sabit 114,08 €/gr)',
         data: planPoints,
-        borderColor: '#fde68a', /* Eski mor yerine açık altın */
-        backgroundColor: 'rgba(253, 230, 138, 0.08)',
+        borderColor: '#f59e0b', /* açık zeminde görünür altın tonu */
+        backgroundColor: 'rgba(245, 158, 11, 0.1)',
         borderDash: [5, 4],
         pointRadius: 2,
         borderWidth: 2,
@@ -127,10 +127,10 @@
       {
         label: 'Bugünün Kuruyla (canlı)',
         data: todayPoints,
-        borderColor: '#fbbf24', /* Eski mor yerine koyu altın/amber */
-        backgroundColor: 'rgba(251, 191, 36, 0.12)',
+        borderColor: '#d97706', /* açık zeminde koyu altın/amber */
+        backgroundColor: 'rgba(217, 119, 6, 0.14)',
         pointRadius: 3,
-        pointBackgroundColor: '#fbbf24',
+        pointBackgroundColor: '#d97706',
         borderWidth: 2.5,
         tension: 0.15,
         fill: false
@@ -152,23 +152,23 @@
             x: {
               type: 'linear',
               ticks: {
-                color: '#d1d5db', /* YENİ: Açık gri metin */
+                color: '#475569', /* açık temada koyu gri metin */
                 font: { family: 'JetBrains Mono', size: 10 },
                 callback: v => new Date(v).toLocaleDateString('tr-TR', { month: 'short', year: '2-digit' })
               },
-              grid: { color: '#374151' } /* YENİ: Koyu gri kılavuz çizgileri */
+              grid: { color: '#e2e8f0' } /* açık gri kılavuz çizgileri */
             },
             y: {
               ticks: {
-                color: '#d1d5db', /* YENİ: Açık gri metin */
+                color: '#475569', /* açık temada koyu gri metin */
                 font: { family: 'JetBrains Mono', size: 10 },
                 callback: v => v + ' gr'
               },
-              grid: { color: '#374151' } /* YENİ: Koyu gri kılavuz çizgileri */
+              grid: { color: '#e2e8f0' } /* açık gri kılavuz çizgileri */
             }
           },
           plugins: {
-            legend: { labels: { color: '#f9fafb', font: { family: 'Inter', size: 11 }, boxWidth: 14 } }, /* YENİ: Beyaz başlık metni */
+            legend: { labels: { color: '#0f172a', font: { family: 'Inter', size: 11 }, boxWidth: 14 } }, /* koyu başlık metni */
             tooltip: {
               callbacks: {
                 title: items => new Date(items[0].parsed.x).toLocaleDateString('tr-TR', { day: '2-digit', month: 'short', year: 'numeric' }),
