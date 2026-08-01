@@ -4,10 +4,12 @@
   --void: #f4f6f9;          /* Buski tarzı açık gri sayfa zemini */
   --panel: #ffffff;         /* Beyaz kart zemini */
   --panel-2: #f1f5f9;       /* İkincil açık panel (tablo başlığı vb.) */
+  --panel-blue: #eaf5fb;    /* Buski'deki açık mavi bölüm zemini */
   --line: #e2e8f0;          /* Açık kenarlık */
-  --purple: #d97706;        /* Amber/altın kimlik — açık zeminde okunur ton */
-  --purple-dim: #f59e0b;    /* Daha canlı altın (rozet/vurgu) */
-  --purple-glow: rgba(217,119,6,0.18);
+  --line-blue: #d3ebf7;     /* Açık mavi bölümlerdeki kenarlık */
+  --purple: #1e88c7;        /* Buski'nin tek mavi vurgu tonu */
+  --purple-dim: #4aa8dc;    /* Daha açık mavi (rozet/vurgu) */
+  --purple-glow: rgba(30,136,199,0.18);
   --green: #059669;         /* Açık zeminde erişilebilir yeşil */
   --amber: #ea580c;         /* Turuncu vurgu (uyarı/risk) */
   --red: #dc2626;           /* Kırmızı */
@@ -24,13 +26,7 @@
 *{box-sizing:border-box; margin:0; padding:0;}
 html{scroll-behavior:smooth;}
 body {
-  background-image:
-    linear-gradient(rgba(244, 246, 249, 0.90), rgba(244, 246, 249, 0.90)), /* açık gri yıkama, foto hafif belli olur */
-    url('harvard2.jpg'); /* Gündüz çekilmiş harvard fotoğrafı — tüm sayfanın arka planı */
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed; /* Scroll yaparken fotoğraf sabit kalır */
-
+  background: var(--void); /* Buski gibi açık gri/beyaz sayfa zemini — foto sadece hero'da */
   color: var(--text);
   font-family: var(--sans);
   line-height: 1.5;
@@ -47,14 +43,26 @@ body {
 ::-webkit-scrollbar-thumb:hover{background:var(--purple);}
 *{scrollbar-color:var(--purple-dim) var(--void); scrollbar-width:thin;}
 
-/* ===== HERO / HEADER — artık kendi fotoğrafı yok, sayfanın arka planındaki
-   foto burada da görünür; header sadece hafif cam görünümlü bir kart --- */
+/* ===== HERO / HEADER — Buski'deki gibi foto sadece burada, tam genişlik hero ===== */
 header{
   position:relative;
   overflow:hidden;
+  isolation:isolate;
   border-radius: var(--radius-lg);
-  background: var(--panel);
+  background-image:
+    linear-gradient(180deg, rgba(8,14,32,0.50) 0%, rgba(8,14,32,0.72) 60%, rgba(8,14,32,0.85) 100%),
+    url('harvard2.jpg'); /* Gündüz çekilmiş harvard fotoğrafı — sadece hero'da */
+  background-size: cover;
+  background-position: center;
   box-shadow: var(--shadow-float);
+  /* Header içindeki her şey bu skopta tanımlı "koyu zemin" değişkenlerini kullanır,
+     böylece hero fotoğrafın üstündeki metin/kartlar okunur kalır. */
+  --text: #f9fafb;
+  --text-dim: #e2e8f0;
+  --text-faint: #cbd5e1;
+  --line: rgba(255,255,255,0.22);
+  --panel: rgba(255,255,255,0.14);
+  --panel-2: rgba(255,255,255,0.20);
 }
 
 /* hero progress */
@@ -142,7 +150,7 @@ h1 .arrow{color:var(--purple); padding:0 8px;}
   border:1px solid var(--line); border-radius:20px; color:var(--text-faint);
 }
 .phase-chip.active{
-  border-color:var(--purple); color:var(--purple); background:rgba(217,119,6,0.12);
+  border-color:var(--purple); color:var(--purple); background:rgba(30,136,199,0.12);
   box-shadow:0 0 0 1px var(--purple-glow) inset;
 }
 
@@ -357,7 +365,7 @@ th{
 }
 td{padding:10px 14px; border-bottom:1px solid var(--line); color:var(--text-dim);}
 tr:last-child td{border-bottom:none;}
-tr:hover td{background:rgba(217,119,6,0.05);}
+tr:hover td{background:rgba(30,136,199,0.05);}
 td.cash{color:var(--text); font-weight:600;}
 td.gold{color:var(--purple);}
 tr.milestone td{background:rgba(5,150,105,0.07);}
@@ -517,7 +525,7 @@ footer{
 .cert-dates-label{font-family:var(--mono); font-size:9.5px; color:var(--text-faint); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:6px;}
 .cert-date-chip{
   display:inline-block; font-family:var(--mono); font-size:10.5px; color:var(--purple);
-  background:rgba(217,119,6,0.1); border:1px solid var(--purple-dim); border-radius:6px;
+  background:rgba(30,136,199,0.1); border:1px solid var(--purple-dim); border-radius:6px;
   padding:3px 8px; margin:0 5px 5px 0;
 }
 .cert-source{font-family:var(--mono); font-size:9.5px; color:var(--text-faint); margin-top:8px;}
@@ -534,7 +542,7 @@ footer{
   letter-spacing:0.05em; color:var(--text-faint); padding:11px 6px; transition:all .15s ease;
 }
 .tab-btn:hover{color:var(--text-dim); background:var(--panel-2);}
-.tab-btn.active{color:#0a122a; background:var(--purple); box-shadow:0 2px 8px var(--purple-glow);}
+.tab-btn.active{color:#ffffff; background:var(--purple); box-shadow:0 2px 8px var(--purple-glow);}
 .tab-panel{display:none;}
 .tab-panel.active{display:block; animation:tabFadeIn .18s ease;}
 @keyframes tabFadeIn{from{opacity:0; transform:translateY(4px);} to{opacity:1; transform:translateY(0);}}
@@ -567,11 +575,11 @@ footer{
 
 /* ==========================================================
    BUSKİ İLHAMLI DÜZEN KATMANI
-   Kendi renk kimliğimiz (lacivert + amber) sabit kalıyor;
-   sadece Buski'nin "yuvarlak köşe + bol boşluk + yükselen kart"
-   düzen dilini üstüne bindiriyoruz. Mevcut selector'lara
-   dokunmadan, override olarak ekleniyor — hiçbir JS class'ı
-   (done/now/checked vb.) etkilenmiyor.
+   Vurgu rengi artık Buski'nin tek mavi tonu (--purple değişkeni
+   mavi olarak tanımlı); Buski'nin "yuvarlak köşe + bol boşluk +
+   yükselen kart" düzen dilini de üstüne bindiriyoruz. Mevcut
+   selector'lara dokunmadan, override olarak ekleniyor — hiçbir
+   JS class'ı (done/now/checked vb.) etkilenmiyor.
    ========================================================== */
 /* --radius-lg / --shadow-float artık :root'ta tanımlı, burada tekrar tanımlamıyoruz */
 
@@ -615,11 +623,11 @@ footer{
 }
 .acc-summary:hover .acc-chevron{border-color:var(--purple);}
 
-/* --- Header artık düz beyaz bir kart; içindeki rozet/kartları hafif gri
-   tonla ayırıyoruz ki beyaz zeminde de görünür kalsınlar --- */
+/* --- Header yine fotoğraflı hero; içindeki rozet/kartlar hafif "cam" görünümlü --- */
 .phase-strip .phase-chip{
   border-radius: 999px;
   background: var(--panel-2);
+  backdrop-filter: blur(6px);
 }
 .hero-progress{
   background: var(--panel-2);
@@ -627,6 +635,7 @@ footer{
   border-radius: var(--radius-lg);
   padding: 16px 18px;
   margin-top: 20px;
+  backdrop-filter: blur(6px);
 }
 
 /* --- Bölüm başlıkları: Buski'deki kalın/net başlık hissi --- */
@@ -634,12 +643,44 @@ footer{
   font-size: 12.5px;
 }
 
-/* --- Tablo satırları: hover'da hafif amber parıltı, kartlar gibi hissettir --- */
-tr:hover td{ background: rgba(217,119,6,0.06) !important; }
+/* --- Tablo satırları: hover'da hafif mavi parıltı, kartlar gibi hissettir --- */
+tr:hover td{ background: rgba(30,136,199,0.06) !important; }
 
 /* --- Bölümler arası nefes payını artır (Buski'nin bol boşluk mantığı) --- */
 section{ margin-bottom: 56px; }
 details.acc-section{ margin-bottom: 52px; }
+
+/* ==========================================================
+   BUSKİ TARZI BEYAZ / AÇIK-MAVİ DÖNÜŞÜMLÜ BÖLÜMLER
+   Her sekme (tab-panel) içindeki bölümler (section/details) sırayla
+   beyaz ve açık mavi zemin alır — Buski'deki gibi geniş, kutulanmış,
+   yuvarlak köşeli şeritler. İçindeki beyaz kartlar (stat, table-wrap,
+   node-card vb.) olduğu gibi kalır, sadece dış zemin renk değiştirir.
+   ========================================================== */
+.tab-panel > section,
+.tab-panel > details.acc-section{
+  border-radius: var(--radius-lg);
+  padding: 26px 22px;
+  margin-left: -22px;
+  margin-right: -22px;
+}
+.tab-panel > section:nth-child(even),
+.tab-panel > details.acc-section:nth-child(even){
+  background: var(--panel-blue);
+  border: 1px solid var(--line-blue);
+}
+.tab-panel > section:nth-child(odd),
+.tab-panel > details.acc-section:nth-child(odd){
+  background: transparent;
+}
+@media(max-width:640px){
+  .tab-panel > section,
+  .tab-panel > details.acc-section{
+    padding: 20px 16px;
+    margin-left: -16px;
+    margin-right: -16px;
+  }
+}
 
 @media(max-width:640px){
   header{padding:18px 16px 18px;}

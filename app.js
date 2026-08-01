@@ -116,8 +116,8 @@
       {
         label: 'Plan (sabit 114,08 €/gr)',
         data: planPoints,
-        borderColor: '#f59e0b', /* açık zeminde görünür altın tonu */
-        backgroundColor: 'rgba(245, 158, 11, 0.1)',
+        borderColor: '#4aa8dc', /* Buski mavi tonu — plan çizgisi */
+        backgroundColor: 'rgba(74, 168, 220, 0.1)',
         borderDash: [5, 4],
         pointRadius: 2,
         borderWidth: 2,
@@ -127,10 +127,10 @@
       {
         label: 'Bugünün Kuruyla (canlı)',
         data: todayPoints,
-        borderColor: '#d97706', /* açık zeminde koyu altın/amber */
-        backgroundColor: 'rgba(217, 119, 6, 0.14)',
+        borderColor: '#1e88c7', /* Buski'nin ana mavi tonu */
+        backgroundColor: 'rgba(30, 136, 199, 0.14)',
         pointRadius: 3,
-        pointBackgroundColor: '#d97706',
+        pointBackgroundColor: '#1e88c7',
         borderWidth: 2.5,
         tension: 0.15,
         fill: false
