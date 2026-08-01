@@ -398,20 +398,39 @@
       ]},
       { id:'ayt-fizik', ad:'Fizik (14)', konular:[
         { id:'ayt-fizik-1', ad:'Vektörler' },
-        { id:'ayt-fizik-2', ad:'Newton Yasaları' },
-        { id:'ayt-fizik-3', ad:'Elektrik ve Manyetizma' },
-        { id:'ayt-fizik-4', ad:'Modern Fizik' }
+        { id:'ayt-fizik-2', ad:'Newton\'un Hareket Yasaları' },
+        { id:'ayt-fizik-3', ad:'Kuvvet, Tork ve Denge' },
+        { id:'ayt-fizik-4', ad:'İş, Güç ve Enerji' },
+        { id:'ayt-fizik-5', ad:'İtme ve Momentum' },
+        { id:'ayt-fizik-6', ad:'Elektrik ve Manyetizma', altKonular:['Elektrik Alan ve Potansiyel','Paralel Levha Kondansatör','Manyetik Alan ve Kuvvet','Elektromanyetik İndükleme'] },
+        { id:'ayt-fizik-7', ad:'Çembersel Hareket' },
+        { id:'ayt-fizik-8', ad:'Basit Harmonik Hareket' },
+        { id:'ayt-fizik-9', ad:'Dalga Mekaniği' },
+        { id:'ayt-fizik-10', ad:'Atom Fiziğine Giriş ve Radyoaktivite' },
+        { id:'ayt-fizik-11', ad:'Modern Fizik' },
+        { id:'ayt-fizik-12', ad:'Fizik ve Teknoloji' }
       ]},
       { id:'ayt-kimya', ad:'Kimya (13)', konular:[
-        { id:'ayt-kimya-1', ad:'Kimyasal Tepkimelerde Hız ve Denge' },
-        { id:'ayt-kimya-2', ad:'Elektrokimya' },
-        { id:'ayt-kimya-3', ad:'Organik Kimya (AYT kimyanın en belirleyici kısmı)' }
+        { id:'ayt-kimya-1', ad:'Modern Atom Teorisi' },
+        { id:'ayt-kimya-2', ad:'Gazlar' },
+        { id:'ayt-kimya-3', ad:'Sıvı Çözeltiler ve Çözünürlük' },
+        { id:'ayt-kimya-4', ad:'Kimyasal Tepkimelerde Enerji' },
+        { id:'ayt-kimya-5', ad:'Kimyasal Tepkimelerde Hız' },
+        { id:'ayt-kimya-6', ad:'Kimyasal Tepkimelerde Denge' },
+        { id:'ayt-kimya-7', ad:'Asit-Baz Dengesi' },
+        { id:'ayt-kimya-8', ad:'Çözünürlük Dengesi' },
+        { id:'ayt-kimya-9', ad:'Kimya ve Elektrik (Elektrokimya)' },
+        { id:'ayt-kimya-10', ad:'Organik Kimyaya Giriş (AYT kimyanın en belirleyici kısmı)', altKonular:['Karbon Kimyasına Giriş','Organik Bileşik Sınıfları','Hidrokarbonlar','Alkoller ve Eterler','Karbonil Bileşikleri'] },
+        { id:'ayt-kimya-11', ad:'Enerji Kaynakları ve Bilimsel Gelişmeler' }
       ]},
       { id:'ayt-biyoloji', ad:'Biyoloji (13)', konular:[
-        { id:'ayt-biyoloji-1', ad:'İnsan Fizyolojisi ve Sistemler', altKonular:['Sinir Sistemi','Endokrin Sistem','Destek ve Hareket Sistemi','Diğer Sistemler'] },
-        { id:'ayt-biyoloji-2', ad:'Fotosentez ve Solunum' },
-        { id:'ayt-biyoloji-3', ad:'Bitki Biyolojisi' },
-        { id:'ayt-biyoloji-4', ad:'Genetik ve Evrim' }
+        { id:'ayt-biyoloji-1', ad:'İnsan Fizyolojisi', altKonular:['Sinir Sistemi','Endokrin Sistem ve Hormonlar','Duyu Organları','Destek ve Hareket Sistemi','Sindirim Sistemi','Dolaşım ve Bağışıklık Sistemi','Solunum Sistemi','Boşaltım (Üriner) Sistemi','Üreme Sistemi ve Embriyonik Gelişim'] },
+        { id:'ayt-biyoloji-2', ad:'Komünite ve Popülasyon Ekolojisi' },
+        { id:'ayt-biyoloji-3', ad:'Genden Proteine' },
+        { id:'ayt-biyoloji-4', ad:'Canlılık ve Enerji (Fotosentez - Kemosentez - Solunum)' },
+        { id:'ayt-biyoloji-5', ad:'Bitki Biyolojisi' },
+        { id:'ayt-biyoloji-6', ad:'Canlılarda Üreme, Büyüme ve Gelişme' },
+        { id:'ayt-biyoloji-7', ad:'Genetik Mühendisliği ve Biyoteknoloji' }
       ]}
     ]
   };
