@@ -32,6 +32,7 @@ body {
   line-height: 1.5;
   min-height: 100vh;
   padding-bottom: 60px;
+  overflow-x: hidden; /* full-bleed (100vw) bölümlerin yatay scrollbar taşırmasını engeller */
 }
 
 .wrap{position:relative; z-index:1; max-width:960px; margin:0 auto; padding:0 18px;}
@@ -43,18 +44,12 @@ body {
 ::-webkit-scrollbar-thumb:hover{background:var(--purple);}
 *{scrollbar-color:var(--purple-dim) var(--void); scrollbar-width:thin;}
 
-/* ===== HERO / HEADER — Buski'deki gibi foto sadece burada, tam genişlik hero ===== */
+/* ===== HERO / HEADER — Buski'deki gibi foto tam viewport genişliğinde, kenarlıksız full-bleed ===== */
 header{
   position:relative;
-  overflow:hidden;
   isolation:isolate;
-  border-radius: var(--radius-lg);
-  background-image:
-    linear-gradient(180deg, rgba(8,14,32,0.50) 0%, rgba(8,14,32,0.72) 60%, rgba(8,14,32,0.85) 100%),
-    url('harvard2.jpg'); /* Gündüz çekilmiş harvard fotoğrafı — sadece hero'da */
-  background-size: cover;
-  background-position: center;
-  box-shadow: var(--shadow-float);
+  border-radius: 0; /* full-bleed: yuvarlak kart değil, Buski'deki gibi kenardan kenara düz şerit */
+  box-shadow: none;
   /* Header içindeki her şey bu skopta tanımlı "koyu zemin" değişkenlerini kullanır,
      böylece hero fotoğrafın üstündeki metin/kartlar okunur kalır. */
   --text: #f9fafb;
@@ -63,6 +58,22 @@ header{
   --line: rgba(255,255,255,0.22);
   --panel: rgba(255,255,255,0.14);
   --panel-2: rgba(255,255,255,0.20);
+}
+/* Fotoğraf zemini gerçek 100vw full-bleed katman olarak header'ın arkasına yerleştirilir;
+   header'ın kendisi .wrap içinde kalıp içeriği (h1, subtitle, chip'ler) normal hizasında tutar. */
+header::before{
+  content:"";
+  position:absolute;
+  top:0; bottom:0;
+  left:50%;
+  width:100vw;
+  transform:translateX(-50%);
+  z-index:-1;
+  background-image:
+    linear-gradient(180deg, rgba(8,14,32,0.50) 0%, rgba(8,14,32,0.72) 60%, rgba(8,14,32,0.85) 100%),
+    url('harvard2.jpg'); /* Gündüz çekilmiş harvard fotoğrafı — sadece hero'da */
+  background-size: cover;
+  background-position: center;
 }
 
 /* hero progress */
@@ -235,6 +246,90 @@ details.acc-section[open] > .acc-summary .acc-chevron{transform:rotate(180deg);}
 .stat-value{font-family:var(--mono); font-weight:800; font-size:22px; color:var(--text); margin-top:6px;}
 .stat-value.purple{color:var(--purple);}
 .stat-value.green{color:var(--green);}
+
+/* ===== "Rakamlarla Buski" tarzı: foto zemin + yüzen beyaz stat kartları =====
+   .stat-grid'in arkasına gerçek 100vw full-bleed bir doğa fotoğrafı konur
+   (header'daki aynı teknik: ::before, left:50%/width:100vw/translateX(-50%)),
+   içerik .wrap hizasında kalır. Kartlar bu zemin üzerinde her zaman opak
+   beyaz, köşeli (border-radius:0) ve gölgeli durur — koyu foto zemininde de
+   okunaklı kalsınlar diye .stat-photo-wrap kendi --text/--text-faint'ini
+   koyu tonlara sabitler (header'ın tersine, kartların İÇİ hep beyaz kalır). */
+.stat-photo-wrap{
+  position:relative;
+  isolation:isolate;
+  padding:34px 0;
+  margin:4px 0 14px;
+}
+.stat-photo-wrap::before{
+  content:"";
+  position:absolute;
+  top:0; bottom:0;
+  left:50%;
+  width:100vw;
+  transform:translateX(-50%);
+  z-index:-1;
+  background-image:
+    linear-gradient(180deg, rgba(8,20,32,0.18) 0%, rgba(8,20,32,0.32) 100%),
+    url('pexels-justguryan-38274162.jpg'); /* sisli şelale/vadi — Senaryolar (nakit akışı) zemini */
+  background-size:cover;
+  background-position:center;
+}
+.stat-photo-wrap .stat-grid{position:relative; z-index:1;}
+.stat-photo-wrap .stat{
+  background:#ffffff; border:none; border-radius:0;
+  box-shadow:0 10px 26px rgba(8,20,32,0.22);
+  --text:#0f1720; --text-faint:#5b6b78;
+}
+@media(max-width:640px){
+  .stat-photo-wrap{padding:24px 0;}
+}
+
+/* ===== YOLCULUK FOTO ŞERİDİ (roadmap bölümleri için — Buski'deki foto şeridi mantığı,
+   stat-photo-wrap'ten farklı olarak tek büyük zemin değil, yan yana küçük kareler) ===== */
+.journey-strip{
+  position:relative;
+  isolation:isolate;
+  display:flex;
+  gap:3px;
+  height:84px;
+  margin:12px 0 16px;
+}
+.journey-strip::before{
+  content:"";
+  position:absolute;
+  top:0; bottom:0;
+  left:50%;
+  width:100vw;
+  transform:translateX(-50%);
+  z-index:-2;
+  background:var(--void);
+}
+.journey-cell{
+  flex:1 1 0;
+  background-size:cover;
+  background-position:center;
+  position:relative;
+}
+.journey-cell::after{
+  content:"";
+  position:absolute; inset:0;
+  background:linear-gradient(180deg, rgba(8,20,32,0.05) 0%, rgba(8,20,32,0.22) 100%);
+}
+.journey-cell.journey-goal{
+  flex:1.15 1 0;
+  outline:3px solid var(--purple);
+  outline-offset:-3px;
+  z-index:1;
+}
+.journey-cell.journey-goal::before{
+  content:"HEDEF";
+  position:absolute; bottom:6px; right:8px; z-index:2;
+  font-family:var(--mono); font-size:9px; letter-spacing:0.08em;
+  color:#fff; background:var(--purple); padding:2px 6px; border-radius:3px;
+}
+@media(max-width:640px){
+  .journey-strip{height:64px; gap:2px;}
+}
 
 /* ===== YKS ÇEKLİST (konu takibi) ===== */
 details.yks-subject{
@@ -659,26 +754,48 @@ details.acc-section{ margin-bottom: 52px; }
    ========================================================== */
 .tab-panel > section,
 .tab-panel > details.acc-section{
-  border-radius: var(--radius-lg);
-  padding: 26px 22px;
-  margin-left: -22px;
-  margin-right: -22px;
+  position: relative;
+  isolation: isolate; /* ::before'un z-index:-1'i bu bölümün içinde kalsın, sayfanın altına sızmasın */
+  border-radius: 0; /* full-bleed: kenardan kenara düz şerit, yuvarlak kart değil */
+  padding: 60px 0 54px; /* dalgalı üst/alt kenarların içeriğe değmemesi için ekstra boşluk */
 }
-.tab-panel > section:nth-child(even),
-.tab-panel > details.acc-section:nth-child(even){
-  background: var(--panel-blue);
-  border: 1px solid var(--line-blue);
-}
-.tab-panel > section:nth-child(odd),
-.tab-panel > details.acc-section:nth-child(odd){
+/* Zemin rengi artık elemanın kendisinde değil, 100vw'ye yayılan bir pseudo-katmanda —
+   böylece içerik (.wrap'in hizasında) sabit kalırken arka plan gerçekten viewport
+   kenarından kenarına akıyor, Buski'deki gibi. */
+.tab-panel > section::before,
+.tab-panel > details.acc-section::before{
+  content:"";
+  position:absolute;
+  top:0; bottom:0;
+  left:50%;
+  width:100vw;
+  transform:translateX(-50%);
+  z-index:-1;
   background: transparent;
+}
+/* Buski'deki gibi dalgalı (wavy) SVG üst/alt kenarlar: iki ayrı dalga şerit +
+   aralarında düz renk dolgusu, tek ::before üzerinde çoklu background katmanı
+   olarak birleşiyor (ekstra pseudo-eleman gerekmiyor). Dalga şeritlerinin
+   dışındaki alan şeffaf kalıp altındaki sayfa (--void) zeminini gösteriyor. */
+.tab-panel > section:nth-child(even)::before,
+.tab-panel > details.acc-section:nth-child(even)::before{
+  background-image:
+    url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%201440%2060%22%20preserveAspectRatio%3D%22none%22%3E%3Cpath%20d%3D%22M0%2C32.2%20L20%2C34.9%20L40%2C37.4%20L60%2C39.7%20L80%2C41.8%20L100%2C43.6%20L120%2C45.1%20L140%2C46.2%20L160%2C46.9%20L180%2C47.3%20L200%2C47.2%20L220%2C46.8%20L240%2C46%20L260%2C44.9%20L280%2C43.5%20L300%2C41.9%20L320%2C40.1%20L340%2C38.2%20L360%2C36.2%20L380%2C34.1%20L400%2C32.1%20L420%2C30.2%20L440%2C28.4%20L460%2C26.7%20L480%2C25.3%20L500%2C24%20L520%2C22.9%20L540%2C21.9%20L560%2C21.2%20L580%2C20.6%20L600%2C20.2%20L620%2C19.9%20L640%2C19.6%20L660%2C19.4%20L680%2C19.1%20L700%2C18.9%20L720%2C18.6%20L740%2C18.2%20L760%2C17.8%20L780%2C17.3%20L800%2C16.6%20L820%2C15.9%20L840%2C15.1%20L860%2C14.3%20L880%2C13.4%20L900%2C12.6%20L920%2C11.9%20L940%2C11.2%20L960%2C10.7%20L980%2C10.4%20L1000%2C10.4%20L1020%2C10.6%20L1040%2C11%20L1060%2C11.8%20L1080%2C12.9%20L1100%2C14.3%20L1120%2C16%20L1140%2C18%20L1160%2C20.2%20L1180%2C22.6%20L1200%2C25.2%20L1220%2C27.9%20L1240%2C30.6%20L1260%2C33.3%20L1280%2C35.9%20L1300%2C38.3%20L1320%2C40.6%20L1340%2C42.6%20L1360%2C44.2%20L1380%2C45.6%20L1400%2C46.5%20L1420%2C47.1%20L1440%2C47.3%20L1440%2C60%20L0%2C60%20Z%22%20fill%3D%22%23eaf5fb%22/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%201440%2060%22%20preserveAspectRatio%3D%22none%22%3E%3Cpath%20d%3D%22M0%2C27.8%20L20%2C25.1%20L40%2C22.6%20L60%2C20.3%20L80%2C18.2%20L100%2C16.4%20L120%2C14.9%20L140%2C13.8%20L160%2C13.1%20L180%2C12.7%20L200%2C12.8%20L220%2C13.2%20L240%2C14%20L260%2C15.1%20L280%2C16.5%20L300%2C18.1%20L320%2C19.9%20L340%2C21.8%20L360%2C23.8%20L380%2C25.9%20L400%2C27.9%20L420%2C29.8%20L440%2C31.6%20L460%2C33.3%20L480%2C34.7%20L500%2C36%20L520%2C37.1%20L540%2C38.1%20L560%2C38.8%20L580%2C39.4%20L600%2C39.8%20L620%2C40.1%20L640%2C40.4%20L660%2C40.6%20L680%2C40.9%20L700%2C41.1%20L720%2C41.4%20L740%2C41.8%20L760%2C42.2%20L780%2C42.7%20L800%2C43.4%20L820%2C44.1%20L840%2C44.9%20L860%2C45.7%20L880%2C46.6%20L900%2C47.4%20L920%2C48.1%20L940%2C48.8%20L960%2C49.3%20L980%2C49.6%20L1000%2C49.6%20L1020%2C49.4%20L1040%2C49%20L1060%2C48.2%20L1080%2C47.1%20L1100%2C45.7%20L1120%2C44%20L1140%2C42%20L1160%2C39.8%20L1180%2C37.4%20L1200%2C34.8%20L1220%2C32.1%20L1240%2C29.4%20L1260%2C26.7%20L1280%2C24.1%20L1300%2C21.7%20L1320%2C19.4%20L1340%2C17.4%20L1360%2C15.8%20L1380%2C14.4%20L1400%2C13.5%20L1420%2C12.9%20L1440%2C12.7%20L1440%2C0%20L0%2C0%20Z%22%20fill%3D%22%23eaf5fb%22/%3E%3C/svg%3E"),
+    linear-gradient(var(--panel-blue), var(--panel-blue));
+  background-repeat: no-repeat, no-repeat, no-repeat;
+  background-position: top center, bottom center, 0 46px;
+  background-size: 100% 46px, 100% 46px, 100% calc(100% - 92px);
 }
 @media(max-width:640px){
   .tab-panel > section,
   .tab-panel > details.acc-section{
-    padding: 20px 16px;
-    margin-left: -16px;
-    margin-right: -16px;
+    padding: 46px 0 40px;
+  }
+  .tab-panel > section:nth-child(even)::before,
+  .tab-panel > details.acc-section:nth-child(even)::before{
+    background-size: 100% 32px, 100% 32px, 100% calc(100% - 64px);
+    background-position: top center, bottom center, 0 32px;
   }
 }
 
@@ -686,4 +803,84 @@ details.acc-section{ margin-bottom: 52px; }
   header{padding:18px 16px 18px;}
   .node-card, .stat, details.yks-subject, .cert-mini{box-shadow: var(--shadow-float);}
   section{ margin-bottom: 40px; }
+}
+
+/* ===== FOOTER — Buski'deki gibi koyu mavi, full-bleed, üstte dalga geçişli ===== */
+.site-footer{
+  position:relative;
+  isolation:isolate;
+  margin-top:50px;
+  padding:52px 18px 0;
+  --text: #f2f8fc;
+  --text-dim: #cfe4f0;
+  --text-faint: #8fb7cc;
+}
+.site-footer::before{
+  content:"";
+  position:absolute;
+  top:0; bottom:0;
+  left:50%;
+  width:100vw;
+  transform:translateX(-50%);
+  z-index:-1;
+  background-image:
+    url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%201440%2060%22%20preserveAspectRatio%3D%22none%22%3E%3Cpath%20d%3D%22M0%2C32.2%20L20%2C34.9%20L40%2C37.4%20L60%2C39.7%20L80%2C41.8%20L100%2C43.6%20L120%2C45.1%20L140%2C46.2%20L160%2C46.9%20L180%2C47.3%20L200%2C47.2%20L220%2C46.8%20L240%2C46%20L260%2C44.9%20L280%2C43.5%20L300%2C41.9%20L320%2C40.1%20L340%2C38.2%20L360%2C36.2%20L380%2C34.1%20L400%2C32.1%20L420%2C30.2%20L440%2C28.4%20L460%2C26.7%20L480%2C25.3%20L500%2C24%20L520%2C22.9%20L540%2C21.9%20L560%2C21.2%20L580%2C20.6%20L600%2C20.2%20L620%2C19.9%20L640%2C19.6%20L660%2C19.4%20L680%2C19.1%20L700%2C18.9%20L720%2C18.6%20L740%2C18.2%20L760%2C17.8%20L780%2C17.3%20L800%2C16.6%20L820%2C15.9%20L840%2C15.1%20L860%2C14.3%20L880%2C13.4%20L900%2C12.6%20L920%2C11.9%20L940%2C11.2%20L960%2C10.7%20L980%2C10.4%20L1000%2C10.4%20L1020%2C10.6%20L1040%2C11%20L1060%2C11.8%20L1080%2C12.9%20L1100%2C14.3%20L1120%2C16%20L1140%2C18%20L1160%2C20.2%20L1180%2C22.6%20L1200%2C25.2%20L1220%2C27.9%20L1240%2C30.6%20L1260%2C33.3%20L1280%2C35.9%20L1300%2C38.3%20L1320%2C40.6%20L1340%2C42.6%20L1360%2C44.2%20L1380%2C45.6%20L1400%2C46.5%20L1420%2C47.1%20L1440%2C47.3%20L1440%2C60%20L0%2C60%20Z%22%20fill%3D%22%23123b54%22/%3E%3C/svg%3E"),
+    linear-gradient(#123b54,#0d3044);
+  background-repeat:no-repeat, no-repeat;
+  background-position: top center, 0 40px;
+  background-size: 100% 40px, 100% calc(100% - 40px);
+}
+.footer-brand{
+  font-family:var(--mono); font-weight:800; font-size:16px; letter-spacing:-0.01em;
+  color:var(--text);
+}
+.footer-brand .arrow{color:var(--purple-dim); padding:0 6px;}
+.footer-desc{
+  margin-top:10px; font-size:12.5px; line-height:1.6; color:var(--text-dim); max-width:280px;
+}
+.footer-grid{
+  display:grid;
+  grid-template-columns:1.4fr 1fr 1fr 1fr;
+  gap:28px;
+  padding-bottom:34px;
+  border-bottom:1px solid rgba(255,255,255,0.14);
+}
+.footer-col-title{
+  font-family:var(--mono); font-size:10.5px; letter-spacing:0.08em; text-transform:uppercase;
+  color:var(--purple-dim); margin-bottom:12px;
+}
+.footer-list{list-style:none; display:flex; flex-direction:column; gap:9px;}
+.footer-list li{font-size:12.5px; color:var(--text-dim); line-height:1.4;}
+.footer-status-dot{
+  display:inline-block; width:6px; height:6px; border-radius:50%;
+  background:var(--green); margin-right:5px; box-shadow:0 0 6px rgba(5,150,105,0.6);
+}
+.footer-cta-row{
+  display:flex; gap:12px; padding:26px 0;
+  border-bottom:1px solid rgba(255,255,255,0.14);
+}
+.footer-cta{
+  flex:1; display:flex; align-items:center; gap:10px;
+  background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.14);
+  border-radius:10px; padding:12px 14px; cursor:pointer; text-align:left;
+  font-family:var(--sans); transition:background .15s ease, border-color .15s ease;
+}
+.footer-cta:hover{background:rgba(255,255,255,0.11); border-color:rgba(255,255,255,0.28);}
+.footer-cta-icon{font-size:18px; flex-shrink:0;}
+.footer-cta-title{display:block; font-size:12.5px; font-weight:700; color:var(--text);}
+.footer-cta-sub{display:block; font-size:10.5px; color:var(--text-faint); margin-top:1px;}
+.footer-bottom{
+  display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;
+  padding:18px 0 20px;
+  font-family:var(--mono); font-size:10px; letter-spacing:0.04em;
+  color:var(--text-faint); text-transform:uppercase;
+}
+@media(max-width:760px){
+  .footer-grid{grid-template-columns:1fr 1fr;}
+  .footer-col-brand{grid-column:1 / -1;}
+}
+@media(max-width:640px){
+  .site-footer{padding:38px 16px 0;}
+  .footer-grid{grid-template-columns:1fr; gap:22px;}
+  .footer-cta-row{flex-direction:column;}
 }
