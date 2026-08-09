@@ -71,7 +71,7 @@ header::before{
   z-index:-1;
   background-image:
     linear-gradient(180deg, rgba(8,14,32,0.50) 0%, rgba(8,14,32,0.72) 60%, rgba(8,14,32,0.85) 100%),
-    url('harvard2.jpg'); /* Gündüz çekilmiş harvard fotoğrafı — sadece hero'da */
+    url('Studio/harvard1.jpg'); /* Gündüz çekilmiş harvard fotoğrafı — sadece hero'da */
   background-size: cover;
   background-position: center;
 }
@@ -270,7 +270,7 @@ details.acc-section[open] > .acc-summary .acc-chevron{transform:rotate(180deg);}
   z-index:-1;
   background-image:
     linear-gradient(180deg, rgba(8,20,32,0.18) 0%, rgba(8,20,32,0.32) 100%),
-    url('pexels-justguryan-38274162.jpg'); /* sisli şelale/vadi — Senaryolar (nakit akışı) zemini */
+    url('Studio/gallery4.jpg'); /* sisli şelale/vadi — Senaryolar (nakit akışı) zemini */
   background-size:cover;
   background-position:center;
 }
@@ -638,12 +638,36 @@ footer{
 }
 .tab-btn:hover{color:var(--text-dim); background:var(--panel-2);}
 .tab-btn.active{color:#ffffff; background:var(--purple); box-shadow:0 2px 8px var(--purple-glow);}
+.tab-btn{text-decoration:none;} /* .tab-btn artık çok sayfalı nav'da <a> olarak da kullanılıyor */
 .tab-panel{display:none;}
 .tab-panel.active{display:block; animation:tabFadeIn .18s ease;}
 @keyframes tabFadeIn{from{opacity:0; transform:translateY(4px);} to{opacity:1; transform:translateY(0);}}
 @media(max-width:420px){
   .tab-btn{font-size:9.5px; padding:10px 4px; gap:4px;}
 }
+
+/* ===== ÇOK SAYFALI SİTE NAV — üstte sabit, sayfa geçişleri için kullanılır ===== */
+.nav-badge{
+  font-family:var(--mono); font-size:10px; font-weight:700; color:var(--purple);
+  background:rgba(30,136,199,0.1); border:1px solid var(--purple-dim); border-radius:8px;
+  padding:6px 10px; white-space:nowrap; margin-left:4px; flex-shrink:0;
+}
+@media(max-width:560px){
+  .nav-badge{display:none;} /* dar ekranda sekmelere yer açmak için rozet gizlenir */
+}
+
+/* ===== ALT SAYFA BAŞLIĞI — index.html dışındaki sayfalarda büyük hero yerine kompakt başlık ===== */
+.page-header{padding:26px 0 4px;}
+.page-header-eyebrow{
+  font-family:var(--mono); font-size:10.5px; color:var(--text-faint); text-transform:uppercase;
+  letter-spacing:0.08em; display:flex; align-items:center; gap:8px;
+}
+.page-header h1{
+  font-family:var(--mono); font-size:26px; font-weight:800; letter-spacing:-0.01em;
+  margin-top:6px; color:var(--text);
+}
+.page-header h1 .arrow{color:var(--purple); margin:0 4px;}
+.page-header p{font-family:var(--sans); font-size:13px; color:var(--text-dim); margin-top:6px; max-width:56ch;}
 
 .yks-clock-wrapper{display:flex; gap:10px; margin-bottom:12px; justify-content:center; flex-wrap:wrap;}
 .yks-unit{background:rgba(11,13,18,0.7); border:1px solid rgba(255,255,255,0.1); border-radius:8px; padding:12px 14px; text-align:center; min-width:68px; backdrop-filter:blur(4px);}
@@ -866,6 +890,8 @@ details.acc-section{ margin-bottom: 52px; }
   font-family:var(--sans); transition:background .15s ease, border-color .15s ease;
 }
 .footer-cta:hover{background:rgba(255,255,255,0.11); border-color:rgba(255,255,255,0.28);}
+.footer-cta, .footer-brand{text-decoration:none; display:flex;} /* footer-cta artık <a href="sayfa.html"> */
+.footer-brand{display:inline-flex; align-items:baseline;}
 .footer-cta-icon{font-size:18px; flex-shrink:0;}
 .footer-cta-title{display:block; font-size:12.5px; font-weight:700; color:var(--text);}
 .footer-cta-sub{display:block; font-size:10.5px; color:var(--text-faint); margin-top:1px;}

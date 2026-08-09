@@ -10,16 +10,15 @@
     document.documentElement.setAttribute('lang', lang);
   }
 
-  // --- Sekmeli (Tab) Navigasyon: ZAMAN / SİSTEM / FİNANS ---
-  function switchTab(name) {
-    document.querySelectorAll('.tab-panel').forEach(p => {
-      p.classList.toggle('active', p.id === 'tab-' + name);
+  // --- Çok Sayfalı Site Nav: aktif sayfayı işaretle ---
+  // Her sayfanın <body> etiketinde data-page="sistem|yks|finans|evrak|blog" olmalı.
+  (function highlightActiveNavLink() {
+    const current = document.body.dataset.page;
+    if (!current) return;
+    document.querySelectorAll('.site-nav [data-page-link]').forEach(a => {
+      a.classList.toggle('active', a.dataset.pageLink === current);
     });
-    document.querySelectorAll('.tab-btn').forEach(b => {
-      b.classList.toggle('active', b.dataset.tab === name);
-    });
-    window.scrollTo({ top: 0, behavior: 'instant' });
-  }
+  })();
 
   // Canlı kur tablosu verisi — gold chart bu objeyi kullandığı için erkenden tanımlanır
   let _liveRates = { EURTRY: null, USDTRY: null, GBPTRY: null, CHFTRY: null, AUDTRY: null, goldTRY: null, goldEUR: null };
@@ -45,6 +44,13 @@
         fillEl.style.width = opRemainingPct + '%';
         document.getElementById('progressPct').textContent = '%' + Math.round(opRemainingPct);
         fillEl.className = 'hero-progress-fill ' + (opRemainingPct >= 50 ? 'lvl-safe' : opRemainingPct >= 20 ? 'lvl-watch' : 'lvl-critical');
+    }
+
+    // Nav rozeti: her sayfada üstte görünen kompakt "%X · FAZ 1" göstergesi
+    const badgeEl = document.getElementById('navProgressBadge');
+    if (badgeEl) {
+      const faz = now < JOB_START ? 'FAZ 1' : (now < new Date('2027-10-01T00:00:00') ? 'FAZ 2' : 'FAZ 3');
+      badgeEl.textContent = '%' + Math.round(opRemainingPct) + ' · ' + faz;
     }
 
     // 2. YKS TikTak Saat & Bar (Azalan)
