@@ -103,6 +103,16 @@
 
     <div class="sec-label i18n" data-tr="Sistem Günlüğü" data-de="Systemprotokoll" style="margin-top:20px;">Sistem Günlüğü</div>
     <div class="log-panel" id="sysLog"></div>
+
+    <div class="sec-label i18n" data-tr="İzleme Linki" data-de="Tracking-Link" style="margin-top:20px;">İzleme Linki</div>
+    <div class="track-link-card">
+      <p class="track-link-desc i18n" data-tr="Ailenle veya arkadaşlarınla paylaşabileceğin, salt-okunur bir anlık görüntü linki oluştur. Link açıldığında yalnızca genel ilerleme (gün sayacı, faz, seri, YKS/evrak yüzdesi, rozetler) görünür — hiçbir finansal veya belge detayı paylaşılmaz ve link üzerinden hiçbir şey değiştirilemez." data-de="Erstelle einen schreibgeschützten Schnappschuss-Link zum Teilen mit Familie oder Freunden. Beim Öffnen des Links ist nur der allgemeine Fortschritt sichtbar (Tageszähler, Phase, Serie, YKS-/Unterlagen-Prozentsatz, Abzeichen) — keine Finanz- oder Dokumentdetails werden geteilt, und nichts kann über den Link geändert werden.">Ailenle veya arkadaşlarınla paylaşabileceğin, salt-okunur bir anlık görüntü linki oluştur. Link açıldığında yalnızca genel ilerleme (gün sayacı, faz, seri, YKS/evrak yüzdesi, rozetler) görünür — hiçbir finansal veya belge detayı paylaşılmaz ve link üzerinden hiçbir şey değiştirilemez.</p>
+      <button type="button" class="track-link-btn" id="trackLinkGenBtn">Salt-Okunur Link Oluştur</button>
+      <div class="track-link-result" id="trackLinkResult" style="display:none;">
+        <input type="text" class="track-link-input" id="trackLinkInput" readonly>
+        <button type="button" class="track-link-copy-btn" id="trackLinkCopyBtn">Kopyala</button>
+      </div>
+    </div>
   </section>
 
   <details class="acc-section" open>

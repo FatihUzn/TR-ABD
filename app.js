@@ -1461,17 +1461,17 @@
     const post = BLOG_POSTS.find(function (p) { return p.slug === slug && !p.draft; });
     if (!post) return;
     blogRenderDetail(post);
-    const listSection = document.getElementById('blogListSection');
+    const toolsSection = document.getElementById('blogToolsSection');
     const detailSection = document.getElementById('blogDetailSection');
-    if (listSection) listSection.style.display = 'none';
+    if (toolsSection) toolsSection.style.display = 'none';
     if (detailSection) detailSection.style.display = 'block';
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   function blogShowGrid() {
-    const listSection = document.getElementById('blogListSection');
+    const toolsSection = document.getElementById('blogToolsSection');
     const detailSection = document.getElementById('blogDetailSection');
-    if (listSection) listSection.style.display = 'block';
+    if (toolsSection) toolsSection.style.display = 'block';
     if (detailSection) detailSection.style.display = 'none';
     if (location.hash) history.replaceState(null, '', location.pathname + location.search);
   }
@@ -1503,7 +1503,407 @@
   blogRenderAll();
 
   // ============================================================
+  // MOTİVASYON ÇEKİRDEĞİ — Aşama 4 (blog/hafıza genişletmesi)
+  // Geçmişle karşılaştırma, fotoğraf zaman tüneli, haftalık kendine
+  // mektup, bir yıl sonra okuyacağın mektup (zaman kapsülü).
+  // Sadece blog.html'de gerekli container'lar bulunur; diğer sayfalarda
+  // fonksiyonlar sessizce hiçbir şey yapmadan çıkar.
+  // ============================================================
+
+  // --- Günlük anlık görüntü: her gün bir kez ilerleme durumunu kaydeder ---
+  function motivationTakeDailySnapshot() {
+    const state = motivationLoadState();
+    const snapshots = state.snapshots || {};
+    const key = motivationTodayKey();
+    if (snapshots[key]) return;
+    const ctx = motivationBuildProofContext();
+    const yksPct = ctx.yksTotal > 0 ? Math.round((ctx.yksDone / ctx.yksTotal) * 100) : 0;
+    const evrakTotal = ctx.evrakTrTotal + ctx.evrakDeTotal;
+    const evrakDone = ctx.evrakTrDone + ctx.evrakDeDone;
+    const evrakPct = evrakTotal > 0 ? Math.round((evrakDone / evrakTotal) * 100) : 0;
+    snapshots[key] = {
+      checkins: ctx.totalCheckins, streak: ctx.streak,
+      yksPct: yksPct, evrakPct: evrakPct
+    };
+    state.snapshots = snapshots;
+    motivationSaveState(state);
+  }
+
+  // --- 4. Geçmişle karşılaştırma: ~30 gün önceki en yakın kayıt ile bugünü kıyaslar ---
+  function motivationFindPastSnapshot(daysAgo) {
+    const state = motivationLoadState();
+    const snapshots = state.snapshots || {};
+    const keys = Object.keys(snapshots).sort();
+    if (!keys.length) return null;
+    const target = new Date();
+    target.setDate(target.getDate() - daysAgo);
+    const targetKey = target.toISOString().slice(0, 10);
+    let best = null;
+    keys.forEach(function (k) { if (k <= targetKey) best = k; });
+    if (!best) best = keys[0];
+    return { date: best, data: snapshots[best] };
+  }
+
+  function compareStatHTML(label, thenVal, nowVal, unit) {
+    const delta = nowVal - thenVal;
+    const deltaCls = delta > 0 ? 'up' : 'flat';
+    const deltaTxt = delta > 0 ? ('+' + delta + unit) : (delta < 0 ? (delta + unit) : '± 0' + unit);
+    return '<div class="compare-stat">' +
+      '<div class="compare-stat-label">' + label + '</div>' +
+      '<div class="compare-stat-row">' +
+        '<span class="compare-stat-then">' + thenVal + unit + '</span>' +
+        '<span class="compare-stat-arrow">→</span>' +
+        '<span class="compare-stat-now">' + nowVal + unit + '</span>' +
+      '</div>' +
+      '<div class="compare-stat-delta ' + deltaCls + '">' + deltaTxt + '</div>' +
+    '</div>';
+  }
+
+  function motivationRenderCompare() {
+    const body = document.getElementById('compareBody');
+    if (!body) return;
+    const state = motivationLoadState();
+    const snapshots = state.snapshots || {};
+    const keys = Object.keys(snapshots).sort();
+    if (keys.length < 2) {
+      body.innerHTML = '<div class="compare-empty">Karşılaştırma için henüz yeterli geçmiş veri yok. Panel her gün otomatik bir anlık görüntü kaydediyor — birkaç gün sonra burada geçmişle bugünü yan yana görebileceksin.</div>';
+      return;
+    }
+    const past = motivationFindPastSnapshot(30);
+    const nowCtx = motivationBuildProofContext();
+    const yksNow = nowCtx.yksTotal > 0 ? Math.round((nowCtx.yksDone / nowCtx.yksTotal) * 100) : 0;
+    const evrakTotalNow = nowCtx.evrakTrTotal + nowCtx.evrakDeTotal;
+    const evrakDoneNow = nowCtx.evrakTrDone + nowCtx.evrakDeDone;
+    const evrakNow = evrakTotalNow > 0 ? Math.round((evrakDoneNow / evrakTotalNow) * 100) : 0;
+    const d = new Date(past.date);
+    const dLabel = d.toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' });
+    const isEarliest = past.date === keys[0] && (new Date() - d) < 30 * 86400000;
+    body.innerHTML =
+      '<div class="compare-meta">' + (isEarliest ? dLabel + ' (ilk kayıt)' : dLabel + ' · yaklaşık 30 gün önce') + ' → bugün</div>' +
+      '<div class="compare-grid">' +
+        compareStatHTML('Check-in', past.data.checkins, nowCtx.totalCheckins, '') +
+        compareStatHTML('Seri', past.data.streak, nowCtx.streak, 'g') +
+        compareStatHTML('YKS', past.data.yksPct, yksNow, '%') +
+        compareStatHTML('Evrak', past.data.evrakPct, evrakNow, '%') +
+      '</div>';
+  }
+
+  // --- 13. Fotoğraf zaman tüneli: görseli olan yazıları kronolojik sırayla gösterir ---
+  function motivationRenderPhotoTimeline() {
+    const wrap = document.getElementById('photoTunnel');
+    if (!wrap) return;
+    const withPhotos = BLOG_POSTS.filter(function (p) { return !p.draft && p.image; })
+      .slice().sort(function (a, b) { return a.date < b.date ? -1 : 1; });
+    if (!withPhotos.length) {
+      wrap.innerHTML = '<div class="photo-tunnel-empty">Henüz fotoğraflı bir yazı yok — yeni bir blog yazısı görsel eklendiğinde burada zaman çizelgesine eklenir.</div>';
+      return;
+    }
+    wrap.innerHTML = withPhotos.map(function (p) {
+      return '<button type="button" class="tunnel-item" data-slug="' + p.slug + '">' +
+        '<div class="tunnel-thumb" style="background-image:url(\'' + p.image + '\')"></div>' +
+        '<div class="tunnel-date">' + p.dateLabel + '</div>' +
+        '<div class="tunnel-title">' + p.title + '</div>' +
+      '</button>';
+    }).join('');
+    wrap.addEventListener('click', function (e) {
+      const item = e.target.closest('.tunnel-item');
+      if (!item) return;
+      history.replaceState(null, '', '#' + item.dataset.slug);
+      blogOpenPost(item.dataset.slug);
+    });
+  }
+
+  // --- 10. Haftalık kendine mektup ---
+  function motivationWeekStart(d) {
+    d = new Date(d);
+    const day = (d.getDay() + 6) % 7; // Pazartesi = 0
+    d.setHours(0, 0, 0, 0);
+    d.setDate(d.getDate() - day);
+    return d;
+  }
+  function motivationWeekKey(d) {
+    return motivationWeekStart(d).toISOString().slice(0, 10);
+  }
+
+  function motivationRenderWeeklyLetter() {
+    const input = document.getElementById('weeklyLetterInput');
+    const archive = document.getElementById('weeklyLetterArchive');
+    const cap = document.getElementById('weeklyLetterCap');
+    if (!input || !archive) return;
+    const state = motivationLoadState();
+    const letters = state.weeklyLetters || {};
+    const weekKey = motivationWeekKey(new Date());
+    const weekStartLabel = new Date(weekKey).toLocaleDateString('tr-TR', { day: 'numeric', month: 'long' });
+    if (cap) cap.textContent = 'Bu haftanın mektubu · ' + weekStartLabel + ' haftası';
+    input.value = letters[weekKey] ? letters[weekKey].text : '';
+
+    const pastKeys = Object.keys(letters).filter(function (k) { return k !== weekKey; }).sort().reverse();
+    if (!pastKeys.length) {
+      archive.innerHTML = '<div class="letter-archive-empty">Geçmiş hafta mektupların burada birikecek.</div>';
+    } else {
+      archive.innerHTML = pastKeys.map(function (k) {
+        const label = new Date(k).toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' });
+        return '<div class="letter-archive-item">' +
+          '<div class="letter-archive-date">' + label + ' haftası</div>' +
+          '<div class="letter-archive-text">' + letters[k].text.replace(/</g, '&lt;') + '</div>' +
+        '</div>';
+      }).join('');
+    }
+  }
+
+  function motivationSaveWeeklyLetter() {
+    const input = document.getElementById('weeklyLetterInput');
+    const note = document.getElementById('weeklyLetterSavedNote');
+    if (!input) return;
+    const text = input.value.trim();
+    if (!text) return;
+    const state = motivationLoadState();
+    const letters = state.weeklyLetters || {};
+    const weekKey = motivationWeekKey(new Date());
+    const isFirst = !letters[weekKey];
+    letters[weekKey] = { text: text, savedAt: Date.now() };
+    state.weeklyLetters = letters;
+    motivationSaveState(state);
+    if (isFirst) motivationLogEvent('✉️ Haftalık kendine mektup yazıldı.');
+    if (note) {
+      note.textContent = 'Kaydedildi ✓';
+      note.classList.add('show');
+      setTimeout(function () { note.classList.remove('show'); }, 2200);
+    }
+  }
+
+  // --- 19. Bir yıl sonra okuyacağın mektup (zaman kapsülü) ---
+  function motivationRenderTimeCapsule() {
+    const body = document.getElementById('timeCapsuleBody');
+    if (!body) return;
+    const state = motivationLoadState();
+    const capsule = state.timeCapsule;
+
+    if (!capsule) {
+      body.innerHTML =
+        '<div class="capsule-card">' +
+          '<div class="letter-card-cap">Bugün bir mektup yaz, bir yıl sonra tekrar aç</div>' +
+          '<textarea class="letter-textarea" id="capsuleInput" placeholder="Bir yıl sonraki sana ne söylemek istersin? Şu an neler hissediyorsun, neyi merak ediyorsun?" rows="6"></textarea>' +
+          '<div class="letter-actions">' +
+            '<button type="button" class="letter-save-btn" id="capsuleSealBtn">Mühürle ve bir yıl sonra aç</button>' +
+          '</div>' +
+        '</div>';
+      const sealBtn = document.getElementById('capsuleSealBtn');
+      if (sealBtn) sealBtn.addEventListener('click', motivationSealTimeCapsule);
+      return;
+    }
+
+    const unlockDate = new Date(capsule.unlockDate);
+    const now = new Date();
+    const writtenLabel = new Date(capsule.writtenDate).toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' });
+    const unlockLabel = unlockDate.toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' });
+
+    if (capsule.opened) {
+      body.innerHTML =
+        '<div class="capsule-card">' +
+          '<div class="capsule-locked-title">📬 AÇILDI</div>' +
+          '<div class="capsule-text">' + capsule.text.replace(/</g, '&lt;') + '</div>' +
+          '<div class="capsule-meta">' + writtenLabel + ' tarihinde yazıldı · ' + unlockLabel + ' tarihinde açıldı</div>' +
+          '<button type="button" class="capsule-new-btn" id="capsuleNewBtn">Yeni bir kapsül başlat</button>' +
+        '</div>';
+      const newBtn = document.getElementById('capsuleNewBtn');
+      if (newBtn) newBtn.addEventListener('click', function () {
+        const st = motivationLoadState();
+        delete st.timeCapsule;
+        motivationSaveState(st);
+        motivationRenderTimeCapsule();
+      });
+      return;
+    }
+
+    if (now >= unlockDate) {
+      body.innerHTML =
+        '<div class="capsule-card">' +
+          '<div class="capsule-locked-icon">🔓</div>' +
+          '<div class="capsule-locked-title">MEKTUP AÇILMAYA HAZIR</div>' +
+          '<div class="capsule-locked-sub">' + writtenLabel + ' tarihinde kendine yazdığın mektubun kilidi açıldı.</div>' +
+          '<button type="button" class="capsule-open-btn" id="capsuleOpenBtn">Mektubu Aç</button>' +
+        '</div>';
+      const openBtn = document.getElementById('capsuleOpenBtn');
+      if (openBtn) openBtn.addEventListener('click', function () {
+        const st = motivationLoadState();
+        st.timeCapsule.opened = true;
+        motivationSaveState(st);
+        motivationLogEvent('📬 Bir yıl önce yazılan mektup açıldı.');
+        motivationRenderTimeCapsule();
+      });
+      return;
+    }
+
+    const daysLeft = Math.ceil((unlockDate - now) / 86400000);
+    body.innerHTML =
+      '<div class="capsule-card">' +
+        '<div class="capsule-locked-icon">🔒</div>' +
+        '<div class="capsule-locked-title">MÜHÜRLÜ</div>' +
+        '<div class="capsule-locked-sub">' + writtenLabel + ' tarihinde kendine bir mektup yazdın. ' + unlockLabel + ' tarihinde açılacak.</div>' +
+        '<div class="capsule-countdown">' + daysLeft + ' gün kaldı</div>' +
+        '<button type="button" class="capsule-open-btn" disabled>Henüz açılamaz</button>' +
+      '</div>';
+  }
+
+  function motivationSealTimeCapsule() {
+    const input = document.getElementById('capsuleInput');
+    if (!input) return;
+    const text = input.value.trim();
+    if (!text) return;
+    const now = new Date();
+    const unlock = new Date(now);
+    unlock.setFullYear(unlock.getFullYear() + 1);
+    const state = motivationLoadState();
+    state.timeCapsule = {
+      text: text,
+      writtenDate: now.toISOString(),
+      unlockDate: unlock.toISOString(),
+      opened: false
+    };
+    motivationSaveState(state);
+    motivationLogEvent('🔒 Bir yıl sonra okunacak mektup mühürlendi.');
+    motivationRenderTimeCapsule();
+  }
+
+  function motivationInitStage4() {
+    motivationTakeDailySnapshot();
+
+    // Bu fonksiyonlar sadece blog.html'de gerekli container'ları bulur, diğer sayfalarda sessizce çıkar.
+    motivationRenderCompare();
+    motivationRenderPhotoTimeline();
+    motivationRenderWeeklyLetter();
+    motivationRenderTimeCapsule();
+
+    const saveBtn = document.getElementById('weeklyLetterSaveBtn');
+    if (saveBtn) saveBtn.addEventListener('click', motivationSaveWeeklyLetter);
+  }
+  motivationInitStage4();
+
+  // ============================================================
   // MOTİVASYON ÇEKİRDEĞİ — Aşama 3 başlatma
   // (YKS_DATA ve EVRAK_CHECKLIST artık tanımlı olduğu için burada çağrılır)
   // ============================================================
   motivationInitStage3();
+
+  // ============================================================
+  // MOTİVASYON ÇEKİRDEĞİ — Aşama 5 (sosyal: salt-okunur izleme linki)
+  // Link, panelin o anki genel ilerleme özetini URL'ye küçük bir
+  // base64 paket olarak gömer — sunucu/veritabanı gerekmez. Link açılan
+  // kişiye normal panel yerine tıklanamaz, salt-okunur bir özet kartı
+  // gösterilir; finansal/evrak detayları asla pakete dahil edilmez.
+  // ============================================================
+
+  function trackB64UrlEncode(str) {
+    const b64 = btoa(unescape(encodeURIComponent(str)));
+    return b64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+  }
+  function trackB64UrlDecode(str) {
+    let b64 = str.replace(/-/g, '+').replace(/_/g, '/');
+    while (b64.length % 4) b64 += '=';
+    return decodeURIComponent(escape(atob(b64)));
+  }
+
+  function motivationBuildTrackingSnapshot() {
+    const ctx = motivationBuildProofContext();
+    const state = motivationLoadState();
+    const badges = Object.keys(state.badges || {});
+    return {
+      v: 1,
+      gen: Date.now(),
+      phase: ctx.phase,
+      elapsedDays: ctx.elapsedDays,
+      totalDays: Math.round((JOB_END - JOB_START) / 86400000),
+      streak: ctx.streak,
+      totalCheckins: ctx.totalCheckins,
+      yksDone: ctx.yksDone, yksTotal: ctx.yksTotal,
+      evrakDone: ctx.evrakTrDone + ctx.evrakDeDone,
+      evrakTotal: ctx.evrakTrTotal + ctx.evrakDeTotal,
+      badges: badges
+    };
+  }
+
+  function motivationInitTrackLinkGenerator() {
+    const btn = document.getElementById('trackLinkGenBtn');
+    if (!btn) return;
+    const resultEl = document.getElementById('trackLinkResult');
+    const inputEl = document.getElementById('trackLinkInput');
+    const copyBtn = document.getElementById('trackLinkCopyBtn');
+
+    btn.addEventListener('click', function () {
+      const snap = motivationBuildTrackingSnapshot();
+      const encoded = trackB64UrlEncode(JSON.stringify(snap));
+      const basePath = location.pathname.replace(/[^/]*$/, '') + 'index.html';
+      const url = location.origin + basePath + '?track=' + encoded;
+      if (inputEl) inputEl.value = url;
+      if (resultEl) resultEl.style.display = 'flex';
+      if (inputEl) { inputEl.focus(); inputEl.select(); }
+      motivationLogEvent('🔗 Salt-okunur izleme linki oluşturuldu.');
+    });
+
+    if (copyBtn) {
+      copyBtn.addEventListener('click', function () {
+        if (!inputEl || !inputEl.value) return;
+        inputEl.select();
+        const finish = function (ok) {
+          copyBtn.textContent = ok ? 'Kopyalandı ✓' : 'Kopyalanamadı';
+          setTimeout(function () { copyBtn.textContent = 'Kopyala'; }, 1800);
+        };
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(inputEl.value).then(function () { finish(true); }).catch(function () { finish(false); });
+        } else {
+          try { document.execCommand('copy'); finish(true); } catch (e) { finish(false); }
+        }
+      });
+    }
+  }
+
+  function motivationBadgeIconFor(id) {
+    const def = BADGE_DEFS.find(function (d) { return d.id === id; });
+    return def ? def.icon : '🏅';
+  }
+
+  function motivationRenderTrackingOverlay(snap) {
+    const overlay = document.createElement('div');
+    overlay.className = 'track-overlay';
+    const genLabel = new Date(snap.gen).toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+    const yksPct = snap.yksTotal > 0 ? Math.round((snap.yksDone / snap.yksTotal) * 100) : 0;
+    const evrakPct = snap.evrakTotal > 0 ? Math.round((snap.evrakDone / snap.evrakTotal) * 100) : 0;
+    const dayPct = snap.totalDays > 0 ? Math.min(100, Math.max(0, Math.round((snap.elapsedDays / snap.totalDays) * 100))) : 0;
+    const badgesHTML = snap.badges.length
+      ? snap.badges.map(function (id) { return '<span class="track-badge" title="' + id + '">' + motivationBadgeIconFor(id) + '</span>'; }).join('')
+      : '<span class="track-empty">Henüz rozet yok</span>';
+    overlay.innerHTML =
+      '<div class="track-card">' +
+        '<div class="track-tag">👁️ İZLEME GÖRÜNÜMÜ · SALT-OKUNUR</div>' +
+        '<div class="track-gen">Anlık görüntü: ' + genLabel + '</div>' +
+        '<div class="track-phase">' + snap.phase + '</div>' +
+        '<div class="track-days">' + snap.elapsedDays + ' / ' + snap.totalDays + ' gün</div>' +
+        '<div class="track-bar-track"><div class="track-bar-fill" style="width:' + dayPct + '%"></div></div>' +
+        '<div class="track-grid">' +
+          '<div class="track-stat"><div class="track-stat-num">' + snap.totalCheckins + '</div><div class="track-stat-label">Check-in</div></div>' +
+          '<div class="track-stat"><div class="track-stat-num">' + snap.streak + '</div><div class="track-stat-label">Seri (gün)</div></div>' +
+          '<div class="track-stat"><div class="track-stat-num">' + yksPct + '%</div><div class="track-stat-label">YKS</div></div>' +
+          '<div class="track-stat"><div class="track-stat-num">' + evrakPct + '%</div><div class="track-stat-label">Evrak</div></div>' +
+        '</div>' +
+        '<div class="track-badges">' + badgesHTML + '</div>' +
+        '<a class="track-exit-link" href="' + location.pathname + '">Salt-okunur görünümü kapat</a>' +
+      '</div>';
+    document.body.appendChild(overlay);
+    document.body.classList.add('track-active');
+  }
+
+  function motivationInitStage5() {
+    motivationInitTrackLinkGenerator();
+
+    const params = new URLSearchParams(location.search);
+    const track = params.get('track');
+    if (!track) return;
+    try {
+      const snap = JSON.parse(trackB64UrlDecode(track));
+      if (snap && snap.v === 1) motivationRenderTrackingOverlay(snap);
+    } catch (e) {
+      // bozuk/eski link — sessizce yoksay, normal panel görünür kalır
+    }
+  }
+  motivationInitStage5();
