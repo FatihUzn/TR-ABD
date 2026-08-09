@@ -28,6 +28,7 @@
         </div>
       </div>
     </div>
+    <div class="daily-greet" id="dailyGreet"></div>
     <h1>ALMANYA<span class="arrow">→</span>TU BERLIN</h1>
     <p class="subtitle i18n" data-tr="Limburgerhof köprü dönemi operasyon paneli. Nihai hedef: Mekatronik Mühendisliği, TU Berlin." data-de="Operationspanel für die Übergangsphase in Limburgerhof. Endziel: Mechatronik-Ingenieurwesen, TU Berlin.">Limburgerhof köprü dönemi operasyon paneli. Nihai hedef: Mekatronik Mühendisliği, TU Berlin.</p>
     <div class="phase-strip">
@@ -42,6 +43,27 @@
       </div>
       <div class="hero-progress-track"><div class="hero-progress-fill" id="progressFill"></div></div>
       <div class="hero-progress-sub" id="progressSub">başlangıç: 01.10.2026 · otomatik hesaplanıyor</div>
+    </div>
+
+    <div class="accum-days">
+      <div class="accum-days-num" id="accumDaysNum">–</div>
+      <div class="accum-days-label">
+        <span class="accum-days-cap i18n" data-tr="Emek Verilen Gün" data-de="Investierte Tage">Emek Verilen Gün</span>
+        <span class="accum-days-sub" id="accumDaysSub">hesaplanıyor...</span>
+      </div>
+    </div>
+
+    <div class="route-map-wrap">
+      <div class="route-map-cap i18n" data-tr="Rota · Türkiye → Limburgerhof" data-de="Route · Türkei → Limburgerhof">Rota · Türkiye → Limburgerhof</div>
+      <svg class="route-map-svg" viewBox="0 0 300 90" xmlns="http://www.w3.org/2000/svg">
+        <path class="route-path" d="M28,58 Q150,14 272,26"></path>
+        <path class="route-path-fill" id="routePathFill" d="M28,58 Q150,14 272,26"></path>
+        <circle cx="28" cy="58" r="3.4" fill="var(--text-faint)"></circle>
+        <circle cx="272" cy="26" r="3.4" fill="var(--text-faint)"></circle>
+        <circle class="route-dot" id="routeDot" cx="28" cy="58" r="4.6"></circle>
+        <text class="route-label" x="28" y="72" text-anchor="middle">TÜRKİYE</text>
+        <text class="route-label" x="272" y="16" text-anchor="middle">LIMBURGERHOF</text>
+      </svg>
     </div>
   </header>
 

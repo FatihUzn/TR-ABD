@@ -82,6 +82,201 @@
   setInterval(updateClocks, 1000);
   updateClocks();
 
+  // ============================================================
+  // MOTİVASYON ÇEKİRDEĞİ — Aşama 1
+  // Boot sekansı, günlük mesaj, faz kutlaması, rota haritası, biriken gün sayacı
+  // ============================================================
+  const MOTIVATION_KEY = 'almanya_motivation_v1';
+  const prefersReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function motivationLoadState() {
+    try {
+      const raw = localStorage.getItem(MOTIVATION_KEY);
+      return raw ? JSON.parse(raw) : {};
+    } catch (e) { return {}; }
+  }
+  function motivationSaveState(state) {
+    try { localStorage.setItem(MOTIVATION_KEY, JSON.stringify(state)); } catch (e) {}
+  }
+
+  // --- Gün hesapları: biriken gün / kalan gün / henüz başlamadıysa hazırlık günü ---
+  function getOpDayInfo() {
+    const now = new Date();
+    const totalDays = Math.round((JOB_END - JOB_START) / 86400000);
+    if (now < JOB_START) {
+      const prepDays = Math.ceil((JOB_START - now) / 86400000);
+      return { started: false, prepDays: prepDays, totalDays: totalDays, elapsedDays: 0, remainingDays: totalDays };
+    }
+    let elapsedDays = Math.floor((now - JOB_START) / 86400000);
+    elapsedDays = Math.max(0, Math.min(totalDays, elapsedDays));
+    const remainingDays = Math.max(0, totalDays - elapsedDays);
+    return { started: true, prepDays: 0, totalDays: totalDays, elapsedDays: elapsedDays, remainingDays: remainingDays };
+  }
+
+  function currentPhaseLabel(now) {
+    now = now || new Date();
+    return now < JOB_START ? 'FAZ 1' : (now < new Date('2027-10-01T00:00:00') ? 'FAZ 2' : 'FAZ 3');
+  }
+
+  // --- 1. Terminal boot sekansı: sadece ana sayfada, oturum başına bir kez ---
+  function motivationRunBoot() {
+    if (document.body.dataset.page !== 'sistem') return;
+    if (sessionStorage.getItem('almanya_boot_shown')) return;
+    sessionStorage.setItem('almanya_boot_shown', '1');
+    if (prefersReducedMotion) return;
+
+    const overlay = document.createElement('div');
+    overlay.className = 'boot-overlay';
+    overlay.innerHTML =
+      '<div class="boot-lines" id="bootLines"></div>' +
+      '<div class="boot-progress-track"><div class="boot-progress-fill" id="bootProgressFill"></div></div>';
+    document.body.appendChild(overlay);
+    document.body.classList.add('boot-active');
+
+    const lines = ['SİSTEM BAŞLATILIYOR...', 'BAĞLANTI KURULUYOR...', 'OPERASYON VERİSİ YÜKLENİYOR...'];
+    const linesEl = overlay.querySelector('#bootLines');
+    const fillEl = overlay.querySelector('#bootProgressFill');
+    let li = 0;
+
+    function typeLine(text, cb) {
+      const p = document.createElement('div');
+      p.className = 'boot-line';
+      linesEl.appendChild(p);
+      let ci = 0;
+      (function step() {
+        if (ci <= text.length) {
+          p.textContent = text.slice(0, ci) + (ci < text.length ? '▍' : '');
+          ci++;
+          setTimeout(step, 16);
+        } else {
+          p.textContent = text;
+          cb();
+        }
+      })();
+    }
+
+    function nextLine() {
+      if (li < lines.length) {
+        typeLine(lines[li], function () { li++; setTimeout(nextLine, 160); });
+      } else {
+        let pct = 0;
+        const iv = setInterval(function () {
+          pct += 5;
+          fillEl.style.width = Math.min(100, pct) + '%';
+          if (pct >= 100) { clearInterval(iv); setTimeout(finishBoot, 280); }
+        }, 20);
+      }
+    }
+
+    function finishBoot() {
+      overlay.classList.add('boot-fade-out');
+      setTimeout(function () {
+        overlay.remove();
+        document.body.classList.remove('boot-active');
+      }, 550);
+    }
+
+    nextLine();
+  }
+
+  // --- 2. Günün ilk girişinde kişisel mesaj ---
+  const DAILY_GREET_POOLS = {
+    morning: [
+      { tr: 'Günaydın. Bugün de hedefe bir gün daha yaklaştın.', de: 'Guten Morgen. Heute bist du deinem Ziel wieder einen Tag näher.' },
+      { tr: 'Sabah oldu. Küçük bir adım, büyük resmi değiştirir.', de: 'Der Morgen ist da. Ein kleiner Schritt verändert das große Bild.' },
+      { tr: 'Yeni gün, aynı hedef: TU Berlin. Devam.', de: 'Neuer Tag, gleiches Ziel: TU Berlin. Weiter geht\u2019s.' }
+    ],
+    afternoon: [
+      { tr: 'Gün ortası. Bugüne kadar geldiğin yolu unutma.', de: 'Mitten am Tag. Vergiss nicht, wie weit du schon gekommen bist.' },
+      { tr: 'Yorulmak normal. Durmak değil.', de: 'Müde sein ist normal. Aufhören nicht.' }
+    ],
+    evening: [
+      { tr: 'Akşam oldu. Bugünü kapatırken kendine teşekkür et.', de: 'Der Abend ist da. Bedanke dich bei dir selbst für heute.' },
+      { tr: 'Bugün ne kadar küçük olursa olsun, bir şey biriktirdin.', de: 'Egal wie klein, heute hast du etwas aufgebaut.' }
+    ],
+    night: [
+      { tr: 'Gece vardiyası. Bu saatte burada olman bile bir irade göstergesi.', de: 'Nachtschicht. Allein dass du um diese Zeit hier bist, zeigt Willenskraft.' }
+    ]
+  };
+  function motivationDailyGreeting() {
+    const el = document.getElementById('dailyGreet');
+    if (!el) return;
+    const now = new Date();
+    const hour = now.getHours();
+    const dayKey = now.toISOString().slice(0, 10);
+    let poolKey = 'morning';
+    if (hour >= 12 && hour < 17) poolKey = 'afternoon';
+    else if (hour >= 17 && hour < 22) poolKey = 'evening';
+    else if (hour >= 22 || hour < 6) poolKey = 'night';
+    const pool = DAILY_GREET_POOLS[poolKey];
+    let seed = 0;
+    for (let i = 0; i < dayKey.length; i++) seed += dayKey.charCodeAt(i);
+    const chosen = pool[seed % pool.length];
+    el.classList.add('i18n');
+    el.setAttribute('data-tr', chosen.tr);
+    el.setAttribute('data-de', chosen.de);
+    const lang = document.documentElement.getAttribute('lang') || 'tr';
+    el.textContent = lang === 'de' ? chosen.de : chosen.tr;
+  }
+
+  // --- 6. Faz geçiş kutlaması ---
+  function motivationShowPhaseToast(faz) {
+    const toast = document.createElement('div');
+    toast.className = 'phase-toast';
+    toast.innerHTML = '<span class="phase-toast-tag">PHASE COMPLETE</span><span>' + faz + ' başladı</span>';
+    document.body.appendChild(toast);
+    requestAnimationFrame(function () { toast.classList.add('show'); });
+    setTimeout(function () {
+      toast.classList.remove('show');
+      setTimeout(function () { toast.remove(); }, 450);
+    }, 4500);
+  }
+  function motivationCheckPhaseChange() {
+    const state = motivationLoadState();
+    const faz = currentPhaseLabel();
+    if (state.lastPhase && state.lastPhase !== faz) motivationShowPhaseToast(faz);
+    state.lastPhase = faz;
+    motivationSaveState(state);
+  }
+
+  // --- 7. Rota haritası: ilerleme oranına göre nokta konumu ---
+  function motivationUpdateRouteMap() {
+    const path = document.getElementById('routePathFill');
+    const dot = document.getElementById('routeDot');
+    if (!path || !dot || !path.getTotalLength) return;
+    const info = getOpDayInfo();
+    let pct = info.started ? (info.elapsedDays / info.totalDays) : 0;
+    pct = Math.max(0.01, Math.min(1, pct));
+    const len = path.getTotalLength();
+    const pt = path.getPointAtLength(len * pct);
+    dot.setAttribute('cx', pt.x);
+    dot.setAttribute('cy', pt.y);
+  }
+
+  // --- 8. Biriken gün sayacı ---
+  function motivationUpdateAccumCounter() {
+    const numEl = document.getElementById('accumDaysNum');
+    const subEl = document.getElementById('accumDaysSub');
+    if (!numEl) return;
+    const info = getOpDayInfo();
+    if (!info.started) {
+      numEl.textContent = info.prepDays;
+      if (subEl) subEl.textContent = 'gün sonra başlıyor · hazırlık aşamasındasın';
+    } else {
+      numEl.textContent = info.elapsedDays;
+      if (subEl) subEl.textContent = info.totalDays + ' günün ' + info.elapsedDays + '\'ini geride bıraktın · ' + info.remainingDays + ' gün kaldı';
+    }
+  }
+
+  function motivationInit() {
+    motivationRunBoot();
+    motivationDailyGreeting();
+    motivationCheckPhaseChange();
+    motivationUpdateRouteMap();
+    motivationUpdateAccumCounter();
+  }
+  motivationInit();
+
   // --- PLAN vs BUGÜNÜN KURUYLA ALTIN GRAFİĞİ (tamamen otomatik, elle giriş yok) ---
   // Her ay için: o ana kadarki kümülatif kasa (€) + planda kullanılan sabit 114,08 €/gr
   // varsayımıyla hesaplanmış gram (Nakit & Altın Rotası / Ay Ay Kasa Kaydı ile aynı veri).

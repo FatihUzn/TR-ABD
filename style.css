@@ -88,6 +88,91 @@ header::before{
 .hero-progress-fill.lvl-critical{background:var(--red);}
 .hero-progress-sub{font-family:var(--mono); font-size:10px; color:var(--text-faint); margin-top:6px;}
 
+/* ===== MOTİVASYON ÇEKİRDEĞİ — Aşama 1 ===== */
+
+/* --- Boot sekansı (sadece ana sayfa, oturum başına bir kez) --- */
+body.boot-active{overflow:hidden;}
+.boot-overlay{
+  position:fixed; inset:0; z-index:999;
+  background:
+    radial-gradient(ellipse at 50% 30%, rgba(30,136,199,0.10), transparent 60%),
+    #080e20;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:22px; padding:24px;
+  transition:opacity 0.55s ease, visibility 0.55s ease;
+}
+.boot-overlay.boot-fade-out{opacity:0; visibility:hidden; pointer-events:none;}
+.boot-lines{
+  font-family:var(--mono); font-size:clamp(12px,3.4vw,15px); letter-spacing:0.06em;
+  color:#e2e8f0; text-transform:uppercase; text-align:left;
+  min-width:min(360px,86vw); display:flex; flex-direction:column; gap:8px;
+}
+.boot-line{min-height:1.3em;}
+.boot-progress-track{
+  width:min(320px,80vw); height:6px; border-radius:4px; overflow:hidden;
+  background:rgba(255,255,255,0.10); border:1px solid rgba(255,255,255,0.14);
+}
+.boot-progress-fill{height:100%; width:0%; background:var(--purple); border-radius:4px; transition:width 0.1s linear;}
+@media(prefers-reduced-motion: reduce){
+  .boot-overlay{display:none !important;}
+}
+
+/* --- Günlük kişisel mesaj (hero üstü) --- */
+.daily-greet{
+  font-family:var(--mono); font-size:12px; letter-spacing:0.03em;
+  color:var(--purple-dim); margin-bottom:10px; min-height:1.4em;
+}
+.daily-greet::before{content:"› "; opacity:0.7;}
+
+/* --- Biriken gün sayacı --- */
+.accum-days{
+  margin-top:18px; padding:16px 18px; border-radius:14px;
+  background:var(--panel); border:1px solid var(--line);
+  display:flex; align-items:baseline; gap:14px; flex-wrap:wrap;
+}
+.accum-days-num{font-family:var(--mono); font-weight:800; font-size:clamp(30px,7vw,44px); color:var(--purple); line-height:1;}
+.accum-days-label{display:flex; flex-direction:column; gap:2px;}
+.accum-days-cap{font-family:var(--mono); font-size:10px; letter-spacing:0.09em; text-transform:uppercase; color:var(--text-faint);}
+.accum-days-sub{font-family:var(--mono); font-size:11px; color:var(--text-dim);}
+
+/* --- Rota haritası (Türkiye → Limburgerhof) --- */
+.route-map-wrap{margin-top:18px; padding:14px 16px 10px; border-radius:14px; background:var(--panel); border:1px solid var(--line);}
+.route-map-cap{font-family:var(--mono); font-size:10px; letter-spacing:0.09em; text-transform:uppercase; color:var(--text-faint); margin-bottom:6px;}
+.route-map-svg{width:100%; height:auto; display:block;}
+.route-path{fill:none; stroke:var(--line); stroke-width:2; stroke-dasharray:4 5;}
+.route-path-fill{fill:none; stroke:var(--purple); stroke-width:2.4; stroke-dasharray:5 6; animation:routeDash 26s linear infinite;}
+@keyframes routeDash{to{stroke-dashoffset:-400;}}
+.route-dot{fill:var(--purple); stroke:var(--void); stroke-width:2; filter:drop-shadow(0 0 4px var(--purple-glow));}
+.route-label{font-family:var(--mono); font-size:8px; fill:var(--text-faint); letter-spacing:0.04em;}
+@media(prefers-reduced-motion: reduce){
+  .route-path-fill{animation:none;}
+}
+
+/* --- Faz tamamlama toast'ı --- */
+.phase-toast{
+  position:fixed; left:50%; bottom:22px; transform:translate(-50%,120%);
+  z-index:900; display:flex; align-items:center; gap:10px;
+  background:#080e20; color:#f1f5f9; border:1px solid var(--purple-dim);
+  padding:12px 18px; border-radius:12px; font-family:var(--mono); font-size:12px;
+  box-shadow:0 12px 30px rgba(8,14,32,0.35);
+  transition:transform 0.45s cubic-bezier(.2,.8,.3,1);
+  max-width:90vw;
+}
+.phase-toast.show{transform:translate(-50%,0);}
+.phase-toast-tag{
+  background:var(--purple); color:#fff; font-weight:800; font-size:9px;
+  letter-spacing:0.08em; padding:3px 7px; border-radius:5px; flex-shrink:0;
+}
+
+/* --- Ambient nefes alma dokusu (CAD çizgileri) --- */
+@keyframes breathe{0%,100%{opacity:0.45;}50%{opacity:0.85;}}
+.dim-seg .dim-line{animation:breathe 5.5s ease-in-out infinite;}
+.dim-seg:nth-child(2n) .dim-line{animation-delay:0.6s;}
+.dim-seg:nth-child(3n) .dim-line{animation-delay:1.2s;}
+@media(prefers-reduced-motion: reduce){
+  .dim-seg .dim-line{animation:none;}
+}
+
 /* section entrance animation */
 section, header, details.acc-section{
   animation:rise 0.6s cubic-bezier(.2,.7,.3,1) both;
