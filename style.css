@@ -26,13 +26,35 @@
 *{box-sizing:border-box; margin:0; padding:0;}
 html{scroll-behavior:smooth;}
 body {
-  background: var(--void); /* Buski gibi açık gri/beyaz sayfa zemini — foto sadece hero'da */
+  position:relative;
+  background: var(--void); /* fotoğraf yüklenene kadar / arkasında görünen taban ton */
   color: var(--text);
   font-family: var(--sans);
   line-height: 1.5;
   min-height: 100vh;
   padding-bottom: 60px;
   overflow-x: hidden; /* full-bleed (100vw) bölümlerin yatay scrollbar taşırmasını engeller */
+}
+
+/* ===== SİTE GENELİ ARKA PLAN FOTOĞRAFI — artık sadece hero'da değil, TÜM sayfalarda sabit (fixed)
+   viewport zemini. "fixed" olduğu için görsel her zaman ekran boyutuna göre ölçekleniyor,
+   sayfa ne kadar uzun olursa olsun tek görsel yeterli oluyor — kalite kaybı / tekrarlama gerekmiyor. */
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:-1;
+  background-image:
+    linear-gradient(180deg, rgba(244,246,249,0.72) 0%, rgba(244,246,249,0.82) 55%, rgba(244,246,249,0.90) 100%),
+    url('Studio/harvard1.jpg');
+  background-size:cover;
+  background-position:center;
+  background-repeat:no-repeat;
+}
+@media(max-width:640px){
+  /* mobilde dikey oranlar çok farklı olduğu için "cover" bazen üstü/altı kırpar;
+     görsel odak noktasını biraz yukarı çekerek binanın kesilmesini azaltıyoruz */
+  body::before{ background-position: center 20%; }
 }
 
 .wrap{position:relative; z-index:1; max-width:960px; margin:0 auto; padding:0 18px;}
