@@ -277,6 +277,239 @@
   }
   motivationInit();
 
+  // ============================================================
+  // MOTİVASYON ÇEKİRDEĞİ — Aşama 2 (site geneli sabit bileşenler)
+  // ============================================================
+  const REASON_TEXT_TR = 'Bunu neden yapıyorsun: TU Berlin Mekatronik Mühendisliği.\n\nBu bir yıllık köprü dönemi zor olacak ama geçici. Şu an attığın her adım, bir yıl sonraki sana ait bir kapıyı açıyor. Bugün yorulman normal — bırakman değil.';
+  const REASON_TEXT_DE = 'Warum du das machst: Mechatronik-Ingenieurwesen an der TU Berlin.\n\nDiese einjährige Übergangsphase wird hart, aber sie ist vorübergehend. Jeder Schritt, den du jetzt gehst, öffnet dir in einem Jahr eine Tür. Heute müde zu sein ist normal — aufzugeben nicht.';
+
+  const EMPATHY_MESSAGES = {
+    evrak: { tr: 'Bu kısım sıkıcı ve bürokratik ama gerekli. Bitince vize sürecine bir adım daha yaklaşmış olacaksın.', de: 'Dieser Teil ist mühsam und bürokratisch, aber notwendig. Danach bist du dem Visumsprozess einen Schritt näher.' },
+    finans: { tr: 'Sayılarla uğraşmak yorucu olabilir ama her satır, planının ne kadar sağlam olduğunun kanıtı.', de: 'Mit Zahlen zu jonglieren kann anstrengend sein, aber jede Zeile ist ein Beweis dafür, wie solide dein Plan ist.' }
+  };
+
+  function motivationTodayKey() {
+    return new Date().toISOString().slice(0, 10);
+  }
+
+  // --- 16. Ses geri bildirimi (kısa, rahatsız etmeyen "tık") ---
+  function motivationPlaySound() {
+    const state = motivationLoadState();
+    if (!state.soundOn) return;
+    try {
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain); gain.connect(ctx.destination);
+      osc.type = 'sine'; osc.frequency.value = 740;
+      gain.gain.setValueAtTime(0.0001, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.12, ctx.currentTime + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.28);
+      osc.start(); osc.stop(ctx.currentTime + 0.3);
+    } catch (e) {}
+  }
+
+  function motivationComputeStreak(checkins) {
+    let streak = 0;
+    let d = new Date();
+    while (true) {
+      const key = d.toISOString().slice(0, 10);
+      if (checkins[key]) { streak++; d.setDate(d.getDate() - 1); } else break;
+    }
+    return streak;
+  }
+
+  // --- 3. "Neden başladım" modalı (hem sabit köşe hem "Bugün zor" butonu açıyor) ---
+  function motivationBuildModal() {
+    if (document.getElementById('motivModalOverlay')) return;
+    const overlay = document.createElement('div');
+    overlay.className = 'motiv-modal-overlay';
+    overlay.id = 'motivModalOverlay';
+    overlay.innerHTML =
+      '<div class="motiv-modal">' +
+        '<div class="motiv-modal-title">NEDEN BAŞLADIN</div>' +
+        '<div class="motiv-modal-text" id="motivModalText"></div>' +
+        '<button type="button" class="motiv-modal-close" id="motivModalClose">Kapat</button>' +
+      '</div>';
+    document.body.appendChild(overlay);
+    overlay.addEventListener('click', function (e) { if (e.target === overlay) motivationCloseModal(); });
+    document.getElementById('motivModalClose').addEventListener('click', motivationCloseModal);
+  }
+  function motivationOpenModal() {
+    motivationBuildModal();
+    const lang = document.documentElement.getAttribute('lang') || 'tr';
+    document.getElementById('motivModalText').textContent = lang === 'de' ? REASON_TEXT_DE : REASON_TEXT_TR;
+    document.getElementById('motivModalOverlay').classList.add('open');
+  }
+  function motivationCloseModal() {
+    const overlay = document.getElementById('motivModalOverlay');
+    if (overlay) overlay.classList.remove('open');
+  }
+
+  // --- 12. Sabit köşe hatırlatma şeridi ---
+  function motivationBuildRibbon() {
+    if (document.getElementById('reasonRibbon')) return;
+    const ribbon = document.createElement('div');
+    ribbon.className = 'reason-ribbon';
+    ribbon.id = 'reasonRibbon';
+    ribbon.innerHTML = '<span class="reason-ribbon-icon">🎯</span><span class="reason-ribbon-text">Hedef: TU Berlin · Mekatronik</span>';
+    ribbon.addEventListener('click', motivationOpenModal);
+    document.body.appendChild(ribbon);
+  }
+
+  // --- 9 & 11 & 16. Kontrol paneli (check-in/streak, sakin mod, ses) ---
+  function motivationRenderPanel() {
+    const state = motivationLoadState();
+    const checkins = state.checkins || {};
+    const todayKey = motivationTodayKey();
+    const doneToday = !!checkins[todayKey];
+    const streak = motivationComputeStreak(checkins);
+
+    const checkinBtn = document.getElementById('motivCheckinBtn');
+    const streakEl = document.getElementById('motivStreak');
+    const calmBtn = document.getElementById('motivCalmBtn');
+    const soundBtn = document.getElementById('motivSoundBtn');
+    const badge = document.getElementById('motivFabBadge');
+
+    if (checkinBtn) {
+      checkinBtn.classList.toggle('done', doneToday);
+      checkinBtn.textContent = doneToday ? '✓ Bugün işaretlendi' : 'Bugünü işaretle';
+    }
+    if (streakEl) streakEl.innerHTML = 'Seri: <b>' + streak + '</b> gün';
+    if (calmBtn) calmBtn.classList.toggle('active', !!state.calmMode);
+    if (soundBtn) soundBtn.classList.toggle('on', !!state.soundOn);
+    if (badge) {
+      if (streak > 0) { badge.style.display = 'flex'; badge.textContent = streak; }
+      else badge.style.display = 'none';
+    }
+  }
+
+  function motivationToggleCheckin() {
+    const state = motivationLoadState();
+    const checkins = state.checkins || {};
+    const todayKey = motivationTodayKey();
+    if (checkins[todayKey]) {
+      delete checkins[todayKey];
+    } else {
+      checkins[todayKey] = true;
+      motivationPlaySound();
+    }
+    state.checkins = checkins;
+    motivationSaveState(state);
+    motivationRenderPanel();
+  }
+
+  function motivationApplyCalmMode(on) {
+    document.body.classList.toggle('calm-mode', !!on);
+    let banner = document.getElementById('calmBanner');
+    if (on) {
+      if (!banner) {
+        banner = document.createElement('div');
+        banner.id = 'calmBanner';
+        banner.className = 'calm-banner';
+        banner.textContent = 'Bugün minimum yeter. Sadece nefes al, yarın devam edersin.';
+        const wrap = document.querySelector('.wrap');
+        if (wrap) wrap.insertBefore(banner, wrap.firstChild);
+      }
+    } else if (banner) {
+      banner.remove();
+    }
+  }
+  function motivationToggleCalm() {
+    const state = motivationLoadState();
+    state.calmMode = !state.calmMode;
+    motivationSaveState(state);
+    motivationApplyCalmMode(state.calmMode);
+    motivationRenderPanel();
+  }
+
+  function motivationToggleSound() {
+    const state = motivationLoadState();
+    state.soundOn = !state.soundOn;
+    motivationSaveState(state);
+    if (state.soundOn) motivationPlaySound();
+    motivationRenderPanel();
+  }
+
+  function motivationBuildFab() {
+    if (document.getElementById('motivFab')) return;
+
+    const fab = document.createElement('button');
+    fab.type = 'button';
+    fab.className = 'motiv-fab';
+    fab.id = 'motivFab';
+    fab.title = 'Kontrol paneli';
+    fab.innerHTML = '⚡<span class="motiv-fab-badge" id="motivFabBadge" style="display:none;"></span>';
+
+    const panel = document.createElement('div');
+    panel.className = 'motiv-panel';
+    panel.id = 'motivPanel';
+    panel.innerHTML =
+      '<div class="motiv-panel-head">' +
+        '<span class="motiv-panel-title">Kontrol Paneli</span>' +
+        '<button type="button" class="motiv-sound-toggle" id="motivSoundBtn" title="Ses geri bildirimi">🔊</button>' +
+      '</div>' +
+      '<div class="motiv-row">' +
+        '<button type="button" class="motiv-checkin-btn" id="motivCheckinBtn">Bugünü işaretle</button>' +
+      '</div>' +
+      '<div class="motiv-streak" id="motivStreak"></div>' +
+      '<button type="button" class="motiv-btn-secondary" id="motivHardBtn">😮\u200d💨 Bugün zor</button>' +
+      '<button type="button" class="motiv-btn-secondary" id="motivCalmBtn">🌙 Sakin mod</button>';
+
+    document.body.appendChild(fab);
+    document.body.appendChild(panel);
+
+    fab.addEventListener('click', function (e) {
+      e.stopPropagation();
+      panel.classList.toggle('open');
+    });
+    document.addEventListener('click', function (e) {
+      if (panel.classList.contains('open') && !panel.contains(e.target) && e.target !== fab) {
+        panel.classList.remove('open');
+      }
+    });
+
+    document.getElementById('motivCheckinBtn').addEventListener('click', motivationToggleCheckin);
+    document.getElementById('motivCalmBtn').addEventListener('click', motivationToggleCalm);
+    document.getElementById('motivSoundBtn').addEventListener('click', motivationToggleSound);
+    document.getElementById('motivHardBtn').addEventListener('click', motivationOpenModal);
+
+    motivationRenderPanel();
+  }
+
+  // --- 20. Zor sayfalara özel bağlamsal empati mesajı ---
+  function motivationInjectEmpathyBanner() {
+    const page = document.body.dataset.page;
+    const msg = EMPATHY_MESSAGES[page];
+    if (!msg) return;
+    const nav = document.querySelector('.tab-nav');
+    if (!nav || document.getElementById('empathyBanner')) return;
+    const banner = document.createElement('div');
+    banner.className = 'empathy-banner';
+    banner.id = 'empathyBanner';
+    const icon = document.createElement('span');
+    icon.className = 'empathy-banner-icon';
+    icon.textContent = '💬';
+    const textSpan = document.createElement('span');
+    textSpan.className = 'i18n';
+    textSpan.setAttribute('data-tr', msg.tr);
+    textSpan.setAttribute('data-de', msg.de);
+    const lang = document.documentElement.getAttribute('lang') || 'tr';
+    textSpan.textContent = lang === 'de' ? msg.de : msg.tr;
+    banner.appendChild(icon);
+    banner.appendChild(textSpan);
+    nav.insertAdjacentElement('afterend', banner);
+  }
+
+  function motivationInitStage2() {
+    motivationBuildRibbon();
+    motivationBuildFab();
+    motivationInjectEmpathyBanner();
+    const state = motivationLoadState();
+    motivationApplyCalmMode(!!state.calmMode);
+  }
+  motivationInitStage2();
+
   // --- PLAN vs BUGÜNÜN KURUYLA ALTIN GRAFİĞİ (tamamen otomatik, elle giriş yok) ---
   // Her ay için: o ana kadarki kümülatif kasa (€) + planda kullanılan sabit 114,08 €/gr
   // varsayımıyla hesaplanmış gram (Nakit & Altın Rotası / Ay Ay Kasa Kaydı ile aynı veri).

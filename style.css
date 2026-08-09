@@ -173,6 +173,111 @@ body.boot-active{overflow:hidden;}
   .dim-seg .dim-line{animation:none;}
 }
 
+/* ===== MOTİVASYON ÇEKİRDEĞİ — Aşama 2 (site geneli) ===== */
+
+/* --- Sabit hatırlatma şeridi --- */
+.reason-ribbon{
+  position:fixed; left:14px; bottom:14px; z-index:850;
+  display:flex; align-items:center; gap:8px;
+  background:#080e20; color:#e2e8f0; border:1px solid rgba(255,255,255,0.14);
+  padding:8px 12px; border-radius:10px; font-family:var(--mono); font-size:10.5px;
+  max-width:min(260px,60vw); cursor:pointer; box-shadow:0 8px 20px rgba(8,14,32,0.28);
+  transition:transform 0.2s ease;
+}
+.reason-ribbon:hover{transform:translateY(-2px);}
+.reason-ribbon-text{overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+@media(max-width:520px){
+  .reason-ribbon{max-width:150px; font-size:9.5px; padding:7px 10px; left:10px; bottom:10px;}
+}
+
+/* --- Kontrol paneli FAB --- */
+.motiv-fab{
+  position:fixed; right:14px; bottom:14px; z-index:860;
+  width:52px; height:52px; border-radius:50%;
+  background:var(--purple); color:#fff; border:none; cursor:pointer;
+  display:flex; align-items:center; justify-content:center; font-size:20px;
+  box-shadow:0 10px 24px rgba(30,136,199,0.35);
+  transition:transform 0.2s ease;
+}
+.motiv-fab:hover{transform:scale(1.06);}
+.motiv-fab-badge{
+  position:absolute; top:-4px; right:-4px; background:var(--amber); color:#fff;
+  font-family:var(--mono); font-size:9px; font-weight:800; min-width:16px; height:16px;
+  border-radius:8px; align-items:center; justify-content:center; padding:0 3px;
+}
+@media(max-width:520px){
+  .motiv-fab{right:10px; bottom:10px; width:46px; height:46px; font-size:18px;}
+}
+
+.motiv-panel{
+  position:fixed; right:14px; bottom:76px; z-index:861;
+  width:min(300px,88vw); background:var(--panel); border:1px solid var(--line);
+  border-radius:16px; box-shadow:var(--shadow-float-hover); padding:16px;
+  display:flex; flex-direction:column; gap:12px;
+  transform:translateY(12px) scale(0.98); opacity:0; visibility:hidden; pointer-events:none;
+  transition:transform 0.22s ease, opacity 0.22s ease, visibility 0.22s ease;
+}
+.motiv-panel.open{transform:translateY(0) scale(1); opacity:1; visibility:visible; pointer-events:auto;}
+@media(max-width:520px){.motiv-panel{right:10px; bottom:66px;}}
+.motiv-panel-head{display:flex; justify-content:space-between; align-items:center;}
+.motiv-panel-title{font-family:var(--mono); font-size:11px; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-faint);}
+.motiv-sound-toggle{background:none; border:1px solid var(--line); border-radius:8px; width:28px; height:28px; cursor:pointer; font-size:13px; color:var(--text-dim);}
+.motiv-sound-toggle.on{color:var(--purple); border-color:var(--purple-dim);}
+
+.motiv-row{display:flex; align-items:center; justify-content:space-between; gap:10px;}
+.motiv-checkin-btn{
+  flex:1; font-family:var(--mono); font-size:12px; font-weight:700; letter-spacing:0.03em;
+  padding:10px 12px; border-radius:10px; border:1px solid var(--purple-dim); background:transparent;
+  color:var(--purple); cursor:pointer; transition:background 0.15s ease, color 0.15s ease;
+}
+.motiv-checkin-btn.done{background:var(--purple); color:#fff;}
+.motiv-streak{font-family:var(--mono); font-size:11px; color:var(--text-dim);}
+.motiv-streak b{color:var(--amber);}
+
+.motiv-btn-secondary{
+  width:100%; font-family:var(--mono); font-size:11.5px; text-align:left; padding:9px 10px; border-radius:9px;
+  border:1px solid var(--line); background:var(--panel-2); color:var(--text); cursor:pointer;
+  display:flex; align-items:center; gap:8px;
+}
+.motiv-btn-secondary:hover{border-color:var(--purple-dim);}
+.motiv-btn-secondary.active{border-color:var(--purple); color:var(--purple);}
+
+/* --- Modal (neden başladım / bugün zor) --- */
+.motiv-modal-overlay{
+  position:fixed; inset:0; z-index:950; background:rgba(8,14,32,0.55);
+  display:flex; align-items:center; justify-content:center; padding:20px;
+  opacity:0; visibility:hidden; transition:opacity 0.2s ease, visibility 0.2s ease;
+}
+.motiv-modal-overlay.open{opacity:1; visibility:visible;}
+.motiv-modal{
+  background:var(--panel); border-radius:16px; padding:26px 24px; max-width:420px; width:100%;
+  box-shadow:0 24px 60px rgba(8,14,32,0.4); font-family:var(--sans);
+}
+.motiv-modal-title{font-family:var(--mono); font-size:12px; text-transform:uppercase; letter-spacing:0.08em; color:var(--purple); margin-bottom:10px;}
+.motiv-modal-text{font-size:14.5px; line-height:1.65; color:var(--text); white-space:pre-line;}
+.motiv-modal-close{margin-top:18px; font-family:var(--mono); font-size:11px; padding:9px 14px; border-radius:9px; border:1px solid var(--line); background:var(--panel-2); cursor:pointer; color:var(--text-dim);}
+
+/* --- Sakin mod --- */
+body.calm-mode .route-map-wrap,
+body.calm-mode .dim-row,
+body.calm-mode .phase-toast,
+body.calm-mode .daily-timeline,
+body.calm-mode .accum-days-sub{display:none !important;}
+body.calm-mode section, body.calm-mode header, body.calm-mode details.acc-section{animation:none !important;}
+body.calm-mode .dim-seg .dim-line{animation:none !important;}
+.calm-banner{
+  font-family:var(--mono); font-size:12px; color:var(--purple); text-align:center;
+  padding:14px 16px; margin-bottom:18px; border:1px dashed var(--purple-dim); border-radius:12px;
+  background:var(--panel-blue);
+}
+
+/* --- Zor sayfa empati mesajı --- */
+.empathy-banner{
+  font-family:var(--mono); font-size:11.5px; color:var(--text-dim);
+  background:var(--panel-blue); border:1px solid var(--line-blue); border-radius:10px;
+  padding:10px 14px; margin:14px 0 0; display:flex; align-items:center; gap:8px;
+}
+
 /* section entrance animation */
 section, header, details.acc-section{
   animation:rise 0.6s cubic-bezier(.2,.7,.3,1) both;
