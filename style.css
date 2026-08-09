@@ -158,9 +158,10 @@ body.boot-active{overflow:hidden;}
 .accum-days-sub{font-family:var(--mono); font-size:11px; color:var(--text-dim);}
 
 /* --- Rota haritası (Türkiye → Limburgerhof) --- */
-.route-map-wrap{margin-top:18px; padding:14px 16px 10px; border-radius:14px; background:var(--panel); border:1px solid var(--line);}
-.route-map-cap{font-family:var(--mono); font-size:10px; letter-spacing:0.09em; text-transform:uppercase; color:var(--text-faint); margin-bottom:6px;}
-.route-map-svg{width:100%; height:auto; display:block;}
+.route-map-wrap{margin-top:18px; padding:10px 14px; border-radius:14px; background:var(--panel); border:1px solid var(--line);}
+.route-mini{display:flex; align-items:center; gap:10px;}
+.route-mini-label{font-family:var(--mono); font-size:10.5px; color:var(--text-dim); white-space:nowrap; flex-shrink:0;}
+.route-mini-svg{flex:1; height:16px; display:block;}
 .route-path{fill:none; stroke:var(--line); stroke-width:2; stroke-dasharray:4 5;}
 .route-path-fill{fill:none; stroke:var(--purple); stroke-width:2.4; stroke-dasharray:5 6; animation:routeDash 26s linear infinite;}
 @keyframes routeDash{to{stroke-dashoffset:-400;}}
@@ -536,9 +537,9 @@ details.acc-section[open] > .acc-summary .acc-chevron{transform:rotate(180deg);}
   position:relative;
   isolation:isolate;
   display:flex;
-  gap:3px;
-  height:84px;
-  margin:12px 0 16px;
+  gap:2px;
+  height:22px;
+  margin:10px 0 14px;
 }
 .journey-strip::before{
   content:"";
@@ -563,18 +564,12 @@ details.acc-section[open] > .acc-summary .acc-chevron{transform:rotate(180deg);}
 }
 .journey-cell.journey-goal{
   flex:1.15 1 0;
-  outline:3px solid var(--purple);
-  outline-offset:-3px;
+  outline:2px solid var(--purple);
+  outline-offset:-2px;
   z-index:1;
 }
-.journey-cell.journey-goal::before{
-  content:"HEDEF";
-  position:absolute; bottom:6px; right:8px; z-index:2;
-  font-family:var(--mono); font-size:9px; letter-spacing:0.08em;
-  color:#fff; background:var(--purple); padding:2px 6px; border-radius:3px;
-}
 @media(max-width:640px){
-  .journey-strip{height:64px; gap:2px;}
+  .journey-strip{height:18px; gap:2px;}
 }
 
 /* ===== YKS ÇEKLİST (konu takibi) ===== */

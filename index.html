@@ -54,16 +54,15 @@
     </div>
 
     <div class="route-map-wrap">
-      <div class="route-map-cap i18n" data-tr="Rota · Türkiye → Limburgerhof" data-de="Route · Türkei → Limburgerhof">Rota · Türkiye → Limburgerhof</div>
-      <svg class="route-map-svg" viewBox="0 0 300 90" xmlns="http://www.w3.org/2000/svg">
-        <path class="route-path" d="M28,58 Q150,14 272,26"></path>
-        <path class="route-path-fill" id="routePathFill" d="M28,58 Q150,14 272,26"></path>
-        <circle cx="28" cy="58" r="3.4" fill="var(--text-faint)"></circle>
-        <circle cx="272" cy="26" r="3.4" fill="var(--text-faint)"></circle>
-        <circle class="route-dot" id="routeDot" cx="28" cy="58" r="4.6"></circle>
-        <text class="route-label" x="28" y="72" text-anchor="middle">TÜRKİYE</text>
-        <text class="route-label" x="272" y="16" text-anchor="middle">LIMBURGERHOF</text>
-      </svg>
+      <div class="route-mini">
+        <span class="route-mini-label">🇹🇷 <span class="i18n" data-tr="Türkiye" data-de="Türkei">Türkiye</span></span>
+        <svg class="route-mini-svg" viewBox="0 0 300 16" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+          <path class="route-path" d="M6,8 L294,8"></path>
+          <path class="route-path-fill" id="routePathFill" d="M6,8 L294,8"></path>
+          <circle class="route-dot" id="routeDot" cx="6" cy="8" r="4"></circle>
+        </svg>
+        <span class="route-mini-label">🇩🇪 Limburgerhof</span>
+      </div>
     </div>
   </header>
 
@@ -98,54 +97,31 @@
       </div>
     </div>
 
-    <div class="sec-label i18n" data-tr="Rozetler" data-de="Abzeichen" style="margin-top:20px;">Rozetler</div>
-    <div class="badge-grid" id="badgeGrid"></div>
+    <details class="acc-section" style="margin-top:18px; margin-bottom:0;">
+      <summary class="sec-label acc-summary"><span class="i18n" data-tr="Rozetler, Günlük &amp; İzleme Linki" data-de="Abzeichen, Protokoll &amp; Tracking-Link">Rozetler, Günlük &amp; İzleme Linki</span><span class="acc-chevron">▾</span></summary>
+      <div class="acc-body">
+        <div class="sec-label i18n" data-tr="Rozetler" data-de="Abzeichen">Rozetler</div>
+        <div class="badge-grid" id="badgeGrid"></div>
 
-    <div class="sec-label i18n" data-tr="Sistem Günlüğü" data-de="Systemprotokoll" style="margin-top:20px;">Sistem Günlüğü</div>
-    <div class="log-panel" id="sysLog"></div>
+        <div class="sec-label i18n" data-tr="Sistem Günlüğü" data-de="Systemprotokoll" style="margin-top:20px;">Sistem Günlüğü</div>
+        <div class="log-panel" id="sysLog"></div>
 
-    <div class="sec-label i18n" data-tr="İzleme Linki" data-de="Tracking-Link" style="margin-top:20px;">İzleme Linki</div>
-    <div class="track-link-card">
-      <p class="track-link-desc i18n" data-tr="Ailenle veya arkadaşlarınla paylaşabileceğin, salt-okunur bir anlık görüntü linki oluştur. Link açıldığında yalnızca genel ilerleme (gün sayacı, faz, seri, YKS/evrak yüzdesi, rozetler) görünür — hiçbir finansal veya belge detayı paylaşılmaz ve link üzerinden hiçbir şey değiştirilemez." data-de="Erstelle einen schreibgeschützten Schnappschuss-Link zum Teilen mit Familie oder Freunden. Beim Öffnen des Links ist nur der allgemeine Fortschritt sichtbar (Tageszähler, Phase, Serie, YKS-/Unterlagen-Prozentsatz, Abzeichen) — keine Finanz- oder Dokumentdetails werden geteilt, und nichts kann über den Link geändert werden.">Ailenle veya arkadaşlarınla paylaşabileceğin, salt-okunur bir anlık görüntü linki oluştur. Link açıldığında yalnızca genel ilerleme (gün sayacı, faz, seri, YKS/evrak yüzdesi, rozetler) görünür — hiçbir finansal veya belge detayı paylaşılmaz ve link üzerinden hiçbir şey değiştirilemez.</p>
-      <button type="button" class="track-link-btn" id="trackLinkGenBtn">Salt-Okunur Link Oluştur</button>
-      <div class="track-link-result" id="trackLinkResult" style="display:none;">
-        <input type="text" class="track-link-input" id="trackLinkInput" readonly>
-        <button type="button" class="track-link-copy-btn" id="trackLinkCopyBtn">Kopyala</button>
+        <div class="sec-label i18n" data-tr="İzleme Linki" data-de="Tracking-Link" style="margin-top:20px;">İzleme Linki</div>
+        <div class="track-link-card">
+          <p class="track-link-desc i18n" data-tr="Ailenle veya arkadaşlarınla paylaşabileceğin, salt-okunur bir anlık görüntü linki oluştur. Link açıldığında yalnızca genel ilerleme (gün sayacı, faz, seri, YKS/evrak yüzdesi, rozetler) görünür — hiçbir finansal veya belge detayı paylaşılmaz ve link üzerinden hiçbir şey değiştirilemez." data-de="Erstelle einen schreibgeschützten Schnappschuss-Link zum Teilen mit Familie oder Freunden. Beim Öffnen des Links ist nur der allgemeine Fortschritt sichtbar (Tageszähler, Phase, Serie, YKS-/Unterlagen-Prozentsatz, Abzeichen) — keine Finanz- oder Dokumentdetails werden geteilt, und nichts kann über den Link geändert werden.">Ailenle veya arkadaşlarınla paylaşabileceğin, salt-okunur bir anlık görüntü linki oluştur. Link açıldığında yalnızca genel ilerleme (gün sayacı, faz, seri, YKS/evrak yüzdesi, rozetler) görünür — hiçbir finansal veya belge detayı paylaşılmaz ve link üzerinden hiçbir şey değiştirilemez.</p>
+          <button type="button" class="track-link-btn" id="trackLinkGenBtn">Salt-Okunur Link Oluştur</button>
+          <div class="track-link-result" id="trackLinkResult" style="display:none;">
+            <input type="text" class="track-link-input" id="trackLinkInput" readonly>
+            <button type="button" class="track-link-copy-btn" id="trackLinkCopyBtn">Kopyala</button>
+          </div>
+        </div>
       </div>
-    </div>
+    </details>
   </section>
 
   <details class="acc-section" open>
-    <summary class="sec-label acc-summary"><span class="i18n" data-tr="Günlük Ritim &amp; Haftalık Yapı" data-de="Täglicher Rhythmus &amp; Wochenstruktur">Günlük Ritim &amp; Haftalık Yapı</span> <span style="color:var(--amber); font-size:10px; margin-left:4px;">— TASLAK, İŞVERENLE NETLEŞTİRİLECEK</span><span class="acc-chevron">▾</span></summary>
+    <summary class="sec-label acc-summary"><span class="i18n" data-tr="Haftalık Çalışma Yapısı" data-de="Wöchentliche Arbeitsstruktur">Haftalık Çalışma Yapısı</span> <span style="color:var(--amber); font-size:10px; margin-left:4px;">— TASLAK, İŞVERENLE NETLEŞTİRİLECEK</span><span class="acc-chevron">▾</span></summary>
     <div class="acc-body">
-    <div class="rhythm-subhead i18n" data-tr="Günlük döngü (24 sa)" data-de="Täglicher Zyklus (24 Std.)">Günlük döngü (24 sa)</div>
-    <div class="daily-timeline">
-      <div class="seg" style="width:25%; background:var(--amber);" title="00:00–06:00 Vardiya (Temel, devam)"></div>
-      <div class="seg" style="width:2.1%; background:var(--line);" title="06:00–06:30 Yol"></div>
-      <div class="seg" style="width:27.1%; background:var(--purple);" title="06:30–13:00 Ana Uyku"></div>
-      <div class="seg" style="width:2.1%; background:var(--line);" title="13:00–13:30 Hazırlık"></div>
-      <div class="seg" style="width:17.7%; background:var(--green);" title="13:30–17:45 VHS Kurs"></div>
-      <div class="seg" style="width:1.0%; background:var(--line);" title="17:45–18:00 Yol"></div>
-      <div class="seg" style="width:5.2%; background:var(--purple-dim);" title="18:00–19:15 Power Nap"></div>
-      <div class="seg" style="width:2.1%; background:var(--line);" title="19:15–19:45 Hazırlık"></div>
-      <div class="seg" style="width:1.0%; background:var(--line);" title="19:45–20:00 Yol"></div>
-      <div class="seg" style="width:8.3%; background:rgba(168,99,26,0.45);" title="20:00–22:00 Mesai (İsteğe Bağlı — vergisiz gece primi penceresi)"></div>
-      <div class="seg" style="width:8.3%; background:var(--amber);" title="22:00–24:00 Vardiya (Temel)"></div>
-    </div>
-    <div class="timeline-ticks"><span>00</span><span>06</span><span>12</span><span>18</span><span>24</span></div>
-    <div class="legend">
-      <div class="legend-item"><span class="legend-dot" style="background:var(--amber);"></span><span class="i18n" data-tr="Fırın Vardiyası — Temel (22:00–06:00, 8 sa)" data-de="Bäckerei-Schicht — Basis (22:00–06:00, 8 Std.)">Fırın Vardiyası — Temel (22:00–06:00, 8 sa)</span></div>
-      <div class="legend-item"><span class="legend-dot" style="background:rgba(168,99,26,0.45);"></span><span class="i18n" data-tr="Mesai — İsteğe Bağlı (20:00–22:00)" data-de="Überstunden — Optional (20:00–22:00)">Mesai — İsteğe Bağlı (20:00–22:00)</span></div>
-      <div class="legend-item"><span class="legend-dot" style="background:var(--purple);"></span><span class="i18n" data-tr="Ana Uyku (06:30–13:00)" data-de="Hauptschlaf (06:30–13:00)">Ana Uyku (06:30–13:00)</span></div>
-      <div class="legend-item"><span class="legend-dot" style="background:var(--green);"></span><span class="i18n" data-tr="VHS Kurs (13:30–17:45)" data-de="VHS-Kurs (13:30–17:45)">VHS Kurs (13:30–17:45)</span></div>
-      <div class="legend-item"><span class="legend-dot" style="background:var(--purple-dim);"></span>Power Nap (18:00–19:15)</div>
-      <div class="legend-item"><span class="legend-dot" style="background:var(--line);"></span><span class="i18n" data-tr="Yol / Hazırlık" data-de="Weg / Vorbereitung">Yol / Hazırlık</span></div>
-    </div>
-    <div class="hero-progress-sub" style="margin-top:10px;">
-      <span class="i18n" data-tr="Temel vardiya 8 sa × 6 gün = 48 sa/hafta (Almanya'daki yasal ortalama üst sınırla aynı hizada). 20:00–22:00 mesai penceresi isteğe bağlı ve gece primi vergisiz olduğu için ekonomik olarak cazip, ama her gün garanti değil — işverenin o gün seni yazıp yazmamasına bağlı." data-de="Basisschicht 8 Std. × 6 Tage = 48 Std./Woche (entspricht der gesetzlichen Durchschnittsobergrenze in Deutschland). Das Zeitfenster 20:00–22:00 ist optionale Mehrarbeit und wegen des steuerfreien Nachtzuschlags finanziell attraktiv, aber nicht täglich garantiert — abhängig davon, ob der Arbeitgeber dich einteilt.">Temel vardiya 8 sa × 6 gün = 48 sa/hafta (Almanya'daki yasal ortalama üst sınırla aynı hizada). 20:00–22:00 mesai penceresi isteğe bağlı ve gece primi vergisiz olduğu için ekonomik olarak cazip, ama her gün garanti değil — işverenin o gün seni yazıp yazmamasına bağlı.</span>
-    </div>
-
-    <div class="rhythm-subhead i18n" data-tr="Haftalık yapı" data-de="Wochenstruktur" style="margin-top:22px;">Haftalık yapı</div>
     <div class="table-wrap weekly-table">
       <table>
         <thead><tr><th class="i18n" data-tr="Gün" data-de="Tag">Gün</th><th class="i18n" data-tr="Vardiya" data-de="Schicht">Vardiya</th><th class="i18n" data-tr="Kurs" data-de="Kurs">Kurs</th><th class="i18n" data-tr="Not" data-de="Notiz">Not</th></tr></thead>
@@ -157,6 +133,9 @@
         </tbody>
 
       </table>
+    </div>
+    <div class="hero-progress-sub" style="margin-top:10px;">
+      <span class="i18n" data-tr="Temel vardiya 8 sa × 6 gün = 48 sa/hafta (Almanya'daki yasal ortalama üst sınırla aynı hizada). 20:00–22:00 mesai penceresi isteğe bağlı ve gece primi vergisiz olduğu için ekonomik olarak cazip, ama her gün garanti değil — işverenin o gün seni yazıp yazmamasına bağlı." data-de="Basisschicht 8 Std. × 6 Tage = 48 Std./Woche (entspricht der gesetzlichen Durchschnittsobergrenze in Deutschland). Das Zeitfenster 20:00–22:00 ist optionale Mehrarbeit und wegen des steuerfreien Nachtzuschlags finanziell attraktiv, aber nicht täglich garantiert — abhängig davon, ob der Arbeitgeber dich einteilt.">Temel vardiya 8 sa × 6 gün = 48 sa/hafta (Almanya'daki yasal ortalama üst sınırla aynı hizada). 20:00–22:00 mesai penceresi isteğe bağlı ve gece primi vergisiz olduğu için ekonomik olarak cazip, ama her gün garanti değil — işverenin o gün seni yazıp yazmamasına bağlı.</span>
     </div>
     <div class="risk-panel" style="margin-top:14px;">
       <div class="risk-item">
