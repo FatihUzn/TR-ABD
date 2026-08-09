@@ -15,7 +15,7 @@
   (function highlightActiveNavLink() {
     const current = document.body.dataset.page;
     if (!current) return;
-    document.querySelectorAll('.site-nav [data-page-link]').forEach(a => {
+    document.querySelectorAll('.tab-nav [data-page-link]').forEach(a => {
       a.classList.toggle('active', a.dataset.pageLink === current);
     });
   })();
