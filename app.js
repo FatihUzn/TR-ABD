@@ -189,6 +189,21 @@
 
   renderGoldChart();
 
+  // --- Ay Ay Kasa Kaydı tablosu (finans.html) — PLAN_MILESTONES verisinden üretilir ---
+  function renderKasaLogTable() {
+    const body = document.getElementById('kasaLogBody');
+    if (!body) return;
+    body.innerHTML = PLAN_MILESTONES.map(p => {
+      const d = new Date(p.tarih + 'T00:00:00');
+      const tarihStr = d.toLocaleDateString('tr-TR', { day: '2-digit', month: 'short', year: 'numeric' });
+      const kasaStr = p.kasa.toLocaleString('tr-TR') + ' €';
+      return '<tr><td data-label="Tarih">' + tarihStr + '</td>' +
+        '<td data-label="Kümülatif Kasa (€)" class="cash">' + kasaStr + '</td>' +
+        '<td data-label="Plan Altın (gr)">' + fmtGram(p.planGram) + '</td></tr>';
+    }).join('');
+  }
+  renderKasaLogTable();
+
   // --- Roadmap Node Durumları ---
   document.querySelectorAll('.roadmap').forEach(roadmap => {
     const nodes = Array.from(roadmap.querySelectorAll('.node[data-date]'));
@@ -581,3 +596,284 @@
   });
 
   yksRenderAll();
+
+  // ============================================================
+  // EVRAK SAYFASI — Almanya/Türkiye evrak checklist + form bilgileri
+  // TASLAK LİSTE: bu maddeler tahmini olarak kondu, sen düzelteceksin.
+  // Sadece evrak.html'de gerekli container'lar bulunur; diğer sayfalarda
+  // fonksiyonlar sessizce hiçbir şey yapmadan çıkar.
+  // ============================================================
+  const EVRAK_CHECKLIST = {
+    turkiye: {
+      id: 'turkiye',
+      kalemler: [
+        { id:'tr-pasaport', ad:'Pasaport (en az 1 yıl geçerlilik)' },
+        { id:'tr-pasaport-foto', ad:'Biyometrik fotoğraf (3.5×4.5, beyaz fon)' },
+        { id:'tr-nufus-cuzdani', ad:'Nüfus cüzdanı fotokopisi' },
+        { id:'tr-nufus-kayit', ad:'Vukuatlı nüfus kayıt örneği (e-Devlet)' },
+        { id:'tr-adli-sicil', ad:'Adli sicil kaydı (sabıka kaydı, e-Devlet)' },
+        { id:'tr-ikametgah', ad:'Yerleşim yeri (ikametgâh) belgesi' },
+        { id:'tr-askerlik', ad:'Askerlik durum belgesi' },
+        { id:'tr-diploma', ad:'Lise diploması + noter onaylı Almanca/İngilizce tercüme' },
+        { id:'tr-is-sozlesmesi', ad:'İş sözleşmesi (Alman işvereninden, imzalı)' },
+        { id:'tr-vize-form', ad:'Vize başvuru formu (VIDEX çıktısı + imza)' },
+        { id:'tr-vize-randevu', ad:'Alman Başkonsolosluğu vize randevusu' },
+        { id:'tr-seyahat-sigorta', ad:'Seyahat sağlık sigortası (giriş için, Schengen uyumlu)' },
+        { id:'tr-konaklama', ad:"Almanya'da konaklama kanıtı (Limburgerhof)" },
+        { id:'tr-banka-dekont', ad:'Banka hesap özeti / mali yeterlilik kanıtı' },
+        { id:'tr-vize-harc', ad:'Vize harcı ödeme dekontu' }
+      ]
+    },
+    almanya: {
+      id: 'almanya',
+      kalemler: [
+        { id:'de-anmeldung', ad:'Anmeldung — ikamet kaydı (Bürgeramt, varıştan sonraki 14 gün içinde)' },
+        { id:'de-bank', ad:'Alman banka hesabı açılışı' },
+        { id:'de-kranken', ad:'Yasal sağlık sigortası (gesetzliche Krankenversicherung) kaydı' },
+        { id:'de-steuer-id', ad:'Steuer-ID (vergi kimlik no) — posta ile otomatik gelir' },
+        { id:'de-sozial', ad:'Sosyal güvenlik numarası (işveren üzerinden)' },
+        { id:'de-vhs-kayit', ad:'VHS dil kursu kayıt belgesi' },
+        { id:'de-rundfunk', ad:'Rundfunkbeitrag (yayın ücreti) kaydı' },
+        { id:'de-aufenthalt', ad:'İkamet izni (Aufenthaltstitel) başvurusu — Ausländerbehörde' },
+        { id:'de-16b', ad:"§16b'ye geçiş başvurusu (dil sertifikası + üniversite kabul belgesi ile)" },
+        { id:'de-tub-kabul', ad:'TU Berlin kabul belgesi (Zulassungsbescheid)' }
+      ]
+    }
+  };
+
+  const EVRAK_CHECK_KEY = 'evrakChecklistState';
+  const EVRAK_FORM_KEY = 'evrakFormState';
+
+  function evrakLoadState(key) {
+    try {
+      const raw = localStorage.getItem(key);
+      return raw ? JSON.parse(raw) : {};
+    } catch (e) {
+      console.warn('Evrak state okunamadı:', e);
+      return {};
+    }
+  }
+
+  function evrakSaveState(key, state) {
+    try {
+      localStorage.setItem(key, JSON.stringify(state));
+    } catch (e) {
+      console.warn('Evrak state kaydedilemedi:', e);
+    }
+  }
+
+  let _evrakCheckState = evrakLoadState(EVRAK_CHECK_KEY);
+  let _evrakFormState = evrakLoadState(EVRAK_FORM_KEY);
+
+  function evrakItemRowHTML(item) {
+    const checked = !!_evrakCheckState[item.id];
+    return '<label class="yks-topic-row' + (checked ? ' checked' : '') + '">' +
+      '<input type="checkbox" class="evrak-checkbox" data-id="' + item.id + '"' + (checked ? ' checked' : '') + '>' +
+      '<span class="yks-topic-name">' + item.ad + '</span>' +
+      '</label>';
+  }
+
+  function evrakCepheProgress(cephe) {
+    let done = 0;
+    const total = cephe.kalemler.length;
+    cephe.kalemler.forEach(k => { if (_evrakCheckState[k.id]) done++; });
+    return { done, total };
+  }
+
+  function evrakUpdateCepheCount(cephe) {
+    const { done, total } = evrakCepheProgress(cephe);
+    const pct = total ? Math.round((done / total) * 100) : 0;
+    const countEl = document.querySelector('[data-evrak-count-for="' + cephe.id + '"]');
+    const fillEl = document.querySelector('[data-evrak-fill-for="' + cephe.id + '"]');
+    if (countEl) countEl.textContent = done + '/' + total;
+    if (fillEl) fillEl.style.width = pct + '%';
+  }
+
+  function evrakRenderCephe(cephe) {
+    const container = document.getElementById('evrakList-' + cephe.id);
+    if (!container) return;
+    container.innerHTML = cephe.kalemler.map(evrakItemRowHTML).join('');
+    evrakUpdateCepheCount(cephe);
+  }
+
+  function evrakOverallProgress() {
+    let done = 0, total = 0;
+    Object.values(EVRAK_CHECKLIST).forEach(c => {
+      const p = evrakCepheProgress(c);
+      done += p.done; total += p.total;
+    });
+    return { done, total };
+  }
+
+  function evrakUpdateOverallBar() {
+    const { done, total } = evrakOverallProgress();
+    const pct = total ? Math.round((done / total) * 100) : 0;
+    const fillEl = document.getElementById('evrakOverallFill');
+    const pctEl = document.getElementById('evrakOverallPct');
+    const subEl = document.getElementById('evrakOverallSub');
+    if (fillEl) {
+      fillEl.style.width = pct + '%';
+      fillEl.className = 'hero-progress-fill ' + (pct >= 66 ? 'lvl-safe' : pct >= 33 ? 'lvl-watch' : 'lvl-critical');
+    }
+    if (pctEl) pctEl.textContent = '%' + pct;
+    if (subEl) subEl.textContent = done + ' / ' + total + ' evrak tamam';
+  }
+
+  function evrakRenderAll() {
+    if (!document.getElementById('evrakList-turkiye') && !document.getElementById('evrakList-almanya')) return;
+    Object.values(EVRAK_CHECKLIST).forEach(evrakRenderCephe);
+    evrakUpdateOverallBar();
+  }
+
+  // Checkbox tıklamalarını event delegation ile yakala
+  document.addEventListener('change', function (e) {
+    if (!e.target.classList || !e.target.classList.contains('evrak-checkbox')) return;
+    const id = e.target.dataset.id;
+    _evrakCheckState[id] = e.target.checked;
+    evrakSaveState(EVRAK_CHECK_KEY, _evrakCheckState);
+    e.target.closest('.yks-topic-row')?.classList.toggle('checked', e.target.checked);
+    const cephe = Object.values(EVRAK_CHECKLIST).find(c => c.kalemler.some(k => k.id === id));
+    if (cephe) {
+      evrakUpdateCepheCount(cephe);
+      evrakUpdateOverallBar();
+    }
+  });
+
+  // --- Form bilgileri (kimlik / pasaport / işveren) — yazdıkça otomatik kaydeder ---
+  function evrakRestoreForm() {
+    document.querySelectorAll('.evrak-form-input').forEach(input => {
+      const key = input.dataset.field;
+      if (key && _evrakFormState[key] !== undefined) input.value = _evrakFormState[key];
+    });
+  }
+
+  document.addEventListener('input', function (e) {
+    if (!e.target.classList || !e.target.classList.contains('evrak-form-input')) return;
+    const key = e.target.dataset.field;
+    if (!key) return;
+    _evrakFormState[key] = e.target.value;
+    evrakSaveState(EVRAK_FORM_KEY, _evrakFormState);
+  });
+
+  evrakRenderAll();
+  evrakRestoreForm();
+
+  // ============================================================
+  // BLOG SAYFASI — foto-öncelikli kart grid + tek yazı detay şablonu
+  // Sadece blog.html'de gerekli container'lar bulunur; diğer sayfalarda
+  // fonksiyonlar sessizce hiçbir şey yapmadan çıkar (evrak/YKS mantığıyla aynı desen).
+  // YENİ YAZI EKLEMEK İÇİN: aşağıdaki BLOG_POSTS dizisine "taslak" objesinin
+  // üstüne yeni bir obje ekle (slug, date, dateLabel, title, excerpt, image, paragraphs),
+  // görsel için Studio/ klasöründeki bir dosya adını kullan.
+  // ============================================================
+  const BLOG_POSTS = [
+    {
+      slug: 'kabul-haberi',
+      draft: false,
+      date: '2026-08-09',
+      dateLabel: '09 Ağustos 2026',
+      title: 'Kabul Geldi',
+      excerpt: "Limburgerhof'taki fırın pozisyonundan resmi onay bugün geldi — operasyonun sıfır günü artık takvimde sabit bir tarih.",
+      image: 'Studio/harvard1.jpg',
+      paragraphs: [
+        "Bugün beklenen e-posta geldi: Limburgerhof'taki pozisyon resmi olarak onaylandı. Aylardır kağıt üzerinde duran '01.10.2026' tarihi artık gerçek bir başlangıç günü oldu.",
+        "İlk tepkim rahatlama oldu, ikincisi biraz panik — çünkü artık her şey geri sayıma bağlandı: VHS kursuna kayıt, dil sertifikaları, evrak cephesi, hepsi bu tarihe göre hizalanacak.",
+        "Bu paneli tam da bunun için kurdum: tek bir yerden ritmi, bütçeyi ve evrakı takip edebilmek için. Bugünden itibaren buraya arada bir not düşeceğim — hem ilerlemeyi görmek hem de ileride geriye bakıp neyin işe yaradığını hatırlamak için.",
+        "Şimdilik plan net: Ekim'de vardiya ve VHS dil kursu başlıyor, hedef bir yıl içinde C1'i tamamlayıp §16b üzerinden TU Berlin'e geçiş yapmak. Bir sonraki yazı muhtemelen ilk hafta izlenimleri olacak."
+      ]
+    },
+    {
+      slug: 'taslak-yazi',
+      draft: true,
+      date: '',
+      dateLabel: 'TASLAK',
+      title: 'Yeni yazı — başlığı burada değiştireceksin',
+      excerpt: "Bu bir boş şablon kartı. app.js içindeki BLOG_POSTS dizisine yeni bir obje ekleyip alanları doldurunca burada gerçek bir yazı olarak görünür.",
+      image: null,
+      paragraphs: [
+        'Buraya yazının tam metnini yaz. Dizideki her satır ayrı bir paragraf olarak render edilir.'
+      ]
+    }
+  ];
+
+  function blogCardHTML(post) {
+    if (post.draft) {
+      return '<div class="blog-card blog-card-draft" data-slug="' + post.slug + '">' +
+        '<div class="blog-card-img">+ YENİ YAZI EKLE</div>' +
+        '<div class="blog-card-body">' +
+          '<div class="blog-card-title">' + post.title + '</div>' +
+          '<div class="blog-card-excerpt">' + post.excerpt + '</div>' +
+        '</div></div>';
+    }
+    return '<div class="blog-card" data-slug="' + post.slug + '">' +
+      '<div class="blog-card-img" style="background-image:url(\'' + post.image + '\')">' +
+        '<span class="blog-card-date">' + post.dateLabel + '</span>' +
+      '</div>' +
+      '<div class="blog-card-body">' +
+        '<div class="blog-card-title">' + post.title + '</div>' +
+        '<div class="blog-card-excerpt">' + post.excerpt + '</div>' +
+      '</div></div>';
+  }
+
+  function blogRenderGrid() {
+    const grid = document.getElementById('blogGrid');
+    if (!grid) return;
+    grid.innerHTML = BLOG_POSTS.map(blogCardHTML).join('');
+  }
+
+  function blogRenderDetail(post) {
+    const wrap = document.getElementById('blogDetailContent');
+    if (!wrap || !post) return;
+    const hero = post.image ? '<div class="blog-detail-hero" style="background-image:url(\'' + post.image + '\')"></div>' : '';
+    wrap.innerHTML = hero +
+      '<div class="blog-detail-body">' +
+        (post.dateLabel ? '<div class="blog-detail-date">' + post.dateLabel + '</div>' : '') +
+        '<div class="blog-detail-title">' + post.title + '</div>' +
+        '<div class="blog-detail-text">' + post.paragraphs.map(function (p) { return '<p>' + p + '</p>'; }).join('') + '</div>' +
+      '</div>';
+  }
+
+  function blogOpenPost(slug) {
+    const post = BLOG_POSTS.find(function (p) { return p.slug === slug && !p.draft; });
+    if (!post) return;
+    blogRenderDetail(post);
+    const listSection = document.getElementById('blogListSection');
+    const detailSection = document.getElementById('blogDetailSection');
+    if (listSection) listSection.style.display = 'none';
+    if (detailSection) detailSection.style.display = 'block';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function blogShowGrid() {
+    const listSection = document.getElementById('blogListSection');
+    const detailSection = document.getElementById('blogDetailSection');
+    if (listSection) listSection.style.display = 'block';
+    if (detailSection) detailSection.style.display = 'none';
+    if (location.hash) history.replaceState(null, '', location.pathname + location.search);
+  }
+
+  function blogRenderAll() {
+    const grid = document.getElementById('blogGrid');
+    if (!grid) return; // sadece blog.html'de çalışır
+
+    blogRenderGrid();
+
+    const backBtn = document.getElementById('blogBackBtn');
+    if (backBtn) backBtn.addEventListener('click', blogShowGrid);
+
+    grid.addEventListener('click', function (e) {
+      const card = e.target.closest('.blog-card');
+      if (!card || card.classList.contains('blog-card-draft')) return;
+      const slug = card.dataset.slug;
+      history.replaceState(null, '', '#' + slug);
+      blogOpenPost(slug);
+    });
+
+    // Doğrudan #slug ile paylaşılan bir link varsa yazıyı direkt aç
+    if (location.hash) {
+      const slug = location.hash.slice(1);
+      if (BLOG_POSTS.some(function (p) { return p.slug === slug && !p.draft; })) blogOpenPost(slug);
+    }
+  }
+
+  blogRenderAll();
