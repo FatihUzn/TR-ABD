@@ -234,7 +234,10 @@
   function motivationCheckPhaseChange() {
     const state = motivationLoadState();
     const faz = currentPhaseLabel();
-    if (state.lastPhase && state.lastPhase !== faz) motivationShowPhaseToast(faz);
+    if (state.lastPhase && state.lastPhase !== faz) {
+      motivationShowPhaseToast(faz);
+      motivationLogEvent('🚀 ' + faz + ' başladı.');
+    }
     state.lastPhase = faz;
     motivationSaveState(state);
   }
@@ -397,6 +400,10 @@
     state.checkins = checkins;
     motivationSaveState(state);
     motivationRenderPanel();
+    if (checkins[todayKey]) {
+      motivationLogEvent('✅ Bugün check-in yapıldı.');
+      if (typeof motivationCheckBadges === 'function') motivationCheckBadges();
+    }
   }
 
   function motivationApplyCalmMode(on) {
@@ -509,6 +516,185 @@
     motivationApplyCalmMode(!!state.calmMode);
   }
   motivationInitStage2();
+
+  // ============================================================
+  // MOTİVASYON ÇEKİRDEĞİ — Aşama 3 (sistem günlüğü, kanıt sayaçları, rozetler)
+  // NOT: motivationInitStage3() dosyanın SONUNDA çağrılır, çünkü YKS_DATA
+  // ve EVRAK_CHECKLIST bu noktadan sonra tanımlanıyor.
+  // ============================================================
+  const BADGE_DEFS = [
+    { id: 'ilk-checkin', icon: '🥇', title: 'İlk Adım', desc: 'İlk check-in yapıldı.' },
+    { id: 'streak-7', icon: '🔥', title: 'Bir Hafta', desc: '7 gün üst üste check-in yaptın.' },
+    { id: 'streak-30', icon: '🔥', title: 'Bir Ay', desc: '30 gün üst üste check-in yaptın.' },
+    { id: 'yks-ilk', icon: '📚', title: 'YKS Başlangıcı', desc: 'İlk YKS konusunu tamamladın.' },
+    { id: 'yks-yarim', icon: '📖', title: 'Yarı Yol · YKS', desc: 'YKS konularının yarısını bitirdin.' },
+    { id: 'evrak-tr', icon: '📋', title: 'Türkiye Evrakı Tamam', desc: 'Türkiye tarafındaki tüm evraklar tamam.' },
+    { id: 'evrak-de', icon: '📋', title: 'Almanya Evrakı Tamam', desc: 'Almanya tarafındaki tüm evraklar tamam.' },
+    { id: 'gun-30', icon: '📅', title: '30 Gün', desc: 'Operasyonun 30. gününe ulaştın.' },
+    { id: 'gun-100', icon: '📅', title: '100 Gün', desc: 'Operasyonun 100. gününe ulaştın.' },
+    { id: 'faz2', icon: '🚀', title: 'FAZ 2', desc: 'Vize dönüşüm fazına geçtin.' },
+    { id: 'faz3', icon: '🎓', title: 'FAZ 3 · TU Berlin', desc: 'Son faza ulaştın.' }
+  ];
+
+  // --- 5. Sistem günlüğü ---
+  function motivationLogEvent(text) {
+    const state = motivationLoadState();
+    const log = state.log || [];
+    log.unshift({ ts: Date.now(), text: text });
+    state.log = log.slice(0, 40);
+    motivationSaveState(state);
+    motivationRenderLog();
+  }
+
+  function motivationRenderLog() {
+    const el = document.getElementById('sysLog');
+    if (!el) return;
+    const state = motivationLoadState();
+    const log = state.log || [];
+    if (!log.length) {
+      el.innerHTML = '<div class="log-empty">Henüz kayıt yok — ilk adımını at.</div>';
+      return;
+    }
+    el.innerHTML = log.map(function (item) {
+      const d = new Date(item.ts);
+      const dateStr = d.toLocaleDateString('tr-TR', { day: '2-digit', month: '2-digit' }) + ' ' + d.toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' });
+      return '<div class="log-line"><span class="log-ts">[' + dateStr + ']</span><span class="log-text"> ' + item.text + '</span></div>';
+    }).join('');
+  }
+
+  // --- 14. Somut kanıt sayaçları (yks/evrak state'lerini doğrudan okur) ---
+  function motivationYksTotals() {
+    try {
+      const raw = localStorage.getItem('yksChecklistState');
+      const yksState = raw ? JSON.parse(raw) : {};
+      let done = 0, total = 0;
+      ['TYT', 'AYT'].forEach(function (grp) {
+        (YKS_DATA[grp] || []).forEach(function (ders) {
+          ders.konular.forEach(function (konu) {
+            yksLeafIds(konu).forEach(function (id) {
+              total++;
+              if (yksState[id]) done++;
+            });
+          });
+        });
+      });
+      return { done: done, total: total };
+    } catch (e) { return { done: 0, total: 0 }; }
+  }
+
+  function motivationEvrakTotals() {
+    try {
+      const raw = localStorage.getItem('evrakChecklistState');
+      const evrakState = raw ? JSON.parse(raw) : {};
+      let trDone = 0, deDone = 0;
+      const trTotal = EVRAK_CHECKLIST.turkiye.kalemler.length;
+      const deTotal = EVRAK_CHECKLIST.almanya.kalemler.length;
+      EVRAK_CHECKLIST.turkiye.kalemler.forEach(function (k) { if (evrakState[k.id]) trDone++; });
+      EVRAK_CHECKLIST.almanya.kalemler.forEach(function (k) { if (evrakState[k.id]) deDone++; });
+      return { trDone: trDone, trTotal: trTotal, deDone: deDone, deTotal: deTotal };
+    } catch (e) { return { trDone: 0, trTotal: 0, deDone: 0, deTotal: 0 }; }
+  }
+
+  function motivationBuildProofContext() {
+    const state = motivationLoadState();
+    const checkins = state.checkins || {};
+    const totalCheckins = Object.keys(checkins).length;
+    const streak = motivationComputeStreak(checkins);
+    const yks = motivationYksTotals();
+    const evrak = motivationEvrakTotals();
+    const dayInfo = getOpDayInfo();
+    const phase = currentPhaseLabel();
+    return {
+      totalCheckins: totalCheckins, streak: streak,
+      yksDone: yks.done, yksTotal: yks.total,
+      evrakTrDone: evrak.trDone, evrakTrTotal: evrak.trTotal,
+      evrakDeDone: evrak.deDone, evrakDeTotal: evrak.deTotal,
+      elapsedDays: dayInfo.elapsedDays, phase: phase
+    };
+  }
+
+  function motivationRenderProofCounters(ctx) {
+    const yksEl = document.getElementById('proofYks');
+    const evrakEl = document.getElementById('proofEvrak');
+    const checkinEl = document.getElementById('proofCheckins');
+    const streakEl2 = document.getElementById('proofStreak');
+    if (yksEl) yksEl.textContent = ctx.yksDone + '/' + ctx.yksTotal;
+    if (evrakEl) evrakEl.textContent = (ctx.evrakTrDone + ctx.evrakDeDone) + '/' + (ctx.evrakTrTotal + ctx.evrakDeTotal);
+    if (checkinEl) checkinEl.textContent = ctx.totalCheckins;
+    if (streakEl2) streakEl2.textContent = ctx.streak;
+  }
+
+  // --- 15. Rozet sistemi ---
+  function motivationBadgeCheck(id, ctx) {
+    switch (id) {
+      case 'ilk-checkin': return ctx.totalCheckins >= 1;
+      case 'streak-7': return ctx.streak >= 7;
+      case 'streak-30': return ctx.streak >= 30;
+      case 'yks-ilk': return ctx.yksDone >= 1;
+      case 'yks-yarim': return ctx.yksTotal > 0 && (ctx.yksDone / ctx.yksTotal) >= 0.5;
+      case 'evrak-tr': return ctx.evrakTrTotal > 0 && ctx.evrakTrDone === ctx.evrakTrTotal;
+      case 'evrak-de': return ctx.evrakDeTotal > 0 && ctx.evrakDeDone === ctx.evrakDeTotal;
+      case 'gun-30': return ctx.elapsedDays >= 30;
+      case 'gun-100': return ctx.elapsedDays >= 100;
+      case 'faz2': return ctx.phase === 'FAZ 2' || ctx.phase === 'FAZ 3';
+      case 'faz3': return ctx.phase === 'FAZ 3';
+      default: return false;
+    }
+  }
+
+  function motivationShowBadgeToast(def) {
+    const toast = document.createElement('div');
+    toast.className = 'phase-toast';
+    toast.innerHTML = '<span class="phase-toast-tag">ROZET</span><span>' + def.icon + ' ' + def.title + '</span>';
+    document.body.appendChild(toast);
+    requestAnimationFrame(function () { toast.classList.add('show'); });
+    setTimeout(function () {
+      toast.classList.remove('show');
+      setTimeout(function () { toast.remove(); }, 450);
+    }, 4500);
+  }
+
+  function motivationRenderBadges() {
+    const grid = document.getElementById('badgeGrid');
+    if (!grid) return;
+    const state = motivationLoadState();
+    const badges = state.badges || {};
+    grid.innerHTML = BADGE_DEFS.map(function (def) {
+      const earned = !!badges[def.id];
+      return '<div class="badge-item' + (earned ? ' earned' : '') + '" title="' + def.desc + '">' +
+        '<span class="badge-icon">' + (earned ? def.icon : '🔒') + '</span>' +
+        '<span class="badge-title">' + def.title + '</span>' +
+        '</div>';
+    }).join('');
+  }
+
+  function motivationCheckBadges() {
+    const state = motivationLoadState();
+    const badges = state.badges || {};
+    const ctx = motivationBuildProofContext();
+    let changed = false;
+    BADGE_DEFS.forEach(function (def) {
+      if (badges[def.id]) return;
+      if (motivationBadgeCheck(def.id, ctx)) {
+        badges[def.id] = Date.now();
+        changed = true;
+        motivationShowBadgeToast(def);
+        motivationLogEvent('🏅 Rozet kazanıldı: ' + def.title);
+      }
+    });
+    if (changed) {
+      state.badges = badges;
+      motivationSaveState(state);
+    }
+    motivationRenderBadges();
+    motivationRenderProofCounters(ctx);
+    return ctx;
+  }
+
+  function motivationInitStage3() {
+    motivationCheckBadges();
+    motivationRenderLog();
+  }
 
   // --- PLAN vs BUGÜNÜN KURUYLA ALTIN GRAFİĞİ (tamamen otomatik, elle giriş yok) ---
   // Her ay için: o ana kadarki kümülatif kasa (€) + planda kullanılan sabit 114,08 €/gr
@@ -1021,6 +1207,11 @@
       const isTyt = YKS_DATA.TYT.includes(ders);
       yksUpdateOverallBar(isTyt ? 'Tyt' : 'Ayt', isTyt ? YKS_DATA.TYT : YKS_DATA.AYT);
     }
+    if (e.target.checked) {
+      const topicName = e.target.closest('.yks-topic-row')?.querySelector('.yks-topic-name')?.textContent?.trim();
+      motivationLogEvent('📚 YKS konusu tamamlandı' + (topicName ? ': ' + topicName : '.'));
+      motivationCheckBadges();
+    }
   });
 
   yksRenderAll();
@@ -1165,6 +1356,11 @@
       evrakUpdateCepheCount(cephe);
       evrakUpdateOverallBar();
     }
+    if (e.target.checked) {
+      const itemName = e.target.closest('.yks-topic-row')?.querySelector('.yks-topic-name')?.textContent?.trim();
+      motivationLogEvent('📋 Evrak tamamlandı' + (itemName ? ': ' + itemName : '.'));
+      motivationCheckBadges();
+    }
   });
 
   // --- Form bilgileri (kimlik / pasaport / işveren) — yazdıkça otomatik kaydeder ---
@@ -1305,3 +1501,9 @@
   }
 
   blogRenderAll();
+
+  // ============================================================
+  // MOTİVASYON ÇEKİRDEĞİ — Aşama 3 başlatma
+  // (YKS_DATA ve EVRAK_CHECKLIST artık tanımlı olduğu için burada çağrılır)
+  // ============================================================
+  motivationInitStage3();

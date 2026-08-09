@@ -278,6 +278,40 @@ body.calm-mode .dim-seg .dim-line{animation:none !important;}
   padding:10px 14px; margin:14px 0 0; display:flex; align-items:center; gap:8px;
 }
 
+/* ===== MOTİVASYON ÇEKİRDEĞİ — Aşama 3 (kanıt / log / rozet) ===== */
+
+/* --- İlerleme kanıtı sayaçları --- */
+.proof-grid{
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); gap:10px; margin-top:10px;
+}
+.proof-card{
+  background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:14px 12px; text-align:center;
+}
+.proof-num{font-family:var(--mono); font-weight:800; font-size:22px; color:var(--purple);}
+.proof-label{font-family:var(--mono); font-size:9.5px; letter-spacing:0.05em; text-transform:uppercase; color:var(--text-faint); margin-top:4px;}
+
+/* --- Rozetler --- */
+.badge-grid{
+  display:grid; grid-template-columns:repeat(auto-fill,minmax(96px,1fr)); gap:10px; margin-top:10px;
+}
+.badge-item{
+  display:flex; flex-direction:column; align-items:center; gap:6px; text-align:center;
+  background:var(--panel-2); border:1px solid var(--line); border-radius:12px; padding:12px 8px;
+  opacity:0.45; filter:grayscale(1);
+}
+.badge-item.earned{opacity:1; filter:none; background:var(--panel); border-color:var(--purple-dim);}
+.badge-icon{font-size:22px;}
+.badge-title{font-family:var(--mono); font-size:9px; letter-spacing:0.02em; color:var(--text-dim); line-height:1.3;}
+
+/* --- Sistem günlüğü --- */
+.log-panel{
+  margin-top:10px; background:#080e20; border-radius:12px; padding:14px 16px;
+  max-height:220px; overflow-y:auto; display:flex; flex-direction:column; gap:6px;
+}
+.log-line{font-family:var(--mono); font-size:11px; color:#cbd5e1; line-height:1.5;}
+.log-ts{color:var(--purple-dim);}
+.log-empty{font-family:var(--mono); font-size:11px; color:#64748b;}
+
 /* section entrance animation */
 section, header, details.acc-section{
   animation:rise 0.6s cubic-bezier(.2,.7,.3,1) both;
