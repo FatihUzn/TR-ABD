@@ -716,21 +716,34 @@ details.yks-subject[open] > .acc-summary .yks-subject-count{color:var(--purple);
 .legend-item{display:flex; align-items:center; gap:7px; font-family:var(--mono); font-size:11px; color:var(--text-dim);}
 .legend-dot{width:10px; height:10px; border-radius:3px; flex-shrink:0;}
 
-/* ===== TABLE ===== */
-.table-wrap{overflow-x:auto; border:1px solid var(--line); border-radius:12px; background:var(--panel);}
+/* ===== TABLE =====
+   Opak beyaz yerine hero'daki gibi "cam" (glass) zemin: yarı saydam koyu
+   fon + blur, foto arkadan hafifçe sezilir ama metin her zaman okunur
+   kalır çünkü bu skopta --text ailesi header'daki gibi açık renge alınıyor. */
+.table-wrap{
+  overflow-x:auto; border-radius:12px;
+  background: rgba(8,14,32,0.62);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.14);
+  --text: #f9fafb;
+  --text-dim: #e2e8f0;
+  --text-faint: #cbd5e1;
+  --line: rgba(255,255,255,0.16);
+}
 table{width:100%; border-collapse:collapse; font-family:var(--mono); font-size:12.5px; min-width:560px;}
 th{
-  background:var(--panel-2); text-align:left; padding:10px 14px; font-size:10.5px;
+  background:rgba(255,255,255,0.06); text-align:left; padding:10px 14px; font-size:10.5px;
   text-transform:uppercase; letter-spacing:0.05em; color:var(--text-faint); font-weight:500;
   border-bottom:1px solid var(--line);
 }
 td{padding:10px 14px; border-bottom:1px solid var(--line); color:var(--text-dim);}
 tr:last-child td{border-bottom:none;}
-tr:hover td{background:rgba(30,136,199,0.05);}
+tr:hover td{background:rgba(74,168,220,0.12);}
 td.cash{color:var(--text); font-weight:600;}
-td.gold{color:var(--purple);}
-tr.milestone td{background:rgba(5,150,105,0.07);}
-tr.milestone td.cash{color:var(--green);}
+td.gold{color:var(--purple-dim);}
+tr.milestone td{background:rgba(52,211,153,0.14);}
+tr.milestone td.cash{color:#6ee7b7;}
 
 /* ===== FOOTER ===== */
 footer{
