@@ -285,14 +285,17 @@
   function motivationUpdateAccumCounter() {
     const numEl = document.getElementById('accumDaysNum');
     const subEl = document.getElementById('accumDaysSub');
+    const barEl = document.getElementById('accumDaysBar');
     if (!numEl) return;
     const info = getOpDayInfo();
     if (!info.started) {
       numEl.textContent = info.prepDays;
       if (subEl) subEl.textContent = 'gün sonra başlıyor · hazırlık aşamasındasın';
+      if (barEl) barEl.style.width = '8%';
     } else {
       numEl.textContent = info.elapsedDays;
       if (subEl) subEl.textContent = info.totalDays + ' günün ' + info.elapsedDays + '\'ini geride bıraktın · ' + info.remainingDays + ' gün kaldı';
+      if (barEl) barEl.style.width = Math.max(4, Math.min(100, (info.elapsedDays / info.totalDays) * 100)) + '%';
     }
   }
 

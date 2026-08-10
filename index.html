@@ -21,7 +21,7 @@
   <header class="dash-header">
 
     <nav class="dash-topnav">
-      <a href="index.html" class="dash-brand">ALMANYA<span class="arrow">→</span>TUB</a>
+      <a href="index.html" class="dash-brand"><span class="dash-brand-mark">A→T</span>ALMANYA<span class="arrow">→</span>TUB</a>
       <div class="dash-topnav-links">
         <a class="dash-topnav-link active" data-page-link="sistem" href="index.html">⚙️ <span class="i18n" data-tr="Sistem" data-de="System">Sistem</span></a>
         <a class="dash-topnav-link" data-page-link="yks" href="yks.html">📚 YKS</a>
@@ -32,86 +32,110 @@
       <div class="dash-topnav-right">
         <span class="nav-badge" id="navProgressBadge">–% · FAZ 1</span>
         <span class="status i18n" data-tr="AKTİF" data-de="AKTIV">AKTİF</span>
+        <button type="button" class="topnav-icon-btn" aria-label="Ara">🔍</button>
+        <button type="button" class="topnav-icon-btn" aria-label="Bildirimler">🔔</button>
         <div class="lang-toggle">
           <button type="button" class="active" data-lang="tr" onclick="setLang('tr')">TR</button>
           <button type="button" data-lang="de" onclick="setLang('de')">DE</button>
         </div>
+        <div class="topnav-avatar" aria-hidden="true">FU</div>
       </div>
     </nav>
 
     <div class="daily-greet" id="dailyGreet"></div>
 
+    <div class="dash-title-block">
+      <span class="dash-eyebrow i18n" data-tr="REV 3.0 // GERÇEKLİK-KONTROLLÜ" data-de="REV 3.0 // REALITÄTSGEPRÜFT">REV 3.0 // GERÇEKLİK-KONTROLLÜ</span>
+      <h1>ALMANYA<span class="arrow">→</span>TU BERLIN</h1>
+      <p class="subtitle i18n" data-tr="Limburgerhof köprü dönemi operasyon paneli. Nihai hedef: Mekatronik Mühendisliği, TU Berlin." data-de="Operationspanel für die Übergangsphase in Limburgerhof. Endziel: Mechatronik-Ingenieurwesen, TU Berlin.">Limburgerhof köprü dönemi operasyon paneli. Nihai hedef: Mekatronik Mühendisliği, TU Berlin.</p>
+
+      <div class="phase-strip">
+        <div class="phase-chip active i18n" data-tr="FAZ 1 · Çalışma &amp; Dil (Ekim–Eylül)" data-de="PHASE 1 · Arbeit &amp; Sprache (Okt.–Sept.)">FAZ 1 · Çalışma &amp; Dil (Ekim–Eylül)</div>
+        <div class="phase-chip i18n" data-tr="FAZ 2 · Vize Dönüşümü (§16b)" data-de="PHASE 2 · Visumsumwandlung (§16b)">FAZ 2 · Vize Dönüşümü (§16b)</div>
+        <div class="phase-chip i18n" data-tr="FAZ 3 · TU Berlin" data-de="PHASE 3 · TU Berlin">FAZ 3 · TU Berlin</div>
+      </div>
+    </div>
+
     <div class="dash-hero-grid">
-      <div class="dash-hero-left">
-        <span class="dash-eyebrow i18n" data-tr="REV 3.0 // GERÇEKLİK-KONTROLLÜ" data-de="REV 3.0 // REALITÄTSGEPRÜFT">REV 3.0 // GERÇEKLİK-KONTROLLÜ</span>
-        <h1>ALMANYA<span class="arrow">→</span>TU BERLIN</h1>
-        <p class="subtitle i18n" data-tr="Limburgerhof köprü dönemi operasyon paneli. Nihai hedef: Mekatronik Mühendisliği, TU Berlin." data-de="Operationspanel für die Übergangsphase in Limburgerhof. Endziel: Mechatronik-Ingenieurwesen, TU Berlin.">Limburgerhof köprü dönemi operasyon paneli. Nihai hedef: Mekatronik Mühendisliği, TU Berlin.</p>
-
-        <div class="dash-stat-row">
-          <div class="dash-stat-box">
-            <span class="dash-stat-box-label i18n" data-tr="Emek Verilen Gün" data-de="Investierte Tage">Emek Verilen Gün</span>
-            <span class="dash-stat-box-num" id="accumDaysNum">–</span>
-            <div class="dash-stat-box-sub" id="accumDaysSub">hesaplanıyor...</div>
-          </div>
-          <div class="dash-stat-box dash-stat-box-route">
-            <span class="dash-stat-box-label i18n" data-tr="Aktif Rota" data-de="Aktive Route">Aktif Rota</span>
-            <div class="route-mini">
-              <span class="route-mini-label">🇹🇷</span>
-              <svg class="route-mini-svg" viewBox="0 0 300 16" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
-                <path class="route-path" d="M6,8 L294,8"></path>
-                <path class="route-path-fill" id="routePathFill" d="M6,8 L294,8"></path>
-                <circle class="route-dot" id="routeDot" cx="6" cy="8" r="4"></circle>
-              </svg>
-              <span class="route-mini-label">🇩🇪 Limburgerhof</span>
-            </div>
-          </div>
+      <div class="dash-stat-row">
+        <div class="dash-stat-box">
+          <span class="dash-stat-box-label i18n" data-tr="Emek Verilen Gün" data-de="Investierte Tage">Emek Verilen Gün</span>
+          <span class="dash-stat-box-num" id="accumDaysNum">–</span>
+          <div class="dash-stat-box-sub" id="accumDaysSub">hesaplanıyor...</div>
+          <div class="dash-stat-bar"><div class="dash-stat-bar-fill dash-stat-bar-fill--dark" id="accumDaysBar"></div></div>
         </div>
-
-        <div class="phase-strip">
-          <div class="phase-chip active i18n" data-tr="FAZ 1 · Çalışma &amp; Dil (Ekim–Eylül)" data-de="PHASE 1 · Arbeit &amp; Sprache (Okt.–Sept.)">FAZ 1 · Çalışma &amp; Dil (Ekim–Eylül)</div>
-          <div class="phase-chip i18n" data-tr="FAZ 2 · Vize Dönüşümü (§16b)" data-de="PHASE 2 · Visumsumwandlung (§16b)">FAZ 2 · Vize Dönüşümü (§16b)</div>
-          <div class="phase-chip i18n" data-tr="FAZ 3 · TU Berlin" data-de="PHASE 3 · TU Berlin">FAZ 3 · TU Berlin</div>
+        <div class="dash-stat-box dash-stat-box-route">
+          <span class="dash-stat-box-label i18n" data-tr="Aktif Rota" data-de="Aktive Route">Aktif Rota</span>
+          <div class="route-mini">
+            <span class="route-mini-label">🇹🇷</span>
+            <svg class="route-mini-svg" viewBox="0 0 300 16" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+              <path class="route-path" d="M6,8 L294,8"></path>
+              <path class="route-path-fill" id="routePathFill" d="M6,8 L294,8"></path>
+              <circle class="route-dot" id="routeDot" cx="6" cy="8" r="4"></circle>
+            </svg>
+            <span class="route-mini-label">🇩🇪 Limburgerhof</span>
+          </div>
+          <div class="dash-stat-bar"><div class="dash-stat-bar-fill dash-stat-bar-fill--accent" style="width:100%"></div></div>
         </div>
       </div>
 
-      <div class="dash-hero-visual">
-        <div class="hero-gauge-card">
-          <span class="hero-progress-label i18n" data-tr="Genel İlerleme" data-de="Gesamtfortschritt">Genel İlerleme</span>
-          <div class="hero-gauge">
-            <svg class="hero-gauge-svg" viewBox="0 0 120 120">
-              <circle class="hero-gauge-track" cx="60" cy="60" r="52"></circle>
-              <circle class="hero-gauge-ring" id="progressFill" cx="60" cy="60" r="52"></circle>
-            </svg>
-            <div class="hero-gauge-center"><span class="hero-gauge-pct" id="progressPct">–%</span></div>
+      <div class="dash-hero-photo">
+        <img src="Studio/harvard1.webp" alt="ALMANYA → TU Berlin">
+      </div>
+    </div>
+
+    <div class="dash-metrics-row">
+      <div class="metric-card">
+        <span class="metric-card-label i18n" data-tr="Genel İlerleme" data-de="Gesamtfortschritt">Genel İlerleme</span>
+        <div class="metric-card-topline">
+          <span class="metric-card-num" id="progressPct">–%</span>
+          <svg class="metric-mini-gauge" viewBox="0 0 120 120" aria-hidden="true">
+            <circle class="hero-gauge-track" cx="60" cy="60" r="52"></circle>
+            <circle class="hero-gauge-ring" id="progressFill" cx="60" cy="60" r="52"></circle>
+          </svg>
+        </div>
+        <div class="metric-card-sub i18n" id="progressSub" data-tr="başlangıç: 01.10.2026 · otomatik hesaplanıyor" data-de="Start: 01.10.2026 · wird automatisch berechnet">başlangıç: 01.10.2026 · otomatik hesaplanıyor</div>
+      </div>
+
+      <div class="metric-card metric-card--bars">
+        <span class="metric-card-label i18n" data-tr="İlerleme Kanıtı" data-de="Fortschrittsnachweis">İlerleme Kanıtı</span>
+        <div class="metric-hbar-list">
+          <div class="metric-hbar-row">
+            <span class="metric-hbar-track"><span class="metric-hbar-fill" style="width:82%"></span></span>
+            <span class="metric-hbar-val" id="proofYks">–/–</span>
+            <span class="metric-hbar-tag i18n" data-tr="YKS" data-de="YKS">YKS</span>
           </div>
-          <div class="hero-progress-sub" id="progressSub">başlangıç: 01.10.2026 · otomatik hesaplanıyor</div>
+          <div class="metric-hbar-row">
+            <span class="metric-hbar-track"><span class="metric-hbar-fill" style="width:68%"></span></span>
+            <span class="metric-hbar-val" id="proofEvrak">–/–</span>
+            <span class="metric-hbar-tag i18n" data-tr="Evrak" data-de="Unterlagen">Evrak</span>
+          </div>
+          <div class="metric-hbar-row">
+            <span class="metric-hbar-track"><span class="metric-hbar-fill" style="width:55%"></span></span>
+            <span class="metric-hbar-val" id="proofCheckins">–</span>
+            <span class="metric-hbar-tag i18n" data-tr="Check-in" data-de="Check-in">Check-in</span>
+          </div>
+          <div class="metric-hbar-row">
+            <span class="metric-hbar-track"><span class="metric-hbar-fill" style="width:40%"></span></span>
+            <span class="metric-hbar-val" id="proofStreak">–</span>
+            <span class="metric-hbar-tag i18n" data-tr="Seri" data-de="Serie">Seri</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="metric-card metric-card--photos">
+        <span class="metric-card-label i18n" data-tr="Dil Yolculuğu" data-de="Sprachreise">Dil Yolculuğu</span>
+        <div class="metric-photo-row">
+          <div class="metric-photo" style="background-image:url('Studio/gallery1.jpg')"><span class="metric-photo-icon">♡</span></div>
+          <div class="metric-photo" style="background-image:url('Studio/gallery3.jpg')"><span class="metric-photo-icon">♡</span></div>
+          <div class="metric-photo" style="background-image:url('Studio/gallery6.jpg')"><span class="metric-photo-icon">⤢</span></div>
         </div>
       </div>
     </div>
   </header>
 
   <section id="proofSection">
-    <div class="sec-label i18n" data-tr="İlerleme Kanıtı" data-de="Fortschrittsnachweis">İlerleme Kanıtı</div>
-    <div class="proof-grid">
-      <div class="proof-card">
-        <div class="proof-num" id="proofYks">–/–</div>
-        <div class="proof-label i18n" data-tr="YKS Konusu" data-de="YKS-Themen">YKS Konusu</div>
-      </div>
-      <div class="proof-card">
-        <div class="proof-num" id="proofEvrak">–/–</div>
-        <div class="proof-label i18n" data-tr="Evrak Kalemi" data-de="Unterlagen">Evrak Kalemi</div>
-      </div>
-      <div class="proof-card">
-        <div class="proof-num" id="proofCheckins">–</div>
-        <div class="proof-label i18n" data-tr="Toplam Check-in" data-de="Check-ins gesamt">Toplam Check-in</div>
-      </div>
-      <div class="proof-card">
-        <div class="proof-num" id="proofStreak">–</div>
-        <div class="proof-label i18n" data-tr="Güncel Seri" data-de="Aktuelle Serie">Güncel Seri</div>
-      </div>
-    </div>
-
-    <details class="acc-section" style="margin-top:18px; margin-bottom:0;">
+    <details class="acc-section" style="margin-top:0; margin-bottom:0;">
       <summary class="sec-label acc-summary"><span class="i18n" data-tr="Rozetler, Günlük &amp; İzleme Linki" data-de="Abzeichen, Protokoll &amp; Tracking-Link">Rozetler, Günlük &amp; İzleme Linki</span><span class="acc-chevron">▾</span></summary>
       <div class="acc-body">
         <div class="sec-label i18n" data-tr="Rozetler" data-de="Abzeichen">Rozetler</div>
