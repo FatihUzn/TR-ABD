@@ -61,9 +61,6 @@
 
 .scen-name{font-family:var(--mono); font-size:12px; color:var(--text-dim); text-transform:uppercase;}
 
-.legend{display:flex; flex-wrap:wrap; gap:14px 20px; margin-top:14px;}
-
 @media(max-width:640px){
 .stat-grid{grid-template-columns:1fr 1fr;}
-.legend{display:grid; grid-template-columns:1fr 1fr; gap:10px 12px;}
 }

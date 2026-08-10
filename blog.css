@@ -120,8 +120,6 @@
 
 .compare-stat-delta.flat{color:var(--text-faint);}
 
-.photo-tunnel{display:flex; gap:12px; overflow-x:auto; padding:4px 2px 10px; -webkit-overflow-scrolling:touch;}
-
 .photo-tunnel-empty{font-size:13px; color:var(--text-faint); padding:6px 2px;}
 
 .tunnel-item{flex:0 0 auto; width:132px; cursor:pointer; text-align:left;}
@@ -136,8 +134,6 @@
 .tunnel-date{font-family:var(--mono); font-size:9.5px; color:var(--text-faint); margin-top:7px; text-transform:uppercase; letter-spacing:0.04em;}
 
 .tunnel-title{font-size:12px; color:var(--text); font-weight:600; margin-top:2px; line-height:1.35;}
-
-.letter-card{background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:16px 18px;}
 
 .letter-card-cap{font-family:var(--mono); font-size:10.5px; letter-spacing:0.06em; text-transform:uppercase; color:var(--text-faint); margin-bottom:10px;}
 
@@ -156,8 +152,6 @@
 }
 
 .letter-save-btn:hover{opacity:0.88;}
-
-.letter-archive{margin-top:14px;}
 
 .letter-archive-item{border-top:1px dashed var(--line); padding:12px 2px;}
 

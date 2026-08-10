@@ -189,8 +189,6 @@
 .journey-strip{height:18px; gap:2px;}
 }
 
-.seg{height:100%; cursor:default;}
-
 @media(max-width:640px){
 .dim-row{display:none;}
 .node-cash{font-size:13.5px;}
