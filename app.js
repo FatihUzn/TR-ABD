@@ -128,43 +128,50 @@
     const overlay = document.createElement('div');
     overlay.className = 'boot-overlay';
     overlay.innerHTML =
-      '<div class="boot-lines" id="bootLines"></div>' +
-      '<div class="boot-progress-track"><div class="boot-progress-fill" id="bootProgressFill"></div></div>';
+      '<div class="boot-card">' +
+        '<div class="boot-emblem">' +
+          '<div class="boot-emblem-mark">ALMANYA<span class="arrow">→</span>TU BERLIN</div>' +
+          '<div class="boot-emblem-sub">OPERASYON PANELİ</div>' +
+        '</div>' +
+        '<div class="boot-lines" id="bootLines"></div>' +
+        '<div class="boot-progress-row">' +
+          '<div class="boot-progress-track"><div class="boot-progress-fill" id="bootProgressFill"></div></div>' +
+          '<span class="boot-progress-pct" id="bootProgressPct">0%</span>' +
+        '</div>' +
+      '</div>';
     document.body.appendChild(overlay);
     document.body.classList.add('boot-active');
 
-    const lines = ['SİSTEM BAŞLATILIYOR...', 'BAĞLANTI KURULUYOR...', 'OPERASYON VERİSİ YÜKLENİYOR...'];
+    const lines = ['Sistem başlatılıyor', 'Bağlantı kuruluyor', 'Operasyon verisi yükleniyor'];
     const linesEl = overlay.querySelector('#bootLines');
     const fillEl = overlay.querySelector('#bootProgressFill');
+    const pctEl = overlay.querySelector('#bootProgressPct');
     let li = 0;
 
-    function typeLine(text, cb) {
+    function addLine(text, cb) {
       const p = document.createElement('div');
       p.className = 'boot-line';
+      p.innerHTML = '<span class="boot-line-dot"></span><span class="boot-line-text"></span>';
       linesEl.appendChild(p);
-      let ci = 0;
-      (function step() {
-        if (ci <= text.length) {
-          p.textContent = text.slice(0, ci) + (ci < text.length ? '▍' : '');
-          ci++;
-          setTimeout(step, 16);
-        } else {
-          p.textContent = text;
-          cb();
-        }
-      })();
+      p.querySelector('.boot-line-text').textContent = text;
+      setTimeout(function () {
+        p.classList.add('boot-line-done');
+        cb();
+      }, 260);
     }
 
     function nextLine() {
       if (li < lines.length) {
-        typeLine(lines[li], function () { li++; setTimeout(nextLine, 160); });
+        addLine(lines[li], function () { li++; setTimeout(nextLine, 190); });
       } else {
         let pct = 0;
         const iv = setInterval(function () {
-          pct += 5;
-          fillEl.style.width = Math.min(100, pct) + '%';
-          if (pct >= 100) { clearInterval(iv); setTimeout(finishBoot, 280); }
-        }, 20);
+          pct += 4;
+          const shown = Math.min(100, pct);
+          fillEl.style.width = shown + '%';
+          pctEl.textContent = shown + '%';
+          if (pct >= 100) { clearInterval(iv); setTimeout(finishBoot, 320); }
+        }, 18);
       }
     }
 
