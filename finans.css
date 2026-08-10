@@ -1,0 +1,69 @@
+/* ============================================================
+   finans.css — sadece finans.html: altın grafiği, kasa kaydı
+   tablosu, canlı kur paneli stilleri.
+   core.css'ten SONRA yüklenmeli.
+   ============================================================ */
+
+.rate-updated{font-size:9.5px; color:var(--text-faint); text-transform:none; letter-spacing:normal;}
+
+.stat-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:12px;}
+
+.stat-value{font-family:var(--mono); font-weight:800; font-size:22px; color:var(--text); margin-top:6px;}
+
+.stat-value.purple{color:var(--purple);}
+
+.stat-value.green{color:var(--green);}
+
+.rate-panel{border:1px solid var(--line); border-radius:12px; overflow:hidden; background:var(--panel);}
+
+.rate-row-top{display:flex;}
+
+.rate-row-bottom{display:flex; border-top:1px solid var(--line);}
+
+.rate-cell{flex:1; min-width:0;}
+
+.rate-cell + .rate-cell{border-left:1px solid var(--line);}
+
+.rate-cell-lg{padding:16px 20px;}
+
+.rate-cell-top{display:flex; align-items:baseline; justify-content:space-between; gap:8px; margin-bottom:6px;}
+
+.rate-hero-code{font-family:var(--mono); font-weight:800; font-size:11px; color:var(--purple); letter-spacing:0.08em;}
+
+.rate-hero-eq{font-family:var(--mono); font-size:11px; color:var(--text-faint);}
+
+.rate-hero-main{display:flex; align-items:baseline; gap:6px;}
+
+.rate-hero-val{font-family:var(--mono); font-weight:800; font-size:26px; color:var(--text); font-variant-numeric:tabular-nums; line-height:1;}
+
+.rate-hero-cur{font-family:var(--mono); font-size:14px; color:var(--text-dim);}
+
+.rate-cell-sm{display:flex; flex-direction:column; align-items:center; gap:3px; padding:10px 6px;}
+
+.rate-mini-label{font-family:var(--mono); font-size:9.5px; color:var(--text-faint); text-transform:uppercase; letter-spacing:0.05em;}
+
+.rate-mini-val{font-family:var(--mono); font-weight:700; font-size:13px; color:var(--text); font-variant-numeric:tabular-nums;}
+
+.rate-error{margin-top:10px; font-family:var(--mono); font-size:11px; color:var(--red); text-align:center;}
+
+@media(max-width:420px){
+.rate-hero-val{font-size:20px;}
+.rate-cell-lg{padding:12px 14px;}
+.rate-row-bottom{flex-wrap:wrap;}
+.rate-cell-sm{flex:1 1 50%; min-width:50%;}
+.rate-cell-sm:nth-child(3){border-left:none; border-top:1px solid var(--line);}
+.rate-cell-sm:nth-child(4){border-top:1px solid var(--line);}
+}
+
+.stat-sub{font-size:11px; color:var(--text-dim); margin-top:4px;}
+
+.scenario{background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:18px 20px;}
+
+.scen-name{font-family:var(--mono); font-size:12px; color:var(--text-dim); text-transform:uppercase;}
+
+.legend{display:flex; flex-wrap:wrap; gap:14px 20px; margin-top:14px;}
+
+@media(max-width:640px){
+.stat-grid{grid-template-columns:1fr 1fr;}
+.legend{display:grid; grid-template-columns:1fr 1fr; gap:10px 12px;}
+}
