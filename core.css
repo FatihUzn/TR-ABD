@@ -735,16 +735,6 @@ details.yks-subject[open] > .acc-summary .yks-subject-count{color:var(--purple);
 
 /* ===== SCENARIO BARS ===== */
 
-.scen-row{margin-bottom:16px;}
-
-.scen-row:last-child{margin-bottom:0;}
-
-.scen-top{display:flex; justify-content:space-between; align-items:baseline; margin-bottom:6px;}
-
-.scen-nums{font-family:var(--mono); font-size:13px; color:var(--text);}
-
-.scen-nums .g{color:var(--purple); margin-left:8px;}
-
 .bar-track{height:8px; background:var(--panel-2); border-radius:5px; overflow:hidden; border:1px solid var(--line);}
 
 .bar-fill{height:100%; border-radius:5px;}
@@ -752,8 +742,6 @@ details.yks-subject[open] > .acc-summary .yks-subject-count{color:var(--purple);
 .bar-fill.base{width:74%; background:linear-gradient(90deg, var(--purple-dim), var(--purple));}
 
 .bar-fill.max{width:100%; background:linear-gradient(90deg, var(--purple), var(--green));}
-
-.scen-prob{font-family:var(--mono); font-size:10px; margin-top:5px; color:var(--text-faint);}
 
 /* ===== RISK PANEL ===== */
 
@@ -871,148 +859,6 @@ footer{
 
 /* ===== KASA TABLOSU: KOMPAKT/TAM GEÇİŞİ ===== */
 
-/* ===== YKS NET GİRİŞİ & PUAN HESAPLAYICI ===== */
-
-.net-form{background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:16px; margin-bottom:16px;}
-
-.net-form-row{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px;}
-
-.net-form-row input{
-  background:var(--panel-2); border:1px solid var(--line); border-radius:8px; color:var(--text);
-  font-family:var(--sans); font-size:13px; padding:9px 12px;
-}
-
-.net-form-row input[type="text"]{flex:1; min-width:180px;}
-
-.net-group-label{font-family:var(--mono); font-size:10px; color:var(--purple); text-transform:uppercase; letter-spacing:0.06em; margin:10px 0 8px;}
-
-.net-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(120px, 1fr)); gap:10px;}
-
-.net-field label{display:block; font-size:10.5px; color:var(--text-faint); margin-bottom:4px; font-family:var(--mono);}
-
-.net-dy{display:flex; align-items:center; gap:4px;}
-
-.net-dy input{
-  width:100%; background:var(--panel-2); border:1px solid var(--line); border-radius:6px; color:var(--text);
-  font-family:var(--mono); font-size:12px; padding:7px 6px; text-align:center; min-width:0;
-}
-
-.net-dy span{color:var(--text-faint); font-size:11px; flex-shrink:0;}
-
-.net-obp-row{display:flex; align-items:center; gap:10px; margin-top:14px; font-family:var(--mono); font-size:11px; color:var(--text-dim); flex-wrap:wrap;}
-
-.net-obp-row input{
-  background:var(--panel-2); border:1px solid var(--line); border-radius:6px; color:var(--text);
-  font-family:var(--mono); font-size:12px; padding:7px 10px; width:90px;
-}
-
-.net-calc-btn{
-  margin-top:14px; font-family:var(--mono); font-size:11px; letter-spacing:0.04em; text-transform:uppercase;
-  background:var(--purple); color:#faf7ef; font-weight:700; border:none; border-radius:8px;
-  padding:10px 18px; cursor:pointer; width:100%;
-}
-
-.net-calc-btn:hover{background:var(--purple-dim);}
-
-.net-live-result{margin-top:12px; font-family:var(--mono); font-size:11.5px; color:var(--text-dim); text-align:center;}
-
-.net-live-result b{color:var(--green); font-size:15px;}
-
-.yks-result-list{display:flex; flex-direction:column; gap:8px;}
-
-.yks-result-item{
-  display:flex; gap:14px; align-items:center; background:var(--panel); border:1px solid var(--line);
-  border-radius:10px; padding:12px 14px;
-}
-
-.yks-result-main{flex:1; min-width:0;}
-
-.yks-result-yayin{font-size:13px; color:var(--text); font-weight:600;}
-
-.yks-result-meta{font-family:var(--mono); font-size:10px; color:var(--text-faint); margin-top:2px;}
-
-.yks-result-score{text-align:right; flex-shrink:0;}
-
-.yks-result-puan{font-family:var(--mono); font-weight:800; font-size:17px; color:var(--purple);}
-
-.yks-result-delta{font-family:var(--mono); font-size:10.5px; margin-top:2px;}
-
-.yks-result-delta.up{color:var(--green);}
-
-.yks-result-delta.down{color:var(--red);}
-
-.yks-del{background:none; border:none; color:var(--text-faint); cursor:pointer; font-size:14px; padding:0 4px; flex-shrink:0;}
-
-.yks-del:hover{color:var(--red);}
-
-.yks-empty{font-family:var(--mono); font-size:11px; color:var(--text-faint); text-align:center; padding:20px 0;}
-
-/* ===== FAZ 6: HEDEF vs GERÇEKLEŞEN ALTIN GRAFİĞİ ===== */
-
-.gold-chart-card{background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:18px 20px 12px; position:relative; height:280px;}
-
-.gold-chart-card canvas{width:100% !important; height:100% !important;}
-
-.gold-entry-list{display:flex; flex-direction:column; gap:8px; margin-top:14px;}
-
-.gold-entry-item{
-  display:flex; gap:12px; align-items:center; background:var(--panel); border:1px solid var(--line);
-  border-radius:10px; padding:10px 14px;
-}
-
-.gold-entry-main{flex:1; min-width:0;}
-
-.gold-entry-date{font-family:var(--mono); font-size:10px; color:var(--text-faint);}
-
-.gold-entry-detail{font-size:12.5px; color:var(--text-dim); margin-top:2px;}
-
-.gold-delta-badge{font-family:var(--mono); font-size:10.5px; margin-top:3px;}
-
-.gold-delta-badge.up{color:var(--green);}
-
-.gold-delta-badge.down{color:var(--red);}
-
-.gold-entry-gram{font-family:var(--mono); font-weight:800; font-size:15px; color:var(--purple); text-align:right; flex-shrink:0; white-space:nowrap;}
-
-.gold-del{background:none; border:none; color:var(--text-faint); cursor:pointer; font-size:14px; padding:0 4px; flex-shrink:0;}
-
-.gold-del:hover{color:var(--red);}
-
-.gold-empty{font-family:var(--mono); font-size:11px; color:var(--text-faint); text-align:center; padding:20px 0;}
-
-@media(max-width:640px){
-.gold-chart-card{height:230px; padding:14px 10px 10px;}
-.gold-entry-item{flex-wrap:wrap;}
-.gold-entry-gram{margin-left:auto;}
-}
-
-/* ===== KOMPAKT SERTİFİKA ÖZETİ (Dil Yol Haritası içine gömülü) ===== */
-
-/* ===== CERTIFICATE REQUIREMENT BOX (tek kutu) ===== */
-
-.cert-box{background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:4px 18px;}
-
-.cert-entry{padding:16px 0 16px 14px; border-bottom:1px dashed var(--line); border-left:2px solid transparent;}
-
-.cert-entry:last-child{border-bottom:none;}
-
-.cert-entry.accepted{border-left-color:var(--green);}
-
-.cert-name{font-family:var(--mono); font-weight:700; font-size:14px; color:var(--text); display:flex; align-items:center; gap:8px;}
-
-.cert-name .badge{
-  font-size:9px; font-family:var(--mono); background:rgba(5,150,105,0.12); color:var(--green);
-  border:1px solid rgba(5,150,105,0.4); border-radius:5px; padding:2px 6px; letter-spacing:0.04em;
-}
-
-.cert-detail{font-size:12px; color:var(--text-dim); margin-top:8px; line-height:1.6;}
-
-.cert-dates{margin-top:10px; padding-top:10px; border-top:1px dashed var(--line);}
-
-.cert-dates-label{font-family:var(--mono); font-size:9.5px; color:var(--text-faint); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:6px;}
-
-.cert-source{font-family:var(--mono); font-size:9.5px; color:var(--text-faint); margin-top:8px;}
-
 /* ===== SEKMELİ (TAB) NAVİGASYON: ZAMAN / SİSTEM / FİNANS ===== */
 
 .tab-nav{
@@ -1107,8 +953,7 @@ footer{
 /* --- Kartların hepsi: daha yuvarlak köşe + yükselen (floating) gölge --- */
 
 .node-card, .stat, .table-wrap, .scenario, .risk-panel, .rate-panel,
-.net-form, .yks-result-item, .gold-entry-item, .gold-chart-card,
-.cert-mini, .cert-box, details.yks-subject, .yks-unit, .tab-nav,
+.cert-mini, details.yks-subject, .yks-unit, .tab-nav,
 .acc-body > .yks-topic-group{
   border-radius: var(--radius-lg) !important;
   box-shadow: var(--shadow-float);
@@ -1118,7 +963,7 @@ footer{
 /* Hover'da hafif yükselme — Buski'nin kart-hover davranışı */
 
 .node-card:hover, .stat:hover, details.yks-subject:hover,
-.cert-mini:hover, .gold-entry-item:hover, .yks-result-item:hover,
+.cert-mini:hover,
 .scenario:hover, .risk-panel:hover, .rate-panel:hover{
   transform: translateY(-3px);
   box-shadow: var(--shadow-float-hover);
@@ -1127,15 +972,14 @@ footer{
 
 @media(prefers-reduced-motion: reduce){
 .node-card, .stat, .table-wrap, .scenario, .risk-panel, .rate-panel,
-  .net-form, .yks-result-item, .gold-entry-item, .gold-chart-card,
-  .cert-mini, .cert-box, details.yks-subject, .yks-unit, .tab-nav{
+  .cert-mini, details.yks-subject, .yks-unit, .tab-nav{
     transition:none; transform:none !important;
   }
 }
 
 /* --- Butonlar: Buski'deki tam pill (hap) şekli --- */
 
-.net-calc-btn, .kasa-rate-chip, .cert-date-chip{
+.kasa-rate-chip, .cert-date-chip{
   border-radius: 999px !important;
 }
 
