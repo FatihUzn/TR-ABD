@@ -18,73 +18,77 @@
 <body data-page="sistem">
 <div class="wrap">
 
-  <header>
-    <div class="tag-row">
-      <span class="i18n" data-tr="REV 3.0 // GERÇEKLİK-KONTROLLÜ" data-de="REV 3.0 // REALITÄTSGEPRÜFT">REV 3.0 // GERÇEKLİK-KONTROLLÜ</span>
-      <div style="display:flex; align-items:center; gap:12px;">
-        <span class="status i18n" data-tr="STATUS: ACTIVE" data-de="STATUS: AKTIV">STATUS: ACTIVE</span>
+  <header class="dash-header">
+
+    <nav class="dash-topnav">
+      <a href="index.html" class="dash-brand">ALMANYA<span class="arrow">→</span>TUB</a>
+      <div class="dash-topnav-links">
+        <a class="dash-topnav-link active" data-page-link="sistem" href="index.html">⚙️ <span class="i18n" data-tr="Sistem" data-de="System">Sistem</span></a>
+        <a class="dash-topnav-link" data-page-link="yks" href="yks.html">📚 YKS</a>
+        <a class="dash-topnav-link" data-page-link="finans" href="finans.html">💰 <span class="i18n" data-tr="Finans" data-de="Finanzen">Finans</span></a>
+        <a class="dash-topnav-link" data-page-link="evrak" href="evrak.html">📋 <span class="i18n" data-tr="Evrak" data-de="Unterlagen">Evrak</span></a>
+        <a class="dash-topnav-link" data-page-link="blog" href="blog.html">📖 Blog</a>
+      </div>
+      <div class="dash-topnav-right">
+        <span class="nav-badge" id="navProgressBadge">–% · FAZ 1</span>
+        <span class="status i18n" data-tr="AKTİF" data-de="AKTIV">AKTİF</span>
         <div class="lang-toggle">
           <button type="button" class="active" data-lang="tr" onclick="setLang('tr')">TR</button>
           <button type="button" data-lang="de" onclick="setLang('de')">DE</button>
         </div>
       </div>
-    </div>
-    <div class="daily-greet" id="dailyGreet"></div>
-    <h1>ALMANYA<span class="arrow">→</span>TU BERLIN</h1>
-    <p class="subtitle i18n" data-tr="Limburgerhof köprü dönemi operasyon paneli. Nihai hedef: Mekatronik Mühendisliği, TU Berlin." data-de="Operationspanel für die Übergangsphase in Limburgerhof. Endziel: Mechatronik-Ingenieurwesen, TU Berlin.">Limburgerhof köprü dönemi operasyon paneli. Nihai hedef: Mekatronik Mühendisliği, TU Berlin.</p>
+    </nav>
 
-    <div class="hero-gauge-card">
-      <span class="hero-progress-label i18n" data-tr="Genel İlerleme" data-de="Gesamtfortschritt">Genel İlerleme</span>
-      <div class="hero-gauge">
-        <svg class="hero-gauge-svg" viewBox="0 0 120 120">
-          <circle class="hero-gauge-track" cx="60" cy="60" r="52"></circle>
-          <circle class="hero-gauge-ring" id="progressFill" cx="60" cy="60" r="52"></circle>
-        </svg>
-        <div class="hero-gauge-center"><span class="hero-gauge-pct" id="progressPct">–%</span></div>
+    <div class="daily-greet" id="dailyGreet"></div>
+
+    <div class="dash-hero-grid">
+      <div class="dash-hero-left">
+        <span class="dash-eyebrow i18n" data-tr="REV 3.0 // GERÇEKLİK-KONTROLLÜ" data-de="REV 3.0 // REALITÄTSGEPRÜFT">REV 3.0 // GERÇEKLİK-KONTROLLÜ</span>
+        <h1>ALMANYA<span class="arrow">→</span>TU BERLIN</h1>
+        <p class="subtitle i18n" data-tr="Limburgerhof köprü dönemi operasyon paneli. Nihai hedef: Mekatronik Mühendisliği, TU Berlin." data-de="Operationspanel für die Übergangsphase in Limburgerhof. Endziel: Mechatronik-Ingenieurwesen, TU Berlin.">Limburgerhof köprü dönemi operasyon paneli. Nihai hedef: Mekatronik Mühendisliği, TU Berlin.</p>
+
+        <div class="dash-stat-row">
+          <div class="dash-stat-box">
+            <span class="dash-stat-box-label i18n" data-tr="Emek Verilen Gün" data-de="Investierte Tage">Emek Verilen Gün</span>
+            <span class="dash-stat-box-num" id="accumDaysNum">–</span>
+            <div class="dash-stat-box-sub" id="accumDaysSub">hesaplanıyor...</div>
+          </div>
+          <div class="dash-stat-box dash-stat-box-route">
+            <span class="dash-stat-box-label i18n" data-tr="Aktif Rota" data-de="Aktive Route">Aktif Rota</span>
+            <div class="route-mini">
+              <span class="route-mini-label">🇹🇷</span>
+              <svg class="route-mini-svg" viewBox="0 0 300 16" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+                <path class="route-path" d="M6,8 L294,8"></path>
+                <path class="route-path-fill" id="routePathFill" d="M6,8 L294,8"></path>
+                <circle class="route-dot" id="routeDot" cx="6" cy="8" r="4"></circle>
+              </svg>
+              <span class="route-mini-label">🇩🇪 Limburgerhof</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="phase-strip">
+          <div class="phase-chip active i18n" data-tr="FAZ 1 · Çalışma &amp; Dil (Ekim–Eylül)" data-de="PHASE 1 · Arbeit &amp; Sprache (Okt.–Sept.)">FAZ 1 · Çalışma &amp; Dil (Ekim–Eylül)</div>
+          <div class="phase-chip i18n" data-tr="FAZ 2 · Vize Dönüşümü (§16b)" data-de="PHASE 2 · Visumsumwandlung (§16b)">FAZ 2 · Vize Dönüşümü (§16b)</div>
+          <div class="phase-chip i18n" data-tr="FAZ 3 · TU Berlin" data-de="PHASE 3 · TU Berlin">FAZ 3 · TU Berlin</div>
+        </div>
       </div>
-      <div class="hero-progress-sub" id="progressSub">başlangıç: 01.10.2026 · otomatik hesaplanıyor</div>
+
+      <div class="dash-hero-visual">
+        <div class="hero-gauge-card">
+          <span class="hero-progress-label i18n" data-tr="Genel İlerleme" data-de="Gesamtfortschritt">Genel İlerleme</span>
+          <div class="hero-gauge">
+            <svg class="hero-gauge-svg" viewBox="0 0 120 120">
+              <circle class="hero-gauge-track" cx="60" cy="60" r="52"></circle>
+              <circle class="hero-gauge-ring" id="progressFill" cx="60" cy="60" r="52"></circle>
+            </svg>
+            <div class="hero-gauge-center"><span class="hero-gauge-pct" id="progressPct">–%</span></div>
+          </div>
+          <div class="hero-progress-sub" id="progressSub">başlangıç: 01.10.2026 · otomatik hesaplanıyor</div>
+        </div>
+      </div>
     </div>
   </header>
-
-  <!-- HERO ALTI VERİ KATMANI — foto üstündeki tek özet karttan sonra, ayrıntılar burada beyaz zeminde toplanır -->
-  <section class="hero-meta">
-    <div class="phase-strip">
-      <div class="phase-chip active i18n" data-tr="FAZ 1 · Çalışma &amp; Dil (Ekim–Eylül)" data-de="PHASE 1 · Arbeit &amp; Sprache (Okt.–Sept.)">FAZ 1 · Çalışma &amp; Dil (Ekim–Eylül)</div>
-      <div class="phase-chip i18n" data-tr="FAZ 2 · Vize Dönüşümü (§16b)" data-de="PHASE 2 · Visumsumwandlung (§16b)">FAZ 2 · Vize Dönüşümü (§16b)</div>
-      <div class="phase-chip i18n" data-tr="FAZ 3 · TU Berlin" data-de="PHASE 3 · TU Berlin">FAZ 3 · TU Berlin</div>
-    </div>
-    <div class="hero-meta-row">
-      <div class="accum-days">
-        <div class="accum-days-num" id="accumDaysNum">–</div>
-        <div class="accum-days-label">
-          <span class="accum-days-cap i18n" data-tr="Emek Verilen Gün" data-de="Investierte Tage">Emek Verilen Gün</span>
-          <span class="accum-days-sub" id="accumDaysSub">hesaplanıyor...</span>
-        </div>
-      </div>
-
-      <div class="route-map-wrap">
-        <div class="route-mini">
-          <span class="route-mini-label">🇹🇷 <span class="i18n" data-tr="Türkiye" data-de="Türkei">Türkiye</span></span>
-          <svg class="route-mini-svg" viewBox="0 0 300 16" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
-            <path class="route-path" d="M6,8 L294,8"></path>
-            <path class="route-path-fill" id="routePathFill" d="M6,8 L294,8"></path>
-            <circle class="route-dot" id="routeDot" cx="6" cy="8" r="4"></circle>
-          </svg>
-          <span class="route-mini-label">🇩🇪 Limburgerhof</span>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ÇOK SAYFALI SİTE NAV — tab-nav/tab-btn stilini yeniden kullanır, artık gerçek sayfalara link verir -->
-  <nav class="tab-nav">
-    <a class="tab-btn" data-page-link="sistem" href="index.html">⚙️ SİSTEM</a>
-    <a class="tab-btn" data-page-link="yks" href="yks.html">📚 YKS</a>
-    <a class="tab-btn" data-page-link="finans" href="finans.html">💰 FİNANS</a>
-    <a class="tab-btn" data-page-link="evrak" href="evrak.html">📋 EVRAK</a>
-    <a class="tab-btn" data-page-link="blog" href="blog.html">📖 BLOG</a>
-    <span class="nav-badge" id="navProgressBadge">–% · FAZ 1</span>
-  </nav>
 
   <section id="proofSection">
     <div class="sec-label i18n" data-tr="İlerleme Kanıtı" data-de="Fortschrittsnachweis">İlerleme Kanıtı</div>

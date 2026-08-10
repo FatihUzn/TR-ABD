@@ -4,6 +4,120 @@
    core.css'ten SONRA yüklenmeli.
    ============================================================ */
 
+/* ==========================================================
+   DASHBOARD HEADER — sadece ana sayfa (SİSTEM). Foto hero yerine
+   Aurex Living tarzı açık zeminli üst nav + kart düzeni. core.css'teki
+   header::before (tam genişlik fotoğraf) ve koyu metin skopu burada
+   iptal edilir; header artık sayfanın geri kalanıyla aynı açık zeminde.
+   ========================================================== */
+
+body[data-page="sistem"] header{
+  --text:#0f172a; --text-dim:#475569; --text-faint:#94a3b8;
+  --line:#e2e8f0; --panel:#ffffff; --panel-2:#f1f5f9;
+  padding:0; margin-bottom:44px; min-height:0; display:block;
+}
+
+body[data-page="sistem"] header::before{content:none;}
+
+.dash-topnav{
+  position:sticky; top:10px; z-index:30;
+  display:flex; align-items:center; gap:18px;
+  background:var(--panel); border:1px solid var(--line); border-radius:999px;
+  padding:9px 10px 9px 20px; box-shadow:var(--shadow-float);
+  flex-wrap:wrap;
+}
+
+.dash-brand{
+  font-family:var(--mono); font-weight:800; font-size:13px; letter-spacing:-0.01em;
+  color:var(--text); text-decoration:none; flex-shrink:0;
+}
+
+.dash-brand .arrow{color:var(--purple); padding:0 3px;}
+
+.dash-topnav-links{display:flex; gap:2px; flex:1; flex-wrap:wrap;}
+
+.dash-topnav-link{
+  display:inline-flex; align-items:center; gap:5px;
+  font-family:var(--mono); font-size:11px; font-weight:600; text-decoration:none;
+  color:var(--text-dim); padding:8px 13px; border-radius:999px; transition:all .15s ease;
+  white-space:nowrap;
+}
+
+.dash-topnav-link:hover{background:var(--panel-2); color:var(--text);}
+
+.dash-topnav-link.active{background:var(--purple); color:#fff; box-shadow:0 2px 8px var(--purple-glow);}
+
+.dash-topnav-right{display:flex; align-items:center; gap:10px; flex-shrink:0; margin-left:auto;}
+
+.dash-topnav-right .status{
+  font-family:var(--mono); font-size:10px; color:var(--green); display:none;
+  align-items:center; text-transform:uppercase; letter-spacing:0.06em;
+}
+
+.dash-topnav-right .status::before{content:"●"; margin-right:5px; animation:pulse 2s infinite ease-in-out;}
+
+@media(min-width:760px){
+.dash-topnav-right .status{display:inline-flex;}
+}
+
+.dash-eyebrow{
+  display:block; font-family:var(--mono); font-size:10.5px; letter-spacing:0.08em;
+  color:var(--text-faint); text-transform:uppercase; margin:26px 0 10px;
+}
+
+.dash-hero-grid{
+  display:grid; grid-template-columns:1.5fr 1fr; gap:22px; align-items:stretch; margin-top:2px;
+}
+
+.dash-hero-left{display:flex; flex-direction:column;}
+
+.dash-hero-left h1{margin-top:0;}
+
+.dash-hero-left .subtitle{margin-top:10px;}
+
+.dash-stat-row{display:flex; gap:12px; margin-top:22px; flex-wrap:wrap;}
+
+.dash-stat-box{
+  flex:1 1 180px; background:var(--panel); border:1px solid var(--line); border-radius:14px;
+  padding:14px 16px; box-shadow:var(--shadow-float);
+}
+
+.dash-stat-box-label{
+  display:block; font-family:var(--mono); font-size:9.5px; letter-spacing:0.07em; text-transform:uppercase;
+  color:var(--text-faint);
+}
+
+.dash-stat-box-num{
+  display:block; font-family:var(--mono); font-weight:800; font-size:26px; color:var(--purple);
+  margin-top:6px; line-height:1;
+}
+
+.dash-stat-box-sub{font-family:var(--mono); font-size:10.5px; color:var(--text-dim); margin-top:6px;}
+
+.dash-stat-box-route{display:flex; flex-direction:column; justify-content:space-between;}
+
+.dash-stat-box-route .route-mini{margin-top:12px;}
+
+.dash-hero-visual{display:flex; flex-direction:column; gap:14px;}
+
+.dash-hero-visual .hero-gauge-card{
+  background:var(--panel); border:1px solid var(--line); box-shadow:var(--shadow-float);
+  width:100%; margin:0; flex:1; justify-content:center;
+}
+
+.dash-hero-visual .hero-gauge-pct{color:var(--text);}
+
+.dash-hero-visual .hero-progress-label{color:var(--text-faint);}
+
+.dash-hero-visual .hero-progress-sub{color:var(--text-faint);}
+
+@media(max-width:760px){
+.dash-hero-grid{grid-template-columns:1fr;}
+.dash-topnav{border-radius:20px; padding:12px 14px;}
+.dash-topnav-links{order:3; width:100%; justify-content:space-between; margin-top:6px;}
+.dash-topnav-link span{display:none;}
+}
+
 .daily-greet{
   font-family:var(--mono); font-size:12px; letter-spacing:0.03em;
   color:var(--purple-dim); margin-bottom:10px; min-height:1.4em;
@@ -54,16 +168,25 @@
 }
 
 .proof-grid{
-  display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); gap:10px; margin-top:10px;
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; margin-top:10px;
 }
 
 .proof-card{
-  background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:14px 12px; text-align:center;
+  position:relative; overflow:hidden;
+  background:var(--panel); border:1px solid var(--line); border-radius:14px;
+  padding:16px 16px 14px; text-align:left;
 }
 
-.proof-num{font-family:var(--mono); font-weight:800; font-size:22px; color:var(--purple);}
+.proof-card::after{
+  content:""; position:absolute; right:14px; bottom:14px; width:44px; height:22px;
+  background-image:repeating-linear-gradient(90deg, var(--panel-2) 0 6px, transparent 6px 10px);
+  mask-image:linear-gradient(90deg, transparent, #000 60%);
+  opacity:0.7; pointer-events:none;
+}
 
-.proof-label{font-family:var(--mono); font-size:9.5px; letter-spacing:0.05em; text-transform:uppercase; color:var(--text-faint); margin-top:4px;}
+.proof-num{font-family:var(--mono); font-weight:800; font-size:26px; color:var(--purple); display:block; margin-top:8px;}
+
+.proof-label{font-family:var(--mono); font-size:9.5px; letter-spacing:0.05em; text-transform:uppercase; color:var(--text-faint);}
 
 .badge-grid{
   display:grid; grid-template-columns:repeat(auto-fill,minmax(96px,1fr)); gap:10px; margin-top:10px;
