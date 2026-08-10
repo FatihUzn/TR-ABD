@@ -1405,7 +1405,7 @@
       dateLabel: '09 Ağustos 2026',
       title: 'Kabul Geldi',
       excerpt: "Limburgerhof'taki fırın pozisyonundan resmi onay bugün geldi — operasyonun sıfır günü artık takvimde sabit bir tarih.",
-      image: 'Studio/harvard1.jpg',
+      image: 'Studio/harvard1.webp',
       paragraphs: [
         "Bugün beklenen e-posta geldi: Limburgerhof'taki pozisyon resmi olarak onaylandı. Aylardır kağıt üzerinde duran '01.10.2026' tarihi artık gerçek bir başlangıç günü oldu.",
         "İlk tepkim rahatlama oldu, ikincisi biraz panik — çünkü artık her şey geri sayıma bağlandı: VHS kursuna kayıt, dil sertifikaları, evrak cephesi, hepsi bu tarihe göre hizalanacak.",
