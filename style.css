@@ -977,12 +977,12 @@ footer{
 
 /* ===== SEKMELİ (TAB) NAVİGASYON: ZAMAN / SİSTEM / FİNANS ===== */
 .tab-nav{
-  display:flex; gap:4px; margin:22px 0 26px; background:var(--panel);
-  border:1px solid var(--line); border-radius:12px; padding:5px; position:sticky; top:10px; z-index:20;
+  display:flex; gap:6px; margin:22px 0 26px; background:var(--panel);
+  border:1px solid var(--line); border-radius:999px; padding:6px; position:sticky; top:10px; z-index:20;
 }
 .tab-btn{
   flex:1; display:flex; align-items:center; justify-content:center; gap:6px;
-  background:transparent; border:none; border-radius:8px; cursor:pointer;
+  background:transparent; border:none; border-radius:999px; cursor:pointer;
   font-family:var(--mono); font-size:11px; font-weight:700; text-transform:uppercase;
   letter-spacing:0.05em; color:var(--text-faint); padding:11px 6px; transition:all .15s ease;
 }
@@ -1100,18 +1100,34 @@ footer{
 }
 .acc-summary:hover .acc-chevron{border-color:var(--purple);}
 
-/* --- Header fotoğraflı hero; tek yüzen kart hafif "cam" görünümlü, sağ altta --- */
-.hero-progress{
-  background: rgba(8,14,28,0.34);
+/* --- Header fotoğraflı hero; tek yüzen kart hafif "cam" görünümlü, sağ altta ---
+   NOT: .hero-progress sınıfı YKS/Evrak sayfalarında da kullanıldığı için ana sayfa kartına
+   özel ".hero-gauge-card" sınıfı verildi — böylece diğer sayfalar etkilenmiyor. */
+.hero-gauge-card{
+  background: rgba(8,14,28,0.40);
   border: 1px solid rgba(255,255,255,0.22);
   border-radius: var(--radius-lg);
-  padding: 16px 18px;
+  padding: 18px 20px 16px;
   backdrop-filter: blur(10px);
   box-shadow: 0 14px 34px rgba(0,0,0,0.22);
   margin-top: auto;
   margin-left: auto;
-  width: min(320px, 100%);
+  width: min(230px, 100%);
+  display:flex; flex-direction:column; align-items:center; text-align:center;
 }
+.hero-gauge{position:relative; width:104px; height:104px; margin:12px 0 6px;}
+.hero-gauge-svg{width:100%; height:100%; transform:rotate(-90deg);}
+.hero-gauge-track{fill:none; stroke:rgba(255,255,255,0.16); stroke-width:9;}
+.hero-gauge-ring{
+  fill:none; stroke:var(--purple-dim); stroke-width:9; stroke-linecap:round;
+  stroke-dasharray:326.7; stroke-dashoffset:326.7;
+  transition:stroke-dashoffset 1.2s cubic-bezier(.4,0,.2,1), stroke 0.6s ease;
+}
+.hero-gauge-ring.lvl-safe{stroke:var(--purple-dim);}
+.hero-gauge-ring.lvl-watch{stroke:var(--amber);}
+.hero-gauge-ring.lvl-critical{stroke:var(--red);}
+.hero-gauge-center{position:absolute; inset:0; display:flex; align-items:center; justify-content:center;}
+.hero-gauge-pct{font-family:var(--mono); font-weight:800; font-size:22px; color:#f9fafb;}
 
 /* --- Bölüm başlıkları: Buski'deki kalın/net başlık hissi --- */
 .sec-label span:first-child{
@@ -1182,7 +1198,7 @@ details.acc-section{ margin-bottom: 52px; }
 
 @media(max-width:640px){
   header{padding:18px 16px 26px; min-height:58vh;}
-  .hero-progress{width:100%; margin-left:0;}
+  .hero-gauge-card{width:100%; margin-left:0;}
   .hero-meta-row{flex-direction:column;}
   .node-card, .stat, details.yks-subject, .cert-mini{box-shadow: var(--shadow-float);}
   section{ margin-bottom: 40px; }

@@ -41,9 +41,12 @@
     
     const fillEl = document.getElementById('progressFill');
     if(fillEl) {
-        fillEl.style.width = opRemainingPct + '%';
+        const CIRC = 326.7; // 2 * PI * 52 (gauge yarıçapı)
+        fillEl.style.strokeDashoffset = CIRC - (CIRC * opRemainingPct / 100);
         document.getElementById('progressPct').textContent = '%' + Math.round(opRemainingPct);
-        fillEl.className = 'hero-progress-fill ' + (opRemainingPct >= 50 ? 'lvl-safe' : opRemainingPct >= 20 ? 'lvl-watch' : 'lvl-critical');
+        // fillEl artık bir SVG <circle>; SVG elementlerde className salt-okunur (SVGAnimatedString)
+        // olduğu için sınıf değişimi setAttribute ile yapılır.
+        fillEl.setAttribute('class', 'hero-gauge-ring ' + (opRemainingPct >= 50 ? 'lvl-safe' : opRemainingPct >= 20 ? 'lvl-watch' : 'lvl-critical'));
     }
 
     // Nav rozeti: her sayfada üstte görünen kompakt "%X · FAZ 1" göstergesi

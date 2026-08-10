@@ -32,12 +32,15 @@
     <h1>ALMANYA<span class="arrow">→</span>TU BERLIN</h1>
     <p class="subtitle i18n" data-tr="Limburgerhof köprü dönemi operasyon paneli. Nihai hedef: Mekatronik Mühendisliği, TU Berlin." data-de="Operationspanel für die Übergangsphase in Limburgerhof. Endziel: Mechatronik-Ingenieurwesen, TU Berlin.">Limburgerhof köprü dönemi operasyon paneli. Nihai hedef: Mekatronik Mühendisliği, TU Berlin.</p>
 
-    <div class="hero-progress">
-      <div class="hero-progress-top">
-        <span class="hero-progress-label i18n" data-tr="Genel İlerleme" data-de="Gesamtfortschritt">Genel İlerleme</span>
-        <span class="hero-progress-pct" id="progressPct">–%</span>
+    <div class="hero-gauge-card">
+      <span class="hero-progress-label i18n" data-tr="Genel İlerleme" data-de="Gesamtfortschritt">Genel İlerleme</span>
+      <div class="hero-gauge">
+        <svg class="hero-gauge-svg" viewBox="0 0 120 120">
+          <circle class="hero-gauge-track" cx="60" cy="60" r="52"></circle>
+          <circle class="hero-gauge-ring" id="progressFill" cx="60" cy="60" r="52"></circle>
+        </svg>
+        <div class="hero-gauge-center"><span class="hero-gauge-pct" id="progressPct">–%</span></div>
       </div>
-      <div class="hero-progress-track"><div class="hero-progress-fill" id="progressFill"></div></div>
       <div class="hero-progress-sub" id="progressSub">başlangıç: 01.10.2026 · otomatik hesaplanıyor</div>
     </div>
   </header>
