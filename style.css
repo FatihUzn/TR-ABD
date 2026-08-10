@@ -46,7 +46,7 @@ body::before{
   z-index:-1;
   background-image:
     linear-gradient(180deg, rgba(10,16,28,0.28) 0%, rgba(10,16,28,0.38) 55%, rgba(10,16,28,0.48) 100%),
-    url('Studio/harvard1.jpg');
+    url('Studio/harvard1.webp');
   background-size:cover;
   background-position:center;
   background-repeat:no-repeat;
@@ -93,7 +93,7 @@ header::before{
   z-index:-1;
   background-image:
     linear-gradient(180deg, rgba(8,14,32,0.50) 0%, rgba(8,14,32,0.72) 60%, rgba(8,14,32,0.85) 100%),
-    url('Studio/harvard1.jpg'); /* Gündüz çekilmiş harvard fotoğrafı — sadece hero'da */
+    url('Studio/harvard1.webp'); /* Gündüz çekilmiş harvard fotoğrafı — sadece hero'da */
   background-size: cover;
   background-position: center;
 }
@@ -432,9 +432,14 @@ section:nth-of-type(10){animation-delay:.80s;}
 }
 
 /* ===== HEADER ===== */
+/* Artık sade bir foto-hero: üstte eyebrow/başlık, altta TEK bir yüzen cam kart (genel ilerleme).
+   Faz chip'leri, gün sayacı ve rota haritası artık fotoğrafın dışında, .hero-meta içinde. */
 header{
-  padding:26px 22px 24px;
+  padding:26px 22px 34px;
   margin-bottom:40px;
+  min-height:50vh;
+  display:flex;
+  flex-direction:column;
 }
 .tag-row{
   display:flex; justify-content:space-between; align-items:center;
@@ -469,6 +474,14 @@ h1 .arrow{color:var(--purple); padding:0 8px;}
   border-color:var(--purple); color:var(--purple); background:rgba(30,136,199,0.12);
   box-shadow:0 0 0 1px var(--purple-glow) inset;
 }
+
+/* ===== HERO ALTI VERİ KATMANI (foto dışında, beyaz zeminde) ===== */
+.hero-meta{margin-bottom:36px;}
+.hero-meta .phase-strip{margin-top:0;}
+.hero-meta-row{display:flex; gap:14px; flex-wrap:wrap; margin-top:14px;}
+.hero-meta-row .accum-days{flex:1 1 220px; margin-top:0;}
+.hero-meta-row .route-map-wrap{flex:1 1 260px; margin-top:0; display:flex; align-items:center;}
+.hero-meta-row .route-map-wrap .route-mini{width:100%;}
 
 /* ===== SECTION LABEL ===== */
 .sec-label{
@@ -1087,19 +1100,17 @@ footer{
 }
 .acc-summary:hover .acc-chevron{border-color:var(--purple);}
 
-/* --- Header yine fotoğraflı hero; içindeki rozet/kartlar hafif "cam" görünümlü --- */
-.phase-strip .phase-chip{
-  border-radius: 999px;
-  background: var(--panel-2);
-  backdrop-filter: blur(6px);
-}
+/* --- Header fotoğraflı hero; tek yüzen kart hafif "cam" görünümlü, sağ altta --- */
 .hero-progress{
-  background: var(--panel-2);
-  border: 1px solid var(--line);
+  background: rgba(8,14,28,0.34);
+  border: 1px solid rgba(255,255,255,0.22);
   border-radius: var(--radius-lg);
   padding: 16px 18px;
-  margin-top: 20px;
-  backdrop-filter: blur(6px);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 14px 34px rgba(0,0,0,0.22);
+  margin-top: auto;
+  margin-left: auto;
+  width: min(320px, 100%);
 }
 
 /* --- Bölüm başlıkları: Buski'deki kalın/net başlık hissi --- */
@@ -1170,7 +1181,9 @@ details.acc-section{ margin-bottom: 52px; }
 }
 
 @media(max-width:640px){
-  header{padding:18px 16px 18px;}
+  header{padding:18px 16px 26px; min-height:58vh;}
+  .hero-progress{width:100%; margin-left:0;}
+  .hero-meta-row{flex-direction:column;}
   .node-card, .stat, details.yks-subject, .cert-mini{box-shadow: var(--shadow-float);}
   section{ margin-bottom: 40px; }
 }
