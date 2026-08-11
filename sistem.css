@@ -21,6 +21,13 @@ body[data-page="sistem"] .wrap{max-width:clamp(1400px, 92vw, 1760px);}
 
 body[data-page="sistem"] header::before{content:none;}
 
+/* Site genelindeki sabit (fixed) arka plan fotoğrafı artık ana sayfanın HER
+   yerinde (yol haritası, footer vb.) saydam biçimde görünüp kartların
+   arasından sızıyordu. Homepage'in üstte kendi foto bandı olduğu için,
+   sayfanın geri kalanını eski temiz açık zemine (--void) döndürüyoruz. */
+body[data-page="sistem"]::before{content:none;}
+body[data-page="sistem"]{background:var(--void);}
+
 /* ==========================================================
    FOTO BANT — Muzli referansındaki gibi: kutucuklar arasına
    sıkışmış küçük foto yerine, tam viewport genişliğinde (100vw)
