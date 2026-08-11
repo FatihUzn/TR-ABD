@@ -50,8 +50,8 @@ body[data-page="sistem"] .dash-photo-band::before{
   transform:translateX(-50%);
   z-index:-1;
   background-image:
-    linear-gradient(180deg, rgba(8,14,32,0.34) 0%, rgba(8,14,32,0.55) 55%, rgba(8,14,32,0.88) 100%),
-    url("Studio/harvard1.webp");
+    linear-gradient(180deg, rgba(6,18,15,0.16) 0%, rgba(6,18,15,0.30) 55%, rgba(6,18,15,0.55) 100%),
+    url("Studio/misty-ridge.webp"); /* core.css > body[data-page="sistem"]::before ile AYNI foto — tek parça hero hissi için */
   background-size:cover;
   background-position:center;
 }
