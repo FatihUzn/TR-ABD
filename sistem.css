@@ -17,7 +17,7 @@ body[data-page="sistem"] header{
   padding:0; margin-bottom:44px; min-height:0; display:block;
 }
 
-body[data-page="sistem"] .wrap{max-width:1400px;}
+body[data-page="sistem"] .wrap{max-width:clamp(1400px, 92vw, 1760px);}
 
 body[data-page="sistem"] header::before{content:none;}
 
