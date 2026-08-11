@@ -82,8 +82,124 @@ body::before{ background-position: center 20%; }
 body[data-page="sistem"]::before{
   background-image:
     linear-gradient(180deg, rgba(8,20,17,0.12) 0%, rgba(8,20,17,0.18) 55%, rgba(8,20,17,0.26) 100%),
-    url("Studio/gallery9.webp"); /* yosunlu taş basamaklar + yeşil gölet */
+    url("Studio/gallery9.webp"); /* yosunlu taş basamaklar + yeşil gölet — varsayılan, aşağıdaki data-photo denemesi yokken */
 }
+
+/* =====================================================================
+   ANASAYFA FOTOĞRAF DENEME MODU — "sırayla hepsini deneyelim"
+   body üzerine geçici olarak data-photo="1..11" atanınca (bkz. index.html
+   sağ-alt köşedeki ‹ Foto Dene › kontrolü) hem arka plan fotoğrafı hem de
+   o fotoğrafın baskın tonlarına göre --purple / --moss vurgu renkleri
+   birlikte değişir. Karar verildiğinde tek fotoğraf kalıcı hale getirilip
+   bu blok + index.html'deki switcher tamamen silinebilir.
+   ===================================================================== */
+
+body[data-page="sistem"][data-photo="1"]::before{ /* Segovia Alcázarı — fırtınalı gri + altın taş */
+  background-image: linear-gradient(180deg, rgba(20,22,26,0.30) 0%, rgba(20,22,26,0.42) 55%, rgba(20,22,26,0.54) 100%), url("Studio/castles/castle-01-segovia.webp");
+}
+body[data-page="sistem"][data-photo="1"]{
+  --purple:#c9973f; --purple-dim:#dcb46b; --purple-glow:rgba(201,151,63,0.20);
+  --moss:#5b7a92; --moss-dim:#82a0b4; --moss-glow:rgba(91,122,146,0.18);
+}
+
+body[data-page="sistem"][data-photo="2"]::before{ /* Burg Eltz — sonbahar kızılı, orman */
+  background-image: linear-gradient(180deg, rgba(18,12,8,0.26) 0%, rgba(18,12,8,0.38) 55%, rgba(18,12,8,0.50) 100%), url("Studio/castles/castle-02-eltz.webp");
+}
+body[data-page="sistem"][data-photo="2"]{
+  --purple:#c2571a; --purple-dim:#dd7c3f; --purple-glow:rgba(194,87,26,0.20);
+  --moss:#3f6b4a; --moss-dim:#66916f; --moss-glow:rgba(63,107,74,0.18);
+}
+
+body[data-page="sistem"][data-photo="3"]::before{ /* Iași Kültür Sarayı — pastel pembe, kar */
+  background-image: linear-gradient(180deg, rgba(12,14,18,0.22) 0%, rgba(12,14,18,0.32) 55%, rgba(12,14,18,0.44) 100%), url("Studio/castles/castle-03-iasi.webp");
+}
+body[data-page="sistem"][data-photo="3"]{
+  --purple:#c97b98; --purple-dim:#dda2b8; --purple-glow:rgba(201,123,152,0.20);
+  --moss:#2f7d6b; --moss-dim:#5aa090; --moss-glow:rgba(47,125,107,0.18);
+}
+
+body[data-page="sistem"][data-photo="4"]::before{ /* Neuschwanstein (havadan) — canlı mavi + yeşil vadi */
+  background-image: linear-gradient(180deg, rgba(8,16,22,0.24) 0%, rgba(8,16,22,0.34) 55%, rgba(8,16,22,0.46) 100%), url("Studio/castles/castle-04-neuschwanstein-aerial.webp");
+}
+body[data-page="sistem"][data-photo="4"]{
+  --purple:#2d8fd1; --purple-dim:#5eaee0; --purple-glow:rgba(45,143,209,0.20);
+  --moss:#3f7d4a; --moss-dim:#66a072; --moss-glow:rgba(63,125,74,0.18);
+}
+
+body[data-page="sistem"][data-photo="5"]::before{ /* Mont Saint-Michel — dupduru mavi, minimal */
+  background-image: linear-gradient(180deg, rgba(6,12,22,0.26) 0%, rgba(6,12,22,0.36) 55%, rgba(6,12,22,0.48) 100%), url("Studio/castles/castle-05-mont-saint-michel.webp");
+}
+body[data-page="sistem"][data-photo="5"]{
+  --purple:#1f5fa8; --purple-dim:#4a80bf; --purple-glow:rgba(31,95,168,0.20);
+  --moss:#4a6b85; --moss-dim:#7290a6; --moss-glow:rgba(74,107,133,0.18);
+}
+
+body[data-page="sistem"][data-photo="6"]::before{ /* Neuschwanstein (geniş açı) — parlak mavi + çayır yeşili */
+  background-image: linear-gradient(180deg, rgba(8,16,22,0.20) 0%, rgba(8,16,22,0.30) 55%, rgba(8,16,22,0.42) 100%), url("Studio/castles/castle-06-neuschwanstein-wide.webp");
+}
+body[data-page="sistem"][data-photo="6"]{
+  --purple:#2a93d6; --purple-dim:#5cb1e3; --purple-glow:rgba(42,147,214,0.20);
+  --moss:#4f9455; --moss-dim:#78b17d; --moss-glow:rgba(79,148,85,0.18);
+}
+
+body[data-page="sistem"][data-photo="7"]::before{ /* Hohenzollern — gün batımı altını, tepe siluet */
+  background-image: linear-gradient(180deg, rgba(16,12,20,0.28) 0%, rgba(16,12,20,0.40) 55%, rgba(16,12,20,0.54) 100%), url("Studio/castles/castle-07-hohenzollern-sunset.webp");
+}
+body[data-page="sistem"][data-photo="7"]{
+  --purple:#d68a1f; --purple-dim:#e7ab55; --purple-glow:rgba(214,138,31,0.22);
+  --moss:#5c4a6b; --moss-dim:#83718f; --moss-glow:rgba(92,74,107,0.18);
+}
+
+body[data-page="sistem"][data-photo="8"]::before{ /* Neuschwanstein — sonbahar vadi, turuncu/sarı yapraklar */
+  background-image: linear-gradient(180deg, rgba(10,16,22,0.22) 0%, rgba(10,16,22,0.32) 55%, rgba(10,16,22,0.44) 100%), url("Studio/castles/castle-08-neuschwanstein-autumn.webp");
+}
+body[data-page="sistem"][data-photo="8"]{
+  --purple:#d17d28; --purple-dim:#e29e57; --purple-glow:rgba(209,125,40,0.20);
+  --moss:#3a86c4; --moss-dim:#67a3d4; --moss-glow:rgba(58,134,196,0.18);
+}
+
+body[data-page="sistem"][data-photo="9"]::before{ /* San Marino — sisli yeşil kayalık */
+  background-image: linear-gradient(180deg, rgba(14,18,16,0.24) 0%, rgba(14,18,16,0.34) 55%, rgba(14,18,16,0.46) 100%), url("Studio/castles/castle-09-san-marino.webp");
+}
+body[data-page="sistem"][data-photo="9"]{
+  --purple:#5f7a5a; --purple-dim:#82a07d; --purple-glow:rgba(95,122,90,0.20);
+  --moss:#6b7280; --moss-dim:#8d94a0; --moss-glow:rgba(107,114,128,0.18);
+}
+
+body[data-page="sistem"][data-photo="10"]::before{ /* Hohenzollern — alacakaranlık moru, sıcak ışıklar */
+  background-image: linear-gradient(180deg, rgba(16,10,20,0.26) 0%, rgba(16,10,20,0.38) 55%, rgba(16,10,20,0.52) 100%), url("Studio/castles/castle-10-hohenzollern-dusk.webp");
+}
+body[data-page="sistem"][data-photo="10"]{
+  --purple:#8a5a9a; --purple-dim:#ab82b7; --purple-glow:rgba(138,90,154,0.20);
+  --moss:#c98a4a; --moss-dim:#dba876; --moss-glow:rgba(201,138,74,0.18);
+}
+
+body[data-page="sistem"][data-photo="11"]::before{ /* Neuschwanstein — kapalı hava, kızıl/yeşil orman */
+  background-image: linear-gradient(180deg, rgba(14,16,18,0.26) 0%, rgba(14,16,18,0.36) 55%, rgba(14,16,18,0.48) 100%), url("Studio/castles/castle-11-neuschwanstein-fog.webp");
+}
+body[data-page="sistem"][data-photo="11"]{
+  --purple:#a8623a; --purple-dim:#c08762; --purple-glow:rgba(168,98,58,0.20);
+  --moss:#5a7a5f; --moss-dim:#80a084; --moss-glow:rgba(90,122,95,0.18);
+}
+
+/* Foto deneme kontrolü — sadece karar verme sürecinde görünür, sonrasında
+   bu bloğu ve index.html'deki .photo-picker öğesini kaldırman yeterli. */
+.photo-picker{
+  position:fixed; right:16px; bottom:16px; z-index:999;
+  display:flex; align-items:center; gap:10px;
+  background:rgba(15,23,42,0.82); backdrop-filter:blur(6px);
+  border:1px solid rgba(255,255,255,0.14); border-radius:999px;
+  padding:8px 10px 8px 14px; box-shadow:0 10px 26px rgba(0,0,0,0.35);
+  font-family:var(--mono); color:#f1f5f9;
+}
+.photo-picker button{
+  width:30px; height:30px; border-radius:50%; border:1px solid rgba(255,255,255,0.22);
+  background:rgba(255,255,255,0.08); color:#f8fafc; font-size:14px; cursor:pointer;
+  display:flex; align-items:center; justify-content:center; transition:background .15s ease;
+}
+.photo-picker button:hover{ background:rgba(255,255,255,0.20); }
+.photo-picker-label{ font-size:11px; line-height:1.3; min-width:112px; text-align:center; }
+.photo-picker-label b{ display:block; font-size:12px; color:#fff; }
 
 body[data-page="almanca"]::before{
   background-image:
