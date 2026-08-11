@@ -28,3 +28,38 @@
 @media(max-width:560px){
 .evrak-form-grid{grid-template-columns:1fr;}
 }
+
+/* ===== Süreç: Kim Ne Yapacak? — işveren / sen kartları ===== */
+
+.evrak-role-grid{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
+
+.evrak-role-card{background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:18px 20px;}
+
+.evrak-role-title{
+  font-family:var(--mono); font-weight:800; font-size:12.5px; letter-spacing:0.02em;
+  color:var(--text); display:flex; align-items:center; gap:8px; margin-bottom:12px;
+}
+
+.evrak-role-list{list-style:none; display:flex; flex-direction:column;}
+
+.evrak-role-list li{
+  font-size:12.5px; line-height:1.5; color:var(--text-dim);
+  padding:9px 0 9px 18px; border-bottom:1px dashed var(--line); position:relative;
+}
+
+.evrak-role-list li:last-child{border-bottom:none; padding-bottom:0;}
+
+.evrak-role-list li:first-child{padding-top:0;}
+
+.evrak-role-list li::before{content:"▸"; position:absolute; left:0; top:9px; color:var(--purple); font-size:11px;}
+
+.evrak-source-note{
+  font-family:var(--mono); font-size:10.5px; color:var(--text-faint); margin-top:12px;
+  display:flex; gap:6px; flex-wrap:wrap;
+}
+
+.evrak-source-note a{color:var(--purple-dim);}
+
+@media(max-width:640px){
+.evrak-role-grid{grid-template-columns:1fr;}
+}

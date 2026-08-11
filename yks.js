@@ -101,6 +101,23 @@
     if (subEl) subEl.textContent = done + ' / ' + total + ' konu';
   }
 
+  // Ders bazlı ilerleme özeti: accordion'ı açmadan hangi dersin ne kadar
+  // tamamlandığını gösteren yatay bar listesi (checklist verisinden üretilir).
+  function yksRenderDersBars(prefix, dersListe) {
+    const container = document.getElementById('yks' + prefix + 'Bars');
+    if (!container) return;
+    if (!dersListe.length) { container.innerHTML = ''; return; }
+    container.innerHTML = dersListe.map(ders => {
+      const { done, total } = yksDersProgress(ders);
+      const pct = total ? Math.round((done / total) * 100) : 0;
+      return '<div class="yks-ders-bar-row">' +
+        '<span class="yks-ders-bar-label">' + ders.ad + '</span>' +
+        '<div class="bar-track"><div class="bar-fill base" style="width:' + pct + '%;"></div></div>' +
+        '<span class="yks-ders-bar-pct">%' + pct + '</span>' +
+        '</div>';
+    }).join('');
+  }
+
   function yksRenderSection(containerId, dersListe, prefix) {
     const container = document.getElementById(containerId);
     if (!container) return;
@@ -110,6 +127,7 @@
       container.innerHTML = dersListe.map(yksDersHTML).join('');
     }
     yksUpdateOverallBar(prefix, dersListe);
+    yksRenderDersBars(prefix, dersListe);
   }
 
   function yksRenderAll() {
@@ -140,6 +158,7 @@
       }
       const isTyt = YKS_DATA.TYT.includes(ders);
       yksUpdateOverallBar(isTyt ? 'Tyt' : 'Ayt', isTyt ? YKS_DATA.TYT : YKS_DATA.AYT);
+      yksRenderDersBars(isTyt ? 'Tyt' : 'Ayt', isTyt ? YKS_DATA.TYT : YKS_DATA.AYT);
     }
     if (e.target.checked) {
       const topicName = e.target.closest('.yks-topic-row')?.querySelector('.yks-topic-name')?.textContent?.trim();
@@ -149,3 +168,87 @@
   });
 
   yksRenderAll();
+
+  // ============================================================
+  // SORU KOTASI — "Bu Hafta" takibi
+  // Her ders satırına gerçek çözülen soru sayısını girebileceğin bir
+  // input + mini ilerleme çubuğu ekler. localStorage'da kalıcı,
+  // haftayı sen sıfırlarsın (elle temizle) — otomatik hafta değişimi yok.
+  // ============================================================
+
+  const YKS_WEEK_STORAGE_KEY = 'yksWeeklyQuestionProgress';
+
+  function yksWeekLoadState() {
+    try {
+      const raw = localStorage.getItem(YKS_WEEK_STORAGE_KEY);
+      return raw ? JSON.parse(raw) : {};
+    } catch (e) {
+      console.warn('YKS haftalık state okunamadı:', e);
+      return {};
+    }
+  }
+
+  function yksWeekSaveState(state) {
+    try {
+      localStorage.setItem(YKS_WEEK_STORAGE_KEY, JSON.stringify(state));
+    } catch (e) {
+      console.warn('YKS haftalık state kaydedilemedi:', e);
+    }
+  }
+
+  let _yksWeekState = yksWeekLoadState();
+
+  function yksWeekBuildBar(value, target) {
+    const pct = target ? Math.max(0, Math.min(100, Math.round((value / target) * 100))) : 0;
+    const done = pct >= 100;
+    return '<div class="yks-week-bar-track"><div class="yks-week-bar-fill' + (done ? ' done' : '') + '" style="width:' + pct + '%;"></div></div>';
+  }
+
+  function yksWeekUpdateTotal(examPrefix) {
+    const tbody = document.querySelector('tbody[data-yks-week-body="' + examPrefix + '"]');
+    if (!tbody) return;
+    let sumValue = 0, sumTarget = 0;
+    tbody.querySelectorAll('tr[data-yks-week-row]').forEach(row => {
+      const target = Number(row.dataset.target) || 0;
+      const value = Number(_yksWeekState[row.dataset.key]) || 0;
+      sumValue += value;
+      sumTarget += target;
+    });
+    const totalEl = tbody.querySelector('[data-yks-week-total="' + examPrefix + '"]');
+    if (!totalEl) return;
+    const pct = sumTarget ? Math.round((sumValue / sumTarget) * 100) : 0;
+    totalEl.textContent = sumValue.toLocaleString('tr-TR') + ' / ' + sumTarget.toLocaleString('tr-TR') + ' (%' + pct + ')';
+  }
+
+  function yksWeekInitTable(examPrefix) {
+    const tbody = document.querySelector('tbody[data-yks-week-body="' + examPrefix + '"]');
+    if (!tbody) return;
+    tbody.querySelectorAll('tr[data-yks-week-row]').forEach(row => {
+      const key = row.dataset.key;
+      const target = Number(row.dataset.target) || 0;
+      const cell = row.querySelector('.yks-week-cell');
+      if (!cell) return;
+      const value = Number(_yksWeekState[key]) || 0;
+      cell.innerHTML = '<input type="number" class="yks-week-input" min="0" step="1" value="' + (value || '') + '" placeholder="0">' +
+        yksWeekBuildBar(value, target);
+    });
+    yksWeekUpdateTotal(examPrefix);
+  }
+
+  document.addEventListener('input', function (e) {
+    if (!e.target.classList || !e.target.classList.contains('yks-week-input')) return;
+    const row = e.target.closest('tr[data-yks-week-row]');
+    if (!row) return;
+    const key = row.dataset.key;
+    const target = Number(row.dataset.target) || 0;
+    const value = Math.max(0, Number(e.target.value) || 0);
+    _yksWeekState[key] = value;
+    yksWeekSaveState(_yksWeekState);
+    const barWrap = row.querySelector('.yks-week-bar-track');
+    if (barWrap) barWrap.outerHTML = yksWeekBuildBar(value, target);
+    const examPrefix = row.closest('tbody')?.dataset.yksWeekBody;
+    if (examPrefix) yksWeekUpdateTotal(examPrefix);
+  });
+
+  yksWeekInitTable('TYT');
+  yksWeekInitTable('AYT');
