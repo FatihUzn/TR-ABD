@@ -57,6 +57,52 @@
 
 .stat-sub{font-size:11px; color:var(--text-dim); margin-top:4px;}
 
+/* ===== Canlı Kur Paneli + Kasa Hesaplayıcı yan yana ===== */
+
+.fin-live-grid{display:grid; grid-template-columns:3fr 2fr; gap:14px; align-items:stretch;}
+
+.fin-live-col{display:flex; flex-direction:column; gap:10px;}
+
+.fin-calc{display:flex; flex-direction:column; gap:8px; height:100%;}
+
+.fin-calc .evrak-form-input{max-width:none;}
+
+.fin-calc-result{font-family:var(--mono); margin-top:auto; padding-top:8px;}
+
+@media(max-width:760px){
+.fin-live-grid{grid-template-columns:1fr;}
+}
+
+/* ===== Stat kartı ikonu ===== */
+
+.stat-icon{display:block; font-size:17px; margin-bottom:6px; line-height:1;}
+
+/* ===== Plana göre kasa ilerlemesi ===== */
+
+.fin-progress-card{margin-top:12px;}
+
+.fin-progress-top{display:flex; align-items:baseline; justify-content:space-between; gap:10px; margin:8px 0 10px;}
+
+.fin-progress-top .stat-value{font-size:16px;}
+
+/* ===== Kasa kaydı tablosu — Durum rozetleri ===== */
+
+.fin-status{
+  font-family:var(--mono); font-size:10.5px; letter-spacing:0.03em;
+  display:inline-flex; align-items:center; gap:6px; white-space:nowrap;
+  text-transform:uppercase;
+}
+
+.fin-status::before{content:"●"; font-size:8px; line-height:1;}
+
+.fin-status.past{color:var(--text-faint);}
+
+.fin-status.now{color:var(--green);}
+
+.fin-status.now::before{animation:pulse 2s infinite ease-in-out;}
+
+.fin-status.future{color:var(--purple-dim);}
+
 .scenario{background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:18px 20px;}
 
 .scen-name{font-family:var(--mono); font-size:12px; color:var(--text-dim); text-transform:uppercase;}

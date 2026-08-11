@@ -27,6 +27,43 @@
 
   let _goldChartInstance = null;
 
+  // --- Milestone durumları: bugüne göre "geçti / şu an / planlanan" ---
+  // Roadmap node'larındaki done/now mantığıyla aynı: PLAN_MILESTONES tarihini
+  // bugünle kıyaslar, ilk geçmemiş tarihi "şu an" olarak işaretler.
+  function computeMilestoneStatuses() {
+    const now = new Date();
+    let determined = false;
+    const statuses = PLAN_MILESTONES.map(p => {
+      const d = new Date(p.tarih + 'T23:59:59');
+      if (now > d) return 'past';
+      if (!determined) { determined = true; return 'now'; }
+      return 'future';
+    });
+    if (!determined && statuses.length) statuses[statuses.length - 1] = 'now';
+    return statuses;
+  }
+
+  const STATUS_LABEL = { past: 'Geçti', now: 'Şu An', future: 'Planlanan' };
+
+  // --- Plana göre bugünkü kasa hedefi (Hedef Özeti altındaki ilerleme çubuğu) ---
+  function renderKasaProgress() {
+    const fillEl = document.getElementById('kasaProgressFill');
+    const pctEl = document.getElementById('kasaProgressPct');
+    const labelEl = document.getElementById('kasaProgressLabel');
+    if (!fillEl || !pctEl || !labelEl) return;
+
+    const statuses = computeMilestoneStatuses();
+    let idx = statuses.indexOf('now');
+    if (idx === -1) idx = statuses.length - 1;
+    const current = PLAN_MILESTONES[idx];
+    const target = PLAN_MILESTONES[PLAN_MILESTONES.length - 1].kasa;
+    const pct = Math.max(0, Math.min(100, Math.round((current.kasa / target) * 100)));
+
+    fillEl.style.width = pct + '%';
+    pctEl.textContent = '%' + pct;
+    labelEl.textContent = current.kasa.toLocaleString('tr-TR') + ' € / ' + target.toLocaleString('tr-TR') + ' €';
+  }
+
   function fmtGram(n) {
     return n.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' gr';
   }
@@ -115,16 +152,20 @@
   function renderKasaLogTable() {
     const body = document.getElementById('kasaLogBody');
     if (!body) return;
-    body.innerHTML = PLAN_MILESTONES.map(p => {
+    const statuses = computeMilestoneStatuses();
+    body.innerHTML = PLAN_MILESTONES.map((p, i) => {
       const d = new Date(p.tarih + 'T00:00:00');
       const tarihStr = d.toLocaleDateString('tr-TR', { day: '2-digit', month: 'short', year: 'numeric' });
       const kasaStr = p.kasa.toLocaleString('tr-TR') + ' €';
+      const st = statuses[i];
       return '<tr><td data-label="Tarih">' + tarihStr + '</td>' +
         '<td data-label="Kümülatif Kasa (€)" class="cash">' + kasaStr + '</td>' +
-        '<td data-label="Plan Altın (gr)">' + fmtGram(p.planGram) + '</td></tr>';
+        '<td data-label="Plan Altın (gr)">' + fmtGram(p.planGram) + '</td>' +
+        '<td data-label="Durum"><span class="fin-status ' + st + '">' + STATUS_LABEL[st] + '</span></td></tr>';
     }).join('');
   }
   renderKasaLogTable();
+  renderKasaProgress();
 
   // --- Roadmap Node Durumları ---
   document.querySelectorAll('.roadmap').forEach(roadmap => {

@@ -46,57 +46,61 @@
     <div class="sec-label i18n" data-tr="Canlı Kur Paneli" data-de="Live-Kurs-Panel">
       Canlı Kur Paneli <span class="rate-updated" id="rateUpdatedAt"></span>
     </div>
-    <div class="rate-panel">
-      <div class="rate-row-top">
-        <div class="rate-cell rate-cell-lg">
-          <div class="rate-cell-top">
-            <span class="rate-hero-code">EUR/TRY</span>
-            <span class="rate-hero-eq">1 € =</span>
+    <div class="fin-live-grid">
+      <div class="fin-live-col">
+        <div class="rate-panel">
+          <div class="rate-row-top">
+            <div class="rate-cell rate-cell-lg">
+              <div class="rate-cell-top">
+                <span class="rate-hero-code">EUR/TRY</span>
+                <span class="rate-hero-eq">1 € =</span>
+              </div>
+              <div class="rate-hero-main">
+                <span class="rate-hero-val" id="rate-EUR-mid">—</span>
+                <span class="rate-hero-cur">₺</span>
+              </div>
+            </div>
+            <div class="rate-cell rate-cell-lg">
+              <div class="rate-cell-top">
+                <span class="rate-hero-code i18n" data-tr="ALTIN (gram)" data-de="GOLD (Gramm)">ALTIN (gram)</span>
+                <span class="rate-hero-eq">1 gr =</span>
+              </div>
+              <div class="rate-hero-main">
+                <span class="rate-hero-val" id="rate-XAU-mid">—</span>
+                <span class="rate-hero-cur">₺</span>
+              </div>
+            </div>
           </div>
-          <div class="rate-hero-main">
-            <span class="rate-hero-val" id="rate-EUR-mid">—</span>
-            <span class="rate-hero-cur">₺</span>
+          <div class="rate-row-bottom">
+            <div class="rate-cell rate-cell-sm">
+              <span class="rate-mini-label">USD/TRY</span>
+              <span class="rate-mini-val" id="rate-USD-mid">—</span>
+            </div>
+            <div class="rate-cell rate-cell-sm">
+              <span class="rate-mini-label">GBP/TRY</span>
+              <span class="rate-mini-val" id="rate-GBP-mid">—</span>
+            </div>
+            <div class="rate-cell rate-cell-sm">
+              <span class="rate-mini-label">CHF/TRY</span>
+              <span class="rate-mini-val" id="rate-CHF-mid">—</span>
+            </div>
+            <div class="rate-cell rate-cell-sm">
+              <span class="rate-mini-label">AUD/TRY</span>
+              <span class="rate-mini-val" id="rate-AUD-mid">—</span>
+            </div>
           </div>
         </div>
-        <div class="rate-cell rate-cell-lg">
-          <div class="rate-cell-top">
-            <span class="rate-hero-code i18n" data-tr="ALTIN (gram)" data-de="GOLD (Gramm)">ALTIN (gram)</span>
-            <span class="rate-hero-eq">1 gr =</span>
-          </div>
-          <div class="rate-hero-main">
-            <span class="rate-hero-val" id="rate-XAU-mid">—</span>
-            <span class="rate-hero-cur">₺</span>
-          </div>
-        </div>
+        <div class="rate-error" id="rateError" style="display:none;">Kur verisi alınamadı — birazdan otomatik tekrar denenecek.</div>
       </div>
-      <div class="rate-row-bottom">
-        <div class="rate-cell rate-cell-sm">
-          <span class="rate-mini-label">USD/TRY</span>
-          <span class="rate-mini-val" id="rate-USD-mid">—</span>
-        </div>
-        <div class="rate-cell rate-cell-sm">
-          <span class="rate-mini-label">GBP/TRY</span>
-          <span class="rate-mini-val" id="rate-GBP-mid">—</span>
-        </div>
-        <div class="rate-cell rate-cell-sm">
-          <span class="rate-mini-label">CHF/TRY</span>
-          <span class="rate-mini-val" id="rate-CHF-mid">—</span>
-        </div>
-        <div class="rate-cell rate-cell-sm">
-          <span class="rate-mini-label">AUD/TRY</span>
-          <span class="rate-mini-val" id="rate-AUD-mid">—</span>
-        </div>
-      </div>
-    </div>
-    <div class="rate-error" id="rateError" style="display:none;">Kur verisi alınamadı — birazdan otomatik tekrar denenecek.</div>
 
-    <div class="scenario" style="margin-top:16px;">
-      <div class="scen-name i18n" data-tr="Kasa Hesaplayıcı" data-de="Kassenrechner" style="margin-bottom:10px;">Kasa Hesaplayıcı</div>
-      <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
-        <input type="number" id="kasaEur" class="evrak-form-input" style="max-width:180px;" placeholder="örn. 1200" min="0" step="1">
-        <span class="stat-sub i18n" data-tr="€ kasandaki tutarı gir" data-de="€-Betrag in deiner Kasse eingeben">€ kasandaki tutarı gir</span>
+      <div class="fin-live-col">
+        <div class="scenario fin-calc">
+          <div class="scen-name i18n" data-tr="Kasa Hesaplayıcı" data-de="Kassenrechner">Kasa Hesaplayıcı</div>
+          <input type="number" id="kasaEur" class="evrak-form-input" placeholder="örn. 1200" min="0" step="1">
+          <span class="stat-sub i18n" data-tr="€ kasandaki tutarı gir" data-de="€-Betrag in deiner Kasse eingeben">€ kasandaki tutarı gir</span>
+          <div id="kasaResult" class="stat-sub fin-calc-result"></div>
+        </div>
       </div>
-      <div id="kasaResult" class="stat-sub" style="margin-top:10px; font-family:var(--mono);"></div>
     </div>
   </section>
 
@@ -104,17 +108,30 @@
     <div class="sec-label i18n" data-tr="Hedef Özeti (30.09.2027)" data-de="Zielübersicht (30.09.2027)">Hedef Özeti (30.09.2027)</div>
     <div class="stat-grid">
       <div class="stat">
+        <span class="stat-icon">💶</span>
         <div class="stat-label i18n" data-tr="Hedef Kasa" data-de="Zielkasse">Hedef Kasa</div>
         <div class="stat-value purple">21.460 €</div>
       </div>
       <div class="stat">
+        <span class="stat-icon">🥇</span>
         <div class="stat-label i18n" data-tr="Hedef Altın (plan kuruyla)" data-de="Zielgold (Planpreis)">Hedef Altın (plan kuruyla)</div>
         <div class="stat-value">188,11 gr</div>
       </div>
       <div class="stat">
+        <span class="stat-icon">⏳</span>
         <div class="stat-label i18n" data-tr="Operasyon Süresi" data-de="Operationsdauer">Operasyon Süresi</div>
         <div class="stat-value green">12 ay</div>
       </div>
+    </div>
+
+    <div class="stat fin-progress-card">
+      <div class="stat-label i18n" data-tr="Plana Göre Bugünkü Kasa Hedefi" data-de="Plangemäßer heutiger Kassenstand">Plana Göre Bugünkü Kasa Hedefi</div>
+      <div class="fin-progress-top">
+        <span class="stat-value purple" id="kasaProgressLabel">—</span>
+        <span class="stat-value" id="kasaProgressPct">—</span>
+      </div>
+      <div class="bar-track"><div class="bar-fill base" id="kasaProgressFill" style="width:0%;"></div></div>
+      <div class="stat-sub i18n" data-tr="Nihai hedef olan 21.460 €'ya göre plandaki güncel konum — gerçek kasa bakiyesi değil." data-de="Aktuelle Position im Plan bezogen auf das Endziel von 21.460 € — nicht der tatsächliche Kassenstand.">Nihai hedef olan 21.460 €'ya göre plandaki güncel konum — gerçek kasa bakiyesi değil.</div>
     </div>
   </section>
 
@@ -132,6 +149,7 @@
             <th class="i18n" data-tr="Tarih" data-de="Datum">Tarih</th>
             <th class="i18n" data-tr="Kümülatif Kasa (€)" data-de="Kumulierte Kasse (€)">Kümülatif Kasa (€)</th>
             <th class="i18n" data-tr="Plan Altın (gr)" data-de="Plan-Gold (g)">Plan Altın (gr)</th>
+            <th class="i18n" data-tr="Durum" data-de="Status">Durum</th>
           </tr>
         </thead>
         <tbody id="kasaLogBody">
