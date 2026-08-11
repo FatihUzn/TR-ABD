@@ -51,7 +51,7 @@ body[data-page="sistem"] .dash-photo-band::before{
   z-index:-1;
   background-image:
     linear-gradient(180deg, rgba(6,18,15,0.16) 0%, rgba(6,18,15,0.30) 55%, rgba(6,18,15,0.55) 100%),
-    url("Studio/misty-ridge.webp"); /* core.css > body[data-page="sistem"]::before ile AYNI foto — tek parça hero hissi için */
+    url("Studio/gallery9.webp"); /* core.css > body[data-page="sistem"]::before ile AYNI foto — tek parça hero hissi için */
   background-size:cover;
   background-position:center;
 }

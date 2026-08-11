@@ -80,7 +80,7 @@ body::before{ background-position: center 20%; }
 body[data-page="sistem"]::before{
   background-image:
     linear-gradient(180deg, rgba(8,20,17,0.12) 0%, rgba(8,20,17,0.18) 55%, rgba(8,20,17,0.26) 100%),
-    url("Studio/misty-ridge.webp"); /* sisli, çitli dağ sırtı — patika */
+    url("Studio/gallery9.webp"); /* yosunlu taş basamaklar + yeşil gölet */
 }
 
 body[data-page="almanca"]::before{
