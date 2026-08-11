@@ -15,21 +15,15 @@
 <link rel="stylesheet" href="core.css">
 <link rel="stylesheet" href="sistem.css">
 <style>
-/* ÜST BANT (dash-photo-band) fotoğrafını da aynı deneme moduna bağlıyoruz.
-   sistem.css'teki .dash-photo-band::before kuralı hâlâ geçerli (konum, filtre vb.);
-   burada sadece background-image'ı data-photo'ya göre override ediyoruz.
-   Karar verilince bu <style> bloğu da photo-picker ile birlikte silinebilir. */
-body[data-page="sistem"][data-photo="1"] .dash-photo-band::before{ background-image: linear-gradient(180deg, rgba(20,22,26,0.30) 0%, rgba(20,22,26,0.42) 60%, rgba(20,22,26,0.58) 100%), url("Studio/castles/castle-01-segovia.webp"); }
-body[data-page="sistem"][data-photo="2"] .dash-photo-band::before{ background-image: linear-gradient(180deg, rgba(18,12,8,0.28) 0%, rgba(18,12,8,0.42) 60%, rgba(18,12,8,0.58) 100%), url("Studio/castles/castle-02-eltz.webp"); }
-body[data-page="sistem"][data-photo="3"] .dash-photo-band::before{ background-image: linear-gradient(180deg, rgba(12,14,18,0.24) 0%, rgba(12,14,18,0.36) 60%, rgba(12,14,18,0.50) 100%), url("Studio/castles/castle-03-iasi.webp"); }
-body[data-page="sistem"][data-photo="4"] .dash-photo-band::before{ background-image: linear-gradient(180deg, rgba(8,16,22,0.26) 0%, rgba(8,16,22,0.38) 60%, rgba(8,16,22,0.52) 100%), url("Studio/castles/castle-04-neuschwanstein-aerial.webp"); }
-body[data-page="sistem"][data-photo="5"] .dash-photo-band::before{ background-image: linear-gradient(180deg, rgba(6,12,22,0.28) 0%, rgba(6,12,22,0.40) 60%, rgba(6,12,22,0.54) 100%), url("Studio/castles/castle-05-mont-saint-michel.webp"); }
-body[data-page="sistem"][data-photo="6"] .dash-photo-band::before{ background-image: linear-gradient(180deg, rgba(8,16,22,0.22) 0%, rgba(8,16,22,0.34) 60%, rgba(8,16,22,0.48) 100%), url("Studio/castles/castle-06-neuschwanstein-wide.webp"); }
-body[data-page="sistem"][data-photo="7"] .dash-photo-band::before{ background-image: linear-gradient(180deg, rgba(16,12,20,0.30) 0%, rgba(16,12,20,0.44) 60%, rgba(16,12,20,0.60) 100%), url("Studio/castles/castle-07-hohenzollern-sunset.webp"); }
-body[data-page="sistem"][data-photo="8"] .dash-photo-band::before{ background-image: linear-gradient(180deg, rgba(10,16,22,0.24) 0%, rgba(10,16,22,0.36) 60%, rgba(10,16,22,0.50) 100%), url("Studio/castles/castle-08-neuschwanstein-autumn.webp"); }
-body[data-page="sistem"][data-photo="9"] .dash-photo-band::before{ background-image: linear-gradient(180deg, rgba(14,18,16,0.26) 0%, rgba(14,18,16,0.38) 60%, rgba(14,18,16,0.52) 100%), url("Studio/castles/castle-09-san-marino.webp"); }
-body[data-page="sistem"][data-photo="10"] .dash-photo-band::before{ background-image: linear-gradient(180deg, rgba(16,10,20,0.28) 0%, rgba(16,10,20,0.42) 60%, rgba(16,10,20,0.58) 100%), url("Studio/castles/castle-10-hohenzollern-dusk.webp"); }
-body[data-page="sistem"][data-photo="11"] .dash-photo-band::before{ background-image: linear-gradient(180deg, rgba(14,16,18,0.28) 0%, rgba(14,16,18,0.40) 60%, rgba(14,16,18,0.54) 100%), url("Studio/castles/castle-11-neuschwanstein-fog.webp"); }
+/* ÜST BANT (dash-photo-band) — sistem.css'teki .dash-photo-band::before kuralı
+   hâlâ geçerli (konum vb.); burada sadece background-image ve filtreyi override edip
+   core.css'teki genel "castleSlideshow" animasyonuna bağlıyoruz. Bu sayede üst bant
+   ve sayfanın geri kalanı birebir SENKRON, aynı anda aynı kaleyi gösterir. Efekt yok. */
+body[data-page="sistem"] .dash-photo-band::before{
+  background-image:url("Studio/castels/castle-01-segovia.webp");
+  filter:none;
+  animation: castleSlideshow var(--slide-duration) infinite;
+}
 </style>
 </head>
 <body data-page="sistem">
@@ -317,55 +311,5 @@ body[data-page="sistem"][data-photo="11"] .dash-photo-band::before{ background-i
   </footer>
 
 <script src="core.js"></script>
-
-<!-- ============================================================
-     FOTO DENEME KONTROLÜ — geçici. Kararını verince bu <div> ve
-     altındaki <script> bloğunu sil, sonra core.css/index.html'deki
-     ilgili "sistem" foto satırını seçtiğin görselle sabitle. Yani:
-     core.css > body[data-page="sistem"]::before kuralının içine
-     seçtiğin numaranın background-image'ını taşı, data-photo mantığını
-     kaldır. ============================================================ -->
-<div class="photo-picker" id="photoPicker">
-  <button type="button" id="photoPrev" aria-label="Önceki foto">‹</button>
-  <span class="photo-picker-label"><b id="photoPickerName">1 / 11</b><span id="photoPickerDesc">Segovia Alcázarı</span></span>
-  <button type="button" id="photoNext" aria-label="Sonraki foto">›</button>
-</div>
-<script>
-(function(){
-  var names = [
-    "Segovia Alcázarı",
-    "Burg Eltz",
-    "Iași Sarayı",
-    "Neuschwanstein (havadan)",
-    "Mont Saint-Michel",
-    "Neuschwanstein (geniş)",
-    "Hohenzollern (gün batımı)",
-    "Neuschwanstein (sonbahar)",
-    "San Marino",
-    "Hohenzollern (alacakaranlık)",
-    "Neuschwanstein (sisli)"
-  ];
-  var body = document.body;
-  var idx = parseInt(localStorage.getItem("photoPickerIdx") || "1", 10);
-  if (idx < 1 || idx > 11) idx = 1;
-
-  function apply(){
-    body.setAttribute("data-photo", idx);
-    document.getElementById("photoPickerName").textContent = idx + " / 11";
-    document.getElementById("photoPickerDesc").textContent = names[idx - 1];
-    localStorage.setItem("photoPickerIdx", idx);
-  }
-  document.getElementById("photoPrev").addEventListener("click", function(){
-    idx = idx === 1 ? 11 : idx - 1;
-    apply();
-  });
-  document.getElementById("photoNext").addEventListener("click", function(){
-    idx = idx === 11 ? 1 : idx + 1;
-    apply();
-  });
-  apply();
-})();
-</script>
-
 </body>
 </html>

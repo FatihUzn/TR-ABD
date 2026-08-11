@@ -49,186 +49,56 @@ body {
   overflow-x: hidden; /* full-bleed (100vw) bölümlerin yatay scrollbar taşırmasını engeller */
 }
 
-/* ===== SİTE GENELİ ARKA PLAN FOTOĞRAFI — artık sadece hero'da değil, TÜM sayfalarda sabit (fixed)
-   viewport zemini. "fixed" olduğu için görsel her zaman ekran boyutuna göre ölçekleniyor,
-   sayfa ne kadar uzun olursa olsun tek görsel yeterli oluyor — kalite kaybı / tekrarlama gerekmiyor. */
+/* ===== SİTE GENELİ ARKA PLAN — OTOMATİK KALE SLAYT GÖSTERİSİ =====
+   TÜM sayfalarda (data-page ne olursa olsun) aynı 11 kale fotoğrafı,
+   sırayla ve otomatik olarak değişir. Hiç blur / karartma gradyanı /
+   saydamlık efekti yok — foto ham haliyle gösteriliyor.
+   Tek yerden süre ayarı: --slide-duration. 11 foto × 8s = 88s bir tur. */
+
+:root{
+  --slide-duration: 88s; /* toplam tur süresi — foto başına ~8sn (88/11) */
+}
+
+@keyframes castleSlideshow{
+  0%     { background-image:url("Studio/castels/castle-01-segovia.webp"); }
+  9.08%  { background-image:url("Studio/castels/castle-01-segovia.webp"); }
+  9.09%  { background-image:url("Studio/castels/castle-02-eltz.webp"); }
+  18.17% { background-image:url("Studio/castels/castle-02-eltz.webp"); }
+  18.18% { background-image:url("Studio/castels/castle-03-iasi.webp"); }
+  27.26% { background-image:url("Studio/castels/castle-03-iasi.webp"); }
+  27.27% { background-image:url("Studio/castels/castle-04-neuschwanstein-aerial.webp"); }
+  36.35% { background-image:url("Studio/castels/castle-04-neuschwanstein-aerial.webp"); }
+  36.36% { background-image:url("Studio/castels/castle-05-mont-saint-michel.webp"); }
+  45.44% { background-image:url("Studio/castels/castle-05-mont-saint-michel.webp"); }
+  45.45% { background-image:url("Studio/castels/castle-06-neuschwanstein-wide.webp"); }
+  54.53% { background-image:url("Studio/castels/castle-06-neuschwanstein-wide.webp"); }
+  54.54% { background-image:url("Studio/castels/castle-07-hohenzollern-sunset.webp"); }
+  63.62% { background-image:url("Studio/castels/castle-07-hohenzollern-sunset.webp"); }
+  63.63% { background-image:url("Studio/castels/castle-08-neuschwanstein-autumn.webp"); }
+  72.71% { background-image:url("Studio/castels/castle-08-neuschwanstein-autumn.webp"); }
+  72.72% { background-image:url("Studio/castels/castle-09-san-marino.webp"); }
+  81.80% { background-image:url("Studio/castels/castle-09-san-marino.webp"); }
+  81.81% { background-image:url("Studio/castels/castle-10-hohenzollern-dusk.webp"); }
+  90.89% { background-image:url("Studio/castels/castle-10-hohenzollern-dusk.webp"); }
+  90.90% { background-image:url("Studio/castels/castle-11-neuschwanstein-fog.webp"); }
+  99.99% { background-image:url("Studio/castels/castle-11-neuschwanstein-fog.webp"); }
+  100%   { background-image:url("Studio/castels/castle-01-segovia.webp"); }
+}
 
 body::before{
   content:"";
   position:fixed;
   inset:0;
   z-index:-1;
-  background-image:
-    linear-gradient(180deg, rgba(10,16,28,0.28) 0%, rgba(10,16,28,0.38) 55%, rgba(10,16,28,0.48) 100%),
-    url("Studio/harvard1.webp");
+  background-image:url("Studio/castels/castle-01-segovia.webp");
   background-size:cover;
   background-position:center;
   background-repeat:no-repeat;
-  filter: blur(8px) saturate(0.82) brightness(0.94);
-  transform: scale(1.08); /* blur kenarlarda şeffaf/keskin taşma yaratmasın diye görseli hafif büyütüyoruz */
+  animation: castleSlideshow var(--slide-duration) infinite;
 }
 
 @media(max-width:640px){
 body::before{ background-position: center 20%; }
-}
-
-/* ===== SAYFA BAZLI ARKAPLAN — her sayfanın kendi fotoğrafı + moss yeşili tonlu overlay.
-   body::before zaten "fixed" olduğu için tek görsel sayfa boyunca (hero gibi) sabit kalıyor;
-   burada sadece hangi fotoğrafın kullanılacağını data-page'e göre override ediyoruz.
-   Overlay formülü tüm sayfalarda aynı (okunurluk + görsel tutarlılık için), sadece fotoğraf değişiyor.
-   NOT: Anasayfada (sistem) bu foto sadece "üst bandın altındaki" alanlarda görünür — üst bant
-   kendi katmanını sistem.css > .dash-photo-band::before üzerinden alır (aynı fotoğrafla eşitlendi). */
-
-body[data-page="sistem"]::before{
-  background-image:
-    linear-gradient(180deg, rgba(8,20,17,0.12) 0%, rgba(8,20,17,0.18) 55%, rgba(8,20,17,0.26) 100%),
-    url("Studio/gallery9.webp"); /* yosunlu taş basamaklar + yeşil gölet — varsayılan, aşağıdaki data-photo denemesi yokken */
-}
-
-/* =====================================================================
-   ANASAYFA FOTOĞRAF DENEME MODU — "sırayla hepsini deneyelim"
-   body üzerine geçici olarak data-photo="1..11" atanınca (bkz. index.html
-   sağ-alt köşedeki ‹ Foto Dene › kontrolü) hem arka plan fotoğrafı hem de
-   o fotoğrafın baskın tonlarına göre --purple / --moss vurgu renkleri
-   birlikte değişir. Karar verildiğinde tek fotoğraf kalıcı hale getirilip
-   bu blok + index.html'deki switcher tamamen silinebilir.
-   ===================================================================== */
-
-body[data-page="sistem"][data-photo="1"]::before{ /* Segovia Alcázarı — fırtınalı gri + altın taş */
-  background-image: linear-gradient(180deg, rgba(20,22,26,0.30) 0%, rgba(20,22,26,0.42) 55%, rgba(20,22,26,0.54) 100%), url("Studio/castles/castle-01-segovia.webp");
-}
-body[data-page="sistem"][data-photo="1"]{
-  --purple:#c9973f; --purple-dim:#dcb46b; --purple-glow:rgba(201,151,63,0.20);
-  --moss:#5b7a92; --moss-dim:#82a0b4; --moss-glow:rgba(91,122,146,0.18);
-}
-
-body[data-page="sistem"][data-photo="2"]::before{ /* Burg Eltz — sonbahar kızılı, orman */
-  background-image: linear-gradient(180deg, rgba(18,12,8,0.26) 0%, rgba(18,12,8,0.38) 55%, rgba(18,12,8,0.50) 100%), url("Studio/castles/castle-02-eltz.webp");
-}
-body[data-page="sistem"][data-photo="2"]{
-  --purple:#c2571a; --purple-dim:#dd7c3f; --purple-glow:rgba(194,87,26,0.20);
-  --moss:#3f6b4a; --moss-dim:#66916f; --moss-glow:rgba(63,107,74,0.18);
-}
-
-body[data-page="sistem"][data-photo="3"]::before{ /* Iași Kültür Sarayı — pastel pembe, kar */
-  background-image: linear-gradient(180deg, rgba(12,14,18,0.22) 0%, rgba(12,14,18,0.32) 55%, rgba(12,14,18,0.44) 100%), url("Studio/castles/castle-03-iasi.webp");
-}
-body[data-page="sistem"][data-photo="3"]{
-  --purple:#c97b98; --purple-dim:#dda2b8; --purple-glow:rgba(201,123,152,0.20);
-  --moss:#2f7d6b; --moss-dim:#5aa090; --moss-glow:rgba(47,125,107,0.18);
-}
-
-body[data-page="sistem"][data-photo="4"]::before{ /* Neuschwanstein (havadan) — canlı mavi + yeşil vadi */
-  background-image: linear-gradient(180deg, rgba(8,16,22,0.24) 0%, rgba(8,16,22,0.34) 55%, rgba(8,16,22,0.46) 100%), url("Studio/castles/castle-04-neuschwanstein-aerial.webp");
-}
-body[data-page="sistem"][data-photo="4"]{
-  --purple:#2d8fd1; --purple-dim:#5eaee0; --purple-glow:rgba(45,143,209,0.20);
-  --moss:#3f7d4a; --moss-dim:#66a072; --moss-glow:rgba(63,125,74,0.18);
-}
-
-body[data-page="sistem"][data-photo="5"]::before{ /* Mont Saint-Michel — dupduru mavi, minimal */
-  background-image: linear-gradient(180deg, rgba(6,12,22,0.26) 0%, rgba(6,12,22,0.36) 55%, rgba(6,12,22,0.48) 100%), url("Studio/castles/castle-05-mont-saint-michel.webp");
-}
-body[data-page="sistem"][data-photo="5"]{
-  --purple:#1f5fa8; --purple-dim:#4a80bf; --purple-glow:rgba(31,95,168,0.20);
-  --moss:#4a6b85; --moss-dim:#7290a6; --moss-glow:rgba(74,107,133,0.18);
-}
-
-body[data-page="sistem"][data-photo="6"]::before{ /* Neuschwanstein (geniş açı) — parlak mavi + çayır yeşili */
-  background-image: linear-gradient(180deg, rgba(8,16,22,0.20) 0%, rgba(8,16,22,0.30) 55%, rgba(8,16,22,0.42) 100%), url("Studio/castles/castle-06-neuschwanstein-wide.webp");
-}
-body[data-page="sistem"][data-photo="6"]{
-  --purple:#2a93d6; --purple-dim:#5cb1e3; --purple-glow:rgba(42,147,214,0.20);
-  --moss:#4f9455; --moss-dim:#78b17d; --moss-glow:rgba(79,148,85,0.18);
-}
-
-body[data-page="sistem"][data-photo="7"]::before{ /* Hohenzollern — gün batımı altını, tepe siluet */
-  background-image: linear-gradient(180deg, rgba(16,12,20,0.28) 0%, rgba(16,12,20,0.40) 55%, rgba(16,12,20,0.54) 100%), url("Studio/castles/castle-07-hohenzollern-sunset.webp");
-}
-body[data-page="sistem"][data-photo="7"]{
-  --purple:#d68a1f; --purple-dim:#e7ab55; --purple-glow:rgba(214,138,31,0.22);
-  --moss:#5c4a6b; --moss-dim:#83718f; --moss-glow:rgba(92,74,107,0.18);
-}
-
-body[data-page="sistem"][data-photo="8"]::before{ /* Neuschwanstein — sonbahar vadi, turuncu/sarı yapraklar */
-  background-image: linear-gradient(180deg, rgba(10,16,22,0.22) 0%, rgba(10,16,22,0.32) 55%, rgba(10,16,22,0.44) 100%), url("Studio/castles/castle-08-neuschwanstein-autumn.webp");
-}
-body[data-page="sistem"][data-photo="8"]{
-  --purple:#d17d28; --purple-dim:#e29e57; --purple-glow:rgba(209,125,40,0.20);
-  --moss:#3a86c4; --moss-dim:#67a3d4; --moss-glow:rgba(58,134,196,0.18);
-}
-
-body[data-page="sistem"][data-photo="9"]::before{ /* San Marino — sisli yeşil kayalık */
-  background-image: linear-gradient(180deg, rgba(14,18,16,0.24) 0%, rgba(14,18,16,0.34) 55%, rgba(14,18,16,0.46) 100%), url("Studio/castles/castle-09-san-marino.webp");
-}
-body[data-page="sistem"][data-photo="9"]{
-  --purple:#5f7a5a; --purple-dim:#82a07d; --purple-glow:rgba(95,122,90,0.20);
-  --moss:#6b7280; --moss-dim:#8d94a0; --moss-glow:rgba(107,114,128,0.18);
-}
-
-body[data-page="sistem"][data-photo="10"]::before{ /* Hohenzollern — alacakaranlık moru, sıcak ışıklar */
-  background-image: linear-gradient(180deg, rgba(16,10,20,0.26) 0%, rgba(16,10,20,0.38) 55%, rgba(16,10,20,0.52) 100%), url("Studio/castles/castle-10-hohenzollern-dusk.webp");
-}
-body[data-page="sistem"][data-photo="10"]{
-  --purple:#8a5a9a; --purple-dim:#ab82b7; --purple-glow:rgba(138,90,154,0.20);
-  --moss:#c98a4a; --moss-dim:#dba876; --moss-glow:rgba(201,138,74,0.18);
-}
-
-body[data-page="sistem"][data-photo="11"]::before{ /* Neuschwanstein — kapalı hava, kızıl/yeşil orman */
-  background-image: linear-gradient(180deg, rgba(14,16,18,0.26) 0%, rgba(14,16,18,0.36) 55%, rgba(14,16,18,0.48) 100%), url("Studio/castles/castle-11-neuschwanstein-fog.webp");
-}
-body[data-page="sistem"][data-photo="11"]{
-  --purple:#a8623a; --purple-dim:#c08762; --purple-glow:rgba(168,98,58,0.20);
-  --moss:#5a7a5f; --moss-dim:#80a084; --moss-glow:rgba(90,122,95,0.18);
-}
-
-/* Foto deneme kontrolü — sadece karar verme sürecinde görünür, sonrasında
-   bu bloğu ve index.html'deki .photo-picker öğesini kaldırman yeterli. */
-.photo-picker{
-  position:fixed; right:16px; bottom:16px; z-index:999;
-  display:flex; align-items:center; gap:10px;
-  background:rgba(15,23,42,0.82); backdrop-filter:blur(6px);
-  border:1px solid rgba(255,255,255,0.14); border-radius:999px;
-  padding:8px 10px 8px 14px; box-shadow:0 10px 26px rgba(0,0,0,0.35);
-  font-family:var(--mono); color:#f1f5f9;
-}
-.photo-picker button{
-  width:30px; height:30px; border-radius:50%; border:1px solid rgba(255,255,255,0.22);
-  background:rgba(255,255,255,0.08); color:#f8fafc; font-size:14px; cursor:pointer;
-  display:flex; align-items:center; justify-content:center; transition:background .15s ease;
-}
-.photo-picker button:hover{ background:rgba(255,255,255,0.20); }
-.photo-picker-label{ font-size:11px; line-height:1.3; min-width:112px; text-align:center; }
-.photo-picker-label b{ display:block; font-size:12px; color:#fff; }
-
-body[data-page="almanca"]::before{
-  background-image:
-    linear-gradient(180deg, rgba(8,20,17,0.14) 0%, rgba(8,20,17,0.20) 55%, rgba(8,20,17,0.28) 100%),
-    url("Studio/forest-light.webp"); /* sisli orman, ağaçlar arasından sızan ışık */
-}
-
-body[data-page="yks"]::before{
-  background-image:
-    linear-gradient(180deg, rgba(8,20,17,0.14) 0%, rgba(8,20,17,0.20) 55%, rgba(8,20,17,0.28) 100%),
-    url("Studio/terraces.webp"); /* sisli teraslı yamaç — basamak basamak ilerleyiş */
-}
-
-body[data-page="finans"]::before{
-  background-image:
-    linear-gradient(180deg, rgba(8,20,17,0.14) 0%, rgba(8,20,17,0.20) 55%, rgba(8,20,17,0.28) 100%),
-    url("Studio/hillside-cabins.webp"); /* uzak yamaçtaki evler — hedeflenen gelecek */
-}
-
-body[data-page="evrak"]::before{
-  background-image:
-    linear-gradient(180deg, rgba(8,20,17,0.14) 0%, rgba(8,20,17,0.20) 55%, rgba(8,20,17,0.28) 100%),
-    url("Studio/settled-green.webp"); /* yerleşik, düzenli yeşil yamaç — oturmuş/istikrarlı düzen */
-}
-
-body[data-page="blog"]::before{
-  background-image:
-    linear-gradient(180deg, rgba(8,20,17,0.14) 0%, rgba(8,20,17,0.20) 55%, rgba(8,20,17,0.28) 100%),
-    url("Studio/river-glimpse.webp"); /* dallar arasından görünen dere — içe dönük/günlük hissi */
 }
 
 .wrap{position:relative; z-index:1; max-width:960px; margin:0 auto; padding:0 18px;}
@@ -271,23 +141,14 @@ header::before{
   top:0; bottom:0;
   left:50%;
   width:100vw;
-  transform:translateX(-50%) scale(1.08);
+  transform:translateX(-50%);
   z-index:-1;
-  background-image:
-    linear-gradient(180deg, rgba(8,14,32,0.28) 0%, rgba(8,14,32,0.46) 60%, rgba(8,14,32,0.62) 100%),
-    url("Studio/harvard1.webp"); /* varsayılan — <header> etiketi kullanan ama kendi override'ı olmayan sayfalar için */
+  background-image:url("Studio/castels/castle-01-segovia.webp");
   background-size: cover;
   background-position: center;
-  filter: blur(8px) saturate(0.82) brightness(0.94);
-}
-
-/* Almanca sayfası gerçek <header> etiketi kullandığı için yukarıdaki genel header::before'ı miras
-   alıyor — burada o bandın fotoğrafını da sayfanın geri kalanıyla (body[data-page="almanca"]::before)
-   AYNI fotoğrafa eşitliyoruz, iki farklı foto üst üste binmesin diye. */
-body[data-page="almanca"] header::before{
-  background-image:
-    linear-gradient(180deg, rgba(6,18,15,0.28) 0%, rgba(6,18,15,0.46) 60%, rgba(6,18,15,0.62) 100%),
-    url("Studio/forest-light.webp");
+  /* body::before ile AYNI animasyon, aynı süre → üst bant ve sayfa zemini
+     her zaman senkron, aynı kale aynı anda gösterilir. Efekt/blur yok. */
+  animation: castleSlideshow var(--slide-duration) infinite;
 }
 
 /* hero progress */
