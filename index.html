@@ -20,6 +20,8 @@
 
   <header class="dash-header">
 
+  <div class="dash-photo-band">
+
     <nav class="dash-topnav">
       <a href="index.html" class="dash-brand"><span class="dash-brand-mark">A→T</span>ALMANYA<span class="arrow">→</span>TUB</a>
       <div class="dash-topnav-links">
@@ -57,32 +59,43 @@
     </div>
 
     <div class="dash-hero-grid">
-      <div class="dash-stat-row">
-        <div class="dash-stat-box">
-          <span class="dash-stat-box-label i18n" data-tr="Emek Verilen Gün" data-de="Investierte Tage">Emek Verilen Gün</span>
-          <span class="dash-stat-box-num" id="accumDaysNum">–</span>
-          <div class="dash-stat-box-sub" id="accumDaysSub">hesaplanıyor...</div>
-          <div class="dash-stat-bar"><div class="dash-stat-bar-fill dash-stat-bar-fill--dark" id="accumDaysBar"></div></div>
-        </div>
-        <div class="dash-stat-box dash-stat-box-route">
-          <span class="dash-stat-box-label i18n" data-tr="Aktif Rota" data-de="Aktive Route">Aktif Rota</span>
-          <div class="route-mini">
-            <span class="route-mini-label">🇹🇷</span>
-            <svg class="route-mini-svg" viewBox="0 0 300 16" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
-              <path class="route-path" d="M6,8 L294,8"></path>
-              <path class="route-path-fill" id="routePathFill" d="M6,8 L294,8"></path>
-              <circle class="route-dot" id="routeDot" cx="6" cy="8" r="4"></circle>
-            </svg>
-            <span class="route-mini-label">🇩🇪 Limburgerhof</span>
-          </div>
-          <div class="dash-stat-bar"><div class="dash-stat-bar-fill dash-stat-bar-fill--accent" style="width:100%"></div></div>
-        </div>
+      <div class="photo-toolbar" aria-hidden="true">
+        <button type="button" class="photo-toolbar-btn" title="Tam ekran">⛶</button>
+        <button type="button" class="photo-toolbar-btn" title="Bildirimler">🔔</button>
+        <button type="button" class="photo-toolbar-btn" title="Notlar">💬</button>
+        <button type="button" class="photo-toolbar-btn" title="Görünüm">☀️</button>
+        <button type="button" class="photo-toolbar-btn" title="Dil">🌐</button>
       </div>
 
-      <div class="dash-hero-photo">
-        <img src="Studio/harvard1.webp" alt="ALMANYA → TU Berlin">
+      <div class="stat-report-card">
+        <div class="stat-report-top">
+          <span class="stat-report-title i18n" data-tr="İlerleme Özeti" data-de="Fortschrittsübersicht">İlerleme Özeti</span>
+        </div>
+        <div class="dash-stat-row">
+          <div class="dash-stat-box">
+            <span class="dash-stat-box-label i18n" data-tr="Emek Verilen Gün" data-de="Investierte Tage">Emek Verilen Gün</span>
+            <span class="dash-stat-box-num" id="accumDaysNum">–</span>
+            <div class="dash-stat-box-sub" id="accumDaysSub">hesaplanıyor...</div>
+            <div class="dash-stat-bar"><div class="dash-stat-bar-fill dash-stat-bar-fill--dark" id="accumDaysBar"></div></div>
+          </div>
+          <div class="dash-stat-box dash-stat-box-route">
+            <span class="dash-stat-box-label i18n" data-tr="Aktif Rota" data-de="Aktive Route">Aktif Rota</span>
+            <div class="route-mini">
+              <span class="route-mini-label">🇹🇷</span>
+              <svg class="route-mini-svg" viewBox="0 0 300 16" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+                <path class="route-path" d="M6,8 L294,8"></path>
+                <path class="route-path-fill" id="routePathFill" d="M6,8 L294,8"></path>
+                <circle class="route-dot" id="routeDot" cx="6" cy="8" r="4"></circle>
+              </svg>
+              <span class="route-mini-label">🇩🇪 Limburgerhof</span>
+            </div>
+            <div class="dash-stat-bar"><div class="dash-stat-bar-fill dash-stat-bar-fill--accent" style="width:100%"></div></div>
+          </div>
+        </div>
       </div>
     </div>
+
+  </div>
 
     <div class="dash-metrics-row">
       <div class="metric-card">

@@ -21,6 +21,111 @@ body[data-page="sistem"] .wrap{max-width:clamp(1400px, 92vw, 1760px);}
 
 body[data-page="sistem"] header::before{content:none;}
 
+/* ==========================================================
+   FOTO BANT — Muzli referansındaki gibi: kutucuklar arasına
+   sıkışmış küçük foto yerine, tam viewport genişliğinde (100vw)
+   full-bleed fotoğraf zemini + üzerinde yüzen cam (glass) kartlar.
+   Sadece başlık + istatistik kartları bu bandın üstünde durur;
+   alt kısımdaki (Genel İlerleme vb.) kartlar yine açık zeminde kalır.
+   ========================================================== */
+
+body[data-page="sistem"] .dash-photo-band{
+  position:relative; isolation:isolate;
+  padding:18px 0 46px;
+  --text:#f9fafb; --text-dim:#e6edf5; --text-faint:#c3d0dd;
+  --line:rgba(255,255,255,0.28); --panel:rgba(17,26,43,0.42); --panel-2:rgba(255,255,255,0.14);
+}
+
+body[data-page="sistem"] .dash-photo-band::before{
+  content:"";
+  position:absolute;
+  top:0; bottom:0;
+  left:50%;
+  width:100vw;
+  transform:translateX(-50%);
+  z-index:-1;
+  background-image:
+    linear-gradient(180deg, rgba(8,14,32,0.34) 0%, rgba(8,14,32,0.55) 55%, rgba(8,14,32,0.88) 100%),
+    url("Studio/harvard1.webp");
+  background-size:cover;
+  background-position:center;
+}
+
+/* Bant içindeki eski "foto kutusu" artık gereksiz — zemin zaten foto;
+   bu alanı kaldırıp istatistik kartının tam genişlik kullanmasını sağlıyoruz. */
+body[data-page="sistem"] .dash-photo-band .dash-hero-photo{display:none;}
+
+body[data-page="sistem"] .dash-photo-band .dash-hero-grid{
+  display:flex; justify-content:space-between; align-items:flex-end; gap:20px; margin-top:38px;
+}
+
+/* Tek gruplanmış "Reports" tarzı yüzen kart — iki istatistik tek çatı altında */
+body[data-page="sistem"] .dash-photo-band .stat-report-card{
+  width:min(100%, 560px); min-width:0; flex-shrink:0;
+  background:var(--panel); border:1px solid var(--line);
+  backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px);
+  border-radius:18px; padding:18px 22px 22px;
+  box-shadow:0 16px 40px rgba(4,8,20,0.35);
+  margin-left:auto;
+}
+
+body[data-page="sistem"] .dash-photo-band .stat-report-top{
+  margin-bottom:14px;
+}
+
+body[data-page="sistem"] .dash-photo-band .stat-report-title{
+  font-family:var(--mono); font-size:11px; letter-spacing:0.06em; text-transform:uppercase;
+  color:var(--text-faint);
+}
+
+body[data-page="sistem"] .dash-photo-band .stat-report-card .dash-stat-row{gap:0; flex-wrap:nowrap;}
+
+body[data-page="sistem"] .dash-photo-band .stat-report-card .dash-stat-box{
+  background:transparent; border:none; box-shadow:none; padding:0; flex:1 1 50%; min-width:0;
+}
+
+body[data-page="sistem"] .dash-photo-band .stat-report-card .dash-stat-box + .dash-stat-box{
+  border-left:1px solid var(--line); padding-left:18px; margin-left:18px;
+}
+
+body[data-page="sistem"] .dash-photo-band .route-mini{min-width:0;}
+
+body[data-page="sistem"] .dash-photo-band .route-mini-svg{min-width:0;}
+
+/* Sol kenarda yüzen dikey ikon şeridi — referans görseldeki gibi, artık akış içinde
+   (istatistik kartıyla aynı satırda, başlık metniyle çakışmaz) */
+body[data-page="sistem"] .photo-toolbar{
+  display:flex; flex-direction:column; gap:10px; flex-shrink:0;
+}
+
+body[data-page="sistem"] .photo-toolbar-btn{
+  width:36px; height:36px; border-radius:50%; flex-shrink:0;
+  display:flex; align-items:center; justify-content:center;
+  background:rgba(255,255,255,0.14); border:1px solid rgba(255,255,255,0.28);
+  backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+  color:#fff; font-size:13px; cursor:pointer; transition:background .15s ease;
+}
+
+body[data-page="sistem"] .photo-toolbar-btn:hover{background:rgba(255,255,255,0.28);}
+
+body[data-page="sistem"] .dash-topnav{
+  background:rgba(255,255,255,0.92);
+}
+
+body[data-page="sistem"] .phase-chip{
+  border-color:var(--line); background:rgba(255,255,255,0.08);
+}
+
+@media(max-width:900px){
+body[data-page="sistem"] .photo-toolbar{display:none;}
+}
+
+@media(max-width:760px){
+body[data-page="sistem"] .dash-photo-band{padding-bottom:34px;}
+body[data-page="sistem"] .dash-photo-band .dash-hero-grid{justify-content:stretch;}
+body[data-page="sistem"] .dash-photo-band .stat-report-card{width:100%;}
+}
+
 .dash-topnav{
   position:sticky; top:10px; z-index:30;
   display:flex; align-items:center; gap:18px;
