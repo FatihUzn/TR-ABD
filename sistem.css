@@ -47,13 +47,14 @@ body[data-page="sistem"] .dash-photo-band::before{
   top:0; bottom:0;
   left:50%;
   width:100vw;
-  transform:translateX(-50%);
+  transform:translateX(-50%) scale(1.08);
   z-index:-1;
   background-image:
     linear-gradient(180deg, rgba(6,18,15,0.16) 0%, rgba(6,18,15,0.30) 55%, rgba(6,18,15,0.55) 100%),
     url("Studio/gallery9.webp"); /* core.css > body[data-page="sistem"]::before ile AYNI foto — tek parça hero hissi için */
   background-size:cover;
   background-position:center;
+  filter: blur(8px) saturate(0.82) brightness(0.94);
 }
 
 /* Bant içindeki eski "foto kutusu" artık gereksiz — zemin zaten foto;

@@ -64,6 +64,8 @@ body::before{
   background-size:cover;
   background-position:center;
   background-repeat:no-repeat;
+  filter: blur(8px) saturate(0.82) brightness(0.94);
+  transform: scale(1.08); /* blur kenarlarda şeffaf/keskin taşma yaratmasın diye görseli hafif büyütüyoruz */
 }
 
 @media(max-width:640px){
@@ -153,13 +155,14 @@ header::before{
   top:0; bottom:0;
   left:50%;
   width:100vw;
-  transform:translateX(-50%);
+  transform:translateX(-50%) scale(1.08);
   z-index:-1;
   background-image:
     linear-gradient(180deg, rgba(8,14,32,0.28) 0%, rgba(8,14,32,0.46) 60%, rgba(8,14,32,0.62) 100%),
     url("Studio/harvard1.webp"); /* varsayılan — <header> etiketi kullanan ama kendi override'ı olmayan sayfalar için */
   background-size: cover;
   background-position: center;
+  filter: blur(8px) saturate(0.82) brightness(0.94);
 }
 
 /* Almanca sayfası gerçek <header> etiketi kullandığı için yukarıdaki genel header::before'ı miras
