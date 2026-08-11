@@ -19,6 +19,7 @@
       btn.classList.toggle('active', btn.dataset.lang === lang);
     });
     document.documentElement.setAttribute('lang', lang);
+    if (typeof renderAlmancaTeaser === 'function') renderAlmancaTeaser();
   }
 
   // --- Çok Sayfalı Site Nav: aktif sayfayı işaretle ---
@@ -1022,6 +1023,40 @@
     document.body.appendChild(overlay);
     document.body.classList.add('track-active');
   }
+
+  // ============================================================
+  // ALMANCA TEASER — index.html'deki kompakt "Dil Yolculuğu" kartı
+  // almanca.js'in yazdığı 'almanca_summary_v1' önbelleğini okur.
+  // İlgili elementler sayfada yoksa sessizce çıkar.
+  // ============================================================
+  function renderAlmancaTeaser() {
+    const bar = document.getElementById('homeAlmBar');
+    if (!bar) return;
+    let summary = null;
+    try {
+      const raw = localStorage.getItem('almanca_summary_v1');
+      summary = raw ? JSON.parse(raw) : null;
+    } catch (e) {}
+    const lang = document.documentElement.getAttribute('lang') || 'tr';
+    const pctEl = document.getElementById('homeAlmPct');
+    const levelEl = document.getElementById('homeAlmLevel');
+    const streakEl = document.getElementById('homeAlmStreak');
+    const doneEl = document.getElementById('homeAlmLevelsDone');
+    if (!summary) {
+      if (pctEl) pctEl.textContent = '%0';
+      if (levelEl) levelEl.textContent = 'A1';
+      if (streakEl) streakEl.textContent = '0';
+      if (doneEl) doneEl.textContent = (lang === 'de' ? 'Noch nicht gestartet' : 'Henüz başlanmadı');
+      bar.style.width = '0%';
+      return;
+    }
+    if (pctEl) pctEl.textContent = '%' + summary.pct;
+    if (levelEl) levelEl.textContent = summary.level;
+    if (streakEl) streakEl.textContent = summary.streak;
+    if (doneEl) doneEl.textContent = summary.levelsDone + '/' + summary.levelsTotal + (lang === 'de' ? ' Stufen abgeschlossen' : ' seviye tamamlandı');
+    bar.style.width = summary.pct + '%';
+  }
+  renderAlmancaTeaser();
 
   function motivationInitStage5() {
     motivationInitTrackLinkGenerator();

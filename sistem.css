@@ -21,12 +21,10 @@ body[data-page="sistem"] .wrap{max-width:clamp(1400px, 92vw, 1760px);}
 
 body[data-page="sistem"] header::before{content:none;}
 
-/* Site genelindeki sabit (fixed) arka plan fotoğrafı artık ana sayfanın HER
-   yerinde (yol haritası, footer vb.) saydam biçimde görünüp kartların
-   arasından sızıyordu. Homepage'in üstte kendi foto bandı olduğu için,
-   sayfanın geri kalanını eski temiz açık zemine (--void) döndürüyoruz. */
-body[data-page="sistem"]::before{content:none;}
-body[data-page="sistem"]{background:var(--void);}
+/* Site genelindeki sabit (fixed) arka plan fotoğrafı artık ana sayfada da
+   diğer tüm alt sayfalarla (finans/evrak/yks/almanca/blog) AYNI şekilde
+   TÜM sayfayı kaplıyor — hero bandındaki gibi. Kartlar (beyaz panel) bu
+   fotoğrafın üzerinde yüzüyor; ayrı bir açık zemine geri dönmüyoruz. */
 
 /* ==========================================================
    FOTO BANT — Muzli referansındaki gibi: kutucuklar arasına
@@ -596,3 +594,35 @@ body[data-page="sistem"] .dash-photo-band .stat-report-card{width:100%;}
 }
 
 .track-link-copy-btn:hover{border-color:var(--purple-dim); color:var(--purple);}
+
+/* ===== DİL YOLCULUĞU TEASER — anasayfadaki kompakt kart, almanca.html'e link verir ===== */
+
+.alm-teaser-card{
+  display:block; margin-top:10px; text-decoration:none;
+  background:var(--panel); border:1px solid var(--line); border-radius:var(--radius-lg);
+  padding:18px 20px; box-shadow:var(--shadow-float); transition:transform .15s ease, box-shadow .15s ease;
+}
+
+.alm-teaser-card:hover{transform:translateY(-2px); box-shadow:var(--shadow-float-hover);}
+
+.alm-teaser-top{display:flex; align-items:flex-end; justify-content:space-between; gap:12px; flex-wrap:wrap;}
+
+.alm-teaser-level-block{display:flex; flex-direction:column; gap:2px;}
+
+.alm-teaser-level-label{font-family:var(--mono); font-size:10px; letter-spacing:0.06em; text-transform:uppercase; color:var(--text-faint);}
+
+.alm-teaser-level{font-family:var(--mono); font-weight:800; font-size:26px; color:var(--text);}
+
+.alm-teaser-pct{font-family:var(--mono); font-weight:800; font-size:22px; color:var(--purple);}
+
+.alm-teaser-track{height:9px; background:var(--panel-2); border:1px solid var(--line); border-radius:5px; overflow:hidden; margin-top:12px;}
+
+.alm-teaser-fill{height:100%; width:0%; background:linear-gradient(90deg, var(--purple-dim), var(--purple)); border-radius:5px; transition:width 1s cubic-bezier(.4,0,.2,1);}
+
+.alm-teaser-bottom{display:flex; align-items:center; justify-content:space-between; gap:10px; margin-top:12px; flex-wrap:wrap;}
+
+.alm-teaser-meta{font-family:var(--mono); font-size:11px; color:var(--text-dim);}
+
+.alm-teaser-meta b{color:var(--amber);}
+
+.alm-teaser-cta{font-family:var(--mono); font-size:11px; font-weight:700; color:var(--purple); white-space:nowrap;}
