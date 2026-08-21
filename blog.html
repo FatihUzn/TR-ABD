@@ -24,7 +24,7 @@
       <a href="index.html" class="dash-brand"><span class="dash-brand-mark">A→T</span>ALMANYA<span class="arrow">→</span>TUB</a>
       <div class="dash-topnav-links">
         <a class="dash-topnav-link" data-page-link="sistem" href="index.html">⚙️ <span class="i18n" data-tr="Sistem" data-de="System">Sistem</span></a>
-        <a class="dash-topnav-link" data-page-link="almanca" href="almanca.html">🇩🇪 <span class="i18n" data-tr="Almanca" data-de="Deutsch">Almanca</span></a>
+        <a class="dash-topnav-link" data-page-link="almanca" href="almanca.html"><span class="flag-de" aria-hidden="true"></span> <span class="i18n" data-tr="Almanca" data-de="Deutsch">Almanca</span></a>
         <a class="dash-topnav-link" data-page-link="yks" href="yks.html">📚 YKS</a>
         <a class="dash-topnav-link" data-page-link="finans" href="finans.html">💰 <span class="i18n" data-tr="Finans" data-de="Finanzen">Finans</span></a>
         <a class="dash-topnav-link" data-page-link="evrak" href="evrak.html">📋 <span class="i18n" data-tr="Evrak" data-de="Unterlagen">Evrak</span></a>
@@ -69,78 +69,41 @@
   </section>
 
   <footer class="site-footer">
-    <div class="footer-grid">
-      <div class="footer-col footer-col-brand">
+    <div class="footer-top">
+
+      <div class="footer-brand-col">
         <a href="index.html" class="footer-brand">ALMANYA<span class="arrow">→</span>TU BERLIN</a>
         <p class="footer-desc i18n" data-tr="Limburgerhof köprü dönemi operasyon paneli. Nihai hedef: Mekatronik Mühendisliği, TU Berlin." data-de="Operationspanel für die Übergangsphase in Limburgerhof. Endziel: Mechatronik-Ingenieurwesen, TU Berlin.">Limburgerhof köprü dönemi operasyon paneli. Nihai hedef: Mekatronik Mühendisliği, TU Berlin.</p>
+        <div class="footer-live">
+          <span class="footer-live-num" id="footerLiveNum">–</span>
+          <span class="footer-live-label" id="footerLiveLabel">hesaplanıyor…</span>
+        </div>
       </div>
+
       <div class="footer-col">
         <div class="footer-col-title i18n" data-tr="Fazlar" data-de="Phasen">Fazlar</div>
-        <ul class="footer-list">
-          <li class="i18n" data-tr="FAZ 1 · Çalışma &amp; Dil (Ekim–Eylül)" data-de="PHASE 1 · Arbeit &amp; Sprache (Okt.–Sept.)">FAZ 1 · Çalışma &amp; Dil (Ekim–Eylül)</li>
-          <li class="i18n" data-tr="FAZ 2 · Vize Dönüşümü (§16b)" data-de="PHASE 2 · Visumsumwandlung (§16b)">FAZ 2 · Vize Dönüşümü (§16b)</li>
-          <li class="i18n" data-tr="FAZ 3 · TU Berlin" data-de="PHASE 3 · TU Berlin">FAZ 3 · TU Berlin</li>
-        </ul>
+        <ol class="footer-phases" id="footerPhases">
+          <li data-phase="FAZ 1"><span class="footer-phase-dot"></span><span class="i18n" data-tr="Çalışma &amp; Dil · Ekim–Eylül" data-de="Arbeit &amp; Sprache · Okt.–Sept.">Çalışma &amp; Dil · Ekim–Eylül</span></li>
+          <li data-phase="FAZ 2"><span class="footer-phase-dot"></span><span class="i18n" data-tr="Vize Dönüşümü · §16b" data-de="Visumsumwandlung · §16b">Vize Dönüşümü · §16b</span></li>
+          <li data-phase="FAZ 3"><span class="footer-phase-dot"></span><span class="i18n" data-tr="TU Berlin · Mekatronik" data-de="TU Berlin · Mechatronik">TU Berlin · Mekatronik</span></li>
+        </ol>
       </div>
+
       <div class="footer-col">
         <div class="footer-col-title i18n" data-tr="Kabul Edilen Sınavlar" data-de="Anerkannte Prüfungen">Kabul Edilen Sınavlar</div>
         <ul class="footer-list">
           <li>telc Deutsch C1 Hochschule</li>
-          <li>TestDaF (TDN 4×4)</li>
+          <li>TestDaF <span class="footer-list-note">TDN 4×4</span></li>
           <li>DSH-2 / DSH-3</li>
-          <li>Goethe-Zertifikat C2 (GDS)</li>
+          <li>Goethe-Zertifikat C2 <span class="footer-list-note">GDS</span></li>
         </ul>
       </div>
-      <div class="footer-col">
-        <div class="footer-col-title i18n" data-tr="Panel" data-de="Panel">Panel</div>
-        <ul class="footer-list">
-          <li class="i18n" data-tr="REV 3.0 · Gerçeklik-Kontrollü" data-de="REV 3.0 · Realitätsgeprüft">REV 3.0 · Gerçeklik-Kontrollü</li>
-          <li><span class="footer-status-dot"></span><span class="i18n" data-tr="Durum: Aktif" data-de="Status: Aktiv">Durum: Aktif</span></li>
-        </ul>
-      </div>
-    </div>
 
-    <div class="footer-cta-row">
-      <a href="index.html" class="footer-cta">
-        <span class="footer-cta-icon">⚙️</span>
-        <span>
-          <span class="footer-cta-title i18n" data-tr="Sistem" data-de="System">Sistem</span>
-          <span class="footer-cta-sub i18n" data-tr="Ritim &amp; yapı" data-de="Rhythmus &amp; Struktur">Ritim &amp; yapı</span>
-        </span>
-      </a>
-      <a href="yks.html" class="footer-cta">
-        <span class="footer-cta-icon">📚</span>
-        <span>
-          <span class="footer-cta-title i18n" data-tr="YKS" data-de="YKS">YKS</span>
-          <span class="footer-cta-sub i18n" data-tr="Geri sayım &amp; konu takibi" data-de="Countdown &amp; Themenverfolgung">Geri sayım &amp; konu takibi</span>
-        </span>
-      </a>
-      <a href="finans.html" class="footer-cta">
-        <span class="footer-cta-icon">💰</span>
-        <span>
-          <span class="footer-cta-title i18n" data-tr="Finans" data-de="Finanzen">Finans</span>
-          <span class="footer-cta-sub i18n" data-tr="Nakit &amp; altın rotası" data-de="Bargeld- &amp; Goldroute">Nakit &amp; altın rotası</span>
-        </span>
-      </a>
-      <a href="evrak.html" class="footer-cta">
-        <span class="footer-cta-icon">📋</span>
-        <span>
-          <span class="footer-cta-title i18n" data-tr="Evrak" data-de="Unterlagen">Evrak</span>
-          <span class="footer-cta-sub i18n" data-tr="Vize takibi" data-de="Visumsverfolgung">Vize takibi</span>
-        </span>
-      </a>
-      <a href="blog.html" class="footer-cta">
-        <span class="footer-cta-icon">📖</span>
-        <span>
-          <span class="footer-cta-title i18n" data-tr="Blog" data-de="Blog">Blog</span>
-          <span class="footer-cta-sub i18n" data-tr="Günlük notlar" data-de="Tagebuchnotizen">Günlük notlar</span>
-        </span>
-      </a>
     </div>
 
     <div class="footer-bottom">
       <span class="i18n" data-tr="© 2026 · Kişisel Operasyon Paneli" data-de="© 2026 · Persönliches Operationspanel">© 2026 · Kişisel Operasyon Paneli</span>
-      <span class="i18n" data-tr="Bursa BUSKİ tasarım diline uyarlandı" data-de="Angepasst an das Bursa-BUSKİ-Designsystem">Bursa BUSKİ tasarım diline uyarlandı</span>
+      <span class="footer-meta"><span class="footer-status-dot"></span>REV 3.0 · <span class="i18n" data-tr="Aktif" data-de="Aktiv">Aktif</span></span>
     </div>
   </footer>
 

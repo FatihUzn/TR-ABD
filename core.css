@@ -86,27 +86,26 @@ body {
   100%   { background-image:url("Studio/castels/castle-01-segovia.webp"); }
 }
 
-/* Hero fotoğrafını taşıyan katman. Alt sayfalarda .page-header,
-   ana sayfada .dash-photo-band (sistem.css) — aynı anda sayfada
-   yalnızca biri bulunur, bu yüzden dikiş oluşmaz. */
-.page-header{
-  position:relative;
-  isolation:isolate;
-}
-
-.page-header::before{
+/* Fotoğraf TÜM sayfanın arkasında, sabit (fixed) tek katman olarak durur.
+   Tek katman olması önemli: eskiden body::before + header::before diye iki
+   ayrı katman vardı, ikisi de "cover" ile farklı yükseklikte kırpıldığı
+   için birleşme yerinde kale ikiye bölünüyordu. Artık tek kaynak var,
+   sayfa kayarken fotoğraf sabit kalıyor — dikiş oluşamaz. */
+body::before{
   content:"";
-  position:absolute;
-  top:0; bottom:0;
-  left:50%;
-  width:100vw;
-  transform:translateX(-50%);
-  z-index:-1;
+  position:fixed;
+  inset:0;
+  z-index:-2;
   background-image:url("Studio/castels/castle-01-segovia.webp");
   background-size:cover;
   background-position:center;
   background-repeat:no-repeat;
   animation: castleSlideshow var(--slide-duration) infinite;
+}
+
+.page-header{
+  position:relative;
+  isolation:isolate;
 }
 
 /* Fotoğrafa dokunmadan okunabilirlik: gölge fotoğrafa değil yazıya. */
@@ -119,12 +118,12 @@ body {
 
 /* Hareket azaltma tercihinde slayt durur, ilk kare kalır. */
 @media(prefers-reduced-motion: reduce){
-  .page-header::before,
+  body::before,
   .dash-photo-band::before{ animation:none !important; }
 }
 
 @media(max-width:640px){
-  .page-header::before{ background-position: center 30%; }
+  body::before{ background-position: center 20%; }
 }
 
 .wrap{position:relative; z-index:1; max-width:960px; margin:0 auto; padding:0 18px;}
@@ -584,14 +583,35 @@ h1 .arrow{color:var(--purple); padding:0 8px;}
 
 /* ===== SECTION LABEL ===== */
 
+/* Bölüm başlıkları fotoğrafın üstünde serbest duruyor. Fotoğrafı
+   karartmak yerine başlığın kendisine okunur bir zemin veriliyor:
+   foto arada görünmeye devam ediyor, yazı her karede okunuyor. */
 .sec-label{
   font-family:var(--mono); font-size:12px; letter-spacing:0.12em;
-  color:var(--purple); text-transform:uppercase; margin-bottom:14px;
+  color:#eaf5ff; text-transform:uppercase; margin-bottom:14px;
   display:flex; align-items:center; gap:10px;
   flex-wrap:wrap; /* yanına uzun bir not geldiğinde üst üste binmesin */
+  background:rgba(10,24,38,0.72);
+  border:1px solid rgba(255,255,255,0.14);
+  border-radius:10px;
+  padding:9px 14px;
+  backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);
+  box-shadow:0 4px 14px rgba(6,16,26,0.22);
 }
 
-.sec-label::after{content:""; flex:1 1 40px; min-width:40px; height:1px; background:var(--line);}
+.sec-label::after{content:""; flex:1 1 30px; min-width:30px; height:1px; background:rgba(255,255,255,0.22);}
+
+/* Kart/akordiyon İÇİNDEKİ .sec-label'lar zaten opak zemin üstünde —
+   ikinci bir kutu almasınlar. */
+.acc-summary.sec-label,
+.acc-body .sec-label,
+details.yks-subject .sec-label,
+.table-wrap .sec-label{
+  background:transparent; border:none; box-shadow:none; backdrop-filter:none;
+  -webkit-backdrop-filter:none; padding:0; color:var(--purple);
+}
+.acc-body .sec-label::after,
+.acc-summary.sec-label::after{background:var(--line);}
 
 section{margin-bottom:44px;}
 
@@ -840,7 +860,9 @@ details.yks-subject[open] > .acc-summary .yks-subject-count{color:var(--purple);
 
 .table-wrap{
   overflow-x:auto; border-radius:12px;
-  background: rgba(8,14,32,0.62);
+  /* 0.62 fazla şeffaftı — tablo satırlarının arasından kale görünüyor,
+     rakamlar okunmuyordu. Foto hâlâ hafifçe seziliyor ama yazı önde. */
+  background: rgba(8,14,32,0.80);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border: 1px solid rgba(255,255,255,0.14);
@@ -874,11 +896,10 @@ tr.milestone td.cash{color:#6ee7b7;}
 
 /* ===== FOOTER ===== */
 
-footer{
-  margin-top:50px; padding-top:20px; border-top:1px solid var(--line);
-  font-family:var(--mono); font-size:10.5px; color:var(--text-faint); text-align:center;
-  line-height:1.8;
-}
+/* NOT: Burada eskiden tüm <footer>'ı ortalayan, 10.5px'e küçülten ve
+   üstüne çizgi ekleyen bir kural vardı — tek satırlık eski footer'dan
+   kalmıştı. Yeni footer'ın bütün hizasını bozuyordu (sütunlar ortalı,
+   yazılar minicik). Kaldırıldı; stiller .site-footer altında. */
 
 @media(max-width:640px){
 .stat-grid .stat:first-child{grid-column:1 / -1;}
@@ -1150,16 +1171,28 @@ header{padding:18px 16px 26px; min-height:58vh;}
 section{ margin-bottom: 40px; }
 }
 
-/* ===== FOOTER — Buski'deki gibi koyu mavi, full-bleed, üstte dalga geçişli ===== */
+/* ===== FOOTER =====
+   Yeniden düzenlendi. Eski hâlinde üst üste üç bölge vardı: 4 sütunluk
+   grid + 6 sayfaya giden kart sırası + alt şerit. Kart sırası üstteki
+   sabit menüyle birebir aynı işi yapıyordu (menü artık altı sayfada da
+   var ve yapışkan), o yüzden kaldırıldı. Yerine panelin asıl işine
+   yarayan bir şey kondu: canlı gün sayacı ve aktif faz.
+   Ayrıca hizalama düzeltildi — eski bir `footer{text-align:center}`
+   kuralı bütün sütunları ortalıyor ve yazıları 10.5px'e düşürüyordu. */
 
 .site-footer{
   position:relative;
   isolation:isolate;
-  margin-top:50px;
-  padding:52px 18px 0;
+  margin-top:64px;
+  padding:0 18px;
+  text-align:left;
   --text: #f2f8fc;
   --text-dim: #cfe4f0;
   --text-faint: #8fb7cc;
+  color:var(--text-dim);
+  font-family:var(--sans);
+  font-size:13px;
+  line-height:1.6;
 }
 
 .site-footer::before{
@@ -1170,15 +1203,19 @@ section{ margin-bottom: 40px; }
   width:100vw;
   transform:translateX(-50%);
   z-index:-1;
-  background-image:
-    url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%201440%2060%22%20preserveAspectRatio%3D%22none%22%3E%3Cpath%20d%3D%22M0%2C32.2%20L20%2C34.9%20L40%2C37.4%20L60%2C39.7%20L80%2C41.8%20L100%2C43.6%20L120%2C45.1%20L140%2C46.2%20L160%2C46.9%20L180%2C47.3%20L200%2C47.2%20L220%2C46.8%20L240%2C46%20L260%2C44.9%20L280%2C43.5%20L300%2C41.9%20L320%2C40.1%20L340%2C38.2%20L360%2C36.2%20L380%2C34.1%20L400%2C32.1%20L420%2C30.2%20L440%2C28.4%20L460%2C26.7%20L480%2C25.3%20L500%2C24%20L520%2C22.9%20L540%2C21.9%20L560%2C21.2%20L580%2C20.6%20L600%2C20.2%20L620%2C19.9%20L640%2C19.6%20L660%2C19.4%20L680%2C19.1%20L700%2C18.9%20L720%2C18.6%20L740%2C18.2%20L760%2C17.8%20L780%2C17.3%20L800%2C16.6%20L820%2C15.9%20L840%2C15.1%20L860%2C14.3%20L880%2C13.4%20L900%2C12.6%20L920%2C11.9%20L940%2C11.2%20L960%2C10.7%20L980%2C10.4%20L1000%2C10.4%20L1020%2C10.6%20L1040%2C11%20L1060%2C11.8%20L1080%2C12.9%20L1100%2C14.3%20L1120%2C16%20L1140%2C18%20L1160%2C20.2%20L1180%2C22.6%20L1200%2C25.2%20L1220%2C27.9%20L1240%2C30.6%20L1260%2C33.3%20L1280%2C35.9%20L1300%2C38.3%20L1320%2C40.6%20L1340%2C42.6%20L1360%2C44.2%20L1380%2C45.6%20L1400%2C46.5%20L1420%2C47.1%20L1440%2C47.3%20L1440%2C60%20L0%2C60%20Z%22%20fill%3D%22%23123b54%22/%3E%3C/svg%3E"),
-    linear-gradient(#123b54,#0d3044);
-  background-repeat:no-repeat, no-repeat;
-  background-position: top center, 0 40px;
-  background-size: 100% 40px, 100% calc(100% - 40px);
+  background:linear-gradient(#123b54,#0d3044);
+}
+
+.footer-top{
+  display:grid;
+  grid-template-columns:minmax(0,1.6fr) minmax(0,1fr) minmax(0,1fr);
+  gap:28px 40px;
+  padding:44px 0 34px;
+  border-bottom:1px solid rgba(255,255,255,0.13);
 }
 
 .footer-brand{
+  display:inline-flex; align-items:baseline; text-decoration:none;
   font-family:var(--mono); font-weight:800; font-size:16px; letter-spacing:-0.01em;
   color:var(--text);
 }
@@ -1186,73 +1223,104 @@ section{ margin-bottom: 40px; }
 .footer-brand .arrow{color:var(--purple-dim); padding:0 6px;}
 
 .footer-desc{
-  margin-top:10px; font-size:12.5px; line-height:1.6; color:var(--text-dim); max-width:280px;
+  margin-top:10px; font-size:13px; line-height:1.65; color:var(--text-dim); max-width:34ch;
 }
 
-.footer-grid{
-  display:grid;
-  grid-template-columns:1.4fr 1fr 1fr 1fr;
-  gap:28px;
-  padding-bottom:34px;
-  border-bottom:1px solid rgba(255,255,255,0.14);
+/* Canlı sayaç — footer'ın tek "işe yarayan" parçası */
+.footer-live{
+  margin-top:20px; display:flex; align-items:baseline; gap:10px; flex-wrap:wrap;
+}
+
+.footer-live-num{
+  font-family:var(--mono); font-weight:800; font-size:34px; line-height:1;
+  color:var(--purple-dim); letter-spacing:-0.02em; font-variant-numeric:tabular-nums;
+}
+
+.footer-live-label{
+  font-family:var(--mono); font-size:11px; letter-spacing:0.06em;
+  color:var(--text-faint); text-transform:uppercase; max-width:22ch; line-height:1.45;
 }
 
 .footer-col-title{
-  font-family:var(--mono); font-size:10.5px; letter-spacing:0.08em; text-transform:uppercase;
-  color:var(--purple-dim); margin-bottom:12px;
+  font-family:var(--mono); font-size:10.5px; letter-spacing:0.1em; text-transform:uppercase;
+  color:var(--purple-dim); margin-bottom:14px;
 }
 
-.footer-list{list-style:none; display:flex; flex-direction:column; gap:9px;}
+/* Fazlar: numaralı, aktif olan işaretli — sıra burada gerçek bilgi */
+.footer-phases{list-style:none; counter-reset:faz; display:flex; flex-direction:column; gap:12px;}
 
-.footer-list li{font-size:12.5px; color:var(--text-dim); line-height:1.4;}
+.footer-phases li{
+  counter-increment:faz;
+  display:flex; align-items:flex-start; gap:10px;
+  font-size:12.5px; color:var(--text-faint); line-height:1.45;
+  position:relative;
+}
+
+.footer-phase-dot{
+  flex:none; width:20px; height:20px; border-radius:50%; margin-top:1px;
+  border:1px solid rgba(255,255,255,0.22);
+  display:inline-flex; align-items:center; justify-content:center;
+  font-family:var(--mono); font-size:9.5px; font-weight:700; color:var(--text-faint);
+}
+
+.footer-phase-dot::before{content:counter(faz);}
+
+.footer-phases li.is-current{color:var(--text);}
+
+.footer-phases li.is-current .footer-phase-dot{
+  background:var(--purple); border-color:var(--purple); color:#fff;
+  box-shadow:0 0 0 4px rgba(30,136,199,0.22);
+}
+
+.footer-phases li.is-done .footer-phase-dot{
+  background:rgba(255,255,255,0.16); border-color:rgba(255,255,255,0.28); color:var(--text-dim);
+}
+
+.footer-list{list-style:none; display:flex; flex-direction:column; gap:10px;}
+
+.footer-list li{font-size:12.5px; color:var(--text-dim); line-height:1.45;}
+
+.footer-list-note{
+  font-family:var(--mono); font-size:10px; color:var(--text-faint);
+  border:1px solid rgba(255,255,255,0.18); border-radius:4px; padding:1px 5px; margin-left:5px;
+  white-space:nowrap;
+}
 
 .footer-status-dot{
   display:inline-block; width:6px; height:6px; border-radius:50%;
-  background:var(--green); margin-right:5px; box-shadow:0 0 6px rgba(5,150,105,0.6);
+  background:var(--green); margin-right:7px; box-shadow:0 0 6px rgba(5,150,105,0.6);
 }
-
-.footer-cta-row{
-  display:flex; gap:12px; padding:26px 0;
-  border-bottom:1px solid rgba(255,255,255,0.14);
-}
-
-.footer-cta{
-  flex:1; display:flex; align-items:center; gap:10px;
-  background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.14);
-  border-radius:10px; padding:12px 14px; cursor:pointer; text-align:left;
-  font-family:var(--sans); transition:background .15s ease, border-color .15s ease;
-}
-
-.footer-cta:hover{background:rgba(255,255,255,0.11); border-color:rgba(255,255,255,0.28);}
-
-.footer-cta, .footer-brand{text-decoration:none; display:flex;}
-
-/* footer-cta artık <a href="sayfa.html"> */
-
-.footer-brand{display:inline-flex; align-items:baseline;}
-
-.footer-cta-icon{font-size:18px; flex-shrink:0;}
-
-.footer-cta-title{display:block; font-size:12.5px; font-weight:700; color:var(--text);}
-
-.footer-cta-sub{display:block; font-size:10.5px; color:var(--text-faint); margin-top:1px;}
 
 .footer-bottom{
-  display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;
-  padding:18px 0 20px;
-  font-family:var(--mono); font-size:10px; letter-spacing:0.04em;
+  display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;
+  padding:18px 0 22px;
+  font-family:var(--mono); font-size:10.5px; letter-spacing:0.05em;
   color:var(--text-faint); text-transform:uppercase;
 }
 
-@media(max-width:760px){
-.footer-grid{grid-template-columns:1fr 1fr;}
-.footer-col-brand{grid-column:1 / -1;}
+.footer-meta{display:inline-flex; align-items:center;}
+
+@media(max-width:860px){
+  .footer-top{grid-template-columns:1fr 1fr; gap:26px 32px;}
+  .footer-brand-col{grid-column:1 / -1;}
 }
 
-@media(max-width:640px){
-.site-footer{padding:38px 16px 0;}
-.footer-grid{grid-template-columns:1fr; gap:22px;}
-.footer-cta-row{flex-direction:column;}
+@media(max-width:560px){
+  .site-footer{padding:0 16px; margin-top:48px;}
+  .footer-top{grid-template-columns:1fr; gap:26px; padding:34px 0 26px;}
+  .footer-desc{max-width:none;}
+  .footer-live-num{font-size:30px;}
+  .footer-bottom{justify-content:flex-start; gap:6px; flex-direction:column; align-items:flex-start;}
+}
+
+/* Almanca sekmesindeki 🇩🇪 emoji'si Windows'ta bayrak olarak çizilmiyor,
+   yerine "DE" harfleri görünüyordu. Bayrak CSS ile çiziliyor — her
+   işletim sisteminde aynı. */
+.flag-de{
+  display:inline-block; width:15px; height:11px; border-radius:2px;
+  vertical-align:-1px; flex:none;
+  background:linear-gradient(#101010 0 33.34%, #DD0000 33.34% 66.67%, #FFCE00 66.67%);
+  box-shadow:0 0 0 1px rgba(0,0,0,0.18);
 }
 
 /* ==========================================================
@@ -1456,4 +1524,203 @@ body{ padding-bottom:calc(60px + env(safe-area-inset-bottom, 0px)); }
      açacağın için asıl orada görünmesi gerekiyor. */
   .dash-topnav-right .nav-badge{display:inline-block; font-size:9.5px; padding:5px 8px; margin-left:0;}
   .topnav-avatar{display:none;}
+}
+
+
+/* ============================================================
+   FOTOĞRAFIN ÜSTÜNDE DURAN İÇERİK — CAM PANELLER
+   Fotoğraf tüm sayfayı kapladığı için, bir kartın içinde OLMAYAN her
+   metin bloğu doğrudan gökyüzünün üstünde kalıyordu. Fotoğrafa filtre
+   uygulamak yerine bu blokların kendisi okunur bir cam zemin taşıyor:
+   foto aralardan görünmeye devam ediyor, yazı her karede okunuyor.
+
+   Seçiciler bilerek "section > ..." biçiminde: yalnızca doğrudan
+   fotoğrafın üstünde duran bloklar hedefleniyor. Aynı sınıf beyaz bir
+   kartın içinde de kullanılıyor (ör. .stat-sub) ve orada cam kutu
+   istemiyoruz.
+   ============================================================ */
+
+.glass-note,
+section > .hero-progress,
+section > .hero-progress-sub,
+section > .stat-sub,
+section > .rhythm-subhead,
+section > .evrak-source-note,
+section > .yks-ders-bars,
+section > * > .skill-bars,
+.rate-error,
+details.acc-section,
+.log-empty{
+  background:rgba(10,24,38,0.72);
+  border:1px solid rgba(255,255,255,0.13);
+  border-radius:12px;
+  padding:14px 16px;
+  backdrop-filter:blur(9px); -webkit-backdrop-filter:blur(9px);
+  box-shadow:0 6px 20px rgba(6,16,26,0.20);
+  /* Cam panelin içindeki her şey açık metin skopunda çalışır */
+  --text:#f4fafd; --text-dim:#d3e5f1; --text-faint:#9fbccf;
+  --line:rgba(255,255,255,0.16);
+  color:var(--text-dim);
+}
+
+details.acc-section{padding:16px 18px;}
+
+/* Cam panelin İÇİNDEKİ ikinci bir cam panel gereksiz — düzleştir. */
+.hero-progress .hero-progress-sub,
+details.acc-section .hero-progress,
+details.acc-section .hero-progress-sub,
+details.acc-section .stat-sub,
+details.acc-section .rhythm-subhead,
+details.acc-section .yks-ders-bars,
+details.acc-section details.acc-section,
+.glass-note .glass-note{
+  background:transparent; border:none; box-shadow:none;
+  backdrop-filter:none; -webkit-backdrop-filter:none;
+  padding:0; border-radius:0;
+}
+
+/* Cam panelin içindeki beyaz kartlar kendi koyu metin skopuna döner */
+details.acc-section .risk-panel,
+details.acc-section .stat,
+details.acc-section .cert-mini,
+details.acc-section .track-link-card{
+  --text:#0f172a; --text-dim:#475569; --text-faint:#94a3b8; --line:#e2e8f0;
+}
+
+/* Akordiyon başlığı cam panelin içinde — vurgu rengi açık zemine göre */
+details.acc-section > .acc-summary{color:#8ecbf0;}
+
+/* .sec-label artık sarabildiği için (yanına uzun not gelince) akordiyon
+   oku alt satıra düşüyordu. Ok sağ üst köşeye sabitlendi. */
+.acc-summary.sec-label{position:relative; padding-right:38px;}
+.acc-summary .acc-chevron{position:absolute; right:12px; top:8px; margin:0;}
+.acc-summary.sec-label::after{margin-right:0;}
+details.acc-section > .acc-summary:hover{color:#ffffff;}
+
+@media(max-width:560px){
+  .glass-note,
+  section > .hero-progress, section > .hero-progress-sub, section > .stat-sub,
+  section > .rhythm-subhead, section > .evrak-source-note, section > .yks-ders-bars,
+  section > * > .skill-bars,
+  .rate-error, details.acc-section{padding:12px 13px; border-radius:10px;}
+}
+
+
+/* ============================================================
+   BUGÜN KARTI — anasayfanın tek eylem bloğu
+   Panel çok iyi ölçüyordu ama günün ne olduğunu söylemiyordu.
+   Bu kart bilerek sayfadaki en opak, en yüksek kontrastlı yüzey:
+   ilk bakışta gözün buraya düşmesi gerekiyor.
+   ============================================================ */
+
+.today-card{
+  background:#ffffff;
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:20px 22px 18px;
+  margin-bottom:34px;
+  box-shadow:0 14px 38px rgba(8,20,32,0.24);
+  --text:#0f172a; --text-dim:#475569; --text-faint:#94a3b8; --line:#e2e8f0;
+}
+
+.today-head{
+  display:flex; align-items:center; justify-content:space-between;
+  gap:14px; flex-wrap:wrap; margin-bottom:16px;
+}
+
+.today-head-text{display:flex; align-items:baseline; gap:10px; flex-wrap:wrap; min-width:0;}
+
+.today-eyebrow{
+  font-family:var(--mono); font-size:10.5px; font-weight:700; letter-spacing:0.14em;
+  text-transform:uppercase; color:var(--purple);
+}
+
+.today-date{
+  font-family:var(--mono); font-size:12.5px; color:var(--text-faint);
+  text-transform:lowercase;
+}
+
+.today-checkin{
+  flex:none; cursor:pointer;
+  font-family:var(--mono); font-size:11.5px; font-weight:700; letter-spacing:0.04em;
+  border:1px solid var(--purple); background:var(--purple); color:#fff;
+  border-radius:999px; padding:10px 18px;
+  transition:background .15s ease, border-color .15s ease, color .15s ease;
+}
+
+.today-checkin:hover{background:#1876ad; border-color:#1876ad;}
+
+.today-checkin.done{
+  background:rgba(5,150,105,0.10); border-color:var(--green); color:var(--green);
+}
+
+.today-rows{
+  display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:10px;
+}
+
+.today-row{
+  display:flex; flex-direction:column; gap:4px; min-width:0;
+  text-decoration:none; border:1px solid var(--line); border-radius:12px;
+  padding:13px 15px; background:var(--panel-2);
+  transition:border-color .15s ease, background .15s ease, transform .15s ease;
+}
+
+.today-row:hover{border-color:var(--purple-dim); background:#fff; transform:translateY(-1px);}
+
+.today-row-tag{
+  font-family:var(--mono); font-size:9.5px; font-weight:700; letter-spacing:0.12em;
+  text-transform:uppercase; color:var(--purple);
+}
+
+.today-row-main{
+  font-size:13.5px; font-weight:600; color:var(--text); line-height:1.35;
+  display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;
+}
+
+.today-row-meta{font-family:var(--mono); font-size:10.5px; color:var(--text-faint);}
+
+.today-row.is-done{border-color:rgba(5,150,105,0.4); background:rgba(5,150,105,0.07);}
+.today-row.is-done .today-row-tag{color:var(--green);}
+
+.today-streak{
+  margin-top:14px; padding-top:13px; border-top:1px dashed var(--line);
+  font-family:var(--mono); font-size:11.5px; color:var(--text-dim);
+}
+
+.today-streak b{color:var(--purple); font-size:13px;}
+
+@media(max-width:760px){
+  .today-rows{grid-template-columns:1fr;}
+  .today-card{padding:18px 16px 16px; border-radius:16px;}
+  .today-checkin{width:100%; text-align:center;}
+  .today-row-main{-webkit-line-clamp:3;}
+}
+
+/* ============================================================
+   AKORDİYON DURUM SATIRI — kapalıyken boş bant kalmasın
+   ============================================================ */
+
+.acc-status{
+  font-family:var(--mono); font-size:10px; letter-spacing:0.04em;
+  color:var(--text-faint); text-transform:none;
+  border:1px solid var(--line); border-radius:999px; padding:3px 10px;
+  white-space:nowrap; flex:none;
+}
+
+details.acc-section[open] > .acc-summary .acc-status{opacity:0.45;}
+
+.acc-note{
+  font-family:var(--mono); font-size:10px; color:#f0a35e; letter-spacing:0.04em;
+  text-transform:none;
+}
+
+/* Koyu cam panelin üstünde --red (#dc2626) çok karanlık kalıyordu. */
+.rate-error{color:#ff9b8f;}
+
+/* Alt sayfalarda hero bandı ~450px'ti; telefonda ilk ekranın tamamını
+   kaplıyordu. İçerik ilk ekranda görünsün diye kısaltıldı. */
+.page-header{padding:20px 0 26px; min-height:0;}
+
+@media(max-width:640px){
+  .page-header{padding:16px 0 20px;}
 }

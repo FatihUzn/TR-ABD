@@ -484,10 +484,12 @@
     state.checkins = checkins;
     motivationSaveState(state);
     motivationRenderPanel();
+    if (typeof motivationRenderToday === 'function') motivationRenderToday();
     if (checkins[todayKey]) {
       motivationLogEvent('✅ Bugün check-in yapıldı.');
       if (typeof motivationCheckBadges === 'function') motivationCheckBadges();
     }
+    if (typeof motivationRenderAccStatus === 'function') motivationRenderAccStatus();
   }
 
   function motivationApplyCalmMode(on) {
@@ -595,7 +597,10 @@
   }
 
   function motivationInitStage2() {
-    motivationBuildRibbon();
+    // motivationBuildRibbon() ARTIK ÇAĞRILMIYOR: sol alttaki sabit
+    // "Hedef: TU Berlin" şeridi içeriğin üstünü kapatıyordu ve aynı
+    // cümle footer'da zaten duruyor. Modalı ⚡ panelindeki
+    // "Bugün zor" butonu açıyor.
     motivationBuildFab();
     motivationInjectEmpathyBanner();
     const state = motivationLoadState();
@@ -1218,8 +1223,200 @@
   }
   motivationInitBackup();
 
+
+  // ============================================================
+  // FOOTER — canlı gün sayacı + aktif faz
+  // Footer'daki eski 6 kartlık sayfa listesi kaldırıldı (üstteki
+  // yapışkan menüyle birebir aynıydı). Yerine panelin asıl işi geldi.
+  // ============================================================
+  function motivationRenderFooter() {
+    const numEl = document.getElementById('footerLiveNum');
+    const labelEl = document.getElementById('footerLiveLabel');
+    if (numEl) {
+      const info = getOpDayInfo();
+      if (!info.started) {
+        numEl.textContent = info.prepDays;
+        if (labelEl) labelEl.textContent = 'gün sonra başlıyor · hazırlık aşaması';
+      } else if (info.remainingDays > 0) {
+        numEl.textContent = info.elapsedDays;
+        if (labelEl) labelEl.textContent = info.totalDays + ' günün ' + info.elapsedDays + '\'i geride · ' + info.remainingDays + ' gün kaldı';
+      } else {
+        numEl.textContent = info.totalDays;
+        if (labelEl) labelEl.textContent = 'köprü dönemi tamamlandı';
+      }
+    }
+
+    const list = document.getElementById('footerPhases');
+    if (list) {
+      const faz = currentPhaseLabel();
+      let passed = true;
+      list.querySelectorAll('li').forEach(function (li) {
+        const isCurrent = li.dataset.phase === faz;
+        li.classList.toggle('is-current', isCurrent);
+        li.classList.toggle('is-done', passed && !isCurrent);
+        if (isCurrent) passed = false;
+      });
+    }
+  }
+  motivationRenderFooter();
+
+
+  // ============================================================
+  // BUGÜN KARTI — anasayfada tek eylem bloğu
+  // Panel çok iyi ÖLÇÜYORDU ama "bugün ne yapacağım"ı söylemiyordu.
+  // Bu kart üç izin de sıradaki somut adımını gösterir.
+  // ============================================================
+  function todayReadJSON(key) {
+    try { const raw = localStorage.getItem(key); return raw ? JSON.parse(raw) : null; }
+    catch (e) { return null; }
+  }
+
+  // Sıradaki işaretlenmemiş YKS konusu: "Ders · Konu"
+  function todayNextYksTopic() {
+    const st = todayReadJSON('yksChecklistState') || {};
+    const groups = ['TYT', 'AYT'];
+    for (let g = 0; g < groups.length; g++) {
+      const dersler = YKS_DATA[groups[g]] || [];
+      for (let i = 0; i < dersler.length; i++) {
+        const ders = dersler[i];
+        for (let j = 0; j < ders.konular.length; j++) {
+          const konu = ders.konular[j];
+          const ids = yksLeafIds(konu);
+          for (let k = 0; k < ids.length; k++) {
+            if (!st[ids[k]]) {
+              const alt = (konu.altKonular && konu.altKonular.length) ? ' · ' + konu.altKonular[k] : '';
+              return { ders: ders.ad.replace(/\s*\(\d+\)$/, ''), konu: konu.ad + alt, group: groups[g] };
+            }
+          }
+        }
+      }
+    }
+    return null;
+  }
+
+  function todayNextEvrak() {
+    const st = todayReadJSON('evrakChecklistState') || {};
+    const sides = [
+      { label: 'Türkiye', list: EVRAK_CHECKLIST.turkiye.kalemler },
+      { label: 'Almanya', list: EVRAK_CHECKLIST.almanya.kalemler }
+    ];
+    for (let i = 0; i < sides.length; i++) {
+      for (let j = 0; j < sides[i].list.length; j++) {
+        if (!st[sides[i].list[j].id]) return { side: sides[i].label, ad: sides[i].list[j].ad };
+      }
+    }
+    return null;
+  }
+
+  function motivationRenderToday() {
+    const card = document.querySelector('.today-card');
+    if (!card) return;
+
+    const now = new Date();
+    const dateEl = document.getElementById('todayDate');
+    if (dateEl) {
+      dateEl.textContent = now.toLocaleDateString('tr-TR', { weekday: 'long', day: 'numeric', month: 'long' });
+    }
+
+    // --- Check-in durumu ---
+    const state = motivationLoadState();
+    const checkins = state.checkins || {};
+    const doneToday = !!checkins[motivationTodayKey()];
+    const btn = document.getElementById('todayCheckinBtn');
+    const lbl = document.getElementById('todayCheckinLabel');
+    if (btn) btn.classList.toggle('done', doneToday);
+    if (lbl) lbl.textContent = doneToday ? '✓ Bugün işaretlendi' : 'Bugünü işaretle';
+
+    const streak = motivationComputeStreak(checkins);
+    const streakEl = document.getElementById('todayStreak');
+    if (streakEl) {
+      streakEl.innerHTML = streak > 0
+        ? '<b>' + streak + '</b> gündür üst üste. Bugün de küçük bir şey yeter.'
+        : 'Seri henüz başlamadı — bugün ilk adımı at.';
+    }
+
+    // --- Almanca: bugünkü kelime sayacı ---
+    const alm = todayReadJSON('almancaState_v1');
+    const almMain = document.getElementById('todayAlmMain');
+    const almMeta = document.getElementById('todayAlmMeta');
+    if (almMain) {
+      const target = (alm && alm.wordTarget) || 15;
+      const done = (alm && alm.wordLog && alm.wordLog[motivationTodayKey()]) || 0;
+      const studied = !!(alm && alm.studyDays && alm.studyDays[motivationTodayKey()]);
+      almMain.textContent = done + ' / ' + target + ' kelime';
+      almMain.parentElement.classList.toggle('is-done', done >= target && studied);
+      if (almMeta) {
+        almMeta.textContent = done >= target
+          ? (studied ? 'bugünlük tamam' : 'kelime tamam · çalışmayı işaretle')
+          : (target - done) + ' kelime kaldı';
+      }
+    }
+
+    // --- YKS: sıradaki konu ---
+    const yksMain = document.getElementById('todayYksMain');
+    const yksMeta = document.getElementById('todayYksMeta');
+    if (yksMain) {
+      const next = todayNextYksTopic();
+      if (next) {
+        yksMain.textContent = next.konu;
+        if (yksMeta) yksMeta.textContent = next.group + ' · ' + next.ders;
+      } else {
+        yksMain.textContent = 'Bütün konular bitti';
+        yksMain.parentElement.classList.add('is-done');
+        if (yksMeta) yksMeta.textContent = 'tekrar zamanı';
+      }
+    }
+
+    // --- Evrak: sıradaki madde ---
+    const evMain = document.getElementById('todayEvrakMain');
+    const evMeta = document.getElementById('todayEvrakMeta');
+    if (evMain) {
+      const next = todayNextEvrak();
+      if (next) {
+        evMain.textContent = next.ad;
+        if (evMeta) evMeta.textContent = next.side + ' cephesi';
+      } else {
+        evMain.textContent = 'Evrak cephesi tamam';
+        evMain.parentElement.classList.add('is-done');
+        if (evMeta) evMeta.textContent = '';
+      }
+    }
+  }
+
+  function motivationInitToday() {
+    const btn = document.getElementById('todayCheckinBtn');
+    if (!btn) return;
+    btn.addEventListener('click', function () {
+      motivationToggleCheckin();
+      motivationRenderToday();
+    });
+    motivationRenderToday();
+  }
+
+  // ============================================================
+  // KAPALI AKORDİYON ÖZETİ — kapalıyken boş bant yerine durum satırı
+  // ============================================================
+  function motivationRenderAccStatus() {
+    const el = document.getElementById('proofAccStatus');
+    if (!el) return;
+    const state = motivationLoadState();
+    const earned = Object.keys(state.badges || {}).length;
+    const logs = (state.log || []).length;
+    const parts = [earned + '/' + BADGE_DEFS.length + ' rozet'];
+    if (logs) {
+      const last = state.log[0];
+      const days = Math.floor((Date.now() - last.ts) / 86400000);
+      parts.push(days <= 0 ? 'son kayıt bugün' : 'son kayıt ' + days + ' gün önce');
+    } else {
+      parts.push('henüz kayıt yok');
+    }
+    el.textContent = parts.join(' · ');
+  }
+
   function motivationInitStage5() {
     motivationInitTrackLinkGenerator();
+    motivationInitToday();
+    motivationRenderAccStatus();
 
     const params = new URLSearchParams(location.search);
     const track = params.get('track');

@@ -88,10 +88,19 @@
 .lvl-card{
   background:var(--panel); border:1px solid var(--line); border-radius:16px;
   padding:16px 12px 14px; text-align:center; box-shadow:var(--shadow-float);
-  opacity:0.55; filter:grayscale(0.3); transition:opacity .2s ease, filter .2s ease;
+  /* Henüz ulaşılmamış seviyeler soluk görünsün ama KART SAYDAM OLMASIN:
+     eskiden opacity:0.55 kullanılıyordu, arkadaki fotoğraf kartın içinden
+     geçiyor ve "0/7" gibi rakamlar okunmuyordu. Soluklaştırma artık
+     kartın kendisinde değil, içindeki yazı renginde. */
+  --text:#8fa0b0; --text-dim:#9aabb9; --text-faint:#adbcc8;
+  filter:grayscale(0.35);
+  transition:filter .2s ease, box-shadow .2s ease;
 }
 
-.lvl-card.lvl-done, .lvl-card.lvl-now{opacity:1; filter:none;}
+.lvl-card.lvl-done, .lvl-card.lvl-now{
+  filter:none;
+  --text:#0f172a; --text-dim:#475569; --text-faint:#94a3b8;
+}
 
 .lvl-card.lvl-now{border-color:var(--purple); box-shadow:0 0 0 2px var(--purple-glow), var(--shadow-float);}
 
