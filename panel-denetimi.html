@@ -1,0 +1,414 @@
+<title>Almanya Paneli Denetimi</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+:root{
+  --ground:#f4f6f8;
+  --surface:#ffffff;
+  --surface-2:#eceff3;
+  --ink:#131a20;
+  --ink-2:#48545f;
+  --ink-3:#77848f;
+  --rule:#d8dee4;
+  --rule-soft:#e6eaee;
+  --accent:#1d4f6c;
+  --accent-soft:#e3edf3;
+  --crit:#a8352a;
+  --crit-soft:#f8e7e4;
+  --warn:#8a5a12;
+  --warn-soft:#f7ecd9;
+  --ok:#2a6349;
+  --ok-soft:#e2efe8;
+  --shadow:0 1px 2px rgba(19,26,32,.05), 0 8px 24px -12px rgba(19,26,32,.18);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#101418;
+    --surface:#171d23;
+    --surface-2:#1e252c;
+    --ink:#e7ecf0;
+    --ink-2:#a7b3bd;
+    --ink-3:#7c8894;
+    --rule:#2b343d;
+    --rule-soft:#232b33;
+    --accent:#7fb6d6;
+    --accent-soft:#1b2c37;
+    --crit:#e9897d;
+    --crit-soft:#331f1c;
+    --warn:#dbab63;
+    --warn-soft:#302518;
+    --ok:#7dc0a1;
+    --ok-soft:#1a2b24;
+    --shadow:0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.6);
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#101418;
+  --surface:#171d23;
+  --surface-2:#1e252c;
+  --ink:#e7ecf0;
+  --ink-2:#a7b3bd;
+  --ink-3:#7c8894;
+  --rule:#2b343d;
+  --rule-soft:#232b33;
+  --accent:#7fb6d6;
+  --accent-soft:#1b2c37;
+  --crit:#e9897d;
+  --crit-soft:#331f1c;
+  --warn:#dbab63;
+  --warn-soft:#302518;
+  --ok:#7dc0a1;
+  --ok-soft:#1a2b24;
+  --shadow:0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.6);
+}
+
+*{box-sizing:border-box;}
+body{
+  background:var(--ground);
+  color:var(--ink);
+  font-family:"Source Serif 4",Georgia,serif;
+  font-size:17px;
+  line-height:1.62;
+  margin:0;
+  padding:0 20px 96px;
+  -webkit-font-smoothing:antialiased;
+}
+.page{max-width:78ch;margin:0 auto;}
+
+h1,h2,h3,.mono,.chip,.eyebrow,.num,th{font-family:Archivo,"Helvetica Neue",Arial,sans-serif;}
+.mono,code,.path{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;}
+
+/* ---- masthead ---- */
+.masthead{padding:64px 0 32px;border-bottom:2px solid var(--ink);}
+.eyebrow{
+  font-size:11.5px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--accent);margin:0 0 18px;
+}
+h1{
+  font-size:clamp(34px,6vw,52px);line-height:1.04;font-weight:700;letter-spacing:-.022em;
+  margin:0 0 16px;text-wrap:balance;
+}
+.standfirst{font-size:19px;color:var(--ink-2);margin:0;max-width:60ch;}
+.meta-line{
+  display:flex;flex-wrap:wrap;gap:8px 22px;margin-top:26px;
+  font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--ink-3);
+}
+
+/* ---- triage ---- */
+.triage{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1px;
+  background:var(--rule);border:1px solid var(--rule);margin:34px 0 8px;border-radius:3px;overflow:hidden;
+}
+.tri{background:var(--surface);padding:16px 18px;}
+.tri .num{
+  font-size:30px;font-weight:700;line-height:1;letter-spacing:-.02em;
+  font-variant-numeric:tabular-nums;display:block;margin-bottom:6px;
+}
+.tri .lbl{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);}
+.tri.c .num{color:var(--crit);} .tri.w .num{color:var(--warn);} .tri.o .num{color:var(--accent);} .tri.s .num{color:var(--ink-3);}
+
+/* ---- sections ---- */
+section{margin-top:56px;}
+h2{
+  font-size:13px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+  margin:0 0 6px;display:flex;align-items:baseline;gap:12px;
+}
+.h2-rule{flex:1;height:1px;background:var(--rule);}
+.sec-note{font-size:15px;color:var(--ink-2);margin:0 0 22px;max-width:62ch;}
+
+/* ---- findings ---- */
+.find{
+  background:var(--surface);border:1px solid var(--rule-soft);border-left:3px solid var(--sev,var(--ink-3));
+  border-radius:3px;padding:20px 22px;margin-bottom:14px;box-shadow:var(--shadow);
+}
+.find.crit{--sev:var(--crit);} .find.warn{--sev:var(--warn);} .find.med{--sev:var(--accent);} .find.low{--sev:var(--ink-3);}
+.find-head{display:flex;align-items:baseline;gap:12px;margin-bottom:8px;}
+.find-n{
+  font-family:"IBM Plex Mono",monospace;font-size:12px;font-weight:600;color:var(--sev);
+  font-variant-numeric:tabular-nums;flex:none;padding-top:2px;
+}
+.find h3{font-size:19px;font-weight:600;line-height:1.3;margin:0;letter-spacing:-.012em;text-wrap:balance;}
+.find p{margin:0 0 10px;color:var(--ink-2);}
+.find p:last-child{margin-bottom:0;}
+.find p.lead{color:var(--ink);}
+.path{
+  display:inline-block;font-size:12.5px;background:var(--surface-2);color:var(--ink-2);
+  padding:1px 6px;border-radius:2px;white-space:nowrap;
+}
+.fix{
+  margin-top:12px;padding-top:12px;border-top:1px dashed var(--rule);
+  font-size:15.5px;color:var(--ink-2);
+}
+.fix b{font-family:Archivo,sans-serif;font-size:10.5px;font-weight:600;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--sev);display:block;margin-bottom:4px;}
+
+/* ---- suggestions ---- */
+.sug{
+  border-top:1px solid var(--rule);padding:22px 0;display:grid;
+  grid-template-columns:minmax(0,1fr);gap:6px;
+}
+.sug:last-child{border-bottom:1px solid var(--rule);}
+.sug h3{font-size:20px;font-weight:600;margin:0;letter-spacing:-.014em;}
+.sug .tag{
+  font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--accent);
+}
+.sug p{margin:0;color:var(--ink-2);}
+.sug ul{margin:6px 0 0;padding-left:20px;color:var(--ink-2);}
+.sug li{margin-bottom:5px;}
+@media(min-width:720px){
+  .sug{grid-template-columns:170px minmax(0,1fr);column-gap:28px;}
+  .sug .tag{grid-column:1;padding-top:7px;}
+  .sug h3,.sug p,.sug ul{grid-column:2;}
+}
+
+/* ---- callout ---- */
+.callout{
+  background:var(--accent-soft);border:1px solid var(--rule-soft);border-radius:3px;
+  padding:18px 22px;margin:26px 0;
+}
+.callout p{margin:0;color:var(--ink);}
+.callout p + p{margin-top:10px;}
+
+.closing{margin-top:56px;padding-top:26px;border-top:2px solid var(--ink);color:var(--ink-2);font-size:16px;}
+strong{font-weight:600;color:var(--ink);}
+::selection{background:var(--accent);color:var(--surface);}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;}
+@media(prefers-reduced-motion:no-preference){
+  .find{transition:border-color .18s ease;}
+}
+</style>
+
+<div class="page">
+
+<header class="masthead">
+  <p class="eyebrow">Kod denetimi · almanya-paneli</p>
+  <h1>Panelde 21 hata, 7 öneri</h1>
+  <p class="standfirst">Altı sayfanın tamamı tarayıcıda çalıştırıldı, konsol hataları ve kırık istekler toplandı, masaüstü ve telefon boyutlarında ekran görüntüsü alındı. Aşağıdakiler tahmin değil — hepsi çalıştırma sırasında doğrulandı.</p>
+  <div class="meta-line">
+    <span>21 Ağustos 2026</span>
+    <span>6 sayfa · 20 dosya</span>
+    <span>Chromium 1440×900 &amp; 390×844</span>
+  </div>
+</header>
+
+<div class="triage">
+  <div class="tri c"><span class="num">5</span><span class="lbl">Kritik</span></div>
+  <div class="tri w"><span class="num">5</span><span class="lbl">Yanıltıcı / riskli</span></div>
+  <div class="tri o"><span class="num">5</span><span class="lbl">Görsel</span></div>
+  <div class="tri s"><span class="num">6</span><span class="lbl">Küçük</span></div>
+</div>
+
+<section>
+  <h2>Kritik <span class="h2-rule"></span></h2>
+  <p class="sec-note">Bir özellik ya hiç çalışmıyor ya da bir dosya eksik olduğu için sessizce boş kalıyor.</p>
+
+  <article class="find crit">
+    <div class="find-head"><span class="find-n">01</span><h3>Slayt gösterisinde eksik fotoğraf var</h3></div>
+    <p class="lead"><span class="path">castle-05-mont-saint-michel.webp</span> klasörde yok ama <span class="path">core.css:71–72</span> onu çağırıyor. 11 kalelik döngünün beşinci sırasında yaklaşık 8 saniye boyunca arka plan boş kalıyor.</p>
+    <div class="fix"><b>Çözüm</b>Ya fotoğrafı klasöre koy, ya keyframe'i 10 fotoğrafa göre yeniden böl (%10'luk adımlar) ve <span class="path">--slide-duration</span> değerini 80s yap.</div>
+  </article>
+
+  <article class="find crit">
+    <div class="find-head"><span class="find-n">02</span><h3>YKS sayacı ve YKS rozetleri hiçbir zaman çalışmayacak</h3></div>
+    <p class="lead">Anasayfadaki “İlerleme Kanıtı” kartında YKS satırı her koşulda <strong>0/0</strong> gösteriyor — sen kaç konu işaretlersen işaretle. “YKS Başlangıcı” ve “Yarı Yol · YKS” rozetleri de bu yüzden asla açılmıyor.</p>
+    <p>Sebep: <span class="path">core.js:603</span> <span class="path">yksLeafIds()</span> fonksiyonunu çağırıyor, ama o fonksiyon <span class="path">yks.js:30</span>'da tanımlı. core.js her sayfada daha önce çalıştığı için fonksiyon henüz yok; hata <span class="path">try/catch</span> içinde yutulduğu için konsolda da görünmüyor. yks.html'de bile bozuk.</p>
+    <div class="fix"><b>Çözüm</b><span class="path">yksLeafIds</span>'i core.js'e, <span class="path">YKS_DATA</span> tanımının hemen yanına taşı. yks.js zaten aynı global alanda çalıştığı için oradan silmen yeterli.</div>
+  </article>
+
+  <article class="find crit">
+    <div class="find-head"><span class="find-n">03</span><h3>İki ayrı menü sistemi var, dördünde Almanca linki yok</h3></div>
+    <p class="lead">index.html ve almanca.html yeni <span class="path">.dash-topnav</span> menüsünü kullanıyor; yks, finans, evrak ve blog hâlâ eski <span class="path">.tab-nav</span>'da. Bu dört sayfada <strong>Almanca sekmesi hiç yok</strong> — dil takibine yalnızca anasayfadan girilebiliyor. Bir yılın en kritik sayfası bu.</p>
+    <p>Aynı ayrışmanın ikinci sonucu: <span class="path">core.js:30</span> aktif sekmeyi sadece <span class="path">.tab-nav</span> içinde arıyor, bu yüzden almanca.html'de hangi sayfada olduğun menüde işaretlenmiyor.</p>
+    <div class="fix"><b>Çözüm</b>Altı sayfayı da <span class="path">.dash-topnav</span>'a geçir ve seçiciyi <span class="path">.dash-topnav-links [data-page-link], .tab-nav [data-page-link]</span> olarak genişlet.</div>
+  </article>
+
+  <article class="find crit">
+    <div class="find-head"><span class="find-n">04</span><h3>Beş görsel referansı boşa çıkıyor</h3></div>
+    <p class="lead">Anasayfadaki “Dil Yolculuğu” kartında üç beyaz boş kutu duruyor: <span class="path">gallery1.jpg</span>, <span class="path">gallery3.jpg</span>, <span class="path">gallery6.jpg</span> yok. Blog'un ilk yazısı da kapaksız çünkü <span class="path">blog.js:24</span> silinmiş <span class="path">harvard1.webp</span>'yi işaret ediyor. <span class="path">core.css:672</span>'deki <span class="path">gallery4.jpg</span> de aynı durumda.</p>
+    <p>Ayrıca <span class="path">Studio/Gallery</span> diye 1 baytlık bozuk bir dosya duruyor; muhtemelen bir klasör olması gerekiyordu.</p>
+    <div class="fix"><b>Çözüm</b>Kalan kale fotoğraflarından üçünü bu üç kutuya ver (zaten elinde 10 tane var), blog kapağını da öyle. Referansı silmek boş kutuyu bırakır — dosyayı değiştirmek gerekiyor.</div>
+  </article>
+
+  <article class="find crit">
+    <div class="find-head"><span class="find-n">05</span><h3>Dil seçimi sayfa değişince kayboluyor</h3></div>
+    <p class="lead">DE'ye basıp Finans'a geçtiğinde her şey Türkçeye dönüyor. <span class="path">setLang()</span> seçimi hiçbir yere kaydetmiyor, her sayfa TR olarak açılıyor. Almanca alıştırması için koyduğun özellik pratikte kullanılamaz durumda.</p>
+    <div class="fix"><b>Çözüm</b><span class="path">setLang</span> içinde <span class="path">localStorage.setItem('lang', lang)</span>, core.js'in başında da kayıtlı değeri oku ve uygula.</div>
+  </article>
+</section>
+
+<section>
+  <h2>Yanıltıcı veya riskli <span class="h2-rule"></span></h2>
+  <p class="sec-note">Bunlar “çalışıyor” ama sana yanlış bilgi veriyor. Bir motivasyon panelinde bu, çökmüş bir sayfadan daha zararlı: panele güvenmeyi bıraktığın anda panel biter.</p>
+
+  <article class="find warn">
+    <div class="find-head"><span class="find-n">06</span><h3>“İlerleme Kanıtı” barları sahte</h3></div>
+    <p class="lead">%82, %68, %55, %40 değerleri <span class="path">index.html:158–176</span>'da elle yazılmış sabitler. JS yalnızca barın yanındaki rakamı güncelliyor, barın kendisini hiç. Şu anda ekranda “0/0” yazarken bar %82 dolu görünüyor.</p>
+    <div class="fix"><b>Çözüm</b><span class="path">motivationRenderProofCounters</span> içinde her satır için <span class="path">.metric-hbar-fill</span>'in genişliğini de hesapla. Bilgi yoksa barı boş göster — dolu göstermek en kötüsü.</div>
+  </article>
+
+  <article class="find warn">
+    <div class="find-head"><span class="find-n">07</span><h3>“Genel İlerleme %100” aslında kalan süre</h3></div>
+    <p class="lead">Etiket “Genel İlerleme” diyor, değer ise kalan yüzdeyi gösteriyor. Henüz Almanya'ya gitmemişken panel <strong>%100 ilerleme</strong> yazıyor; iş başladıkça bu sayı düşecek. YKS'deki “%93” ve menüdeki “%100 · FAZ 1” rozeti de aynı hatayı taşıyor.</p>
+    <div class="fix"><b>Çözüm</b>İkisinden birini seç. Motivasyon açısından doğru seçim ilerlemeyi göstermek: <span class="path">opRemainingPct</span> yerine <span class="path">100 − opRemainingPct</span>. Kalan süreyi göstermek istiyorsan etiketi “Kalan Süre” yap.</div>
+  </article>
+
+  <article class="find warn">
+    <div class="find-head"><span class="find-n">08</span><h3>Seri her gece yarısı sıfıra düşüyor</h3></div>
+    <p class="lead"><span class="path">motivationComputeStreak</span> bugünden geriye sayıyor ve bugün işaretlenmemişse döngü ilk adımda kırılıp <strong>0</strong> döndürüyor. 40 gün üst üste çalışmış biri sabah panele baktığında “Seri: 0 gün” görüyor — üstelik rozet kontrolü de bu sayıyı okuyor.</p>
+    <div class="fix"><b>Çözüm</b>Sayımı bugün işaretliyse bugünden, değilse dünden başlat. Seri ancak dün de boşsa kırılsın.</div>
+  </article>
+
+  <article class="find warn">
+    <div class="find-head"><span class="find-n">09</span><h3>Gün sınırı UTC'ye göre — gece vardiyasında bu tam senin saatin</h3></div>
+    <p class="lead">Check-in, kelime sayacı ve günlük anlık görüntü, gün anahtarını <span class="path">toISOString().slice(0,10)</span> ile üretiyor; bu <strong>UTC</strong> tarihi. Almanya yazın UTC+2. Yani gece 00:00–02:00 arasında yaptığın her check-in bir önceki güne yazılıyor.</p>
+    <p>Vardiyandan 22:00'de çıkıp gece yarısından sonra panele bakacaksın. Bu hata seni günde bir kez, tam da en yorgun olduğun saatte vuracak.</p>
+    <div class="fix"><b>Çözüm</b>Yerel tarihten anahtar üret ve gün sınırını 04:00'e kaydır: saat 4'ten önceki işaretlemeler bir önceki güne sayılsın. Gece vardiyası için doğru “gün” tanımı bu.</div>
+  </article>
+
+  <article class="find warn">
+    <div class="find-head"><span class="find-n">10</span><h3>Bir yıllık veri tek bir tarayıcının hafızasında, yedeği yok</h3></div>
+    <p class="lead">Check-in'ler, YKS işaretleri, evrak listesi, kelime kaydı, rozetler — hepsi yalnızca <span class="path">localStorage</span>'da. Dışa aktarma yok, içe aktarma yok, yedek yok. Tarayıcı verisini temizlemek, tarayıcı değiştirmek veya gizli sekmede açmak bir yılın kaydını siler.</p>
+    <p>İkinci sonuç: telefon ve bilgisayar tamamen ayrı hafızalar. Telefonda yaptığın check-in bilgisayarda görünmez, iki cihazda iki farklı seri sayacı büyür.</p>
+    <div class="fix"><b>Çözüm</b>Kısa vadede bir “Yedek al / geri yükle” butonu (tüm state'i tek JSON dosyası olarak indir). Uzun vadede aşağıdaki B önerisi.</div>
+  </article>
+</section>
+
+<section>
+  <h2>Görsel <span class="h2-rule"></span></h2>
+  <p class="sec-note">Fotoğrafların üstündeki her efekti kaldırma kararı fotoğrafları güzelleştirdi ama yazıları kurban etti.</p>
+
+  <article class="find med">
+    <div class="find-head"><span class="find-n">11</span><h3>Fotoğraf üstündeki yazıların çoğu okunmuyor</h3></div>
+    <p class="lead">Karartma katmanı kaldırılınca açık gökyüzünün üstüne düşen bütün açık renkli yazılar kayboldu. Ekran görüntülerinde net görünenler: üst menü linkleri, günün mesajı, “Rozetler, Günlük &amp; İzleme Linki”, Finans'ta “Canlı Kur Paneli” ve “Hedef Özeti”, Evrak'ta “Genel Evrak İlerlemesi” ve yanındaki %0, YKS'de “Soru Kotası” başlığı ve altındaki turuncu uyarı — ki bu ikisi üst üste biniyor.</p>
+    <div class="fix"><b>Çözüm</b>Fotoğrafı karartmadan çözmenin yolu var: hero'yu ham bırak, <strong>sayfa gövdesinin</strong> arkasını düz zemin yap. Yazı taşıyan her bölüm zaten kart içinde; kartların arkasını opaklaştırmak yeterli. Ek bonus: bu değişiklik 14 numaradaki performans sorununu da çözüyor.</div>
+  </article>
+
+  <article class="find med">
+    <div class="find-head"><span class="find-n">12</span><h3>Header ile sayfa zemini arasında görünür bir dikiş var</h3></div>
+    <p class="lead">Aynı kale iki ayrı elemanda gösteriliyor: <span class="path">body::before</span> ve <span class="path">header::before</span>. İkisi de <span class="path">cover</span> kullandığı ama yükseklikleri farklı olduğu için görüntü farklı kırpılıyor. Sonuç: header'ın bittiği yerde kale yatay olarak ikiye bölünüyor, kayma açıkça görülüyor. Notta “her zaman senkron” yazıyor — animasyon senkron, kırpma değil.</p>
+    <div class="fix"><b>Çözüm</b>Tek bir <span class="path">position:fixed</span> zemin bırak, <span class="path">header::before</span>'ı tamamen kaldır.</div>
+  </article>
+
+  <article class="find med">
+    <div class="find-head"><span class="find-n">13</span><h3>Telefonda üst menü dağılıyor</h3></div>
+    <p class="lead">390 px genişlikte index ve almanca sayfalarında menü iki satıra taşıyor, “Blog” tek başına alt satırda kalıyor, sekme yazıları kayboluyor ve emojiler etiketlerinden kopuyor. <span class="path">%100 · FAZ 1</span> rozeti ile “AKTİF” durumu tamamen düşüyor. Paneli en çok telefondan açacaksan ilk düzeltilecek yer burası.</p>
+    <div class="fix"><b>Çözüm</b>640 px altında menüyü yatay kaydırılan tek satır şeride çevir (<span class="path">overflow-x:auto</span> + <span class="path">flex-wrap:nowrap</span>), rozeti ve durumu başlık bloğunun altına al.</div>
+  </article>
+
+  <article class="find med">
+    <div class="find-head"><span class="find-n">14</span><h3>Slayt gösterisi telefonda pahalı bir özellik</h3></div>
+    <p class="lead">On bir webp toplam ~3,9 MB ve iki ayrı eleman aynı anda dekode ediyor. <span class="path">background-image</span> keyframe'de ara geçiş yapılamayan bir özellik olduğu için her geçişte sert kesme oluyor; ilk turda henüz önbelleğe girmemiş fotoğrafta bu bir flaş olarak görünüyor. Animasyon sekme açık kaldığı sürece 88 saniyelik döngüyle sonsuza kadar dönüyor.</p>
+    <p>Ayrıca sayfadaki diğer animasyonlar için yazdığın <span class="path">prefers-reduced-motion</span> kuralları bu animasyonu kapsamıyor.</p>
+    <div class="fix"><b>Çözüm</b>Fotoğrafları ~1600 px genişliğe düşür (dosya boyutu üçte birine iner), zemini tek elemana indir, <span class="path">prefers-reduced-motion</span> altında <span class="path">animation:none</span> ver. Geçişi yumuşatmak istersen üst üste iki katman ve <span class="path">opacity</span> ile çapraz geçiş yap — bu bir “efekt” değil, sadece kesmenin yumuşaması.</div>
+  </article>
+
+  <article class="find med">
+    <div class="find-head"><span class="find-n">15</span><h3>“Sakin mod” hiçbir şey yapmıyor</h3></div>
+    <p class="lead"><span class="path">core.css:430–438</span> sakin modda <span class="path">.route-map-wrap</span>, <span class="path">.dim-row</span>, <span class="path">.daily-timeline</span>, <span class="path">.accum-days-sub</span> öğelerini gizliyor. Bu dört sınıfın <strong>hiçbiri</strong> HTML'de yok — muhtemelen eski bir sürümden kalmış. Butona bastığında sadece alttaki bant çıkıyor, panel aynı yoğunlukta kalıyor.</p>
+    <div class="fix"><b>Çözüm</b>Gerçek sınıfları hedefle: <span class="path">.dash-metrics-row</span>, <span class="path">.dash-stat-box-sub</span>, <span class="path">.phase-strip</span>, <span class="path">#proofSection</span>. Kötü bir günde paneli tek bir cümleye indirgemek bu özelliğin bütün amacı.</div>
+  </article>
+</section>
+
+<section>
+  <h2>Küçük <span class="h2-rule"></span></h2>
+  <p class="sec-note">Acil değil, ama biri bugün, birkaçı önümüzdeki aylarda sorun çıkaracak.</p>
+
+  <article class="find low">
+    <div class="find-head"><span class="find-n">16</span><h3>İzleme linki şu haliyle kimsede açılmaz</h3></div>
+    <p>Site dosyadan açıldığı için <span class="path">location.origin</span> değeri <span class="path">"null"</span> dönüyor ve üretilen link bozuk çıkıyor. Site yayına alınmadan bu özellik çalışamaz.</p>
+  </article>
+
+  <article class="find low">
+    <div class="find-head"><span class="find-n">17</span><h3>Sınav takvimi elle yazılmış ve şimdiden eskimiş</h3></div>
+    <p><span class="path">almanca.js:92</span>'deki telc C1 tarihlerinden 27.07.2026 çoktan geçti, liste 18.12.2026'da bitiyor. TestDaF listesi 11.11.2027'de bitiyor — o günden sonra “Yaklaşan sınav” kartı boşalacak. Takvimi altı ayda bir elle güncellemen gerekecek; kartın altına “tarihleri kurumdan doğrula” notu koymak en azından yanlış tarihe güvenmeni engeller.</p>
+  </article>
+
+  <article class="find low">
+    <div class="find-head"><span class="find-n">18</span><h3>Panel sana 75 gün sonra C1 sınavı gösteriyor</h3></div>
+    <p>Almanca sayfası “Yaklaşan sınav: telc Deutsch C1 Hochschule — 75 gün kaldı” diyor. 1 Ekim'de A1 ile gideceksin; 3 Kasım'da C1 sınavı gerçekçi değil. Bu kart şu anda motive etmiyor, daha başlamadan geri bırakılmışlık hissi veriyor. Yaklaşan sınavı, seviyene uygun ilk sınava (A2/B1) göre seç.</p>
+  </article>
+
+  <article class="find low">
+    <div class="find-head"><span class="find-n">19</span><h3>Blog'da şablon kartı hâlâ görünüyor</h3></div>
+    <p>“Yeni yazı — başlığı burada değiştireceksin” kartı yayında duruyor. <span class="path">blog.js</span>'teki <span class="path">BLOG_POSTS</span> dizisinden çıkar.</p>
+  </article>
+
+  <article class="find low">
+    <div class="find-head"><span class="find-n">20</span><h3>Finans grafiği tek bir CDN'e bağlı</h3></div>
+    <p>Chart.js <span class="path">cdn.jsdelivr.net</span>'ten çekiliyor. İnternet yoksa veya CDN engelliyse grafik sessizce boş kalıyor, kullanıcıya hiçbir şey söylenmiyor. Kur servisleri için yazdığın yedek kaynak mantığının aynısı burada da lazım — en azından “grafik yüklenemedi” mesajı.</p>
+  </article>
+
+  <article class="find low">
+    <div class="find-head"><span class="find-n">21</span><h3>iPhone'da alt köşedeki butonlar ana ekran çubuğuyla çakışabilir</h3></div>
+    <p><span class="path">viewport-fit=cover</span> tanımlı ama hiçbir yerde <span class="path">env(safe-area-inset-*)</span> kullanılmıyor. Sağ alttaki ⚡ butonu ve sol alttaki hedef şeridi tam ekran modunda çubuğun altında kalabilir. Ayrıca hiçbir sayfada <span class="path">meta description</span> yok.</p>
+  </article>
+</section>
+
+<section>
+  <h2>Öneriler <span class="h2-rule"></span></h2>
+  <p class="sec-note">Hataların ötesinde, bu panelin bir yıl boyunca ayakta kalması için gereken şeyler. Sıralama önem sırasına göre.</p>
+
+  <div class="sug">
+    <span class="tag">A · Önce bu</span>
+    <h3>Siteyi yayına al</h3>
+    <p>Şu anda masaüstündeki bir klasör. Telefonunda açılmıyor, izleme linki çalışmıyor, ana ekrana eklenemiyor. GitHub Pages, Netlify veya Cloudflare Pages'te ücretsiz ve klasörü sürükleyip bırakmak kadar basit. Bir adres olduğu anda: telefonun ana ekranına ikon olarak eklenir, PWA manifestin anlam kazanır, izleme linkini ailene gönderebilirsin.</p>
+  </div>
+
+  <div class="sug">
+    <span class="tag">B · Veri</span>
+    <h3>Kaydı tarayıcıdan çıkar</h3>
+    <p>Bir yıllık check-in, konu ve evrak kaydının tek bir tarayıcı önbelleğinde durması kabul edilebilir bir risk değil. İki aşamalı ilerle:</p>
+    <ul>
+      <li><strong>Bu hafta:</strong> “Yedek al” butonu — bütün state tek JSON dosyası olarak inisin, “geri yükle” de dosyadan okusun. On satırlık iş, tek başına riski bitirir.</li>
+      <li><strong>Sonra:</strong> küçük bir veritabanı (Supabase gibi) ile telefon–bilgisayar senkronu. Tek tablo, tek satır, tek kullanıcı yeterli. O zaman vardiyada telefondan işaretlediğin konu eve gelince ekranda durur.</li>
+    </ul>
+  </div>
+
+  <div class="sug">
+    <span class="tag">C · Tasarım</span>
+    <h3>Fotoğrafı hero'ya hapset</h3>
+    <p>11–14 numaralı hataların tamamı tek bir karardan geliyor: fotoğrafın bütün sayfanın arkasında dönmesi. Fotoğrafı üst bantla sınırla, gövdeye sakin bir düz zemin ver. Kaleler kaybolmaz — aksine, ilk ekranda tek başına dururken çok daha güçlü görünür. Aynı hamlede okunabilirlik, dikiş sorunu ve telefon performansı çözülür.</p>
+  </div>
+
+  <div class="sug">
+    <span class="tag">D · Gece vardiyası</span>
+    <h3>Paneli kendi saatine göre kur</h3>
+    <p>Gündüz çalışan biri için tasarlanmış varsayımlar var: gün gece yarısı biter, sabah mesajı 06:00'da başlar, seri gece yarısı sıfırlanır. Seninki 22:00'de biten bir vardiya.</p>
+    <ul>
+      <li>Gün sınırını 04:00'e al (hata 9).</li>
+      <li>Günün mesajı havuzuna gece vardiyası için daha fazla varyant ekle — şu anda gece havuzunda tek cümle var, her gece aynısını okuyacaksın.</li>
+      <li>Pazartesi tam dinlenme günü olarak tabloda yazıyor; seri hesabı bunu bilsin, Pazartesi'ler seriyi kırmasın.</li>
+    </ul>
+  </div>
+
+  <div class="sug">
+    <span class="tag">E · Motivasyon</span>
+    <h3>Panel ölçüyor ama ödüllendirmiyor</h3>
+    <p>Bugünkü haliyle panel çoğunlukla ne kadar yol kaldığını gösteriyor: geri sayımlar, azalan barlar, kilitli rozetler. Zor bir yılın 200. gününde bu tablo yorucu olur. Birikeni öne çıkaran birkaç ekleme:</p>
+    <ul>
+      <li><strong>Minimum gün tanımı:</strong> 15 kelime + 1 konu = gün sayılır. Kötü günlerde seriyi korumanın meşru bir yolu olsun; “ya hep ya hiç” serileri hep aynı şekilde kırılır.</li>
+      <li><strong>Haftalık özet kartı:</strong> “Bu hafta: 4 konu, 90 kelime, 5 check-in.” Geri sayım değil, biriken.</li>
+      <li><strong>Geriye bakış:</strong> 30/60/90. günde “üç ay önce A1'deydin” tarzı bir kart. <span class="path">snapshots</span> verisini zaten her gün topluyorsun ama hiçbir yerde göstermiyorsun — malzeme hazır.</li>
+    </ul>
+  </div>
+
+  <div class="sug">
+    <span class="tag">F · Kapsam</span>
+    <h3>YKS listesini daraltıp göster</h3>
+    <p>Haftada 48 saat vardiya, haftada dört gün kurs, A1'den C1'e ve tam YKS müfredatı — aynı on iki aya sığmıyor. Panel şu anda bütün konu listesini açık gösteriyor; yüzlerce kutucuğun neredeyse tamamı boş duracak ve bu her açışta caydırıcı olacak. Bunun yerine “bu ayın konuları” diye 3–5 maddelik dar bir aktif kapsam göster, kalanını kapalı tut. Aynı veri, bambaşka bir his.</p>
+  </div>
+
+  <div class="sug">
+    <span class="tag">G · Bakım</span>
+    <h3>Altı kopyayı tek kaynağa indir</h3>
+    <p>Menü, footer ve <span class="path">&lt;head&gt;</span> altı HTML dosyasına elle kopyalanmış — 3 numaralı hata tam olarak bu yüzden oluştu: bir kopya güncellendi, dördü unutuldu. Bir sonraki değişiklikte aynısı tekrar olur. Basit çözüm: menü ve footer'ı core.js'te bir fonksiyonla üret, sayfalarda tek satır bırak. Aynı temizlikte JS dosyalarını IIFE'ye alıp <span class="path">core.js</span>'i <span class="path">defer</span> ile yükle.</p>
+  </div>
+</section>
+
+<div class="callout">
+  <p><strong>Doğru olan tarafı da söylemek gerek.</strong> Evrak ve finans sayfalarındaki veri modeli düzgün kurulmuş; kur servisinde yedek kaynak mantığı var; <span class="path">try/catch</span>'ler her yerde; TR/DE altyapısı tutarlı; rozet ve anlık görüntü sistemi doğru tasarlanmış. İskelet sağlam — yukarıdakilerin çoğu bağlantı hatası, mimari hata değil.</p>
+</div>
+
+<p class="closing">Sıralama önerim: önce 5, 3 ve 2 (dakikalar sürer, üçü de günlük kullanımı doğrudan etkiliyor), sonra 9 ve 8 (gece vardiyası başlamadan hazır olsun), sonra 10 ve öneri A. Görsel olanlar bekleyebilir — ama 11'i çözmeden paneli telefonundan her açışında yarısını okuyamayacaksın.</p>
+
+</div>

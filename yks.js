@@ -26,13 +26,9 @@
 
   let _yksState = yksLoadState();
 
-  // Bir konunun leaf checkbox id'lerini döndürür (altKonular varsa hepsi, yoksa kendisi)
-  function yksLeafIds(konu) {
-    if (konu.altKonular && konu.altKonular.length) {
-      return konu.altKonular.map((_, i) => konu.id + '__' + i);
-    }
-    return [konu.id];
-  }
+  // NOT: yksLeafIds() artık core.js'te tanımlı. core.js her sayfada
+  // yks.js'ten ÖNCE çalıştığı için burada durduğu sürece anasayfadaki
+  // kanıt sayacı sessizce hata verip hep "0/0" gösteriyordu.
 
   function yksTopicRowHTML(id, ad, extraClass) {
     const checked = !!_yksState[id];

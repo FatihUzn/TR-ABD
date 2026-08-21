@@ -87,12 +87,21 @@
     { id: 'schreiben',  tr: 'Schreiben (Yazma)', de: 'Schreiben' }
   ];
 
-  // Sınavlar — index.html'deki kabul edilen sınav takvimiyle aynı veri
+  // Sınavlar. lvl = sınavın seviyesi (0=A1 ... 5=C2); "Yaklaşan sınav"
+  // kartı bu bilgiyi kullanıyor, yoksa A1'deyken 75 gün sonrasına C1
+  // sınavı gösteriyordu — motive etmek yerine baştan yenilgi hissi verir.
+  //
+  // TARİHLER ELLE GİRİLİYOR ve eskiyor. Panelde geçmiş tarihler
+  // gösterilmiyor; bir sınavın tarihleri tükenirse kart bunu söylüyor.
+  // Kesin tarih için her zaman kurumun kendi takvimine bak.
   const EXAMS = [
-    { id: 'telc-c1', name: 'telc Deutsch C1 Hochschule', note: 'Mannheim Abendakademie', dates: ['2026-07-27', '2026-11-03', '2026-12-18'] },
-    { id: 'testdaf',  name: 'TestDaF (TDN 4×4 şart)', note: '', dates: ['2027-01-20', '2027-04-14', '2027-06-08', '2027-09-15', '2027-10-07', '2027-11-11'] },
-    { id: 'dsh',      name: 'DSH-2 / DSH-3', note: 'Sabit takvim yok — kuruma sorulmalı', dates: [] },
-    { id: 'goethe-c2', name: 'Goethe-Zertifikat C2 (GDS)', note: 'C1 yeterli değil, bilgi amaçlı', dates: [] }
+    { id: 'telc-a2',  lvl: 1, name: 'telc Deutsch A2', note: 'VHS / Mannheim Abendakademie — tarihleri kursla netleştir', dates: [] },
+    { id: 'telc-b1',  lvl: 2, name: 'telc Deutsch B1', note: 'VHS / Mannheim Abendakademie — tarihleri kursla netleştir', dates: [] },
+    { id: 'telc-b2',  lvl: 3, name: 'telc Deutsch B2', note: 'VHS / Mannheim Abendakademie — tarihleri kursla netleştir', dates: [] },
+    { id: 'telc-c1',  lvl: 4, name: 'telc Deutsch C1 Hochschule', note: 'Mannheim Abendakademie', dates: ['2026-11-03', '2026-12-18'] },
+    { id: 'testdaf',  lvl: 4, name: 'TestDaF (TDN 4×4 şart)', note: '', dates: ['2027-01-20', '2027-04-14', '2027-06-08', '2027-09-15', '2027-10-07', '2027-11-11'] },
+    { id: 'dsh',      lvl: 4, name: 'DSH-2 / DSH-3', note: 'Sabit takvim yok — kuruma sorulmalı', dates: [] },
+    { id: 'goethe-c2', lvl: 5, name: 'Goethe-Zertifikat C2 (GDS)', note: 'C1 yeterli değil, bilgi amaçlı', dates: [] }
   ];
 
   const STATUS_OPTS = [
@@ -122,7 +131,14 @@
   function saveState(s) {
     try { localStorage.setItem(STORE_KEY, JSON.stringify(s)); } catch (e) {}
   }
-  function todayKey() { return new Date().toISOString().slice(0, 10); }
+  // Gün tanımı core.js ile aynı olmalı: yerel saat, sınır 04:00.
+  // (Eskiden UTC'ydi; gece vardiyasından sonra yapılan kayıt bir önceki
+  // güne yazılıyordu.)
+  function todayKey() {
+    return (typeof motivationTodayKey === 'function')
+      ? motivationTodayKey()
+      : new Date().toISOString().slice(0, 10);
+  }
   function lang() { return document.documentElement.getAttribute('lang') || 'tr'; }
 
   // ============================================================
@@ -239,28 +255,45 @@
   // ============================================================
   // 4. ÜST İSTATİSTİK KARTLARI (genel %, seri, sınava kalan gün)
   // ============================================================
+  // core.js'teki genel seri hesabıyla aynı kurallar: gün henüz bitmediği
+  // için bugün işaretsizse seri kırılmaz, Pazartesi (haftalık tam dinlenme
+  // günü) seriyi kırmaz, gün sınırı yerel saatle 04:00'tür.
   function computeStreak(studyDays) {
+    if (typeof motivationComputeStreak === 'function') {
+      return motivationComputeStreak(studyDays);
+    }
     let streak = 0;
     let d = new Date();
-    while (true) {
-      const key = d.toISOString().slice(0, 10);
+    while (streak < 800) {
+      const key = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
       if (studyDays[key]) { streak++; d.setDate(d.getDate() - 1); } else break;
     }
     return streak;
   }
 
-  function nextExamInfo() {
+  // Yaklaşan sınav, mevcut seviyenin en fazla BİR ÜSTÜNDEKİ sınavlar
+  // arasından seçilir. A1'deyken hedef C1 sınavı değil, bir sonraki
+  // basamaktır. Uygun aday yoksa seviye filtresi gevşetilir.
+  function nextExamInfo(curLvlIdx) {
     const state = loadState();
     const now = new Date();
-    let best = null;
-    EXAMS.forEach(function (ex) {
-      if (state.examStatus[ex.id] === 'passed') return;
-      ex.dates.forEach(function (dstr) {
-        const d = new Date(dstr + 'T10:00:00');
-        if (d > now && (!best || d < best.date)) best = { date: d, exam: ex };
+    function pick(maxLvl) {
+      let best = null;
+      EXAMS.forEach(function (ex) {
+        if (state.examStatus[ex.id] === 'passed') return;
+        if (maxLvl !== null && ex.lvl > maxLvl) return;
+        ex.dates.forEach(function (dstr) {
+          const d = new Date(dstr + 'T10:00:00');
+          if (d > now && (!best || d < best.date)) best = { date: d, exam: ex };
+        });
       });
-    });
-    return best;
+      return best;
+    }
+    if (typeof curLvlIdx === 'number') {
+      const near = pick(curLvlIdx + 1);
+      if (near) return near;
+    }
+    return pick(null);
   }
 
   function renderTopStats(stats) {
@@ -282,7 +315,7 @@
     const streakEl = document.getElementById('almStreakNum');
     if (streakEl) streakEl.textContent = streak;
 
-    const next = nextExamInfo();
+    const next = nextExamInfo(curIdx);
     const examEl = document.getElementById('almNextExamDays');
     const examNameEl = document.getElementById('almNextExamName');
     if (next) {
@@ -428,12 +461,20 @@
 
     wrap.innerHTML = EXAMS.map(function (ex) {
       const status = state.examStatus[ex.id] || 'none';
-      const dateChips = ex.dates.length
-        ? ex.dates.map(function (d) {
-            const dt = new Date(d + 'T00:00:00');
-            return '<span class="cert-date-chip">' + dt.toLocaleDateString('tr-TR', { day: '2-digit', month: '2-digit', year: 'numeric' }) + '</span>';
-          }).join('')
-        : '<span class="cert-mini-note">' + ex.note + '</span>';
+      // Geçmiş tarihler gösterilmiyor; liste tükendiyse bunu açıkça söyle.
+      const today = new Date(); today.setHours(0, 0, 0, 0);
+      const upcoming = ex.dates.filter(function (d) { return new Date(d + 'T00:00:00') >= today; });
+      let dateChips;
+      if (upcoming.length) {
+        dateChips = upcoming.map(function (d) {
+          const dt = new Date(d + 'T00:00:00');
+          return '<span class="cert-date-chip">' + dt.toLocaleDateString('tr-TR', { day: '2-digit', month: '2-digit', year: 'numeric' }) + '</span>';
+        }).join('');
+      } else if (ex.dates.length) {
+        dateChips = '<span class="cert-mini-note">Kayıtlı tarihler geçti — kurumun güncel takvimine bak.</span>';
+      } else {
+        dateChips = '<span class="cert-mini-note">' + ex.note + '</span>';
+      }
       const optionsHTML = STATUS_OPTS.map(function (o) {
         return '<option value="' + o.v + '"' + (o.v === status ? ' selected' : '') + '>' + (L === 'de' ? o.de : o.tr) + '</option>';
       }).join('');
@@ -443,7 +484,7 @@
             '<span class="cert-mini-name">' + ex.name + '</span>' +
             '<select class="exam-status-select">' + optionsHTML + '</select>' +
           '</div>' +
-          '<div class="cert-mini-dates">' + dateChips + (ex.note && ex.dates.length ? '<span class="cert-mini-note">' + ex.note + '</span>' : '') + '</div>' +
+          '<div class="cert-mini-dates">' + dateChips + (ex.note && upcoming.length ? '<span class="cert-mini-note">' + ex.note + '</span>' : '') + '</div>' +
         '</div>'
       );
     }).join('');

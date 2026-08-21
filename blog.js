@@ -21,7 +21,7 @@
       dateLabel: '09 Ağustos 2026',
       title: 'Kabul Geldi',
       excerpt: "Limburgerhof'taki fırın pozisyonundan resmi onay bugün geldi — operasyonun sıfır günü artık takvimde sabit bir tarih.",
-      image: 'Studio/harvard1.webp',
+      image: 'Studio/castels/castle-04-neuschwanstein-aerial.webp',
       paragraphs: [
         "Bugün beklenen e-posta geldi: Limburgerhof'taki pozisyon resmi olarak onaylandı. Aylardır kağıt üzerinde duran '01.10.2026' tarihi artık gerçek bir başlangıç günü oldu.",
         "İlk tepkim rahatlama oldu, ikincisi biraz panik — çünkü artık her şey geri sayıma bağlandı: VHS kursuna kayıt, dil sertifikaları, evrak cephesi, hepsi bu tarihe göre hizalanacak.",
@@ -34,8 +34,8 @@
       draft: true,
       date: '',
       dateLabel: 'TASLAK',
-      title: 'Yeni yazı — başlığı burada değiştireceksin',
-      excerpt: "Bu bir boş şablon kartı. app.js içindeki BLOG_POSTS dizisine yeni bir obje ekleyip alanları doldurunca burada gerçek bir yazı olarak görünür.",
+      title: 'Bir sonraki not',
+      excerpt: "Buraya yeni bir yazı eklemek için blog.js dosyasındaki BLOG_POSTS dizisine yeni bir obje ekle.",
       image: null,
       paragraphs: [
         'Buraya yazının tam metnini yaz. Dizideki her satır ayrı bir paragraf olarak render edilir.'

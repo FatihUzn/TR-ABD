@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>SİSTEM · ALMANYA → TU BERLIN</title>
+<meta name="description" content="Limburgerhof köprü dönemi operasyon paneli — TU Berlin Mekatronik hedefi için gün, dil, YKS, finans ve evrak takibi.">
 <meta name="theme-color" content="#f5f2e8">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -115,22 +116,22 @@
         <span class="metric-card-label i18n" data-tr="İlerleme Kanıtı" data-de="Fortschrittsnachweis">İlerleme Kanıtı</span>
         <div class="metric-hbar-list">
           <div class="metric-hbar-row">
-            <span class="metric-hbar-track"><span class="metric-hbar-fill" style="width:82%"></span></span>
+            <span class="metric-hbar-track"><span class="metric-hbar-fill" style="width:0%"></span></span>
             <span class="metric-hbar-val" id="proofYks">–/–</span>
             <span class="metric-hbar-tag i18n" data-tr="YKS" data-de="YKS">YKS</span>
           </div>
           <div class="metric-hbar-row">
-            <span class="metric-hbar-track"><span class="metric-hbar-fill" style="width:68%"></span></span>
+            <span class="metric-hbar-track"><span class="metric-hbar-fill" style="width:0%"></span></span>
             <span class="metric-hbar-val" id="proofEvrak">–/–</span>
             <span class="metric-hbar-tag i18n" data-tr="Evrak" data-de="Unterlagen">Evrak</span>
           </div>
           <div class="metric-hbar-row">
-            <span class="metric-hbar-track"><span class="metric-hbar-fill" style="width:55%"></span></span>
+            <span class="metric-hbar-track"><span class="metric-hbar-fill" style="width:0%"></span></span>
             <span class="metric-hbar-val" id="proofCheckins">–</span>
             <span class="metric-hbar-tag i18n" data-tr="Check-in" data-de="Check-in">Check-in</span>
           </div>
           <div class="metric-hbar-row">
-            <span class="metric-hbar-track"><span class="metric-hbar-fill" style="width:40%"></span></span>
+            <span class="metric-hbar-track"><span class="metric-hbar-fill" style="width:0%"></span></span>
             <span class="metric-hbar-val" id="proofStreak">–</span>
             <span class="metric-hbar-tag i18n" data-tr="Seri" data-de="Serie">Seri</span>
           </div>
@@ -140,9 +141,9 @@
       <div class="metric-card metric-card--photos">
         <span class="metric-card-label i18n" data-tr="Dil Yolculuğu" data-de="Sprachreise">Dil Yolculuğu</span>
         <div class="metric-photo-row">
-          <div class="metric-photo" style="background-image:url('Studio/gallery1.jpg')"><span class="metric-photo-icon">♡</span></div>
-          <div class="metric-photo" style="background-image:url('Studio/gallery3.jpg')"><span class="metric-photo-icon">♡</span></div>
-          <div class="metric-photo" style="background-image:url('Studio/gallery6.jpg')"><span class="metric-photo-icon">⤢</span></div>
+          <div class="metric-photo" style="background-image:url('Studio/castels/castle-02-eltz.webp')"><span class="metric-photo-icon">♡</span></div>
+          <div class="metric-photo" style="background-image:url('Studio/castels/castle-07-hohenzollern-sunset.webp')"><span class="metric-photo-icon">♡</span></div>
+          <div class="metric-photo" style="background-image:url('Studio/castels/castle-11-neuschwanstein-fog.webp')"><span class="metric-photo-icon">⤢</span></div>
         </div>
       </div>
     </div>
@@ -157,6 +158,17 @@
 
         <div class="sec-label i18n" data-tr="Sistem Günlüğü" data-de="Systemprotokoll" style="margin-top:20px;">Sistem Günlüğü</div>
         <div class="log-panel" id="sysLog"></div>
+
+        <div class="sec-label i18n" data-tr="Yedekleme" data-de="Sicherung" style="margin-top:20px;">Yedekleme</div>
+        <div class="track-link-card">
+          <p class="track-link-desc i18n" data-tr="Panelin tüm verisi (check-in'ler, YKS konuları, evrak listesi, Almanca kaydı, rozetler) yalnızca bu tarayıcının hafızasında duruyor. Tarayıcı verisini temizlemek ya da cihaz değiştirmek bu kaydı siler. Ayda bir yedek al — dosyayı istediğin cihazda geri yükleyebilirsin." data-de="Alle Daten des Panels (Check-ins, YKS-Themen, Unterlagenliste, Deutsch-Fortschritt, Abzeichen) liegen ausschließlich im Speicher dieses Browsers. Browserdaten zu löschen oder das Gerät zu wechseln löscht sie. Sichere einmal im Monat — die Datei kannst du auf jedem Gerät wiederherstellen.">Panelin tüm verisi (check-in'ler, YKS konuları, evrak listesi, Almanca kaydı, rozetler) yalnızca bu tarayıcının hafızasında duruyor. Tarayıcı verisini temizlemek ya da cihaz değiştirmek bu kaydı siler. Ayda bir yedek al — dosyayı istediğin cihazda geri yükleyebilirsin.</p>
+          <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            <button type="button" class="track-link-btn" id="backupExportBtn">Yedek Al (JSON)</button>
+            <button type="button" class="track-link-btn" id="backupImportBtn">Yedekten Geri Yükle</button>
+            <input type="file" id="backupFileInput" accept="application/json,.json" style="display:none;">
+          </div>
+          <div class="track-link-desc" id="backupStatus" style="margin-top:8px;"></div>
+        </div>
 
         <div class="sec-label i18n" data-tr="İzleme Linki" data-de="Tracking-Link" style="margin-top:20px;">İzleme Linki</div>
         <div class="track-link-card">

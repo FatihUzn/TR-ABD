@@ -68,9 +68,24 @@
     return n.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' gr';
   }
 
+  // Chart.js tek bir CDN'den geliyor. Yüklenemediğinde grafik alanı
+  // sessizce boş kalıyordu — artık sebebi yazıyor.
+  function goldChartFallback(msg) {
+    const box = document.getElementById('goldChartFallback');
+    const canvas = document.getElementById('goldChart');
+    if (!box) return;
+    box.textContent = msg;
+    box.style.display = 'flex';
+    if (canvas) canvas.style.display = 'none';
+  }
+
   function renderGoldChart() {
     const canvas = document.getElementById('goldChart');
-    if (!canvas || !window.Chart) return;
+    if (!canvas) return;
+    if (!window.Chart) {
+      goldChartFallback('Grafik kütüphanesi (Chart.js) yüklenemedi — internet bağlantısını kontrol et. Aşağıdaki tablodaki veriler etkilenmedi.');
+      return;
+    }
 
     const planPoints = PLAN_MILESTONES.map(p => ({ x: new Date(p.tarih + 'T00:00:00').getTime(), y: p.planGram }));
     const todayPoints = _liveRates.goldEUR

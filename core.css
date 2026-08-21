@@ -49,46 +49,58 @@ body {
   overflow-x: hidden; /* full-bleed (100vw) bölümlerin yatay scrollbar taşırmasını engeller */
 }
 
-/* ===== SİTE GENELİ ARKA PLAN — OTOMATİK KALE SLAYT GÖSTERİSİ =====
-   TÜM sayfalarda (data-page ne olursa olsun) aynı 11 kale fotoğrafı,
-   sırayla ve otomatik olarak değişir. Hiç blur / karartma gradyanı /
-   saydamlık efekti yok — foto ham haliyle gösteriliyor.
-   Tek yerden süre ayarı: --slide-duration. 11 foto × 8s = 88s bir tur. */
+/* ===== HERO FOTOĞRAF ZEMİNİ — OTOMATİK KALE SLAYT GÖSTERİSİ =====
+   Fotoğraf artık SAYFANIN TAMAMINI değil, yalnızca üst hero bandını
+   kaplar. Sebebi: bölüm başlıkları, yüzdeler ve uyarı metinleri açık
+   gökyüzü kareleri geldiğinde okunmuyordu. Gövde artık sakin düz zemin.
+
+   Klasörde 10 fotoğraf var (castle-05 dosyası eksikti, döngüde boş kare
+   bırakıyordu) — döngü 10'a göre yeniden bölündü. Süre tek yerden:
+   --slide-duration. 10 foto x 8sn = 80sn. Blur/karartma/saydamlık yok. */
 
 :root{
-  --slide-duration: 88s; /* toplam tur süresi — foto başına ~8sn (88/11) */
+  --slide-duration: 80s; /* toplam tur suresi — foto basina 8sn (80/10) */
 }
 
 @keyframes castleSlideshow{
   0%     { background-image:url("Studio/castels/castle-01-segovia.webp"); }
-  9.08%  { background-image:url("Studio/castels/castle-01-segovia.webp"); }
-  9.09%  { background-image:url("Studio/castels/castle-02-eltz.webp"); }
-  18.17% { background-image:url("Studio/castels/castle-02-eltz.webp"); }
-  18.18% { background-image:url("Studio/castels/castle-03-iasi.webp"); }
-  27.26% { background-image:url("Studio/castels/castle-03-iasi.webp"); }
-  27.27% { background-image:url("Studio/castels/castle-04-neuschwanstein-aerial.webp"); }
-  36.35% { background-image:url("Studio/castels/castle-04-neuschwanstein-aerial.webp"); }
-  36.36% { background-image:url("Studio/castels/castle-05-mont-saint-michel.webp"); }
-  45.44% { background-image:url("Studio/castels/castle-05-mont-saint-michel.webp"); }
-  45.45% { background-image:url("Studio/castels/castle-06-neuschwanstein-wide.webp"); }
-  54.53% { background-image:url("Studio/castels/castle-06-neuschwanstein-wide.webp"); }
-  54.54% { background-image:url("Studio/castels/castle-07-hohenzollern-sunset.webp"); }
-  63.62% { background-image:url("Studio/castels/castle-07-hohenzollern-sunset.webp"); }
-  63.63% { background-image:url("Studio/castels/castle-08-neuschwanstein-autumn.webp"); }
-  72.71% { background-image:url("Studio/castels/castle-08-neuschwanstein-autumn.webp"); }
-  72.72% { background-image:url("Studio/castels/castle-09-san-marino.webp"); }
-  81.80% { background-image:url("Studio/castels/castle-09-san-marino.webp"); }
-  81.81% { background-image:url("Studio/castels/castle-10-hohenzollern-dusk.webp"); }
-  90.89% { background-image:url("Studio/castels/castle-10-hohenzollern-dusk.webp"); }
-  90.90% { background-image:url("Studio/castels/castle-11-neuschwanstein-fog.webp"); }
+  9.99%  { background-image:url("Studio/castels/castle-01-segovia.webp"); }
+  10%    { background-image:url("Studio/castels/castle-02-eltz.webp"); }
+  19.99% { background-image:url("Studio/castels/castle-02-eltz.webp"); }
+  20%    { background-image:url("Studio/castels/castle-03-iasi.webp"); }
+  29.99% { background-image:url("Studio/castels/castle-03-iasi.webp"); }
+  30%    { background-image:url("Studio/castels/castle-04-neuschwanstein-aerial.webp"); }
+  39.99% { background-image:url("Studio/castels/castle-04-neuschwanstein-aerial.webp"); }
+  40%    { background-image:url("Studio/castels/castle-06-neuschwanstein-wide.webp"); }
+  49.99% { background-image:url("Studio/castels/castle-06-neuschwanstein-wide.webp"); }
+  50%    { background-image:url("Studio/castels/castle-07-hohenzollern-sunset.webp"); }
+  59.99% { background-image:url("Studio/castels/castle-07-hohenzollern-sunset.webp"); }
+  60%    { background-image:url("Studio/castels/castle-08-neuschwanstein-autumn.webp"); }
+  69.99% { background-image:url("Studio/castels/castle-08-neuschwanstein-autumn.webp"); }
+  70%    { background-image:url("Studio/castels/castle-09-san-marino.webp"); }
+  79.99% { background-image:url("Studio/castels/castle-09-san-marino.webp"); }
+  80%    { background-image:url("Studio/castels/castle-10-hohenzollern-dusk.webp"); }
+  89.99% { background-image:url("Studio/castels/castle-10-hohenzollern-dusk.webp"); }
+  90%    { background-image:url("Studio/castels/castle-11-neuschwanstein-fog.webp"); }
   99.99% { background-image:url("Studio/castels/castle-11-neuschwanstein-fog.webp"); }
   100%   { background-image:url("Studio/castels/castle-01-segovia.webp"); }
 }
 
-body::before{
+/* Hero fotoğrafını taşıyan katman. Alt sayfalarda .page-header,
+   ana sayfada .dash-photo-band (sistem.css) — aynı anda sayfada
+   yalnızca biri bulunur, bu yüzden dikiş oluşmaz. */
+.page-header{
+  position:relative;
+  isolation:isolate;
+}
+
+.page-header::before{
   content:"";
-  position:fixed;
-  inset:0;
+  position:absolute;
+  top:0; bottom:0;
+  left:50%;
+  width:100vw;
+  transform:translateX(-50%);
   z-index:-1;
   background-image:url("Studio/castels/castle-01-segovia.webp");
   background-size:cover;
@@ -97,8 +109,22 @@ body::before{
   animation: castleSlideshow var(--slide-duration) infinite;
 }
 
+/* Fotoğrafa dokunmadan okunabilirlik: gölge fotoğrafa değil yazıya. */
+.page-header .page-header-eyebrow,
+.page-header h1,
+.page-header p,
+.page-header .status{
+  text-shadow:0 1px 3px rgba(8,20,32,0.55);
+}
+
+/* Hareket azaltma tercihinde slayt durur, ilk kare kalır. */
+@media(prefers-reduced-motion: reduce){
+  .page-header::before,
+  .dash-photo-band::before{ animation:none !important; }
+}
+
 @media(max-width:640px){
-body::before{ background-position: center 20%; }
+  .page-header::before{ background-position: center 30%; }
 }
 
 .wrap{position:relative; z-index:1; max-width:960px; margin:0 auto; padding:0 18px;}
@@ -135,21 +161,10 @@ header{
 /* Fotoğraf zemini gerçek 100vw full-bleed katman olarak header'ın arkasına yerleştirilir;
    header'ın kendisi .wrap içinde kalıp içeriği (h1, subtitle, chip'ler) normal hizasında tutar. */
 
-header::before{
-  content:"";
-  position:absolute;
-  top:0; bottom:0;
-  left:50%;
-  width:100vw;
-  transform:translateX(-50%);
-  z-index:-1;
-  background-image:url("Studio/castels/castle-01-segovia.webp");
-  background-size: cover;
-  background-position: center;
-  /* body::before ile AYNI animasyon, aynı süre → üst bant ve sayfa zemini
-     her zaman senkron, aynı kale aynı anda gösterilir. Efekt/blur yok. */
-  animation: castleSlideshow var(--slide-duration) infinite;
-}
+/* NOT: Eskiden burada ikinci bir fotoğraf katmanı (header::before) vardı.
+   body::before ile aynı fotoğrafı farklı yükseklikte kırptığı için,
+   header'ın bittiği yerde kale yatay olarak ikiye bölünüyordu.
+   Tek katmana indirildi — bkz. .page-header::before yukarıda. */
 
 /* hero progress */
 
@@ -427,11 +442,16 @@ body.boot-active{overflow:hidden;}
 
 /* --- Sakin mod --- */
 
-body.calm-mode .route-map-wrap,
-body.calm-mode .dim-row,
+/* Sakin mod: kötü bir günde paneli en aza indirir. Eskiden burada
+   HTML'de hiç bulunmayan sınıflar hedefleniyordu — buton görsel olarak
+   hiçbir şey yapmıyordu. Gerçek sınıflarla değiştirildi. */
+body.calm-mode .dash-metrics-row,
+body.calm-mode .phase-strip,
+body.calm-mode .dash-stat-box-sub,
+body.calm-mode #proofSection,
+body.calm-mode .dash-hero-grid,
 body.calm-mode .phase-toast,
-body.calm-mode .daily-timeline,
-body.calm-mode .accum-days-sub{display:none !important;}
+body.calm-mode .daily-greet{display:none !important;}
 
 body.calm-mode section, body.calm-mode header, body.calm-mode details.acc-section{animation:none !important;}
 
@@ -568,9 +588,10 @@ h1 .arrow{color:var(--purple); padding:0 8px;}
   font-family:var(--mono); font-size:12px; letter-spacing:0.12em;
   color:var(--purple); text-transform:uppercase; margin-bottom:14px;
   display:flex; align-items:center; gap:10px;
+  flex-wrap:wrap; /* yanına uzun bir not geldiğinde üst üste binmesin */
 }
 
-.sec-label::after{content:""; flex:1; height:1px; background:var(--line);}
+.sec-label::after{content:""; flex:1 1 40px; min-width:40px; height:1px; background:var(--line);}
 
 section{margin-bottom:44px;}
 
@@ -669,7 +690,7 @@ details.acc-section[open] > .acc-summary .acc-chevron{transform:rotate(180deg);}
   z-index:-1;
   background-image:
     linear-gradient(180deg, rgba(8,20,32,0.18) 0%, rgba(8,20,32,0.32) 100%),
-    url("Studio/gallery4.jpg"); /* sisli şelale/vadi — Senaryolar (nakit akışı) zemini */
+    url("Studio/castels/castle-09-san-marino.webp"); /* Senaryolar (nakit akışı) zemini — silinmiş gallery4.jpg yerine */
   background-size:cover;
   background-position:center;
 }
@@ -943,7 +964,7 @@ footer{
    açık renk metin skopuna alınıyor (foto beyazla yıkanmadığı için okunabilirlik burada sağlanıyor). */
 
 .page-header{
-  padding:26px 0 4px;
+  padding:22px 0 30px;
   --text: #f9fafb;
   --text-dim: #e2e8f0;
   --text-faint: #cbd5e1;
@@ -1302,4 +1323,137 @@ body.track-active{overflow:hidden;}
 .track-exit-link{
   display:inline-block; margin-top:20px; font-family:var(--mono); font-size:10px; color:var(--text-faint);
   text-decoration:underline; text-underline-offset:2px;
+}
+
+
+/* ===== iPhone TAM EKRAN GÜVENLİ ALANI =====
+   viewport-fit=cover kullanıldığı için alt köşedeki sabit butonlar
+   ana ekran çubuğunun altında kalabiliyordu. */
+.motiv-fab{ bottom:calc(22px + env(safe-area-inset-bottom, 0px)) !important; }
+.motiv-panel{ bottom:calc(84px + env(safe-area-inset-bottom, 0px)) !important; }
+.reason-ribbon{ bottom:calc(22px + env(safe-area-inset-bottom, 0px)) !important; }
+body{ padding-bottom:calc(60px + env(safe-area-inset-bottom, 0px)); }
+
+
+/* ============================================================
+   ÜST MENÜ (.dash-topnav) — altı sayfanın hepsinde aynı.
+   Eskiden yks/finans/evrak/blog eski .tab-nav'ı kullanıyordu ve o
+   menüde Almanca linki hiç yoktu. Tek menüye indirildi ve stiller
+   sistem.css'ten buraya taşındı (sistem.css her sayfada yüklenmiyor).
+   ============================================================ */
+
+.dash-topnav{
+  position:sticky; top:10px; z-index:30;
+  display:flex; align-items:center; gap:18px;
+  background:var(--panel); border:1px solid var(--line); border-radius:999px;
+  padding:9px 10px 9px 20px; box-shadow:var(--shadow-float);
+  flex-wrap:wrap;
+}
+
+.dash-brand{
+  display:inline-flex; align-items:center; gap:9px;
+  font-family:var(--mono); font-weight:800; font-size:13px; letter-spacing:-0.01em;
+  color:var(--text); text-decoration:none; flex-shrink:0;
+}
+
+.dash-brand .arrow{color:var(--purple); padding:0 3px;}
+
+.dash-brand-mark{
+  display:inline-flex; align-items:center; justify-content:center;
+  width:26px; height:26px; border-radius:50%;
+  background:var(--text); color:#fff; font-size:9px; font-weight:800; letter-spacing:0;
+}
+
+.dash-topnav-links{display:flex; gap:6px; flex:1; flex-wrap:wrap;}
+
+.dash-topnav-link{
+  display:inline-flex; align-items:center; gap:5px;
+  font-family:var(--mono); font-size:11px; font-weight:600; text-decoration:none;
+  color:var(--text-dim); background:var(--panel-2); padding:8px 14px; border-radius:999px; transition:all .15s ease;
+  white-space:nowrap;
+}
+
+.dash-topnav-link:hover{background:var(--line); color:var(--text);}
+
+.dash-topnav-link.active{background:var(--text); color:#fff; box-shadow:0 2px 8px rgba(15,23,42,0.18);}
+
+.dash-topnav-right{display:flex; align-items:center; gap:8px; flex-shrink:0; margin-left:auto;}
+
+.topnav-icon-btn{
+  width:34px; height:34px; border-radius:50%; flex-shrink:0;
+  display:inline-flex; align-items:center; justify-content:center;
+  background:var(--panel-2); border:1px solid var(--line); font-size:13px; line-height:1;
+  color:var(--text-dim); cursor:pointer; transition:all .15s ease;
+}
+
+.topnav-icon-btn:hover{background:var(--purple-glow); color:var(--purple); border-color:var(--purple-dim);}
+
+@media(max-width:760px){
+.topnav-icon-btn{display:none;}
+}
+
+.topnav-avatar{
+  width:34px; height:34px; border-radius:50%; flex-shrink:0;
+  display:inline-flex; align-items:center; justify-content:center;
+  background:linear-gradient(135deg, var(--purple), var(--purple-dim));
+  color:#fff; font-family:var(--mono); font-weight:800; font-size:11px;
+  box-shadow:0 2px 6px var(--purple-glow);
+}
+
+.dash-topnav-right .status{
+  font-family:var(--mono); font-size:10px; color:var(--green); display:none;
+  align-items:center; text-transform:uppercase; letter-spacing:0.06em;
+}
+
+.dash-topnav-right .status::before{content:"●"; margin-right:5px; animation:pulse 2s infinite ease-in-out;}
+
+@media(min-width:760px){
+.dash-topnav-right .status{display:inline-flex;}
+}
+
+/* Menü, fotoğraf bandının açık-metin skopunun İÇİNDE duruyor; kendi
+   zemini beyaz olduğu için linkler görünmez hale geliyordu. Menü artık
+   renklerini skoptan miras almıyor, kendi koyu paletini taşıyor. */
+.dash-topnav{
+  --text:#0f172a; --text-dim:#475569; --text-faint:#94a3b8;
+  --line:#e2e8f0; --panel:#ffffff; --panel-2:#f1f5f9;
+  background:rgba(255,255,255,0.94);
+  backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+  text-shadow:none;
+}
+
+/* Dar sayfalarda (960px .wrap) altı sekme tek satıra sığmayıp alt satıra
+   taşıyordu. Sekme şeridi artık sarmıyor, gerekirse yatay kayıyor. */
+.dash-topnav-links{flex-wrap:nowrap; overflow-x:auto; scrollbar-width:none; -ms-overflow-style:none; padding-right:4px; min-width:0;}
+.dash-topnav-links::-webkit-scrollbar{display:none;}
+.dash-topnav-link{flex:0 0 auto;}
+
+.dash-topnav-link:focus-visible,
+.dash-brand:focus-visible,
+.topnav-icon-btn:focus-visible{outline:2px solid var(--purple); outline-offset:2px;}
+
+/* Telefonda: etiketleri gizlemek yerine tek satır yatay kaydırma.
+   Eskiden 6 sekme alt satıra taşıyor, etiketler gizlenince geriye
+   sıralaması bozuk emojiler kalıyordu. */
+@media(max-width:760px){
+  .dash-topnav{
+    border-radius:18px; padding:10px 12px; gap:8px;
+    flex-wrap:wrap; align-items:center;
+  }
+  .dash-brand{order:1; font-size:12px;}
+  .dash-topnav-right{order:2; margin-left:auto; gap:6px;}
+  /* Sekmeler kendi satırına iner ve o satırda yatay kayar.
+     flex-basis:100% şart — sadece width:100% flex:1'i yenmiyor. */
+  .dash-topnav-links{
+    order:3; flex:1 0 100%; width:100%; margin-top:2px;
+    flex-wrap:nowrap; overflow-x:auto; gap:6px;
+    scrollbar-width:none; -ms-overflow-style:none;
+    padding-bottom:2px; -webkit-overflow-scrolling:touch;
+  }
+  .dash-topnav-links::-webkit-scrollbar{display:none;}
+  .dash-topnav-link{flex:0 0 auto; font-size:11px; padding:8px 12px;}
+  /* İlerleme rozeti telefonda gizleniyordu — paneli en çok telefondan
+     açacağın için asıl orada görünmesi gerekiyor. */
+  .dash-topnav-right .nav-badge{display:inline-block; font-size:9.5px; padding:5px 8px; margin-left:0;}
+  .topnav-avatar{display:none;}
 }

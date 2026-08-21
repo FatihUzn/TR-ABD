@@ -9,6 +9,28 @@
 // diğer script'lerden ÖNCE yüklenmeli.
 // ============================================================
 
+// ============================================================
+// ORTAK YARDIMCILAR — gün tanımı, dil hafızası
+// "Gün" gece yarısında değil 04:00'te biter: gece vardiyasından
+// sonra 01:30'da yapılan bir işaretleme hâlâ o güne yazılır.
+// ============================================================
+  const DAY_BOUNDARY_HOUR = 4;
+  const LANG_KEY = 'almanya_lang';
+
+  function localDateKey(d) {
+    return d.getFullYear() + '-' +
+      String(d.getMonth() + 1).padStart(2, '0') + '-' +
+      String(d.getDate()).padStart(2, '0');
+  }
+  function shiftToOpDay(d) {
+    const x = new Date(d.getTime());
+    if (x.getHours() < DAY_BOUNDARY_HOUR) x.setDate(x.getDate() - 1);
+    return x;
+  }
+  function motivationTodayKey() {
+    return localDateKey(shiftToOpDay(new Date()));
+  }
+
   // --- Dil değiştirme (TR/DE) ---
   function setLang(lang) {
     document.querySelectorAll('.i18n').forEach(el => {
@@ -19,17 +41,36 @@
       btn.classList.toggle('active', btn.dataset.lang === lang);
     });
     document.documentElement.setAttribute('lang', lang);
+    try { localStorage.setItem(LANG_KEY, lang); } catch (e) {}
     if (typeof renderAlmancaTeaser === 'function') renderAlmancaTeaser();
   }
+
+  // Kayıtlı dili uygula. Sayfaya özel script'ler core.js'ten SONRA
+  // çalışıp yeni .i18n elemanları ürettiği için 'load' anında bir kez
+  // daha uygulanır — yoksa sonradan basılan içerik TR kalırdı.
+  function applySavedLang() {
+    let saved = null;
+    try { saved = localStorage.getItem(LANG_KEY); } catch (e) {}
+    if (saved === 'de' || saved === 'tr') setLang(saved);
+  }
+  window.addEventListener('load', applySavedLang);
 
   // --- Çok Sayfalı Site Nav: aktif sayfayı işaretle ---
   // Her sayfanın <body> etiketinde data-page="sistem|yks|finans|evrak|blog" olmalı.
   (function highlightActiveNavLink() {
     const current = document.body.dataset.page;
     if (!current) return;
-    document.querySelectorAll('.tab-nav [data-page-link]').forEach(a => {
+    document.querySelectorAll('.dash-topnav-links [data-page-link], .tab-nav [data-page-link]').forEach(a => {
       a.classList.toggle('active', a.dataset.pageLink === current);
     });
+    // Sekme şeridi dar ekranlarda yatay kayıyor; aktif sekme şeridin
+    // görünmeyen kısmında kalmasın diye görünüre kaydırılıyor.
+    const activeLink = document.querySelector('.dash-topnav-links .active');
+    const strip = activeLink && activeLink.parentElement;
+    if (activeLink && strip && strip.scrollWidth > strip.clientWidth) {
+      strip.scrollLeft = Math.max(0,
+        activeLink.offsetLeft - (strip.clientWidth - activeLink.offsetWidth) / 2);
+    }
   })();
 
   // Canlı kur tablosu verisi — gold chart bu objeyi kullandığı için erkenden tanımlanır
@@ -50,12 +91,15 @@
     const opElapsed = now - JOB_START;
     let opRemainingPct = 100 - ((opElapsed / opTotal) * 100);
     opRemainingPct = Math.max(0, Math.min(100, opRemainingPct));
-    
+    // Ekranda gösterilen değer İLERLEME'dir (etiket "Genel İlerleme").
+    // Renk kodu ise kalan süreye bakar — süre azaldıkça uyarıya döner.
+    const opProgressPct = 100 - opRemainingPct;
+
     const fillEl = document.getElementById('progressFill');
     if(fillEl) {
         const CIRC = 326.7; // 2 * PI * 52 (gauge yarıçapı)
-        fillEl.style.strokeDashoffset = CIRC - (CIRC * opRemainingPct / 100);
-        document.getElementById('progressPct').textContent = '%' + Math.round(opRemainingPct);
+        fillEl.style.strokeDashoffset = CIRC - (CIRC * opProgressPct / 100);
+        document.getElementById('progressPct').textContent = '%' + Math.round(opProgressPct);
         // fillEl artık bir SVG <circle>; SVG elementlerde className salt-okunur (SVGAnimatedString)
         // olduğu için sınıf değişimi setAttribute ile yapılır.
         fillEl.setAttribute('class', 'hero-gauge-ring ' + (opRemainingPct >= 50 ? 'lvl-safe' : opRemainingPct >= 20 ? 'lvl-watch' : 'lvl-critical'));
@@ -65,7 +109,7 @@
     const badgeEl = document.getElementById('navProgressBadge');
     if (badgeEl) {
       const faz = now < JOB_START ? 'FAZ 1' : (now < new Date('2027-10-01T00:00:00') ? 'FAZ 2' : 'FAZ 3');
-      badgeEl.textContent = '%' + Math.round(opRemainingPct) + ' · ' + faz;
+      badgeEl.textContent = '%' + Math.round(opProgressPct) + ' · ' + faz;
     }
 
     // 2. YKS TikTak Saat & Bar (Azalan)
@@ -89,11 +133,12 @@
       const yksElapsed = now - YKS_COUNT_START;
       let yksRemainingPct = 100 - ((yksElapsed / yksTotal) * 100);
       yksRemainingPct = Math.max(0, Math.min(100, yksRemainingPct));
-      
+      const yksProgressPct = 100 - yksRemainingPct;
+
       const yFill = document.getElementById('yksFill');
       if(yFill) {
-          yFill.style.width = yksRemainingPct + '%';
-          document.getElementById('yksPct').textContent = '%' + Math.round(yksRemainingPct);
+          yFill.style.width = yksProgressPct + '%';
+          document.getElementById('yksPct').textContent = '%' + Math.round(yksProgressPct);
           yFill.className = 'hero-progress-fill ' + (yksRemainingPct >= 50 ? 'lvl-safe' : yksRemainingPct >= 20 ? 'lvl-watch' : 'lvl-critical');
       }
     }
@@ -221,7 +266,12 @@
       { tr: 'Bugün ne kadar küçük olursa olsun, bir şey biriktirdin.', de: 'Egal wie klein, heute hast du etwas aufgebaut.' }
     ],
     night: [
-      { tr: 'Gece vardiyası. Bu saatte burada olman bile bir irade göstergesi.', de: 'Nachtschicht. Allein dass du um diese Zeit hier bist, zeigt Willenskraft.' }
+      { tr: 'Gece vardiyası. Bu saatte burada olman bile bir irade göstergesi.', de: 'Nachtschicht. Allein dass du um diese Zeit hier bist, zeigt Willenskraft.' },
+      { tr: 'Şehir uyuyor, sen çalışıyorsun. Fark tam olarak burada birikiyor.', de: 'Die Stadt schläft, du arbeitest. Genau hier sammelt sich der Unterschied.' },
+      { tr: 'Bu vardiya da geçecek. Sabah geldiğinde bir gün daha eklenmiş olacak.', de: 'Auch diese Schicht geht vorbei. Am Morgen ist wieder ein Tag dazugekommen.' },
+      { tr: 'Yorgunluk gerçek ama geçici. Hedef gerçek ve kalıcı.', de: 'Die Müdigkeit ist echt, aber vorübergehend. Das Ziel ist echt und bleibt.' },
+      { tr: 'Bugün az yaptıysan da olur. Sıfır yapmadığın sürece seri devam ediyor.', de: 'Auch wenig ist heute in Ordnung. Solange es nicht null ist, läuft die Serie weiter.' },
+      { tr: 'Gece primi vergisiz, ama asıl birikim saatlerde değil — devam etmende.', de: 'Der Nachtzuschlag ist steuerfrei, aber der eigentliche Gewinn liegt nicht in den Stunden — sondern darin, dass du weitermachst.' }
     ]
   };
   function motivationDailyGreeting() {
@@ -229,7 +279,7 @@
     if (!el) return;
     const now = new Date();
     const hour = now.getHours();
-    const dayKey = now.toISOString().slice(0, 10);
+    const dayKey = motivationTodayKey();
     let poolKey = 'morning';
     if (hour >= 12 && hour < 17) poolKey = 'afternoon';
     else if (hour >= 17 && hour < 22) poolKey = 'evening';
@@ -320,10 +370,6 @@
     finans: { tr: 'Sayılarla uğraşmak yorucu olabilir ama her satır, planının ne kadar sağlam olduğunun kanıtı.', de: 'Mit Zahlen zu jonglieren kann anstrengend sein, aber jede Zeile ist ein Beweis dafür, wie solide dein Plan ist.' }
   };
 
-  function motivationTodayKey() {
-    return new Date().toISOString().slice(0, 10);
-  }
-
   // --- 16. Ses geri bildirimi (kısa, rahatsız etmeyen "tık") ---
   function motivationPlaySound() {
     const state = motivationLoadState();
@@ -341,12 +387,21 @@
     } catch (e) {}
   }
 
+  // Seri, günün işaretlenmemiş olmasıyla KIRILMAZ — gün henüz bitmedi.
+  // Sayım bugünden (işaretliyse) ya da dünden başlar. Pazartesi haftalık
+  // tam dinlenme günü olduğu için seriyi kırmaz, sadece seriye eklenmez.
   function motivationComputeStreak(checkins) {
     let streak = 0;
-    let d = new Date();
-    while (true) {
-      const key = d.toISOString().slice(0, 10);
-      if (checkins[key]) { streak++; d.setDate(d.getDate() - 1); } else break;
+    let cursor = shiftToOpDay(new Date());
+    if (!checkins[localDateKey(cursor)]) cursor.setDate(cursor.getDate() - 1);
+    let guard = 0;
+    let skipped = 0;
+    while (guard++ < 800) {
+      const key = localDateKey(cursor);
+      if (checkins[key]) { streak++; skipped = 0; }
+      else if (cursor.getDay() === 1 && skipped < 1) { skipped++; }   // Pazartesi: izin günü
+      else break;
+      cursor.setDate(cursor.getDate() - 1);
     }
     return streak;
   }
@@ -518,8 +573,10 @@
     const page = document.body.dataset.page;
     const msg = EMPATHY_MESSAGES[page];
     if (!msg) return;
-    const nav = document.querySelector('.tab-nav');
-    if (!nav || document.getElementById('empathyBanner')) return;
+    // Eskiden .tab-nav'ın altına ekleniyordu; o menü kaldırıldığı için
+    // banner hiç görünmez olmuştu. Artık hero başlığının altına giriyor.
+    const anchor = document.querySelector('.page-header') || document.querySelector('.dash-topnav');
+    if (!anchor || document.getElementById('empathyBanner')) return;
     const banner = document.createElement('div');
     banner.className = 'empathy-banner';
     banner.id = 'empathyBanner';
@@ -534,7 +591,7 @@
     textSpan.textContent = lang === 'de' ? msg.de : msg.tr;
     banner.appendChild(icon);
     banner.appendChild(textSpan);
-    nav.insertAdjacentElement('afterend', banner);
+    anchor.insertAdjacentElement('afterend', banner);
   }
 
   function motivationInitStage2() {
@@ -591,6 +648,16 @@
     }).join('');
   }
 
+  // Bir konunun leaf checkbox id'lerini döndürür (altKonular varsa hepsi, yoksa kendisi).
+  // ÖNEMLİ: Bu fonksiyon eskiden yks.js'teydi; core.js her sayfada ondan ÖNCE
+  // çalıştığı için kanıt sayacı sessizce hata verip hep 0/0 gösteriyordu.
+  function yksLeafIds(konu) {
+    if (konu.altKonular && konu.altKonular.length) {
+      return konu.altKonular.map(function (_, i) { return konu.id + '__' + i; });
+    }
+    return [konu.id];
+  }
+
   // --- 14. Somut kanıt sayaçları (yks/evrak state'lerini doğrudan okur) ---
   function motivationYksTotals() {
     try {
@@ -642,15 +709,31 @@
     };
   }
 
+  // Barın genişliği artık HTML'e elle yazılmış sabit değil, gerçek orandan
+  // hesaplanıyor. Veri yoksa bar boş kalır — dolu göstermek yanıltıcıydı.
+  function proofSetRow(valueEl, text, pct) {
+    if (!valueEl) return;
+    valueEl.textContent = text;
+    const row = valueEl.closest('.metric-hbar-row');
+    const fill = row && row.querySelector('.metric-hbar-fill');
+    if (fill) fill.style.width = Math.max(0, Math.min(100, pct)) + '%';
+  }
+
   function motivationRenderProofCounters(ctx) {
-    const yksEl = document.getElementById('proofYks');
-    const evrakEl = document.getElementById('proofEvrak');
-    const checkinEl = document.getElementById('proofCheckins');
-    const streakEl2 = document.getElementById('proofStreak');
-    if (yksEl) yksEl.textContent = ctx.yksDone + '/' + ctx.yksTotal;
-    if (evrakEl) evrakEl.textContent = (ctx.evrakTrDone + ctx.evrakDeDone) + '/' + (ctx.evrakTrTotal + ctx.evrakDeTotal);
-    if (checkinEl) checkinEl.textContent = ctx.totalCheckins;
-    if (streakEl2) streakEl2.textContent = ctx.streak;
+    const evrakDone = ctx.evrakTrDone + ctx.evrakDeDone;
+    const evrakTotal = ctx.evrakTrTotal + ctx.evrakDeTotal;
+    proofSetRow(document.getElementById('proofYks'),
+      ctx.yksDone + '/' + ctx.yksTotal,
+      ctx.yksTotal ? (ctx.yksDone / ctx.yksTotal) * 100 : 0);
+    proofSetRow(document.getElementById('proofEvrak'),
+      evrakDone + '/' + evrakTotal,
+      evrakTotal ? (evrakDone / evrakTotal) * 100 : 0);
+    // Check-in barı: 30 günlük işaretleme barı doldurur.
+    proofSetRow(document.getElementById('proofCheckins'),
+      String(ctx.totalCheckins), (ctx.totalCheckins / 30) * 100);
+    // Seri barı: 30 günlük seri barı doldurur (30 gün rozetiyle aynı eşik).
+    proofSetRow(document.getElementById('proofStreak'),
+      String(ctx.streak), (ctx.streak / 30) * 100);
   }
 
   // --- 15. Rozet sistemi ---
@@ -962,10 +1045,16 @@
     const copyBtn = document.getElementById('trackLinkCopyBtn');
 
     btn.addEventListener('click', function () {
+      if (location.protocol === 'file:') {
+        // file:// altında location.origin "null" döner; üretilen link kimsede açılmaz.
+        if (inputEl) inputEl.value = 'Bu özellik için site yayında olmalı (ör. GitHub Pages).';
+        if (resultEl) resultEl.style.display = 'flex';
+        return;
+      }
       const snap = motivationBuildTrackingSnapshot();
       const encoded = trackB64UrlEncode(JSON.stringify(snap));
-      const basePath = location.pathname.replace(/[^/]*$/, '') + 'index.html';
-      const url = location.origin + basePath + '?track=' + encoded;
+      const base = location.href.split('#')[0].split('?')[0].replace(/[^/]*$/, '') + 'index.html';
+      const url = base + '?track=' + encoded;
       if (inputEl) inputEl.value = url;
       if (resultEl) resultEl.style.display = 'flex';
       if (inputEl) { inputEl.focus(); inputEl.select(); }
@@ -1057,6 +1146,77 @@
     bar.style.width = summary.pct + '%';
   }
   renderAlmancaTeaser();
+
+
+  // ============================================================
+  // YEDEKLEME — bütün panel verisi tek JSON dosyasında
+  // Veri yalnızca bu tarayıcının hafızasında duruyor; tarayıcı verisini
+  // temizlemek bir yıllık kaydı siler. Bu yüzden dışa/içe aktarma şart.
+  // ============================================================
+  const BACKUP_KEYS = [
+    'almanya_motivation_v1',
+    'yksChecklistState',
+    'yksWeeklyQuestionProgress',
+    'evrakChecklistState',
+    'evrakFormState',
+    'almancaState_v1',
+    'almanca_summary_v1',
+    'almanya_lang'
+  ];
+
+  function motivationExportBackup() {
+    const data = { _v: 1, _gen: new Date().toISOString(), keys: {} };
+    BACKUP_KEYS.forEach(function (k) {
+      try {
+        const v = localStorage.getItem(k);
+        if (v !== null) data.keys[k] = v;
+      } catch (e) {}
+    });
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'almanya-paneli-yedek-' + motivationTodayKey() + '.json';
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+    motivationLogEvent('💾 Yedek alındı.');
+  }
+
+  function motivationImportBackup(file, statusEl) {
+    const reader = new FileReader();
+    reader.onload = function () {
+      let data;
+      try { data = JSON.parse(reader.result); } catch (e) { data = null; }
+      if (!data || !data.keys) {
+        if (statusEl) statusEl.textContent = 'Dosya okunamadı — bu bir panel yedeği değil.';
+        return;
+      }
+      let n = 0;
+      Object.keys(data.keys).forEach(function (k) {
+        if (BACKUP_KEYS.indexOf(k) === -1) return;
+        try { localStorage.setItem(k, data.keys[k]); n++; } catch (e) {}
+      });
+      if (statusEl) statusEl.textContent = n + ' kayıt geri yüklendi. Sayfa yenileniyor...';
+      setTimeout(function () { location.reload(); }, 900);
+    };
+    reader.readAsText(file);
+  }
+
+  function motivationInitBackup() {
+    const expBtn = document.getElementById('backupExportBtn');
+    if (!expBtn) return;
+    const impBtn = document.getElementById('backupImportBtn');
+    const fileInput = document.getElementById('backupFileInput');
+    const statusEl = document.getElementById('backupStatus');
+    expBtn.addEventListener('click', motivationExportBackup);
+    if (impBtn && fileInput) {
+      impBtn.addEventListener('click', function () { fileInput.click(); });
+      fileInput.addEventListener('change', function () {
+        if (fileInput.files && fileInput.files[0]) motivationImportBackup(fileInput.files[0], statusEl);
+      });
+    }
+  }
+  motivationInitBackup();
 
   function motivationInitStage5() {
     motivationInitTrackLinkGenerator();

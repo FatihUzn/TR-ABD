@@ -115,11 +115,13 @@ body[data-page="sistem"] .photo-toolbar-btn{
 body[data-page="sistem"] .photo-toolbar-btn:hover{background:rgba(255,255,255,0.28);}
 
 body[data-page="sistem"] .dash-topnav{
-  background:rgba(255,255,255,0.92);
+  background:rgba(255,255,255,0.94);
 }
 
 body[data-page="sistem"] .phase-chip{
-  border-color:var(--line); background:rgba(255,255,255,0.08);
+  border-color:rgba(255,255,255,0.4); background:rgba(12,26,40,0.42);
+  color:#eef4fa;
+  backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px);
 }
 
 @media(max-width:900px){
@@ -132,74 +134,8 @@ body[data-page="sistem"] .dash-photo-band .dash-hero-grid{justify-content:stretc
 body[data-page="sistem"] .dash-photo-band .stat-report-card{width:100%;}
 }
 
-.dash-topnav{
-  position:sticky; top:10px; z-index:30;
-  display:flex; align-items:center; gap:18px;
-  background:var(--panel); border:1px solid var(--line); border-radius:999px;
-  padding:9px 10px 9px 20px; box-shadow:var(--shadow-float);
-  flex-wrap:wrap;
-}
-
-.dash-brand{
-  display:inline-flex; align-items:center; gap:9px;
-  font-family:var(--mono); font-weight:800; font-size:13px; letter-spacing:-0.01em;
-  color:var(--text); text-decoration:none; flex-shrink:0;
-}
-
-.dash-brand .arrow{color:var(--purple); padding:0 3px;}
-
-.dash-brand-mark{
-  display:inline-flex; align-items:center; justify-content:center;
-  width:26px; height:26px; border-radius:50%;
-  background:var(--text); color:#fff; font-size:9px; font-weight:800; letter-spacing:0;
-}
-
-.dash-topnav-links{display:flex; gap:6px; flex:1; flex-wrap:wrap;}
-
-.dash-topnav-link{
-  display:inline-flex; align-items:center; gap:5px;
-  font-family:var(--mono); font-size:11px; font-weight:600; text-decoration:none;
-  color:var(--text-dim); background:var(--panel-2); padding:8px 14px; border-radius:999px; transition:all .15s ease;
-  white-space:nowrap;
-}
-
-.dash-topnav-link:hover{background:var(--line); color:var(--text);}
-
-.dash-topnav-link.active{background:var(--text); color:#fff; box-shadow:0 2px 8px rgba(15,23,42,0.18);}
-
-.dash-topnav-right{display:flex; align-items:center; gap:8px; flex-shrink:0; margin-left:auto;}
-
-.topnav-icon-btn{
-  width:34px; height:34px; border-radius:50%; flex-shrink:0;
-  display:inline-flex; align-items:center; justify-content:center;
-  background:var(--panel-2); border:1px solid var(--line); font-size:13px; line-height:1;
-  color:var(--text-dim); cursor:pointer; transition:all .15s ease;
-}
-
-.topnav-icon-btn:hover{background:var(--purple-glow); color:var(--purple); border-color:var(--purple-dim);}
-
-@media(max-width:760px){
-.topnav-icon-btn{display:none;}
-}
-
-.topnav-avatar{
-  width:34px; height:34px; border-radius:50%; flex-shrink:0;
-  display:inline-flex; align-items:center; justify-content:center;
-  background:linear-gradient(135deg, var(--purple), var(--purple-dim));
-  color:#fff; font-family:var(--mono); font-weight:800; font-size:11px;
-  box-shadow:0 2px 6px var(--purple-glow);
-}
-
-.dash-topnav-right .status{
-  font-family:var(--mono); font-size:10px; color:var(--green); display:none;
-  align-items:center; text-transform:uppercase; letter-spacing:0.06em;
-}
-
-.dash-topnav-right .status::before{content:"●"; margin-right:5px; animation:pulse 2s infinite ease-in-out;}
-
-@media(min-width:760px){
-.dash-topnav-right .status{display:inline-flex;}
-}
+/* NOT: .dash-topnav stilleri core.css'e taşındı — menü artık altı
+   sayfanın hepsinde var, sistem.css ise yalnızca index+almanca'da yükleniyor. */
 
 .dash-eyebrow{
   display:block; font-family:var(--mono); font-size:10.5px; letter-spacing:0.08em;
@@ -207,6 +143,15 @@ body[data-page="sistem"] .dash-photo-band .stat-report-card{width:100%;}
 }
 
 .dash-title-block h1{margin-top:0;}
+
+/* Fotoğrafın üstündeki başlık metinleri açık gökyüzü karelerinde
+   kayboluyordu. Fotoğrafa filtre uygulamak yerine yazıya gölge. */
+.dash-photo-band .dash-eyebrow,
+.dash-photo-band .dash-title-block h1,
+.dash-photo-band .dash-title-block .subtitle,
+.dash-photo-band .phase-chip{
+  text-shadow:0 1px 3px rgba(8,20,32,0.55);
+}
 
 .dash-title-block .subtitle{margin-top:10px;}
 
@@ -317,14 +262,15 @@ body[data-page="sistem"] .dash-photo-band .stat-report-card{width:100%;}
 @media(max-width:760px){
 .dash-hero-grid{grid-template-columns:1fr;}
 .dash-hero-photo{min-height:160px; order:-1;}
-.dash-topnav{border-radius:20px; padding:12px 14px;}
-.dash-topnav-links{order:3; width:100%; justify-content:space-between; margin-top:6px;}
-.dash-topnav-link span{display:none;}
 }
 
 .daily-greet{
   font-family:var(--mono); font-size:12px; letter-spacing:0.03em;
-  color:var(--purple-dim); margin-bottom:10px; min-height:1.4em;
+  color:#ffffff; margin:14px 0 10px; min-height:1.4em;
+  display:inline-block; max-width:100%;
+  background:rgba(12,26,40,0.55); border:1px solid rgba(255,255,255,0.18);
+  border-radius:999px; padding:7px 14px;
+  backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px);
 }
 
 .daily-greet::before{content:"› "; opacity:0.7;}
