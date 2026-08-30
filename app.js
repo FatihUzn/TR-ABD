@@ -24,17 +24,6 @@
   const EXAM  = new Date('2027-06-19T10:15:00');
   const RUTIN_ESIK = 70;
 
-  // Ayna modu: file:// ile açıldığında panel düzenlenebilir (PC = tek kaynak).
-  // http(s) ile açıldığında (telefon / GitHub Pages) salt okunur aynadır.
-  const MIRROR = location.protocol.indexOf('http') === 0;
-
-  // İlerleme halkası çevresi (r = 27)
-  const RING_C = 2 * Math.PI * 27;
-
-  // Son yedek tarihi — K sözlüğünün dışında tutuluyor ki geri yükleme
-  // eski yedeğin tarihini geri getirmesin.
-  const K_YEDEK = 'panel_last_backup';
-
   function dateKey(d) {
     return d.getFullYear() + '-' +
       String(d.getMonth() + 1).padStart(2, '0') + '-' +
@@ -433,43 +422,6 @@
   };
 
   // ============================================================
-  // 3b. TEMA
-  // ============================================================
-  function storedTheme() {
-    try { const v = localStorage.getItem('panel_theme'); return (v === 'dark' || v === 'light') ? v : null; }
-    catch (e) { return null; }
-  }
-  function systemTheme() {
-    try { return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'; }
-    catch (e) { return 'light'; }
-  }
-  function applyTheme(v) {
-    document.documentElement.setAttribute('data-theme', v);
-  }
-  function toggleTheme() {
-    const cur = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
-    const next = cur === 'dark' ? 'light' : 'dark';
-    try { localStorage.setItem('panel_theme', next); } catch (e) {}
-    applyTheme(next);
-  }
-  applyTheme(storedTheme() || systemTheme());
-  try {
-    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function (e) {
-      if (!storedTheme()) applyTheme(e.matches ? 'dark' : 'light');
-    });
-  } catch (e) {}
-
-  // ============================================================
-  // 3c. İLERLEME HALKASI
-  // ============================================================
-  function setRing(id, pct) {
-    const el = document.getElementById(id);
-    if (!el) return;
-    el.style.strokeDasharray = RING_C.toFixed(2);
-    el.style.strokeDashoffset = (RING_C * (1 - (pct || 0) / 100)).toFixed(2);
-  }
-
-  // ============================================================
   // 4. DİL
   // ============================================================
   function getLang() {
@@ -655,7 +607,6 @@
     if (f) f.style.width = pct + '%';
     const p = document.getElementById('yksPct');
     if (p) p.textContent = '%' + pct;
-    setRing('yksRing', pct);
     t(document.getElementById('yksSub'),
       tot.done + ' / ' + tot.total + ' konu',
       tot.done + ' / ' + tot.total + ' temas');
@@ -678,7 +629,7 @@
   }
 
   // Haftalık soru kotası
-  function renderKota(force) {
+  function renderKota() {
     document.querySelectorAll('[data-kota]').forEach(tbody => {
       const grup = tbody.dataset.kota;
       let sv = 0, st = 0;
@@ -688,7 +639,6 @@
         const val = Number(S.yksHafta[key]) || 0;
         sv += val; st += hedef;
         const cell = tr.querySelector('.kota-c');
-        if (cell && force) { cell.dataset.ready = ''; cell.innerHTML = ''; }
         if (cell && !cell.dataset.ready) {
           cell.dataset.ready = '1';
           const pct = hedef ? Math.min(100, Math.round((val / hedef) * 100)) : 0;
@@ -772,11 +722,10 @@
     t(document.getElementById('rutinSub'),
       p.done + ' / ' + p.total + ' madde · gün %' + RUTIN_ESIK + ' dolunca seriye sayılır',
       p.done + ' / ' + p.total + ' puntos · cuenta para la racha al ' + RUTIN_ESIK + '%');
-    setRing('rutinRing', p.pct);
     const rs = rutinStreak();
     t(document.getElementById('rutinSeri'),
-      rs > 0 ? rs + ' günlük rutin serisi' : 'Rutin serisi henüz başlamadı.',
-      rs > 0 ? 'Racha de rutina de ' + rs + ' días' : 'La racha de rutina aún no ha empezado.');
+      rs > 0 ? '🔥 ' + rs + ' günlük rutin serisi' : 'Rutin serisi henüz başlamadı.',
+      rs > 0 ? '🔥 racha de rutina de ' + rs + ' días' : 'La racha de rutina aún no ha empezado.');
   }
 
   // ============================================================
@@ -793,7 +742,6 @@
     if (f) f.style.width = pct + '%';
     const p = document.getElementById('gelisimPct');
     if (p) p.textContent = '%' + pct;
-    setRing('gelisimRing', pct);
     t(document.getElementById('gelisimSub'),
       tot.done + ' / ' + tot.total + ' madde', tot.done + ' / ' + tot.total + ' puntos');
   }
@@ -823,131 +771,6 @@
     const k = kitapCounts();
     t(document.getElementById('kitapSub'),
       k.done + ' / ' + k.total + ' kitap bitti', k.done + ' / ' + k.total + ' libros terminados');
-  }
-
-  // ============================================================
-  // 10b. YIL IZGARASI
-  // Başlangıçtan sınava kadar her gün bir kare. Sütunlar hafta,
-  // satırlar Pazartesi–Pazar. Seri sayısı soyut; bu ızgara değil.
-  // ============================================================
-  const YG_PITCH = 14; // kare 11px + boşluk 3px
-
-  function renderYearGrid() {
-    const grid = document.getElementById('ygGrid');
-    if (!grid) return;
-
-    const c = checkins();
-    const tk = todayKey();
-
-    // Izgara Pazartesi'den başlasın
-    const first = new Date(START);
-    first.setDate(first.getDate() - ((first.getDay() + 6) % 7));
-
-    const days = [];
-    for (let d = new Date(first); d <= EXAM; d.setDate(d.getDate() + 1)) days.push(new Date(d));
-
-    let toplam = 0, dolu = 0;
-    const cells = days.map(d => {
-      const k = dateKey(d);
-      const cls = [];
-      if (d < START) cls.push('pre');
-      else {
-        toplam++;
-        if (c[k]) { cls.push('on'); dolu++; }
-        else if (k > tk) cls.push('fut');
-      }
-      if (k === tk) cls.push('now');
-      return '<i class="' + cls.join(' ') + '" title="' + k + '"></i>';
-    });
-    grid.innerHTML = cells.join('');
-
-    // Ay etiketleri — her hafta sütununun ilk gününe göre grupla
-    const AY = ['Oca','Şub','Mar','Nis','May','Haz','Tem','Ağu','Eyl','Eki','Kas','Ara'];
-    const AY_ES = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
-    const haftaSayisi = Math.ceil(days.length / 7);
-    const gruplar = [];
-    for (let w = 0; w < haftaSayisi; w++) {
-      const d = days[w * 7];
-      if (!d) break;
-      const m = d.getMonth();
-      const son = gruplar[gruplar.length - 1];
-      if (son && son.m === m) son.n++;
-      else gruplar.push({ m: m, n: 1 });
-    }
-    const el = document.getElementById('ygAylar');
-    if (el) {
-      el.innerHTML = gruplar.map(g => {
-        const w = ' style="width:' + (g.n * YG_PITCH) + 'px"';
-        if (g.n <= 2) return '<span' + w + '></span>';
-        return '<span' + w + ' data-tr="' + AY[g.m] + '" data-es="' + AY_ES[g.m] + '">' +
-          AY[g.m] + '</span>';
-      }).join('');
-    }
-
-    t(document.getElementById('ygSayi'),
-      dolu + ' / ' + toplam + ' gün işaretlendi',
-      dolu + ' / ' + toplam + ' días marcados');
-  }
-
-  // ============================================================
-  // 10c. YEDEK HATIRLATICI
-  // Veri sadece bu tarayıcıda. Ayda bir yedeği hatırlamaya
-  // bırakmak yerine panel kendisi uyarıyor.
-  // ============================================================
-  function yedekTarihi() {
-    try { const v = localStorage.getItem(K_YEDEK); return v ? new Date(v) : null; }
-    catch (e) { return null; }
-  }
-  function yedekAlindi() {
-    try { localStorage.setItem(K_YEDEK, new Date().toISOString()); } catch (e) {}
-    renderYedek();
-  }
-  function renderYedek() {
-    const d = yedekTarihi();
-    const gun = d ? Math.floor((Date.now() - d.getTime()) / 86400000) : null;
-    const alarm = document.getElementById('yedekAlarm');
-    const durum = document.getElementById('yedekDurum');
-
-    if (durum) {
-      t(durum,
-        d ? 'Son yedek: ' + d.toLocaleDateString('tr-TR') + ' (' + gun + ' gün önce)'
-          : 'Henüz yedek alınmadı.',
-        d ? 'Última copia: ' + d.toLocaleDateString('es-ES') + ' (hace ' + gun + ' días)'
-          : 'Aún no hay ninguna copia.');
-    }
-    if (alarm) {
-      const goster = !MIRROR && (gun === null || gun >= 30);
-      alarm.hidden = !goster;
-      if (goster) {
-        t(document.getElementById('yedekAlarmTxt'),
-          gun === null
-            ? '<b>Henüz hiç yedek almadın.</b> Panelin tüm verisi sadece bu tarayıcıda duruyor. Yedekleme bölümünden bir dakikada al.'
-            : '<b>' + gun + ' gündür yedek alınmadı.</b> Tarayıcı verisi silinirse bu kayıt geri gelmez. Yedekleme bölümüne git.',
-          gun === null
-            ? '<b>Aún no has hecho ninguna copia.</b> Todos los datos están solo en este navegador. Hazla en un minuto desde la sección de copia.'
-            : '<b>Hace ' + gun + ' días que no haces copia.</b> Si se borran los datos del navegador, este registro no vuelve.',
-          true);
-      }
-    }
-  }
-
-  // ============================================================
-  // 10d. DIŞA AKTARMA
-  // ============================================================
-  function stateObj() {
-    const data = { v: 1, tarih: new Date().toISOString(), keys: {} };
-    Object.values(K).forEach(key => {
-      try { const v = localStorage.getItem(key); if (v !== null) data.keys[key] = v; } catch (err) {}
-    });
-    return data;
-  }
-  function indir(obj, ad) {
-    const blob = new Blob([JSON.stringify(obj, null, 2)], { type: 'application/json' });
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = ad;
-    a.click();
-    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
   }
 
   // ============================================================
@@ -1001,7 +824,6 @@
     const pct = tot.total ? Math.round((tot.done / tot.total) * 100) : 0;
     const f = document.getElementById(fillId); if (f) f.style.width = pct + '%';
     const p = document.getElementById(pctId); if (p) p.textContent = '%' + pct;
-    setRing(fillId.replace('Fill', 'Ring'), pct);
     t(document.getElementById(subId),
       tot.done + ' / ' + tot.total + ' ' + birim,
       tot.done + ' / ' + tot.total + ' ' + birimEs);
@@ -1047,11 +869,10 @@
       t(document.getElementById('rutinSub'),
         p.done + ' / ' + p.total + ' madde · gün %' + RUTIN_ESIK + ' dolunca seriye sayılır',
         p.done + ' / ' + p.total + ' puntos · cuenta para la racha al ' + RUTIN_ESIK + '%');
-      setRing('rutinRing', p.pct);
       const rs = rutinStreak();
       t(document.getElementById('rutinSeri'),
-        rs > 0 ? rs + ' günlük rutin serisi' : 'Rutin serisi henüz başlamadı.',
-        rs > 0 ? 'Racha de rutina de ' + rs + ' días' : 'La racha de rutina aún no ha empezado.');
+        rs > 0 ? '🔥 ' + rs + ' günlük rutin serisi' : 'Rutin serisi henüz başlamadı.',
+        rs > 0 ? '🔥 racha de rutina de ' + rs + ' días' : 'La racha de rutina aún no ha empezado.');
     }
 
     const lbl = el.closest('label');
@@ -1090,24 +911,22 @@
       if (c[k]) delete c[k]; else c[k] = true;
       save(K.motiv, S.motiv);
       renderCheckin();
-      renderYearGrid();
-      applyLang(getLang());
       return;
     }
 
     if (e.target.closest('#btnYedek')) {
-      indir(stateObj(), 'panel-yedek-' + todayKey() + '.json');
-      yedekAlindi();
+      const data = { v: 1, tarih: new Date().toISOString(), keys: {} };
+      Object.values(K).forEach(key => {
+        try { const v = localStorage.getItem(key); if (v !== null) data.keys[key] = v; } catch (err) {}
+      });
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'panel-yedek-' + todayKey() + '.json';
+      a.click();
+      setTimeout(() => URL.revokeObjectURL(a.href), 1000);
       return;
     }
-
-    // Telefon aynası için: state.json — C:\\Panel'e koyup senkron.bat çalıştır.
-    if (e.target.closest('#btnJson')) {
-      indir(stateObj(), 'state.json');
-      return;
-    }
-
-    if (e.target.closest('#themeBtn')) { toggleTheme(); return; }
 
     if (e.target.closest('#btnGeri')) {
       document.getElementById('fileGeri').click();
@@ -1141,12 +960,10 @@
     const links = Array.from(document.querySelectorAll('.nav-a'));
     if (!links.length) return;
     const secs = links.map(a => document.querySelector(a.getAttribute('href'))).filter(Boolean);
-    const bar = document.getElementById('topBar');
     function upd() {
       let cur = 0;
       secs.forEach((s, i) => { if (s.getBoundingClientRect().top <= 120) cur = i; });
       links.forEach((a, i) => a.classList.toggle('on', i === cur));
-      if (bar) bar.classList.toggle('stuck', window.scrollY > 8);
     }
     window.addEventListener('scroll', upd, { passive: true });
     upd();
@@ -1155,67 +972,14 @@
   // ============================================================
   // 13. BAŞLAT
   // ============================================================
-  function renderAll(force) {
-    renderYks();
-    renderKota(force);
-    renderRutin();
-    renderGelisim();
-    renderKitap();
-    renderBugun();
-    renderCheckin();
-    renderCounters();
-    renderYearGrid();
-    renderYedek();
-    applyLang(getLang());
-  }
-
-  renderAll(false);
+  renderYks();
+  renderKota();
+  renderRutin();
+  renderGelisim();
+  renderKitap();
+  renderBugun();
+  renderCheckin();
+  renderCounters();
+  applyLang(getLang());
   setInterval(renderCounters, 1000);
-
-  // ============================================================
-  // 14. AYNA MODU
-  // PC (file://) tek kaynak. Telefonda / GitHub Pages'te panel
-  // state.json dosyasını okur ve salt okunur gösterir. Böylece
-  // iki ayrı defter oluşmuyor.
-  // ============================================================
-  if (MIRROR) {
-    document.body.classList.add('mirror');
-
-    fetch('state.json?t=' + Date.now(), { cache: 'no-store' })
-      .then(function (r) { return r.ok ? r.json() : null; })
-      .then(function (d) {
-        if (!d || !d.keys) throw new Error('yok');
-
-        function oku(key, bos) {
-          try { return d.keys[key] ? JSON.parse(d.keys[key]) : bos; }
-          catch (e) { return bos; }
-        }
-        S.yks      = oku(K.yks, {});
-        S.yksHafta = oku(K.yksHafta, {});
-        S.gelisim  = oku(K.gelisim, {});
-        S.rutin    = oku(K.rutin, {});
-        S.kitap    = oku(K.kitap, {});
-        S.motiv    = oku(K.motiv, {});
-
-        renderAll(true);
-
-        const tarih = d.tarih ? new Date(d.tarih) : null;
-        t(document.getElementById('mirrorTxt'),
-          tarih
-            ? 'Ayna görünümü · bilgisayardan son gönderim: ' +
-              tarih.toLocaleDateString('tr-TR', { day: 'numeric', month: 'long' }) + ' ' +
-              tarih.toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })
-            : 'Ayna görünümü — işaretleme bilgisayardan yapılır',
-          tarih
-            ? 'Vista espejo · último envío desde el ordenador: ' +
-              tarih.toLocaleDateString('es-ES', { day: 'numeric', month: 'long' }) + ' ' +
-              tarih.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })
-            : 'Vista espejo: se marca desde el ordenador');
-      })
-      .catch(function () {
-        t(document.getElementById('mirrorTxt'),
-          'Ayna görünümü · henüz veri gönderilmemiş (state.json yok)',
-          'Vista espejo · aún no se han enviado datos (falta state.json)');
-      });
-  }
 })();
