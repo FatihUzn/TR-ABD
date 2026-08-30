@@ -1,4 +1,4 @@
-# TR → ABD Paneli · REV 8.0
+# TR → ABD Paneli · REV 9.0
 
 Tek sayfalık operasyon paneli. Bağımlılık yok, derleme yok, sunucu yok —
 düz statik dosyalar. GitHub Pages'te olduğu gibi çalışır.
@@ -14,16 +14,33 @@ Etiketler de gökkuşağı değil, üç anlam katmanı:
 kiraz = asıl iş (YKS) · mavi = yatırım (spor, dil, kültür) ·
 gümüş = altyapı (uyku, beslenme, temel).
 
-## Arka plan görseli
+## Tasarım fikri
 
-Üstteki şeridin zemini varsayılan olarak `arka.svg` — kendi çizdiğim
-neoklasik bir kampüs cephesi, telif sorunu yok.
+Siyah zemin, kocaman tipografi, kırmızı ve mavi ışıltı.
 
-**Kendi fotoğrafını koymak için:** klasöre `arka.jpg` (ya da `.png`,
-`.webp`) adında bir dosya bırak, başka hiçbir şey yapma. Panel açılışta
-dosyayı bulur ve zemini onunla değiştirir. Üstüne kiraz-mavi bir duotone
-örtü geliyor, böylece hangi fotoğraf olursa olsun yazılar okunur kalıyor.
-Silersen çizim geri gelir.
+Kahraman şeridin altındaki yol süs değil, panelin verisi:
+
+- Yay soldan (TR) sağa (ABD) uzanıyor.
+- Parlak kısım geçen zaman kadar; kırmızıdan maviye dönüyor.
+- Yay üzerindeki ışıklı noktalar **işaretlediğin günler.** Her check-in
+  bir ışık daha ekliyor.
+- Baştaki beyaz nokta bugünkü konumun, nabız gibi atıyor.
+
+Kütüphane yok, üçüncü parti yok — saf canvas, birkaç kilobayt. Sayfa
+açılır açılmaz çalışır. Sekme arkadayken ve işletim sisteminde "hareketi
+azalt" açıkken çizim durur, batarya yemez.
+
+Etiketler üç anlam katmanı: kırmızı = asıl iş (YKS), mavi = yatırım
+(spor, dil, kültür), gri = altyapı (uyku, beslenme, temel).
+
+Varsayılan tema siyah. Açık tema düğmesi duruyor ama panelin kimliği
+siyah üzerine kurulu.
+
+## Arka plan fotoğrafı
+
+Klasöre **`arka.jpg`** adında bir görsel koyarsan canvas'ın altına
+girer, sönük ve gri tonlu bir katman olarak. Dosya yoksa şerit saf
+siyah kalır.
 
 Telifli bir fotoğrafı (üniversite tanıtım görselleri dahil) herkese açık
 bir depoya koymak hak ihlali olur — kendi çektiğin ya da lisansı uygun

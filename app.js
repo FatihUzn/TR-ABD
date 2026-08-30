@@ -435,10 +435,9 @@
     try { const v = localStorage.getItem('panel_theme'); return (v === 'dark' || v === 'light') ? v : null; }
     catch (e) { return null; }
   }
-  function systemTheme() {
-    try { return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'; }
-    catch (e) { return 'light'; }
-  }
+  // Varsayılan siyah. Panelin kimliği siyah üzerine kurulu; açık tema
+  // isteyerek seçilen bir seçenek, sistemin dayattığı değil.
+  function systemTheme() { return 'dark'; }
   // Başlatma bitmeden yeniden çizim yapılamaz: aşağıdaki sabitler
   // (YG_PITCH gibi) henüz tanımlı olmuyor.
   let HAZIR = false;
@@ -1137,6 +1136,7 @@
       save(K.motiv, S.motiv);
       renderCheckin();
       renderYearGrid();
+      if (window.heroTazele) window.heroTazele();
       applyLang(getLang());
       return;
     }
@@ -1217,15 +1217,225 @@
   (function arkaFoto() {
     const band = document.getElementById('heroBand');
     if (!band) return;
-    ['arka.jpg', 'arka.jpeg', 'arka.png', 'arka.webp'].forEach(function (ad) {
-      const im = new Image();
-      im.onload = function () {
-        if (band.classList.contains('foto')) return;
-        band.style.setProperty('--foto', 'url("' + ad + '")');
-        band.classList.add('foto');
+    // Tek dosya yokluyoruz (arka.jpg). Birden çok uzantı denemek
+    // konsolu gereksiz 404'lerle dolduruyordu.
+    const im = new Image();
+    im.onload = function () {
+      band.style.setProperty('--foto', 'url("arka.jpg")');
+      band.classList.add('foto');
+    };
+    im.src = 'arka.jpg';
+  })();
+
+  // ============================================================
+  // 12d. KAHRAMAN GÖRSELİ
+  //
+  // Kütüphane yok, üçüncü parti yok. Saf canvas, birkaç kilobayt,
+  // sayfa açılır açılmaz çalışıyor — Lusion gibi sitelerin on saniyelik
+  // yükleme ekranı olmadan.
+  //
+  // Çizilen şey süs değil, senin verin:
+  //   · Yay soldan (Türkiye) sağa (ABD) uzanıyor.
+  //   · Yayın parlak kısmı geçen zaman kadar.
+  //   · Yay üzerindeki ışıklı noktalar İŞARETLEDİĞİN GÜNLER.
+  //     Her check-in bir ışık daha ekliyor.
+  //   · Baştaki büyük nokta bugünkü konumun; nabız gibi atıyor.
+  //
+  // Sekme arkadayken ve "hareketi azalt" açıkken duruyor.
+  // ============================================================
+  (function heroCanvas() {
+    const cv = document.getElementById('heroCanvas');
+    if (!cv || !cv.getContext) return;
+    const ctx = cv.getContext('2d');
+
+    let W = 0, H = 0, DPR = 1;
+    let yildizlar = [], gunler = [], ilerleme = 0, oran = 0;
+    let calisiyor = true, t0 = performance.now();
+
+    const azHareket = (function () {
+      try { return window.matchMedia('(prefers-reduced-motion: reduce)').matches; }
+      catch (e) { return false; }
+    })();
+
+    function boyutla() {
+      const r = cv.getBoundingClientRect();
+      DPR = Math.min(2, window.devicePixelRatio || 1);
+      W = Math.max(1, Math.round(r.width));
+      H = Math.max(1, Math.round(r.height));
+      cv.width = W * DPR; cv.height = H * DPR;
+      ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+      yildizVer();
+    }
+
+    function yildizVer() {
+      yildizlar = [];
+      const n = Math.round(Math.min(150, (W * H) / 5200));
+      for (let i = 0; i < n; i++) {
+        yildizlar.push({
+          x: Math.random() * W,
+          y: Math.random() * H,
+          r: Math.random() * 1.25 + 0.25,
+          a: Math.random() * 0.45 + 0.10,
+          h: Math.random() * 0.5 + 0.25,      // faz
+          v: Math.random() * 0.10 + 0.02      // sürüklenme
+        });
+      }
+    }
+
+    // Yol: şeridin alt bandında, içeriğin altından geçiyor.
+    // Kendi alanı var ki kartların arkasında kaybolmasın.
+    function P(u) {
+      const taban = H - 34;              // yolun oturduğu çizgi
+      const yay   = Math.min(96, H * 0.17); // kavis yüksekliği
+      const x0 = W * 0.07, y0 = taban;
+      const cx = W * 0.50, cy = taban - yay * 2;
+      const x1 = W * 0.93, y1 = taban - yay * 0.55;
+      const m = 1 - u;
+      return {
+        x: m * m * x0 + 2 * m * u * cx + u * u * x1,
+        y: m * m * y0 + 2 * m * u * cy + u * u * y1
       };
-      im.src = ad;
+    }
+
+    // Panelin verisi: yılın ne kadarı geçti, hangi günler işaretli
+    function veriyiAl() {
+      const simdi = Date.now();
+      const toplam = Math.max(1, EXAM - START);
+      oran = Math.min(1, Math.max(0, (simdi - START) / toplam));
+
+      const c = (S.motiv && S.motiv.checkins) || {};
+      gunler = [];
+      Object.keys(c).forEach(function (k) {
+        if (!c[k]) return;
+        const d = new Date(k + 'T12:00:00');
+        if (isNaN(d)) return;
+        const u = (d - START) / toplam;
+        if (u >= 0 && u <= 1) gunler.push(u);
+      });
+      gunler.sort(function (a, b) { return a - b; });
+    }
+
+    function ciz(zaman) {
+      const t = (zaman - t0) / 1000;
+      ctx.clearRect(0, 0, W, H);
+
+      // 1. Yıldızlar
+      for (let i = 0; i < yildizlar.length; i++) {
+        const s = yildizlar[i];
+        const p = azHareket ? 1 : 0.55 + 0.45 * Math.sin(t * s.h + i);
+        ctx.globalAlpha = s.a * p;
+        ctx.fillStyle = i % 7 === 0 ? '#ff5b7a' : (i % 5 === 0 ? '#6aa8ff' : '#ffffff');
+        ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, 6.2832); ctx.fill();
+        if (!azHareket) { s.x += s.v; if (s.x > W + 2) s.x = -2; }
+      }
+      ctx.globalAlpha = 1;
+
+      // 2. Yayın tamamı — sönük
+      ctx.beginPath();
+      for (let u = 0; u <= 1.0001; u += 0.01) {
+        const q = P(u);
+        if (u === 0) ctx.moveTo(q.x, q.y); else ctx.lineTo(q.x, q.y);
+      }
+      ctx.strokeStyle = 'rgba(255,255,255,0.10)';
+      ctx.lineWidth = 1.25;
+      ctx.setLineDash([5, 7]);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      // 3. Geçen kısım — kırmızıdan maviye, parlak
+      ilerleme += (oran - ilerleme) * 0.06;
+      if (ilerleme > 0.002) {
+        const a = P(0), b = P(ilerleme);
+        const g = ctx.createLinearGradient(a.x, a.y, b.x, b.y);
+        g.addColorStop(0, '#ff2d55');
+        g.addColorStop(1, '#3d8bff');
+        ctx.beginPath();
+        for (let u = 0; u <= ilerleme; u += 0.004) {
+          const q = P(u);
+          if (u === 0) ctx.moveTo(q.x, q.y); else ctx.lineTo(q.x, q.y);
+        }
+        ctx.strokeStyle = g;
+        ctx.lineWidth = 2.4;
+        ctx.lineCap = 'round';
+        ctx.shadowColor = 'rgba(255,45,85,0.85)';
+        ctx.shadowBlur = 16;
+        ctx.stroke();
+        ctx.shadowBlur = 0;
+      }
+
+      // 4. İşaretlenen günler — yay üzerinde ışıklar
+      for (let i = 0; i < gunler.length; i++) {
+        const u = gunler[i];
+        if (u > ilerleme + 0.002) continue;
+        const q = P(u);
+        const par = azHareket ? 1 : 0.75 + 0.25 * Math.sin(t * 1.6 + i * 0.7);
+        const kar = u;  // yolun neresinde: kırmızıdan maviye
+        const R = Math.round(255 + (61 - 255) * kar);
+        const G = Math.round(45 + (139 - 45) * kar);
+        const B = Math.round(85 + (255 - 85) * kar);
+        ctx.beginPath();
+        ctx.arc(q.x, q.y, 2.6, 0, 6.2832);
+        ctx.fillStyle = 'rgba(' + R + ',' + G + ',' + B + ',' + (0.85 * par) + ')';
+        ctx.shadowColor = 'rgb(' + R + ',' + G + ',' + B + ')';
+        ctx.shadowBlur = 12;
+        ctx.fill();
+        ctx.shadowBlur = 0;
+      }
+
+      // 5. Bugünkü konum — nabız
+      if (ilerleme > 0.002) {
+        const q = P(ilerleme);
+        const nabiz = azHareket ? 0 : (Math.sin(t * 2.1) + 1) / 2;
+        ctx.beginPath();
+        ctx.arc(q.x, q.y, 6 + nabiz * 9, 0, 6.2832);
+        ctx.fillStyle = 'rgba(255,45,85,' + (0.16 - nabiz * 0.12) + ')';
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(q.x, q.y, 4.2, 0, 6.2832);
+        ctx.fillStyle = '#ffffff';
+        ctx.shadowColor = '#ff2d55'; ctx.shadowBlur = 18;
+        ctx.fill(); ctx.shadowBlur = 0;
+      }
+
+      // 6. İki uç: TR ve ABD
+      const uc = [
+        { p: P(0), c: '#ff2d55', ad: 'TR',  hiza: 'left'  },
+        { p: P(1), c: '#3d8bff', ad: 'ABD', hiza: 'right' }
+      ];
+      for (let i = 0; i < uc.length; i++) {
+        const e = uc[i];
+        ctx.beginPath(); ctx.arc(e.p.x, e.p.y, 3.4, 0, 6.2832);
+        ctx.fillStyle = e.c; ctx.shadowColor = e.c; ctx.shadowBlur = 14;
+        ctx.fill(); ctx.shadowBlur = 0;
+        ctx.font = '600 10px ui-monospace, "JetBrains Mono", monospace';
+        ctx.fillStyle = 'rgba(255,255,255,0.40)';
+        ctx.textAlign = e.hiza === 'left' ? 'left' : 'right';
+        ctx.fillText(e.ad, e.p.x + (e.hiza === 'left' ? 10 : -10), e.p.y + 3.5);
+      }
+
+      if (calisiyor) requestAnimationFrame(ciz);
+    }
+
+    function baslat() {
+      boyutla(); veriyiAl();
+      requestAnimationFrame(ciz);
+    }
+
+    let zamanlayici;
+    window.addEventListener('resize', function () {
+      clearTimeout(zamanlayici);
+      zamanlayici = setTimeout(boyutla, 160);
     });
+
+    document.addEventListener('visibilitychange', function () {
+      calisiyor = !document.hidden;
+      if (calisiyor) { t0 = performance.now(); requestAnimationFrame(ciz); }
+    });
+
+    // Check-in yapılınca yeni ışık hemen görünsün
+    window.heroTazele = veriyiAl;
+
+    baslat();
   })();
 
   // ============================================================

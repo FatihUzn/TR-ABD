@@ -1,5 +1,5 @@
 /* ============================================================
-   style.css — TR→ABD operasyon paneli · REV 7.0
+   style.css — TR→ABD operasyon paneli · REV 9.0
 
    FİKİR
    Panelin tek cümlesi var: kırmızıdan maviye gitmek.
@@ -64,33 +64,34 @@
 :root{
   color-scheme:light;
 
-  --bg:#f4f5f7;
-  --bg-tint:#e6e9ee;
+  --bg:#f2f2f4;
+  --bg-tint:#e4e5ea;
   --card:#ffffff;
-  --card-2:#fafbfc;
-  --soft:#edeff2;
-  --line:#e0e3e8;
-  --line-2:#c9ced6;
+  --card-2:#f8f8fa;
+  --soft:#ebebef;
+  --line:#dcdce2;
+  --line-2:#c2c2cc;
 
-  --ink:#15171c;
-  --ink-2:#4d525b;
-  --ink-3:#848a94;
+  --ink:#08080a;
+  --ink-2:#43434c;
+  --ink-3:#7c7c87;
 
-  --cherry:#7a2338;
-  --cherry-2:#9d3050;
-  --cherry-soft:#f8e9ed;
-  --cherry-line:#e5c4ce;
+  --cherry:#c11538;
+  --cherry-2:#e0234a;
+  --cherry-soft:#fde8ec;
+  --cherry-line:#f5c2cd;
 
-  --blue:#2b6d9e;
-  --blue-2:#4a92c4;
-  --blue-soft:#e9f1f8;
-  --blue-line:#c3d9ea;
+  --blue:#0b5fd6;
+  --blue-2:#2f83f5;
+  --blue-soft:#e6efff;
+  --blue-line:#bcd4fb;
 
-  --silver:#616872;
-  --silver-soft:#eef0f3;
-  --silver-line:#d6dae0;
+  --silver:#5b5b66;
+  --silver-soft:#ededf1;
+  --silver-line:#d3d3db;
 
   --on-fill:#ffffff;
+  --hero-bg:#050507;
 
   --sh-1:0 1px 2px rgba(18,20,26,.05);
   --sh-2:0 1px 2px rgba(18,20,26,.05), 0 10px 28px -18px rgba(18,20,26,.30);
@@ -110,33 +111,34 @@
 :root[data-theme="dark"]{
   color-scheme:dark;
 
-  --bg:#0e1013;
-  --bg-tint:#171b21;
-  --card:#16191e;
-  --card-2:#1b1f25;
-  --soft:#1e232a;
-  --line:#282e36;
-  --line-2:#3a424c;
+  --bg:#050507;
+  --bg-tint:#0b0b10;
+  --card:#0c0c11;
+  --card-2:#101018;
+  --soft:#141420;
+  --line:#1f1f2b;
+  --line-2:#33334a;
 
-  --ink:#eceef1;
-  --ink-2:#a3aab4;
-  --ink-3:#6d747e;
+  --ink:#f4f4f7;
+  --ink-2:#9c9caa;
+  --ink-3:#63636f;
 
-  --cherry:#cc6480;
-  --cherry-2:#dd7c96;
-  --cherry-soft:#2b141b;
-  --cherry-line:#4a2530;
+  --cherry:#ff2d55;
+  --cherry-2:#ff5b7a;
+  --cherry-soft:#22070e;
+  --cherry-line:#4a1224;
 
-  --blue:#7fb6dd;
-  --blue-2:#9bc9e8;
-  --blue-soft:#131f29;
-  --blue-line:#264055;
+  --blue:#3d8bff;
+  --blue-2:#6aa8ff;
+  --blue-soft:#061428;
+  --blue-line:#123055;
 
-  --silver:#9aa2ad;
-  --silver-soft:#1a1e24;
-  --silver-line:#2d343d;
+  --silver:#8b8b99;
+  --silver-soft:#101018;
+  --silver-line:#26263a;
 
-  --on-fill:#0e1013;
+  --on-fill:#050507;
+  --hero-bg:#000000;
 
   --sh-1:0 1px 2px rgba(0,0,0,.55);
   --sh-2:0 1px 2px rgba(0,0,0,.55), 0 10px 28px -18px rgba(0,0,0,.95);
@@ -161,9 +163,8 @@ body{
 body::before{
   content:""; position:fixed; inset:0; z-index:-1;
   background:
-    radial-gradient(820px 460px at 6% 4%, color-mix(in srgb,var(--cherry) 15%,transparent), transparent 66%),
-    radial-gradient(820px 460px at 94% 10%, color-mix(in srgb,var(--blue) 17%,transparent), transparent 66%),
-    radial-gradient(700px 500px at 50% 108%, color-mix(in srgb,var(--blue) 12%,transparent), transparent 70%);
+    radial-gradient(900px 500px at 4% 2%, color-mix(in srgb,var(--cherry) 12%,transparent), transparent 62%),
+    radial-gradient(900px 500px at 96% 8%, color-mix(in srgb,var(--blue) 14%,transparent), transparent 62%);
   pointer-events:none;
 }
 
@@ -244,69 +245,80 @@ body::before{
 
 /* ---------- 4. KAHRAMAN ŞERİT (kısa tutuldu) ---------- */
 
-/* Tam genişlik şerit. Zemin: kirazdan maviye gradyan + kampüs cephesi.
-   Klasöre arka.jpg / arka.png koyulursa app.js onu --foto olarak
-   veriyor ve fotoğraf çizimin yerine geçiyor; duotone örtü sayesinde
-   hangi fotoğraf olursa olsun yazı okunur kalıyor. */
+/* Kahraman şerit her zaman siyah. Zemini canlı: heroCanvas üzerine
+   kod ile çizilen bir yol — solda Türkiye, sağda ABD, arada işaretlediğin
+   günlerle dolan bir yay. Kütüphane yok, birkaç kilobayt, anında açılır.
+   Klasöre arka.jpg konursa fotoğraf canvas'ın altına girer. */
 .hero-band{
   position:relative; overflow:hidden;
-  background:
-    linear-gradient(112deg,#5e1a2b 0%,#7a2338 26%,#9d3050 48%,#3a6f9c 82%,#4a92c4 100%);
+  background:var(--hero-bg);
   border-bottom:1px solid var(--line);
 }
 .hero-band::before{
   content:""; position:absolute; inset:0;
-  background-image:var(--foto,url(arka.svg));
-  background-size:cover; background-position:center 62%;
-  background-repeat:no-repeat;
-  opacity:var(--foto-op,1);
-  mix-blend-mode:soft-light;
+  background-image:var(--foto,none);
+  background-size:cover; background-position:center 55%;
+  opacity:.30; filter:grayscale(.4) contrast(1.1);
 }
-.hero-band.foto::before{mix-blend-mode:normal; opacity:.38;}
-/* Fotoğraf varken üstüne kiraz-mavi bir duotone örtü. */
-.hero-band.foto::after{
-  content:""; position:absolute; inset:0;
-  background:linear-gradient(112deg,rgba(94,26,43,.80),rgba(157,48,80,.55) 45%,rgba(43,109,158,.78));
+#heroCanvas{
+  position:absolute; inset:0; width:100%; height:100%;
+  display:block; pointer-events:none;
 }
-.hero{position:relative; z-index:2; padding:34px 0 26px; color:#fff;}
+/* Yolun üstünde kalan içerik için hafif bir karartma. */
+.hero-band::after{
+  content:""; position:absolute; left:0; right:0; top:0; height:62%;
+  background:linear-gradient(to bottom, rgba(0,0,0,.55), transparent);
+  pointer-events:none;
+}
+.hero{position:relative; z-index:2; padding:46px 0 150px; color:#fff;}
 .hero-top{display:flex; align-items:flex-end; justify-content:space-between;
-  gap:22px; flex-wrap:wrap; margin-bottom:22px;}
+  gap:22px; flex-wrap:wrap; margin-bottom:26px;}
 
-h1{font-size:clamp(32px,5.8vw,48px); line-height:1;
-  margin:0 0 10px; letter-spacing:-0.05em; font-weight:700; color:#fff;
-  text-shadow:0 2px 18px rgba(0,0,0,.30);}
-h1 .tr,h1 .us{color:#fff;}
-h1 .ar{display:inline-block; margin:0 .1em; font-style:normal; color:rgba(255,255,255,.62);}
-.lede{color:rgba(255,255,255,.82); margin:0; max-width:44ch;
-  font-size:13.5px; line-height:1.6; text-shadow:0 1px 10px rgba(0,0,0,.28);}
+h1{
+  font-size:clamp(46px,9vw,104px); line-height:.88;
+  margin:0 0 16px; letter-spacing:-0.055em; font-weight:700; color:#fff;
+}
+h1 .tr{color:#fff;}
+h1 .us{color:#fff;}
+h1 .ar{display:inline-block; margin:0 .06em; font-style:normal;
+  color:#ff2d55; font-weight:400;}
+.lede{color:rgba(255,255,255,.62); margin:0; max-width:40ch;
+  font-size:14px; line-height:1.6;}
 
 .stats{display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:14px;}
 .stat{
-  background:rgba(255,255,255,.13); border:1px solid rgba(255,255,255,.22);
-  border-radius:var(--r); padding:15px 16px 14px; position:relative; overflow:hidden;
-  backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
-  box-shadow:0 8px 26px -18px rgba(0,0,0,.7);
+  background:rgba(255,255,255,.045); border:1px solid rgba(255,255,255,.11);
+  border-radius:var(--r); padding:16px 18px 15px; position:relative; overflow:hidden;
+  backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
   transition:transform .18s ease, background .18s ease, border-color .18s ease;
 }
-.stat:hover{transform:translateY(-2px); background:rgba(255,255,255,.19);
-  border-color:rgba(255,255,255,.34);}
-.stat::before{content:""; position:absolute; left:0; top:0; bottom:0; width:3px; background:#fff; opacity:.55;}
-.stat-n{font-family:var(--mono); font-size:30px; font-weight:700; line-height:1;
-  letter-spacing:-0.035em; font-variant-numeric:tabular-nums; color:#fff;}
-.stat-k{font-family:var(--mono); font-size:9px; font-weight:600; letter-spacing:0.12em;
-  text-transform:uppercase; color:rgba(255,255,255,.72); margin-top:9px;}
+.stat:hover{transform:translateY(-2px); background:rgba(255,255,255,.08);
+  border-color:rgba(255,255,255,.2);}
+.stat::before{content:""; position:absolute; left:0; top:0; bottom:0; width:2px;}
+.stat.s-tr::before{background:#ff2d55; box-shadow:0 0 18px 1px rgba(255,45,85,.85);}
+.stat.s-us::before{background:#3d8bff; box-shadow:0 0 18px 1px rgba(61,139,255,.85);}
+.stat.s-yol::before{background:linear-gradient(#ff2d55,#3d8bff);}
+.stat-n{font-family:var(--mono); font-size:38px; font-weight:700; line-height:1;
+  letter-spacing:-0.045em; font-variant-numeric:tabular-nums; color:#fff;}
+.stat.s-tr .stat-n{color:#ff5b7a;}
+.stat.s-us .stat-n{color:#6aa8ff;}
+.stat-k{font-family:var(--mono); font-size:8.5px; font-weight:600; letter-spacing:0.16em;
+  text-transform:uppercase; color:rgba(255,255,255,.42); margin-top:11px;}
 
 .hero-bar{
-  background:rgba(255,255,255,.13); border:1px solid rgba(255,255,255,.22);
-  border-radius:var(--r); padding:14px 16px;
-  backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+  background:rgba(255,255,255,.045); border:1px solid rgba(255,255,255,.11);
+  border-radius:var(--r); padding:15px 18px;
+  backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
 }
-.hero-bar .bar{background:rgba(0,0,0,.26); border-color:rgba(255,255,255,.18);}
-.hero-bar .bar i{background:#fff;}
-.hero-bar .prog-s{color:rgba(255,255,255,.72);}
-.hb-uc{display:flex; justify-content:space-between; gap:12px; margin-bottom:9px;
-  font-family:var(--mono); font-size:9px; font-weight:700;
-  letter-spacing:0.12em; text-transform:uppercase; color:rgba(255,255,255,.86);}
+.hero-bar .bar{background:rgba(255,255,255,.08); border-color:rgba(255,255,255,.10);}
+.hero-bar .bar i{background:linear-gradient(90deg,#ff2d55,#3d8bff);
+  box-shadow:0 0 14px rgba(61,139,255,.7);}
+.hero-bar .prog-s{color:rgba(255,255,255,.45);}
+.hb-uc{display:flex; justify-content:space-between; gap:12px; margin-bottom:10px;
+  font-family:var(--mono); font-size:8.5px; font-weight:700;
+  letter-spacing:0.16em; text-transform:uppercase;}
+.hb-uc .u-tr{color:#ff5b7a;}
+.hb-uc .u-us{color:#6aa8ff;}
 
 /* ---------- 5. BÖLÜMLER ---------- */
 
@@ -659,3 +671,85 @@ footer{padding:28px 0 46px; margin-top:20px; font-family:var(--mono); font-size:
 .top .lang{background:rgba(255,255,255,.14);}
 .top .lang-btn{color:rgba(255,255,255,.72);}
 .top .lang-btn.on{background:rgba(255,255,255,.92); color:#15171c; box-shadow:none;}
+
+/* ============================================================
+   16. REV 9 — SİYAH + ENERJİ
+   Framer'ın siyahı: yüksek kontrast, ışıltı, büyük rakam.
+   ============================================================ */
+
+/* Sekme çubuğu siyah şeridin hemen altında, kendisi de koyu. */
+.tabs-w{
+  background:var(--hero-bg);
+  border-bottom:1px solid rgba(255,255,255,.09);
+  backdrop-filter:none; -webkit-backdrop-filter:none;
+}
+.tab{color:rgba(255,255,255,.42);}
+.tab:hover{color:#fff; background:rgba(255,255,255,.07); border-color:transparent;}
+.tab.on{
+  color:#fff;
+  background:linear-gradient(96deg,#ff2d55,#3d8bff);
+  box-shadow:0 0 22px -4px rgba(61,139,255,.75);
+}
+.tab .tab-n{color:rgba(255,255,255,.38); background:rgba(255,255,255,.07);
+  border-color:rgba(255,255,255,.10);}
+.tab.on .tab-n{color:#fff; background:rgba(0,0,0,.26); border-color:rgba(255,255,255,.26);}
+
+/* İçerik alanı: koyu temada siyah, açık temada kağıt. */
+.wrap:not(.hero){padding-top:6px;}
+
+/* Kartlar: ince kenar + üstte ışıklı çizgi */
+.card,.acc,.tw,.pts{border-color:var(--line);}
+.card::before{opacity:1; height:1px;
+  background:linear-gradient(90deg,var(--cherry),var(--blue));
+  box-shadow:0 0 10px -1px var(--blue);}
+
+/* Büyük rakamlar */
+.prog-n{font-size:34px;}
+.cd-n{font-size:30px;}
+.cd-u:first-child{
+  background:linear-gradient(120deg,var(--cherry),var(--blue));
+  box-shadow:0 0 30px -8px var(--blue);
+}
+
+/* Check-in düğmesi: enerji buradan gelsin */
+.checkin{
+  background:linear-gradient(96deg,#ff2d55,#3d8bff);
+  font-size:14px; padding:13px 24px; border-radius:11px;
+  box-shadow:0 0 26px -6px rgba(255,45,85,.7);
+  position:relative; overflow:hidden;
+}
+.checkin::after{
+  content:""; position:absolute; top:0; left:-60%; width:40%; height:100%;
+  background:linear-gradient(100deg,transparent,rgba(255,255,255,.45),transparent);
+  transform:skewX(-18deg); animation:parla 3.6s ease-in-out infinite;
+}
+@keyframes parla{0%,72%{left:-60%;} 88%,100%{left:120%;}}
+.checkin.done{background:var(--soft); color:var(--ink-2);
+  border-color:var(--line-2); box-shadow:none;}
+.checkin.done::after{display:none;}
+
+/* Seri kutusu: kiraz ışıltısı */
+.seri{background:var(--cherry-soft); border-color:var(--cherry-line);}
+.seri::before{box-shadow:0 0 0 4px color-mix(in srgb,var(--cherry) 22%,transparent),
+  0 0 14px 2px var(--cherry);}
+
+/* Yıl ızgarasında işaretli kareler parlasın */
+.yg i.on{box-shadow:0 0 7px -1px var(--c);}
+
+/* Bölüm başlığı: büyük ve sert */
+h2{font-size:26px; letter-spacing:-0.04em;}
+h2::before{box-shadow:0 0 12px -1px var(--blue);}
+
+/* Etiketler */
+.t-yks{background:linear-gradient(96deg,var(--cherry),var(--cherry-2)); color:#fff;}
+
+/* Üst şerit siyah zeminde */
+.top .brand-m{background:linear-gradient(120deg,#ff2d55,#3d8bff);
+  border:0; box-shadow:0 0 18px -4px rgba(255,45,85,.8);}
+
+@media(max-width:680px){
+  .hero{padding:32px 0 120px;}
+  h1{line-height:.9;}
+  .stat-n{font-size:30px;}
+  .prog-n{font-size:28px;}
+}
