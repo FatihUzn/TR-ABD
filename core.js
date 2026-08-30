@@ -31,11 +31,27 @@
     return localDateKey(shiftToOpDay(new Date()));
   }
 
+  // Dinamik üretilen metinleri iki dilde saklar; setLang bunları da çevirir.
+  function setI18nText(el, tr, es, asHTML) {
+    if (!el) return;
+    el.classList.add('i18n');
+    el.setAttribute('data-tr', tr);
+    el.setAttribute('data-es', es);
+    const lang = document.documentElement.getAttribute('lang') || 'tr';
+    const val = lang === 'es' ? es : tr;
+    if (asHTML) el.innerHTML = val; else el.textContent = val;
+  }
+
+  function currentLang() {
+    return document.documentElement.getAttribute('lang') === 'es' ? 'es' : 'tr';
+  }
+
   // --- Dil değiştirme (TR/DE) ---
   function setLang(lang) {
     document.querySelectorAll('.i18n').forEach(el => {
       const val = el.getAttribute('data-' + lang);
-      if (val !== null) el.textContent = val;
+      if (val === null) return;
+      if (el.dataset.i18nHtml === '1') el.innerHTML = val; else el.textContent = val;
     });
     document.querySelectorAll('.lang-toggle button').forEach(btn => {
       btn.classList.toggle('active', btn.dataset.lang === lang);
@@ -50,7 +66,7 @@
   function applySavedLang() {
     let saved = null;
     try { saved = localStorage.getItem(LANG_KEY); } catch (e) {}
-    if (saved === 'de' || saved === 'tr') setLang(saved);
+    if (saved === 'es' || saved === 'tr') setLang(saved);
   }
   window.addEventListener('load', applySavedLang);
 
@@ -108,7 +124,7 @@
     const badgeEl = document.getElementById('navProgressBadge');
     if (badgeEl) {
       const faz = now < new Date('2027-05-01T00:00:00') ? 'FAZ 1' : (now < new Date('2027-07-01T00:00:00') ? 'FAZ 2' : 'FAZ 3');
-      badgeEl.textContent = '%' + Math.round(opProgressPct) + ' · ' + faz;
+      setI18nText(badgeEl, '%' + Math.round(opProgressPct) + ' · ' + faz, Math.round(opProgressPct) + '% · ' + faz.replace('FAZ','FASE'));
     }
 
     // 2. YKS TikTak Saat & Bar (Azalan)
@@ -252,25 +268,27 @@
   // --- 2. Günün ilk girişinde kişisel mesaj ---
   const DAILY_GREET_POOLS = {
     morning: [
-      { tr: 'Günaydın. Bugün de hedefe bir gün daha yaklaştın.', de: 'Guten Morgen. Heute bist du deinem Ziel wieder einen Tag näher.' },
-      { tr: 'Sabah oldu. Küçük bir adım, büyük resmi değiştirir.', de: 'Der Morgen ist da. Ein kleiner Schritt verändert das große Bild.' },
-      { tr: 'Yeni gün, aynı hedef: TU Berlin. Devam.', de: 'Neuer Tag, gleiches Ziel: TU Berlin. Weiter geht\u2019s.' }
+      { tr: 'Günaydın. Bugün de hedefe bir gün daha yaklaştın.', es: 'Buenos días. Hoy estás un día más cerca de tu objetivo.' },
+      { tr: 'Sabah oldu. Küçük bir adım, büyük resmi değiştirir.', es: 'Ha amanecido. Un paso pequeño cambia el panorama entero.' },
+      { tr: 'Yeni gün, aynı hedef: Koç Endüstri. Devam.', es: 'Nuevo día, el mismo objetivo: Ingeniería Industrial en Koç. Sigue.' },
+      { tr: 'En zor işi sabaha bırak. Kafan bir daha bu kadar taze olmayacak.', es: 'Deja la tarea más difícil para la mañana. Tu cabeza no volverá a estar tan despejada.' }
     ],
     afternoon: [
-      { tr: 'Gün ortası. Bugüne kadar geldiğin yolu unutma.', de: 'Mitten am Tag. Vergiss nicht, wie weit du schon gekommen bist.' },
-      { tr: 'Yorulmak normal. Durmak değil.', de: 'Müde sein ist normal. Aufhören nicht.' }
+      { tr: 'Gün ortası. Bugüne kadar geldiğin yolu unutma.', es: 'Mitad del día. No olvides lo lejos que has llegado.' },
+      { tr: 'Yorulmak normal. Durmak değil.', es: 'Cansarse es normal. Detenerse no.' },
+      { tr: 'Öğleden sonra düşüş yaşamak herkeste var. Bir mola ver, sonra devam et.', es: 'El bajón de la tarde le pasa a todo el mundo. Haz una pausa y continúa.' }
     ],
     evening: [
-      { tr: 'Akşam oldu. Bugünü kapatırken kendine teşekkür et.', de: 'Der Abend ist da. Bedanke dich bei dir selbst für heute.' },
-      { tr: 'Bugün ne kadar küçük olursa olsun, bir şey biriktirdin.', de: 'Egal wie klein, heute hast du etwas aufgebaut.' }
+      { tr: 'Akşam oldu. Bugünü kapatırken kendine teşekkür et.', es: 'Ha llegado la noche. Al cerrar el día, date las gracias a ti mismo.' },
+      { tr: 'Bugün ne kadar küçük olursa olsun, bir şey biriktirdin.', es: 'Por poco que haya sido, hoy has acumulado algo.' },
+      { tr: 'Spor bloğu yaklaşıyor. Yorgunluk bahane değil, tam da bu yüzden işe yarıyor.', es: 'Se acerca el bloque de deporte. El cansancio no es excusa: precisamente por eso funciona.' }
     ],
     night: [
-      { tr: 'Gece vardiyası. Bu saatte burada olman bile bir irade göstergesi.', de: 'Nachtschicht. Allein dass du um diese Zeit hier bist, zeigt Willenskraft.' },
-      { tr: 'Şehir uyuyor, sen çalışıyorsun. Fark tam olarak burada birikiyor.', de: 'Die Stadt schläft, du arbeitest. Genau hier sammelt sich der Unterschied.' },
-      { tr: 'Bu vardiya da geçecek. Sabah geldiğinde bir gün daha eklenmiş olacak.', de: 'Auch diese Schicht geht vorbei. Am Morgen ist wieder ein Tag dazugekommen.' },
-      { tr: 'Yorgunluk gerçek ama geçici. Hedef gerçek ve kalıcı.', de: 'Die Müdigkeit ist echt, aber vorübergehend. Das Ziel ist echt und bleibt.' },
-      { tr: 'Bugün az yaptıysan da olur. Sıfır yapmadığın sürece seri devam ediyor.', de: 'Auch wenig ist heute in Ordnung. Solange es nicht null ist, läuft die Serie weiter.' },
-      { tr: 'Gece primi vergisiz, ama asıl birikim saatlerde değil — devam etmende.', de: 'Der Nachtzuschlag ist steuerfrei, aber der eigentliche Gewinn liegt nicht in den Stunden — sondern darin, dass du weitermachst.' }
+      { tr: 'Geç oldu. Bu saatte hâlâ burada olman bile bir irade göstergesi.', es: 'Es tarde. Que sigas aquí a esta hora ya demuestra voluntad.' },
+      { tr: 'Şehir uyuyor, sen çalışıyorsun. Fark tam olarak burada birikiyor.', es: 'La ciudad duerme y tú estudias. La diferencia se acumula justo aquí.' },
+      { tr: 'Uykudan çalınan saat, ertesi gün iki katı olarak geri alınır. Kapat ve yat.', es: 'La hora que le robas al sueño te la cobra el día siguiente por partida doble. Cierra y vete a dormir.' },
+      { tr: 'Yorgunluk gerçek ama geçici. Hedef gerçek ve kalıcı.', es: 'El cansancio es real, pero pasajero. El objetivo es real y permanente.' },
+      { tr: 'Bugün az yaptıysan da olur. Sıfır yapmadığın sürece seri devam ediyor.', es: 'Si hoy has hecho poco, no pasa nada. Mientras no sea cero, la racha continúa.' }
     ]
   };
   function motivationDailyGreeting() {
@@ -289,9 +307,9 @@
     const chosen = pool[seed % pool.length];
     el.classList.add('i18n');
     el.setAttribute('data-tr', chosen.tr);
-    el.setAttribute('data-de', chosen.de);
+    el.setAttribute('data-es', chosen.es);
     const lang = document.documentElement.getAttribute('lang') || 'tr';
-    el.textContent = lang === 'de' ? chosen.de : chosen.tr;
+    el.textContent = lang === 'es' ? chosen.es : chosen.tr;
   }
 
   // --- 6. Faz geçiş kutlaması ---
@@ -344,7 +362,9 @@
       if (barEl) barEl.style.width = '8%';
     } else {
       numEl.textContent = info.elapsedDays;
-      if (subEl) subEl.textContent = info.totalDays + ' günün ' + info.elapsedDays + '\'ini geride bıraktın · ' + info.remainingDays + ' gün kaldı';
+      if (subEl) setI18nText(subEl,
+        info.totalDays + ' günün ' + info.elapsedDays + '\'ini geride bıraktın · ' + info.remainingDays + ' gün kaldı',
+        info.elapsedDays + ' de ' + info.totalDays + ' días completados · quedan ' + info.remainingDays);
       if (barEl) barEl.style.width = Math.max(4, Math.min(100, (info.elapsedDays / info.totalDays) * 100)) + '%';
     }
   }
@@ -362,11 +382,11 @@
   // MOTİVASYON ÇEKİRDEĞİ — Aşama 2 (site geneli sabit bileşenler)
   // ============================================================
   const REASON_TEXT_TR = 'Bunu neden yapıyorsun: ABD\'de İktisat/İşletme yüksek lisansı.\n\nBu bir yıl zor olacak ama geçici. Şu an attığın her adım, bir yıl sonraki sana ait bir kapıyı açıyor. Bugün yorulman normal — bırakman değil. Kimseye bel bağlamadan, kendi başarınla.';
-  const REASON_TEXT_DE = 'Warum du das machst: ein Wirtschafts-Master in den USA.\n\nDieses Jahr wird hart, aber es ist vorübergehend. Jeder Schritt, den du jetzt gehst, öffnet dir in einem Jahr eine Tür. Heute müde zu sein ist normal — aufzugeben nicht.';
+  const REASON_TEXT_ES = 'Por qué haces esto: un máster en Economía/Empresariales en EE. UU.\n\nEste año será duro, pero es temporal. Cada paso que das ahora abre una puerta que dentro de un año será tuya. Estar cansado hoy es normal; rendirse no. Sin depender de nadie, con tu propio mérito.';
 
   const EMPATHY_MESSAGES = {
-    gelisim: { tr: 'Bu sayfa acil değil ama önemli. YKS bittiğinde seni diğerlerinden ayıracak şeyler burada birikiyor.', de: 'Diese Seite ist nicht dringend, aber wichtig. Hier sammelt sich an, was dich nach der Prüfung von anderen unterscheidet.' },
-    rutin: { tr: 'Mükemmel gün diye bir şey yok. Bugün yarısını yaptıysan, bu da sayılır — yarın devam.', de: 'Den perfekten Tag gibt es nicht. Wenn du heute die Hälfte geschafft hast, zählt das auch — morgen weiter.' }
+    gelisim: { tr: 'Bu sayfa acil değil ama önemli. YKS bittiğinde seni diğerlerinden ayıracak şeyler burada birikiyor.', es: 'Esta página no es urgente, pero sí importante. Aquí se acumula lo que te distinguirá de los demás cuando acabe el YKS.' },
+    rutin: { tr: 'Mükemmel gün diye bir şey yok. Bugün yarısını yaptıysan, bu da sayılır — yarın devam.', es: 'El día perfecto no existe. Si hoy has hecho la mitad, también cuenta: mañana sigues.' }
   };
 
   // --- 16. Ses geri bildirimi (kısa, rahatsız etmeyen "tık") ---
@@ -424,7 +444,7 @@
   function motivationOpenModal() {
     motivationBuildModal();
     const lang = document.documentElement.getAttribute('lang') || 'tr';
-    document.getElementById('motivModalText').textContent = lang === 'de' ? REASON_TEXT_DE : REASON_TEXT_TR;
+    document.getElementById('motivModalText').textContent = lang === 'es' ? REASON_TEXT_ES : REASON_TEXT_TR;
     document.getElementById('motivModalOverlay').classList.add('open');
   }
   function motivationCloseModal() {
@@ -459,7 +479,7 @@
 
     if (checkinBtn) {
       checkinBtn.classList.toggle('done', doneToday);
-      checkinBtn.textContent = doneToday ? '✓ Bugün işaretlendi' : 'Bugünü işaretle';
+      setI18nText(checkinBtn, doneToday ? '✓ Bugün işaretlendi' : 'Bugünü işaretle', doneToday ? '✓ Marcado hoy' : 'Marcar hoy');
     }
     if (streakEl) streakEl.innerHTML = 'Seri: <b>' + streak + '</b> gün';
     if (calmBtn) calmBtn.classList.toggle('active', !!state.calmMode);
@@ -587,9 +607,9 @@
     const textSpan = document.createElement('span');
     textSpan.className = 'i18n';
     textSpan.setAttribute('data-tr', msg.tr);
-    textSpan.setAttribute('data-de', msg.de);
+    textSpan.setAttribute('data-es', msg.es);
     const lang = document.documentElement.getAttribute('lang') || 'tr';
-    textSpan.textContent = lang === 'de' ? msg.de : msg.tr;
+    textSpan.textContent = lang === 'es' ? msg.es : msg.tr;
     banner.appendChild(icon);
     banner.appendChild(textSpan);
     anchor.insertAdjacentElement('afterend', banner);
@@ -1181,7 +1201,9 @@
         if (labelEl) labelEl.textContent = 'gün sonra başlıyor · hazırlık aşaması';
       } else if (info.remainingDays > 0) {
         numEl.textContent = info.elapsedDays;
-        if (labelEl) labelEl.textContent = info.totalDays + ' günün ' + info.elapsedDays + '\'i geride · ' + info.remainingDays + ' gün kaldı';
+        if (labelEl) setI18nText(labelEl,
+          info.totalDays + ' günün ' + info.elapsedDays + '\'i geride · ' + info.remainingDays + ' gün kaldı',
+          info.elapsedDays + '/' + info.totalDays + ' días · quedan ' + info.remainingDays);
       } else {
         numEl.textContent = info.totalDays;
         if (labelEl) labelEl.textContent = 'köprü dönemi tamamlandı';
@@ -1243,7 +1265,10 @@
     const now = new Date();
     const dateEl = document.getElementById('todayDate');
     if (dateEl) {
-      dateEl.textContent = now.toLocaleDateString('tr-TR', { weekday: 'long', day: 'numeric', month: 'long' });
+      const dOpts = { weekday: 'long', day: 'numeric', month: 'long' };
+      setI18nText(dateEl,
+        now.toLocaleDateString('tr-TR', dOpts),
+        now.toLocaleDateString('es-ES', dOpts));
     }
 
     // --- Check-in durumu ---
@@ -1253,14 +1278,18 @@
     const btn = document.getElementById('todayCheckinBtn');
     const lbl = document.getElementById('todayCheckinLabel');
     if (btn) btn.classList.toggle('done', doneToday);
-    if (lbl) lbl.textContent = doneToday ? '✓ Bugün işaretlendi' : 'Bugünü işaretle';
+    if (lbl) setI18nText(lbl, doneToday ? '✓ Bugün işaretlendi' : 'Bugünü işaretle', doneToday ? '✓ Marcado hoy' : 'Marcar hoy');
 
     const streak = motivationComputeStreak(checkins);
     const streakEl = document.getElementById('todayStreak');
     if (streakEl) {
-      streakEl.innerHTML = streak > 0
-        ? '<b>' + streak + '</b> gündür üst üste. Bugün de küçük bir şey yeter.'
-        : 'Seri henüz başlamadı — bugün ilk adımı at.';
+      streakEl.dataset.i18nHtml = '1';
+      setI18nText(streakEl,
+        streak > 0 ? '<b>' + streak + '</b> gündür üst üste. Bugün de küçük bir şey yeter.'
+                   : 'Seri henüz başlamadı — bugün ilk adımı at.',
+        streak > 0 ? '<b>' + streak + '</b> días seguidos. Hoy también basta con algo pequeño.'
+                   : 'La racha aún no ha empezado: da hoy el primer paso.',
+        true);
     }
 
     // --- Rutin: bugünün tamamlanma oranı ---
@@ -1272,10 +1301,12 @@
       const done = Object.keys(dayObj).filter(function (k) { return dayObj[k]; }).length;
       const TOTAL = 22; // gün şablonu (16) + beslenme (6)
       const pct = Math.round((done / TOTAL) * 100);
-      rutMain.textContent = done + ' / ' + TOTAL + ' madde';
+      setI18nText(rutMain, done + ' / ' + TOTAL + ' madde', done + ' / ' + TOTAL + ' puntos');
       rutMain.parentElement.classList.toggle('is-done', pct >= 70);
       if (rutMeta) {
-        rutMeta.textContent = pct >= 70 ? 'bugün seriye sayıldı' : '%' + pct + ' · %70\'te seriye sayılır';
+        setI18nText(rutMeta,
+          pct >= 70 ? 'bugün seriye sayıldı' : '%' + pct + ' · %70\'te seriye sayılır',
+          pct >= 70 ? 'hoy cuenta para la racha' : pct + '% · cuenta a partir del 70%');
       }
     }
 
@@ -1299,9 +1330,11 @@
     const gelMeta = document.getElementById('todayGelisimMeta');
     if (gelMain) {
       const done = motivationGelisimTotals().done;
-      gelMain.textContent = done + ' madde tamam';
+      setI18nText(gelMain, done + ' madde tamam', done + ' puntos hechos');
       if (gelMeta) {
-        gelMeta.textContent = done === 0 ? 'henüz başlanmadı' : 'genel kültür · kod · siber · YL';
+        setI18nText(gelMeta,
+          done === 0 ? 'henüz başlanmadı' : 'genel kültür · kod · siber · YL',
+          done === 0 ? 'aún sin empezar' : 'cultura · código · ciber · máster');
       }
     }
   }
