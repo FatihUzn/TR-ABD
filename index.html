@@ -79,17 +79,51 @@
 
 
 <div class="wrap hero">
-    <div class="hero-top">
-      <div>
-        <h1><span class="tr">TR</span><i class="ar">→</i><span class="us">ABD</span></h1>
-        <p class="lede" data-tr="Bir yıl YKS. Sonra Koç Endüstri, burslu, iki yılda. Sonra ABD'de İktisat/İşletme yüksek lisansı. Kendi başarımla." data-es="Un año de YKS. Después Ingeniería Industrial en Koç, con beca, en dos años. Después un máster en Economía/Empresariales en EE. UU. Con mi propio mérito.">Bir yıl YKS. Sonra Koç Endüstri, burslu, iki yılda. Sonra ABD'de İktisat/İşletme yüksek lisansı. Kendi başarımla.</p>
+  <div class="hero-grid">
+
+    <div class="hero-left">
+      <p class="hero-kick">
+        <span class="hk-dot"></span>
+        <span id="heroTarih">—</span>
+        <em id="heroSaat">--:--</em>
+      </p>
+      <h1><span class="tr">TR</span><i class="ar">→</i><span class="us">ABD</span></h1>
+      <p class="lede" data-tr="Bir yıl YKS. Sonra Koç Endüstri, burslu, iki yılda. Sonra ABD'de İktisat/İşletme yüksek lisansı. Kendi başarımla." data-es="Un año de YKS. Después Ingeniería Industrial en Koç, con beca, en dos años. Después un máster en Economía/Empresariales en EE. UU. Con mi propio mérito.">Bir yıl YKS. Sonra Koç Endüstri, burslu, iki yılda. Sonra ABD'de İktisat/İşletme yüksek lisansı. Kendi başarımla.</p>
+
+      <div class="simdi" id="simdiKutu">
+        <div class="simdi-k" data-tr="Şu an olması gereken" data-es="Lo que toca ahora">Şu an olması gereken</div>
+        <div class="simdi-v" id="simdiAd">—</div>
+        <div class="simdi-a"><span id="simdiSaat"></span><span class="tag" id="simdiTur"></span></div>
       </div>
     </div>
 
+    <div class="hero-right">
+      <div class="cd-w">
+        <div class="cd-t" data-tr="Sınava kalan" data-es="Para el examen">Sınava kalan</div>
+        <div class="cd">
+          <div class="cd-u"><div class="cd-n" id="cdG">00</div><div class="cd-k" data-tr="Gün" data-es="Días">Gün</div></div>
+          <div class="cd-u"><div class="cd-n" id="cdS">00</div><div class="cd-k" data-tr="Saat" data-es="Horas">Saat</div></div>
+          <div class="cd-u"><div class="cd-n" id="cdD">00</div><div class="cd-k" data-tr="Dakika" data-es="Minutos">Dakika</div></div>
+          <div class="cd-u"><div class="cd-n" id="cdSn">00</div><div class="cd-k" data-tr="Saniye" data-es="Segundos">Saniye</div></div>
+        </div>
+      </div>
+
+      <div class="hero-bar">
+        <div class="hb-uc">
+          <span class="u-tr" data-tr="29 Tem 2026 · Başlangıç" data-es="29 jul 2026 · Inicio">29 Tem 2026 · Başlangıç</span>
+          <span class="u-us" data-tr="19 Haz 2027 · Sınav" data-es="19 jun 2027 · Examen">19 Haz 2027 · Sınav</span>
+        </div>
+        <div class="bar"><i id="yilBar"></i></div>
+        <div class="prog-s" id="yilBarNot"></div>
+      </div>
+    </div>
+
+  </div>
+
     <div class="stats">
       <div class="stat s-tr">
-        <div class="stat-n" id="statKalan">–</div>
-        <div class="stat-k" data-tr="Sınava kalan gün" data-es="Días para el examen">Sınava kalan gün</div>
+        <div class="stat-n" id="statIsaret">–</div>
+        <div class="stat-k" data-tr="İşaretlenen gün" data-es="Días marcados">İşaretlenen gün</div>
       </div>
       <div class="stat s-us">
         <div class="stat-n" id="statGecen">–</div>
@@ -101,14 +135,6 @@
       </div>
     </div>
 
-    <div class="hero-bar">
-      <div class="hb-uc">
-        <span class="u-tr" data-tr="29 Tem 2026 · Başlangıç" data-es="29 jul 2026 · Inicio">29 Tem 2026 · Başlangıç</span>
-        <span class="u-us" data-tr="19 Haz 2027 · Sınav" data-es="19 jun 2027 · Examen">19 Haz 2027 · Sınav</span>
-      </div>
-      <div class="bar"><i id="yilBar"></i></div>
-      <div class="prog-s" id="yilBarNot"></div>
-    </div>
 </div>
 </div>
 
@@ -132,8 +158,8 @@
     </div>
 
     <div class="bugun-h">
-      <span class="bugun-d" id="bugunTarih">—</span>
       <button type="button" class="checkin" id="checkinBtn">Bugünü işaretle</button>
+      <span class="bugun-d" id="seriRozet"></span>
     </div>
 
     <div class="cards">
@@ -183,13 +209,6 @@
       <div class="ps"><b id="ps-yks-1">–</b><span data-tr="Tamamlanan konu" data-es="Temas completados">Tamamlanan konu</span></div>
       <div class="ps"><b id="ps-yks-2">–</b><span data-tr="Bu hafta soru" data-es="Preguntas esta semana">Bu hafta soru</span></div>
       <div class="ps"><b id="ps-yks-3">–</b><span data-tr="Sıradaki" data-es="Siguiente">Sıradaki</span></div>
-    </div>
-
-    <div class="cd">
-      <div class="cd-u"><div class="cd-n" id="cdG">00</div><div class="cd-k" data-tr="Gün" data-es="Días">Gün</div></div>
-      <div class="cd-u"><div class="cd-n" id="cdS">00</div><div class="cd-k" data-tr="Saat" data-es="Horas">Saat</div></div>
-      <div class="cd-u"><div class="cd-n" id="cdD">00</div><div class="cd-k" data-tr="Dakika" data-es="Minutos">Dakika</div></div>
-      <div class="cd-u"><div class="cd-n" id="cdSn">00</div><div class="cd-k" data-tr="Saniye" data-es="Segundos">Saniye</div></div>
     </div>
 
     <h3 data-tr="Konu takibi" data-es="Seguimiento de temas">Konu takibi</h3>
@@ -474,7 +493,7 @@
 
   <footer>
     <span data-tr="Kişisel operasyon paneli" data-es="Panel personal de operaciones">Kişisel operasyon paneli</span>
-    <span>REV 11.0</span>
+    <span>REV 12.0</span>
   </footer>
 
 </div>

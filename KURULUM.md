@@ -1,4 +1,4 @@
-# TR → ABD Paneli · REV 11.0
+# TR → ABD Paneli · REV 12.0
 
 Tek sayfalık operasyon paneli. Bağımlılık yok, derleme yok, sunucu yok —
 düz statik dosyalar. GitHub Pages'te olduğu gibi çalışır.

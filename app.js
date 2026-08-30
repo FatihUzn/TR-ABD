@@ -531,6 +531,13 @@
     const toplam = Math.round((EXAM - START) / 86400000);
     const pct = toplam ? Math.min(100, Math.round((gecen / toplam) * 100)) : 0;
 
+    // Geri sayım zaten kahraman alanda; bu kart yerine işaretlenen gün.
+    let isaretli = 0;
+    const cc = checkins();
+    Object.keys(cc).forEach(function (k) { if (cc[k]) isaretli++; });
+    const dI = document.getElementById('statIsaret');
+    if (dI) dI.textContent = isaretli;
+
     const d1 = document.getElementById('statKalan');
     const d2 = document.getElementById('statGecen');
     const d3 = document.getElementById('statSeri');
@@ -554,6 +561,56 @@
       const set = (id, v) => { const e = document.getElementById(id); if (e) e.textContent = String(v).padStart(2, '0'); };
       set('cdG', gg); set('cdS', ss); set('cdD', dd); set('cdSn', sn);
     }
+  }
+
+  // ============================================================
+  // 5b. ŞU AN — rutindeki hangi bloktasın
+  // Saat dizesinden ("07:30–09:30" ya da "23:00") başlangıç dakikası
+  // çıkarılıp o ana denk gelen blok bulunuyor. Her saniye tazeleniyor.
+  // ============================================================
+  function dakikaya(saat) {
+    const m = String(saat).match(/^(\d{1,2}):(\d{2})/);
+    return m ? Number(m[1]) * 60 + Number(m[2]) : null;
+  }
+
+  function suAnkiBlok() {
+    const d = new Date();
+    const su = d.getHours() * 60 + d.getMinutes();
+    let bulunan = null;
+    for (let i = 0; i < RUTIN_GUN.length; i++) {
+      const b = dakikaya(RUTIN_GUN[i].saat);
+      if (b === null) continue;
+      if (b <= su) bulunan = RUTIN_GUN[i]; else break;
+    }
+    // Gece yarısından 06:30'a kadar: uyku bloğu
+    if (!bulunan) bulunan = RUTIN_GUN[RUTIN_GUN.length - 1];
+    return bulunan;
+  }
+
+  function renderSimdi() {
+    const d = new Date();
+    const saatEl = document.getElementById('heroSaat');
+    if (saatEl) {
+      saatEl.textContent = String(d.getHours()).padStart(2, '0') + ':' +
+                           String(d.getMinutes()).padStart(2, '0');
+    }
+    t(document.getElementById('heroTarih'),
+      d.toLocaleDateString('tr-TR', { weekday: 'long', day: 'numeric', month: 'long' }),
+      d.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' }));
+
+    const b = suAnkiBlok();
+    if (!b) return;
+    const bitti = rutinOn(b.id);
+    t(document.getElementById('simdiAd'), b.ad, b.ad);
+    const sEl = document.getElementById('simdiSaat');
+    if (sEl) sEl.textContent = b.saat + (bitti ? '  ✓' : '');
+    const tEl = document.getElementById('simdiTur');
+    if (tEl) {
+      tEl.textContent = b.tur ? (TUR_ETIKET[b.tur] || b.tur) : '';
+      tEl.className = 'tag' + (b.tur ? ' t-' + b.tur : '');
+    }
+    const kutu = document.getElementById('simdiKutu');
+    if (kutu) kutu.classList.toggle('bitti', bitti);
   }
 
   // ============================================================
@@ -1083,10 +1140,11 @@
   // 11. BUGÜN KARTLARI
   // ============================================================
   function renderBugun() {
-    const dOpt = { weekday: 'long', day: 'numeric', month: 'long' };
-    const now = new Date();
-    t(document.getElementById('bugunTarih'),
-      now.toLocaleDateString('tr-TR', dOpt), now.toLocaleDateString('es-ES', dOpt));
+    // Tarih artık kahraman alanda; buradaki rozet seriyi gösteriyor.
+    const seri = streakCount();
+    t(document.getElementById('seriRozet'),
+      seri > 0 ? seri + ' günlük seri' : 'Seri yok',
+      seri > 0 ? 'Racha de ' + seri + ' días' : 'Sin racha');
 
     const p = rutinPct(S.rutin[todayKey()]);
     t(document.getElementById('bRutin'), p.done + ' / ' + p.total + ' madde', p.done + ' / ' + p.total + ' puntos');
@@ -1189,6 +1247,7 @@
     const lbl = el.closest('label');
     if (lbl) lbl.classList.toggle('on', on);
     renderBugun();
+    renderSimdi();
     applyLang(getLang());
   });
 
@@ -1563,12 +1622,13 @@
     renderCounters();
     renderYearGrid();
     renderYedek();
+    renderSimdi();
     applyLang(getLang());
   }
 
   HAZIR = true;
   renderAll(false);
   setTab((location.hash || '').replace('#', '') || 'bugun', false);
-  setInterval(renderCounters, 1000);
+  setInterval(function () { renderCounters(); renderSimdi(); }, 1000);
 
 })();
