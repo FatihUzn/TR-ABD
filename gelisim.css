@@ -1,0 +1,25 @@
+/* ============================================================
+   gelisim.css — sadece gelisim.html: Kendini Geliştirme sayfasına
+   özel küçük ek stiller. Checklist bileşenleri core.css'teki
+   .yks-topic-row / .yks-subject / .bar-track ailesinden geliyor,
+   burada tekrar tanımlanmıyor. core.css'ten SONRA yüklenmeli.
+   ============================================================ */
+
+.gelisim-desc{
+  font-size:12.5px; color:var(--text-dim); line-height:1.5;
+  margin:0 0 12px; padding:8px 10px; background:var(--panel-2);
+  border-left:2px solid var(--purple); border-radius:4px;
+}
+
+.yks-ders-bars{display:flex; flex-direction:column; gap:9px;}
+
+.yks-ders-bar-row{display:grid; grid-template-columns:150px 1fr 40px; align-items:center; gap:10px;}
+
+.yks-ders-bar-label{font-family:var(--mono); font-size:11px; color:var(--text-dim); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+
+.yks-ders-bar-pct{font-family:var(--mono); font-size:11px; color:var(--text-faint); text-align:right; font-variant-numeric:tabular-nums;}
+
+@media(max-width:520px){
+.yks-ders-bar-row{grid-template-columns:104px 1fr 34px; gap:6px;}
+.yks-ders-bar-label{font-size:10px;}
+}

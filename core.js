@@ -1164,6 +1164,8 @@
     'yksWeeklyQuestionProgress',
     'evrakChecklistState',
     'evrakFormState',
+    'gelisimChecklistState',
+    'rutinDailyState',
     'almancaState_v1',
     'almanca_summary_v1',
     'almanya_lang'
