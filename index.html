@@ -1,32 +1,71 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="tr" data-theme="light">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>TR → ABD · Operasyon Paneli</title>
 <meta name="description" content="YKS hazırlığı, günlük rutin, spor, dil ve kitap takibi. Hedef: ABD'de İktisat/İşletme yüksek lisansı.">
-<meta name="theme-color" content="#fbfbfa">
+
+<meta name="theme-color" content="#f6f6f3" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0e100f" media="(prefers-color-scheme: dark)">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="TR→ABD">
-<link rel="manifest" href="data:application/manifest+json,%7B%22name%22%3A%22TR%20%E2%86%92%20ABD%20Paneli%22%2C%22short_name%22%3A%22Panel%22%2C%22display%22%3A%22standalone%22%2C%22start_url%22%3A%22.%22%2C%22background_color%22%3A%22%23fbfbfa%22%2C%22theme_color%22%3A%22%23fbfbfa%22%7D">
+
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon-180.png">
+
+<!-- Temayı CSS'ten önce uygula: sayfa açılırken beyaz parlama olmasın. -->
+<script>
+(function(){
+  try{
+    var s = localStorage.getItem('panel_theme');
+    var m = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    document.documentElement.setAttribute('data-theme',
+      s === 'dark' || s === 'light' ? s : (m ? 'dark' : 'light'));
+  }catch(e){}
+})();
+</script>
+
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<header class="top">
+<!-- Telefonda / GitHub Pages'te görünür: panel salt okunur aynadır. -->
+<div class="mirror-bar" id="mirrorBar">
+  <span id="mirrorTxt">Ayna görünümü — işaretleme bilgisayardan yapılır</span>
+</div>
+
+<header class="top" id="topBar">
   <div class="top-in">
-    <a class="brand" href="#ust">TR <span>→</span> ABD</a>
+    <a class="brand" href="#ust">
+      <span class="brand-m" aria-hidden="true">→</span>
+      TR <span>→</span> ABD
+    </a>
     <nav class="nav">
       <a class="nav-a" href="#bugun" data-tr="Bugün" data-es="Hoy">Bugün</a>
       <a class="nav-a" href="#yks" data-tr="YKS" data-es="YKS">YKS</a>
       <a class="nav-a" href="#rutin" data-tr="Rutin" data-es="Rutina">Rutin</a>
       <a class="nav-a" href="#gelisim" data-tr="Gelişim" data-es="Desarrollo">Gelişim</a>
       <a class="nav-a" href="#kitap" data-tr="Kitaplar" data-es="Libros">Kitaplar</a>
+      <a class="nav-a" href="#yedek" data-tr="Yedek" data-es="Copia">Yedek</a>
     </nav>
-    <div class="lang">
-      <button type="button" class="lang-btn on" data-lang="tr">TR</button>
-      <button type="button" class="lang-btn" data-lang="es">ES</button>
+    <div class="top-r">
+      <button type="button" class="theme-btn" id="themeBtn" title="Tema" aria-label="Tema değiştir">
+        <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <circle cx="12" cy="12" r="4"></circle>
+          <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path>
+        </svg>
+        <svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path>
+        </svg>
+      </button>
+      <div class="lang">
+        <button type="button" class="lang-btn on" data-lang="tr">TR</button>
+        <button type="button" class="lang-btn" data-lang="es">ES</button>
+      </div>
     </div>
   </div>
 </header>
@@ -39,7 +78,7 @@
     <p class="lede" data-tr="Bir yıl YKS. Sonra Koç Üniversitesi Endüstri Mühendisliği, burslu, iki yılda. Sonra ABD'de İktisat/İşletme yüksek lisansı. Kimseye bel bağlamadan, kendi başarımla." data-es="Un año de YKS. Después, Ingeniería Industrial en la Universidad Koç, con beca, en dos años. Después, un máster en Economía/Empresariales en EE. UU. Sin depender de nadie, con mi propio mérito.">Bir yıl YKS. Sonra Koç Üniversitesi Endüstri Mühendisliği, burslu, iki yılda. Sonra ABD'de İktisat/İşletme yüksek lisansı. Kimseye bel bağlamadan, kendi başarımla.</p>
 
     <div class="stats">
-      <div class="stat">
+      <div class="stat hot">
         <div class="stat-n" id="statKalan">–</div>
         <div class="stat-k" data-tr="Sınava kalan gün" data-es="Días para el examen">Sınava kalan gün</div>
       </div>
@@ -53,29 +92,38 @@
       </div>
     </div>
 
-    <div class="bar"><i id="yilBar"></i></div>
-    <div class="prog-s" id="yilBarNot"></div>
+    <div class="hero-bar">
+      <div class="bar"><i id="yilBar"></i></div>
+      <div class="prog-s" id="yilBarNot"></div>
+    </div>
   </div>
 
   <section id="bugun">
-    <h2 data-tr="Bugün" data-es="Hoy">Bugün</h2>
+    <h2 data-no="01" data-tr="Bugün" data-es="Hoy">Bugün</h2>
+    <p class="sub" data-tr="Gün 04:00'te biter — gece geç işaretlersen hâlâ dünkü güne yazılır." data-es="El día termina a las 04:00: si marcas de madrugada, cuenta para el día anterior.">Gün 04:00'te biter — gece geç işaretlersen hâlâ dünkü güne yazılır.</p>
+
+    <div class="alarm" id="yedekAlarm" hidden>
+      <span class="alarm-i">!</span>
+      <span id="yedekAlarmTxt"></span>
+    </div>
+
     <div class="bugun-h">
       <span class="bugun-d" id="bugunTarih">—</span>
       <button type="button" class="checkin" id="checkinBtn">Bugünü işaretle</button>
     </div>
 
     <div class="cards">
-      <a class="card" href="#rutin" style="text-decoration:none; color:inherit;">
+      <a class="card" href="#rutin">
         <div class="ck" data-tr="Rutin" data-es="Rutina">Rutin</div>
         <div class="cv" id="bRutin">—</div>
         <div class="ca" id="bRutinAlt"></div>
       </a>
-      <a class="card" href="#yks" style="text-decoration:none; color:inherit;">
+      <a class="card" href="#yks">
         <div class="ck" data-tr="Sıradaki YKS konusu" data-es="Siguiente tema del YKS">Sıradaki YKS konusu</div>
         <div class="cv" id="bYks">—</div>
         <div class="ca" id="bYksAlt"></div>
       </a>
-      <a class="card" href="#gelisim" style="text-decoration:none; color:inherit;">
+      <a class="card" href="#gelisim">
         <div class="ck" data-tr="Gelişim" data-es="Desarrollo">Gelişim</div>
         <div class="cv" id="bGelisim">—</div>
         <div class="ca" id="bGelisimAlt"></div>
@@ -83,10 +131,26 @@
     </div>
 
     <div class="seri" id="seriNot"></div>
+
+    <h3 data-tr="Bu yıl" data-es="Este año">Bu yıl</h3>
+    <div class="card yg-w">
+      <div class="yg-h">
+        <span class="yg-t" data-tr="Başlangıçtan sınava · her kare bir gün" data-es="Del inicio al examen · cada cuadro es un día">Başlangıçtan sınava · her kare bir gün</span>
+        <span class="yg-n" id="ygSayi"></span>
+      </div>
+      <div class="yg-scroll">
+        <div class="yg-months" id="ygAylar"></div>
+        <div class="yg" id="ygGrid"></div>
+      </div>
+      <div class="yg-key">
+        <i></i><span data-tr="işaretlenmedi" data-es="sin marcar">işaretlenmedi</span>
+        <i class="on" style="margin-left:8px;"></i><span data-tr="işaretlendi" data-es="marcado">işaretlendi</span>
+      </div>
+    </div>
   </section>
 
   <section id="yks">
-    <h2 data-tr="YKS" data-es="YKS">YKS</h2>
+    <h2 data-no="02" data-tr="YKS" data-es="YKS">YKS</h2>
     <p class="sub" data-tr="19 Haziran 2027 · Hedef: Koç Üniversitesi Endüstri Mühendisliği (burslu)" data-es="19 de junio de 2027 · Objetivo: Ingeniería Industrial en la Universidad Koç (con beca)">19 Haziran 2027 · Hedef: Koç Üniversitesi Endüstri Mühendisliği (burslu)</p>
 
     <div class="cd">
@@ -129,14 +193,22 @@
     </div>
 
     <h3 data-tr="Konu takibi" data-es="Seguimiento de temas">Konu takibi</h3>
-    <div class="card" style="margin-bottom:14px;">
-      <div class="prog-top">
-        <span class="prog-l" data-tr="Tamamlanan konu" data-es="Temas completados">Tamamlanan konu</span>
-        <span class="prog-n" id="yksPct">–%</span>
+    <div class="card" style="margin-bottom:16px;">
+      <div class="ring-w">
+        <svg class="ring" viewBox="0 0 64 64" aria-hidden="true">
+          <circle class="r-bg" cx="32" cy="32" r="27"></circle>
+          <circle class="r-fg" id="yksRing" cx="32" cy="32" r="27"></circle>
+        </svg>
+        <div style="flex:1; min-width:0;">
+          <div class="prog-top">
+            <span class="prog-l" data-tr="Tamamlanan konu" data-es="Temas completados">Tamamlanan konu</span>
+            <span class="prog-n" id="yksPct">–%</span>
+          </div>
+          <div class="bar"><i id="yksFill"></i></div>
+          <div class="prog-s" id="yksSub"></div>
+        </div>
       </div>
-      <div class="bar"><i id="yksFill"></i></div>
-      <div class="prog-s" id="yksSub"></div>
-      <div style="margin-top:14px;" id="yksBars"></div>
+      <div style="margin-top:18px;" id="yksBars"></div>
     </div>
     <h3>TYT</h3>
     <div id="yksTyt"></div>
@@ -235,16 +307,24 @@
   </section>
 
   <section id="rutin">
-    <h2 data-tr="Rutin" data-es="Rutina">Rutin</h2>
+    <h2 data-no="03" data-tr="Rutin" data-es="Rutina">Rutin</h2>
     <p class="sub" data-tr="Kutucuklar her sabah sıfırlanır. Önemli olan tek bir mükemmel gün değil, üst üste gelen sıradan günler." data-es="Las casillas se reinician cada mañana. Lo que cuenta no es un día perfecto, sino muchos días corrientes seguidos.">Kutucuklar her sabah sıfırlanır. Önemli olan tek bir mükemmel gün değil, üst üste gelen sıradan günler.</p>
 
     <div class="card" style="margin-bottom:16px;">
-      <div class="prog-top">
-        <span class="prog-l" data-tr="Bugün tamamlanan" data-es="Completado hoy">Bugün tamamlanan</span>
-        <span class="prog-n" id="rutinPct">–%</span>
+      <div class="ring-w">
+        <svg class="ring" viewBox="0 0 64 64" aria-hidden="true">
+          <circle class="r-bg" cx="32" cy="32" r="27"></circle>
+          <circle class="r-fg" id="rutinRing" cx="32" cy="32" r="27"></circle>
+        </svg>
+        <div style="flex:1; min-width:0;">
+          <div class="prog-top">
+            <span class="prog-l" data-tr="Bugün tamamlanan" data-es="Completado hoy">Bugün tamamlanan</span>
+            <span class="prog-n" id="rutinPct">–%</span>
+          </div>
+          <div class="bar"><i id="rutinFill"></i></div>
+          <div class="prog-s" id="rutinSub"></div>
+        </div>
       </div>
-      <div class="bar"><i id="rutinFill"></i></div>
-      <div class="prog-s" id="rutinSub"></div>
       <div class="seri" id="rutinSeri"></div>
     </div>
 
@@ -262,45 +342,75 @@
   </section>
 
   <section id="gelisim">
-    <h2 data-tr="Gelişim" data-es="Desarrollo">Gelişim</h2>
+    <h2 data-no="04" data-tr="Gelişim" data-es="Desarrollo">Gelişim</h2>
     <p class="sub" data-tr="Bu yılın odağı: genel kültür, dil, spor, YKS. Siber ve kod düşük tempoda, WSL üzerinden. YL hazırlığı zemin seviyesinde." data-es="El foco de este año: cultura general, idioma, deporte y YKS. Ciberseguridad y código a ritmo bajo, vía WSL. La preparación del máster, a nivel de base.">Bu yılın odağı: genel kültür, dil, spor, YKS. Siber ve kod düşük tempoda, WSL üzerinden. YL hazırlığı zemin seviyesinde.</p>
 
     <div class="card" style="margin-bottom:16px;">
-      <div class="prog-top">
-        <span class="prog-l" data-tr="Tamamlanan madde" data-es="Puntos completados">Tamamlanan madde</span>
-        <span class="prog-n" id="gelisimPct">–%</span>
+      <div class="ring-w">
+        <svg class="ring" viewBox="0 0 64 64" aria-hidden="true">
+          <circle class="r-bg" cx="32" cy="32" r="27"></circle>
+          <circle class="r-fg" id="gelisimRing" cx="32" cy="32" r="27"></circle>
+        </svg>
+        <div style="flex:1; min-width:0;">
+          <div class="prog-top">
+            <span class="prog-l" data-tr="Tamamlanan madde" data-es="Puntos completados">Tamamlanan madde</span>
+            <span class="prog-n" id="gelisimPct">–%</span>
+          </div>
+          <div class="bar"><i id="gelisimFill"></i></div>
+          <div class="prog-s" id="gelisimSub"></div>
+        </div>
       </div>
-      <div class="bar"><i id="gelisimFill"></i></div>
-      <div class="prog-s" id="gelisimSub"></div>
-      <div style="margin-top:14px;" id="gelisimBars"></div>
+      <div style="margin-top:18px;" id="gelisimBars"></div>
     </div>
 
     <div id="gelisimList"></div>
   </section>
 
   <section id="kitap">
-    <h2 data-tr="Kitaplar" data-es="Libros">Kitaplar</h2>
+    <h2 data-no="05" data-tr="Kitaplar" data-es="Libros">Kitaplar</h2>
     <p class="sub" id="kitapSub">—</p>
     <p class="note" data-tr="Hepsi Storytel Türkiye'de mevcut (katalog değişebilir, bulamazsan atla). Sesli dinlemek de sayılır — spor yaparken ve yolda dinlemek, günde ekstra bir saat kazandırır. Türk edebiyatı kategorisi doğrudan TYT Türkçe paragraf netine yarar: paragrafı yükselten şey soru bankası değil, düzenli nitelikli okumadır." data-es="Todos están en Storytel Turquía (el catálogo cambia; si no lo encuentras, sáltalo). Escuchar también cuenta: hacerlo mientras entrenas o vas de camino te regala una hora extra al día. La categoría de literatura turca sube directamente los netos de comprensión lectora del TYT: lo que mejora esa parte no son los cuadernillos, sino la lectura regular de calidad.">Hepsi Storytel Türkiye'de mevcut (katalog değişebilir, bulamazsan atla). Sesli dinlemek de sayılır — spor yaparken ve yolda dinlemek, günde ekstra bir saat kazandırır. Türk edebiyatı kategorisi doğrudan TYT Türkçe paragraf netine yarar: paragrafı yükselten şey soru bankası değil, düzenli nitelikli okumadır.</p>
     <div id="kitapList"></div>
   </section>
 
   <section id="yedek">
-    <h2 data-tr="Yedekleme" data-es="Copia de seguridad">Yedekleme</h2>
-    <p class="sub" data-tr="Panelin tüm verisi yalnızca bu tarayıcının hafızasında. Tarayıcı verisini temizlemek ya da cihaz değiştirmek bir yıllık kaydı siler. Ayda bir yedek al." data-es="Todos los datos del panel están solo en la memoria de este navegador. Borrar los datos del navegador o cambiar de dispositivo elimina un año de registro. Haz una copia una vez al mes.">Panelin tüm verisi yalnızca bu tarayıcının hafızasında. Tarayıcı verisini temizlemek ya da cihaz değiştirmek bir yıllık kaydı siler. Ayda bir yedek al.</p>
+    <h2 data-no="06" data-tr="Yedekleme ve senkron" data-es="Copia y sincronización">Yedekleme ve senkron</h2>
+    <p class="sub" data-tr="Panelin tüm verisi yalnızca bu tarayıcının hafızasında. Tarayıcı verisini temizlemek ya da cihaz değiştirmek bir yıllık kaydı siler." data-es="Todos los datos del panel están solo en la memoria de este navegador. Borrar los datos del navegador o cambiar de dispositivo elimina un año de registro.">Panelin tüm verisi yalnızca bu tarayıcının hafızasında. Tarayıcı verisini temizlemek ya da cihaz değiştirmek bir yıllık kaydı siler.</p>
+
+    <div class="pts" style="margin-bottom:16px;">
+      <div class="pt">
+        <div class="pt-i">↓</div>
+        <div class="pt-t" data-html="1" data-tr="&lt;b&gt;Yedek al&lt;/b&gt; — tüm veriyi JSON olarak indirir. Ayda bir yeterli; panel 30 gün geçince Bugün bölümünde seni uyarır." data-es="&lt;b&gt;Descargar copia&lt;/b&gt;: guarda todos los datos en JSON. Una vez al mes basta; el panel te avisa en la sección Hoy pasados 30 días."><b>Yedek al</b> — tüm veriyi JSON olarak indirir. Ayda bir yeterli; panel 30 gün geçince Bugün bölümünde seni uyarır.</div>
+      </div>
+      <div class="pt">
+        <div class="pt-i">↗</div>
+        <div class="pt-t" data-html="1" data-tr="&lt;b&gt;Telefona gönder&lt;/b&gt; — &lt;code&gt;state.json&lt;/code&gt; indirir. Bu dosyayı C:\Panel klasörüne koyup &lt;code&gt;senkron.bat&lt;/code&gt; dosyasını çalıştır; telefondaki panel güncellenir." data-es="&lt;b&gt;Enviar al móvil&lt;/b&gt;: descarga &lt;code&gt;state.json&lt;/code&gt;. Ponlo en la carpeta C:\Panel y ejecuta &lt;code&gt;senkron.bat&lt;/code&gt;; el panel del móvil se actualiza."><b>Telefona gönder</b> — <code>state.json</code> indirir. Bu dosyayı C:\Panel klasörüne koyup <code>senkron.bat</code> dosyasını çalıştır; telefondaki panel güncellenir.</div>
+      </div>
+    </div>
+
     <div class="tools">
-      <button type="button" class="btn" id="btnYedek" data-tr="↓ Yedek al" data-es="↓ Descargar copia">↓ Yedek al</button>
+      <button type="button" class="btn primary" id="btnYedek" data-tr="↓ Yedek al" data-es="↓ Descargar copia">↓ Yedek al</button>
+      <button type="button" class="btn" id="btnJson" data-tr="↗ Telefona gönder (state.json)" data-es="↗ Enviar al móvil (state.json)">↗ Telefona gönder (state.json)</button>
       <button type="button" class="btn" id="btnGeri" data-tr="↑ Yedekten geri yükle" data-es="↑ Restaurar copia">↑ Yedekten geri yükle</button>
       <input type="file" id="fileGeri" accept="application/json" hidden>
     </div>
+    <div class="prog-s" id="yedekDurum" style="margin-top:14px;"></div>
   </section>
 
   <footer>
-    <span data-tr="© 2026 · Kişisel operasyon paneli · REV 5.0" data-es="© 2026 · Panel personal de operaciones · REV 5.0">© 2026 · Kişisel operasyon paneli · REV 5.0</span>
+    <span data-tr="© 2026 · Kişisel operasyon paneli" data-es="© 2026 · Panel personal de operaciones">© 2026 · Kişisel operasyon paneli</span>
+    <span>REV 6.0</span>
   </footer>
 
 </div>
 
 <script src="app.js"></script>
+<script>
+if ('serviceWorker' in navigator && location.protocol.indexOf('http') === 0) {
+  window.addEventListener('load', function () {
+    navigator.serviceWorker.register('sw.js').catch(function () {});
+  });
+}
+</script>
 </body>
 </html>
