@@ -1,4 +1,4 @@
-# TR → ABD Paneli · REV 7.0
+# TR → ABD Paneli · REV 8.0
 
 Tek sayfalık operasyon paneli. Bağımlılık yok, derleme yok, sunucu yok —
 düz statik dosyalar. GitHub Pages'te olduğu gibi çalışır.
@@ -13,6 +13,21 @@ Palet iPhone 18 Pro bitişlerinden alındı.
 Etiketler de gökkuşağı değil, üç anlam katmanı:
 kiraz = asıl iş (YKS) · mavi = yatırım (spor, dil, kültür) ·
 gümüş = altyapı (uyku, beslenme, temel).
+
+## Arka plan görseli
+
+Üstteki şeridin zemini varsayılan olarak `arka.svg` — kendi çizdiğim
+neoklasik bir kampüs cephesi, telif sorunu yok.
+
+**Kendi fotoğrafını koymak için:** klasöre `arka.jpg` (ya da `.png`,
+`.webp`) adında bir dosya bırak, başka hiçbir şey yapma. Panel açılışta
+dosyayı bulur ve zemini onunla değiştirir. Üstüne kiraz-mavi bir duotone
+örtü geliyor, böylece hangi fotoğraf olursa olsun yazılar okunur kalıyor.
+Silersen çizim geri gelir.
+
+Telifli bir fotoğrafı (üniversite tanıtım görselleri dahil) herkese açık
+bir depoya koymak hak ihlali olur — kendi çektiğin ya da lisansı uygun
+bir görsel kullan.
 
 ## Nasıl çalışır
 

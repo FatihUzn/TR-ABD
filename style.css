@@ -159,10 +159,11 @@ body{
 
 /* Tepede kirazdan maviye çok hafif bir yıkama. */
 body::before{
-  content:""; position:fixed; inset:0 0 auto 0; height:320px; z-index:-1;
+  content:""; position:fixed; inset:0; z-index:-1;
   background:
-    radial-gradient(700px 300px at 10% -90px, color-mix(in srgb,var(--cherry) 14%,transparent), transparent 70%),
-    radial-gradient(700px 300px at 90% -90px, color-mix(in srgb,var(--blue) 16%,transparent), transparent 70%);
+    radial-gradient(820px 460px at 6% 4%, color-mix(in srgb,var(--cherry) 15%,transparent), transparent 66%),
+    radial-gradient(820px 460px at 94% 10%, color-mix(in srgb,var(--blue) 17%,transparent), transparent 66%),
+    radial-gradient(700px 500px at 50% 108%, color-mix(in srgb,var(--blue) 12%,transparent), transparent 70%);
   pointer-events:none;
 }
 
@@ -225,59 +226,87 @@ body::before{
   scrollbar-width:none; -ms-overflow-style:none;}
 .tabs::-webkit-scrollbar{display:none;}
 
-.tab{position:relative; flex:none; border:0; background:transparent; cursor:pointer;
+.tabs{padding-top:9px; padding-bottom:9px;}
+.tab{position:relative; flex:none; border:1px solid transparent; cursor:pointer;
+  background:transparent; border-radius:99px;
   font-family:var(--sans); font-size:13.5px; font-weight:500; letter-spacing:-0.01em;
-  color:var(--ink-3); padding:12px 13px 13px; white-space:nowrap;
-  transition:color .16s ease;}
-.tab:hover{color:var(--ink-2);}
-.tab::after{content:""; position:absolute; left:11px; right:11px; bottom:-1px; height:2px;
-  border-radius:2px 2px 0 0; background:var(--yol);
-  transform:scaleX(0); transition:transform .24s cubic-bezier(.4,0,.2,1);}
-.tab.on{color:var(--ink); font-weight:600;}
-.tab.on::after{transform:scaleX(1);}
-.tab-n{font-family:var(--mono); font-size:9.5px; font-weight:600; color:var(--ink-3);
-  margin-left:6px; background:var(--soft); border:1px solid var(--line);
-  padding:1.5px 5px; border-radius:99px; vertical-align:1px;}
-.tab.on .tab-n{color:var(--blue); background:var(--blue-soft); border-color:var(--blue-line);}
+  color:var(--ink-3); padding:8px 15px; white-space:nowrap;
+  transition:color .16s ease, background .16s ease, border-color .16s ease, box-shadow .16s ease;}
+.tab:hover{color:var(--ink); background:var(--soft); border-color:var(--line);}
+.tab.on{
+  color:#fff; font-weight:600; border-color:transparent;
+  background:var(--yol); box-shadow:var(--sh-2);
+}
+.tab-n{font-family:var(--mono); font-size:9.5px; font-weight:700; color:var(--ink-3);
+  margin-left:7px; background:var(--soft); border:1px solid var(--line);
+  padding:1.5px 6px; border-radius:99px; vertical-align:1px;}
+.tab.on .tab-n{color:#fff; background:rgba(255,255,255,.22); border-color:rgba(255,255,255,.30);}
 
 /* ---------- 4. KAHRAMAN ŞERİT (kısa tutuldu) ---------- */
 
-.hero{padding:30px 0 24px;}
+/* Tam genişlik şerit. Zemin: kirazdan maviye gradyan + kampüs cephesi.
+   Klasöre arka.jpg / arka.png koyulursa app.js onu --foto olarak
+   veriyor ve fotoğraf çizimin yerine geçiyor; duotone örtü sayesinde
+   hangi fotoğraf olursa olsun yazı okunur kalıyor. */
+.hero-band{
+  position:relative; overflow:hidden;
+  background:
+    linear-gradient(112deg,#5e1a2b 0%,#7a2338 26%,#9d3050 48%,#3a6f9c 82%,#4a92c4 100%);
+  border-bottom:1px solid var(--line);
+}
+.hero-band::before{
+  content:""; position:absolute; inset:0;
+  background-image:var(--foto,url(arka.svg));
+  background-size:cover; background-position:center 62%;
+  background-repeat:no-repeat;
+  opacity:var(--foto-op,1);
+  mix-blend-mode:soft-light;
+}
+.hero-band.foto::before{mix-blend-mode:normal; opacity:.38;}
+/* Fotoğraf varken üstüne kiraz-mavi bir duotone örtü. */
+.hero-band.foto::after{
+  content:""; position:absolute; inset:0;
+  background:linear-gradient(112deg,rgba(94,26,43,.80),rgba(157,48,80,.55) 45%,rgba(43,109,158,.78));
+}
+.hero{position:relative; z-index:2; padding:34px 0 26px; color:#fff;}
 .hero-top{display:flex; align-items:flex-end; justify-content:space-between;
-  gap:22px; flex-wrap:wrap; margin-bottom:20px;}
+  gap:22px; flex-wrap:wrap; margin-bottom:22px;}
 
-h1{font-size:clamp(30px,5.4vw,44px); line-height:1;
-  margin:0 0 8px; letter-spacing:-0.05em; font-weight:700;}
-h1 .tr{color:var(--cherry);}
-h1 .us{color:var(--blue);}
-h1 .ar{display:inline-block; margin:0 .1em; font-style:normal;
-  background:var(--yol); -webkit-background-clip:text; background-clip:text; color:transparent;}
-.lede{color:var(--ink-2); margin:0; max-width:44ch; font-size:13.5px; line-height:1.6;}
+h1{font-size:clamp(32px,5.8vw,48px); line-height:1;
+  margin:0 0 10px; letter-spacing:-0.05em; font-weight:700; color:#fff;
+  text-shadow:0 2px 18px rgba(0,0,0,.30);}
+h1 .tr,h1 .us{color:#fff;}
+h1 .ar{display:inline-block; margin:0 .1em; font-style:normal; color:rgba(255,255,255,.62);}
+.lede{color:rgba(255,255,255,.82); margin:0; max-width:44ch;
+  font-size:13.5px; line-height:1.6; text-shadow:0 1px 10px rgba(0,0,0,.28);}
 
 .stats{display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:14px;}
-.stat{background:var(--card); border:1px solid var(--line); border-radius:var(--r);
-  padding:15px 16px 14px; box-shadow:var(--sh-1); position:relative; overflow:hidden;
-  transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease;}
-.stat:hover{transform:translateY(-2px); box-shadow:var(--sh-2); border-color:var(--line-2);}
-.stat::before{content:""; position:absolute; left:0; top:0; bottom:0; width:3px;}
-.stat.s-tr::before{background:var(--cherry);}
-.stat.s-us::before{background:var(--blue);}
-.stat.s-yol::before{background:var(--yol);}
-.stat-n{font-family:var(--mono); font-size:29px; font-weight:700; line-height:1;
-  letter-spacing:-0.035em; font-variant-numeric:tabular-nums;}
-.stat.s-tr .stat-n{color:var(--cherry);}
-.stat.s-us .stat-n{color:var(--ink);}
-.stat.s-yol .stat-n{color:var(--blue);}
-.stat-k{font-family:var(--mono); font-size:9px; font-weight:500; letter-spacing:0.12em;
-  text-transform:uppercase; color:var(--ink-3); margin-top:9px;}
+.stat{
+  background:rgba(255,255,255,.13); border:1px solid rgba(255,255,255,.22);
+  border-radius:var(--r); padding:15px 16px 14px; position:relative; overflow:hidden;
+  backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+  box-shadow:0 8px 26px -18px rgba(0,0,0,.7);
+  transition:transform .18s ease, background .18s ease, border-color .18s ease;
+}
+.stat:hover{transform:translateY(-2px); background:rgba(255,255,255,.19);
+  border-color:rgba(255,255,255,.34);}
+.stat::before{content:""; position:absolute; left:0; top:0; bottom:0; width:3px; background:#fff; opacity:.55;}
+.stat-n{font-family:var(--mono); font-size:30px; font-weight:700; line-height:1;
+  letter-spacing:-0.035em; font-variant-numeric:tabular-nums; color:#fff;}
+.stat-k{font-family:var(--mono); font-size:9px; font-weight:600; letter-spacing:0.12em;
+  text-transform:uppercase; color:rgba(255,255,255,.72); margin-top:9px;}
 
-.hero-bar{background:var(--card); border:1px solid var(--line);
-  border-radius:var(--r); padding:14px 16px; box-shadow:var(--sh-1);}
+.hero-bar{
+  background:rgba(255,255,255,.13); border:1px solid rgba(255,255,255,.22);
+  border-radius:var(--r); padding:14px 16px;
+  backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+}
+.hero-bar .bar{background:rgba(0,0,0,.26); border-color:rgba(255,255,255,.18);}
+.hero-bar .bar i{background:#fff;}
+.hero-bar .prog-s{color:rgba(255,255,255,.72);}
 .hb-uc{display:flex; justify-content:space-between; gap:12px; margin-bottom:9px;
-  font-family:var(--mono); font-size:9px; font-weight:600;
-  letter-spacing:0.12em; text-transform:uppercase;}
-.hb-uc .u-tr{color:var(--cherry);}
-.hb-uc .u-us{color:var(--blue);}
+  font-family:var(--mono); font-size:9px; font-weight:700;
+  letter-spacing:0.12em; text-transform:uppercase; color:rgba(255,255,255,.86);}
 
 /* ---------- 5. BÖLÜMLER ---------- */
 
@@ -285,18 +314,24 @@ h1 .ar{display:inline-block; margin:0 .1em; font-style:normal;
 .panel.on{display:block; animation:gir .28s cubic-bezier(.2,0,.2,1);}
 @keyframes gir{from{opacity:0; transform:translateY(7px);} to{opacity:1; transform:none;}}
 
-h2{font-size:21px; font-weight:700; letter-spacing:-0.035em;
-  color:var(--ink); margin:22px 0 5px;}
+h2{font-size:22px; font-weight:700; letter-spacing:-0.035em;
+  color:var(--ink); margin:26px 0 6px; padding-left:14px; position:relative;}
+h2::before{content:""; position:absolute; left:0; top:.18em; bottom:.18em;
+  width:4px; border-radius:99px; background:var(--yol);}
 .sub{font-size:13px; color:var(--ink-3); margin:0 0 20px; line-height:1.55; max-width:66ch;}
 h3{font-size:10.5px; font-family:var(--mono); font-weight:700; letter-spacing:0.12em;
-  text-transform:uppercase; color:var(--ink-3); margin:28px 0 11px;
+  text-transform:uppercase; color:var(--blue); margin:28px 0 11px;
   display:flex; align-items:center; gap:12px;}
-h3::after{content:""; flex:1; height:1px; background:var(--line);}
+h3::after{content:""; flex:1; height:1px;
+  background:linear-gradient(90deg,var(--blue-line),transparent);}
 
 /* ---------- 6. KARTLAR ---------- */
 
 .card{background:var(--card); border:1px solid var(--line);
-  border-radius:var(--r); padding:18px; box-shadow:var(--sh-1);}
+  border-radius:var(--r); padding:18px; box-shadow:var(--sh-1);
+  position:relative; overflow:hidden;}
+.card::before{content:""; position:absolute; left:0; right:0; top:0; height:2px;
+  background:var(--yol); opacity:.85;}
 .cards{display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:11px;}
 a.card{display:block; text-decoration:none; color:inherit;
   transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease;}
@@ -312,8 +347,9 @@ a.card:hover .ck::after{opacity:1; transform:translateX(0);}
 
 .bugun-h{display:flex; justify-content:space-between; align-items:center;
   gap:14px; margin-bottom:16px; flex-wrap:wrap;}
-.bugun-d{font-family:var(--mono); font-size:11.5px; color:var(--ink-2);
-  background:var(--soft); border:1px solid var(--line); padding:6px 12px; border-radius:8px;}
+.bugun-d{font-family:var(--mono); font-size:11.5px; color:var(--cherry); font-weight:600;
+  background:var(--cherry-soft); border:1px solid var(--cherry-line);
+  padding:6px 12px; border-radius:8px;}
 
 /* ---------- 7. İLERLEME ---------- */
 
@@ -396,7 +432,9 @@ a.card:hover .ck::after{opacity:1; transform:translateX(0);}
   background:var(--card); box-shadow:var(--sh-1); overflow:hidden;
   transition:border-color .18s ease, box-shadow .18s ease;}
 .acc:hover{border-color:var(--line-2);}
-.acc[open]{box-shadow:var(--sh-2);}
+.acc[open]{box-shadow:var(--sh-2); border-color:var(--blue-line);}
+.acc[open] > summary{background:var(--blue-soft);}
+.acc[open] > summary .acc-n{color:var(--blue);}
 .acc summary{list-style:none; cursor:pointer; padding:13px 16px;
   display:flex; align-items:center; gap:11px; transition:background .15s ease;}
 .acc summary:hover{background:var(--card-2);}
@@ -406,8 +444,8 @@ a.card:hover .ck::after{opacity:1; transform:translateX(0);}
   border-radius:1px; transform:rotate(45deg) translate(-2px,-2px); transition:transform .22s ease;}
 .acc[open] summary::after{transform:rotate(225deg) translate(-2px,-2px);}
 .acc-n{font-size:14px; font-weight:600; letter-spacing:-0.018em;}
-.acc-c{font-family:var(--mono); font-size:10px; color:var(--ink-3);
-  background:var(--soft); border:1px solid var(--line); padding:2.5px 8px;
+.acc-c{font-family:var(--mono); font-size:10px; color:var(--cherry);
+  background:var(--cherry-soft); border:1px solid var(--cherry-line); padding:2.5px 8px;
   border-radius:99px; margin-left:auto; font-variant-numeric:tabular-nums;}
 .acc-b{padding:0 16px 16px;}
 
@@ -428,9 +466,9 @@ a.card:hover .ck::after{opacity:1; transform:translateX(0);}
   transition:background .16s ease, border-color .16s ease, transform .12s ease;}
 .chk input:hover{border-color:var(--blue);}
 .chk input:active{transform:scale(.9);}
-.chk input:checked{background:var(--blue); border-color:var(--blue);}
+.chk input:checked{background:var(--yol); border-color:transparent;}
 .chk input:checked::after{content:""; position:absolute; left:4.5px; top:1.5px;
-  width:4px; height:8px; border:solid var(--on-fill);
+  width:4px; height:8px; border:solid #fff;
   border-width:0 1.8px 1.8px 0; transform:rotate(43deg);}
 .chk-t{font-size:13.5px; line-height:1.5;}
 .chk.on .chk-t{color:var(--ink-3); text-decoration:line-through; text-decoration-color:var(--line-2);}
@@ -458,9 +496,9 @@ a.card:hover .ck::after{opacity:1; transform:translateX(0);}
   transition:background .16s ease, border-color .16s ease, transform .12s ease;}
 .rrow input:hover{border-color:var(--blue);}
 .rrow input:active{transform:scale(.9);}
-.rrow input:checked{background:var(--blue); border-color:var(--blue);}
+.rrow input:checked{background:var(--yol); border-color:transparent;}
 .rrow input:checked::after{content:""; position:absolute; left:4.5px; top:1.5px;
-  width:4px; height:8px; border:solid var(--on-fill);
+  width:4px; height:8px; border:solid #fff;
   border-width:0 1.8px 1.8px 0; transform:rotate(43deg);}
 .rt{font-family:var(--mono); font-size:10.5px; color:var(--ink-2); font-weight:500;
   padding-top:3px; font-variant-numeric:tabular-nums;}
@@ -497,8 +535,8 @@ a.card:hover .ck::after{opacity:1; transform:translateX(0);}
   background:var(--card); margin-bottom:13px; box-shadow:var(--sh-1);}
 table{width:100%; border-collapse:collapse; font-size:13px; min-width:460px;}
 th{font-family:var(--mono); font-size:9px; font-weight:700; letter-spacing:0.1em;
-  text-transform:uppercase; color:var(--ink-3); text-align:left; padding:12px 14px;
-  border-bottom:1px solid var(--line); white-space:nowrap; background:var(--card-2);}
+  text-transform:uppercase; color:var(--blue); text-align:left; padding:12px 14px;
+  border-bottom:1px solid var(--blue-line); white-space:nowrap; background:var(--blue-soft);}
 td{padding:12px 14px; border-bottom:1px solid var(--line); vertical-align:top;}
 tbody tr:last-child td{border-bottom:0;}
 tbody tr:hover td{background:var(--card-2);}
@@ -516,8 +554,8 @@ td b{font-weight:600;}
 /* ---------- 12. NOTLAR ---------- */
 
 .note{font-size:13px; color:var(--ink-2); line-height:1.6; margin:0 0 14px;
-  padding:12px 15px; background:var(--soft); border:1px solid var(--line);
-  border-left:3px solid var(--line-2); border-radius:0 var(--r-s) var(--r-s) 0;}
+  padding:12px 15px; background:var(--blue-soft); border:1px solid var(--blue-line);
+  border-left:3px solid var(--blue); border-radius:0 var(--r-s) var(--r-s) 0;}
 
 .pts{border:1px solid var(--line); border-radius:var(--r); background:var(--card);
   padding:4px 18px; box-shadow:var(--sh-1);}
@@ -567,7 +605,7 @@ footer{padding:28px 0 46px; margin-top:20px; font-family:var(--mono); font-size:
   .tabs{padding:0 16px;}
   .tab{font-size:13px; padding:11px 10px 12px;}
   .tab::after{left:8px; right:8px;}
-  .hero{padding:22px 0 18px;}
+  .hero{padding:26px 0 22px;}
   .hero-top{gap:12px;}
   h2{font-size:18px;}
   .stats{grid-template-columns:1fr; gap:8px;}
@@ -598,3 +636,26 @@ footer{padding:28px 0 46px; margin-top:20px; font-family:var(--mono); font-size:
   body::before{display:none;}
   .acc{break-inside:avoid;}
 }
+
+
+/* ---------- 15. ŞERİT İÇİ DÜZELTMELER ---------- */
+
+/* Sekme çubuğu artık kahraman şeridin altında; üst şeride yapışıyor. */
+.tabs-w{top:0;}
+.top{position:static;}
+@media(min-width:681px){
+  .tabs-w{position:sticky; top:0;}
+}
+
+/* Üst şerit kahraman şeridin üstünde şeffaf durur. */
+.top{background:transparent; backdrop-filter:none; -webkit-backdrop-filter:none;
+  border-bottom:0; box-shadow:none;}
+.top .brand{color:#fff;}
+.top .brand-tr,.top .brand-us{color:#fff;}
+.top .brand-ar{color:rgba(255,255,255,.55);}
+.top .brand-m{background:rgba(255,255,255,.18); border:1px solid rgba(255,255,255,.28);}
+.top .theme-btn{background:rgba(255,255,255,.14); border-color:rgba(255,255,255,.24); color:#fff;}
+.top .theme-btn:hover{background:rgba(255,255,255,.24); color:#fff;}
+.top .lang{background:rgba(255,255,255,.14);}
+.top .lang-btn{color:rgba(255,255,255,.72);}
+.top .lang-btn.on{background:rgba(255,255,255,.92); color:#15171c; box-shadow:none;}

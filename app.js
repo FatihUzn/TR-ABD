@@ -1209,6 +1209,26 @@
   }, { passive: true });
 
   // ============================================================
+  // 12c. ARKA PLAN GÖRSELİ
+  // Klasörde arka.jpg / arka.png varsa kahraman şeridin zemini o olur.
+  // Yoksa çizilmiş kampüs cephesi (arka.svg) kalır. Fotoğraf konunca
+  // üstüne kiraz-mavi duotone örtü geliyor, yazı okunur kalsın diye.
+  // ============================================================
+  (function arkaFoto() {
+    const band = document.getElementById('heroBand');
+    if (!band) return;
+    ['arka.jpg', 'arka.jpeg', 'arka.png', 'arka.webp'].forEach(function (ad) {
+      const im = new Image();
+      im.onload = function () {
+        if (band.classList.contains('foto')) return;
+        band.style.setProperty('--foto', 'url("' + ad + '")');
+        band.classList.add('foto');
+      };
+      im.src = ad;
+    });
+  })();
+
+  // ============================================================
   // 13. BAŞLAT
   // ============================================================
   function renderAll(force) {
