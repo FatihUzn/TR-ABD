@@ -1,5 +1,5 @@
 /* ============================================================
-   style.css — TR→ABD operasyon paneli · REV 9.0
+   style.css — TR→ABD operasyon paneli · REV 11.0
 
    FİKİR
    Panelin tek cümlesi var: kırmızıdan maviye gitmek.
@@ -100,6 +100,12 @@
 
   --yol:linear-gradient(90deg,var(--cherry) 0%,var(--cherry-2) 36%,var(--blue) 100%);
 
+  /* SEKME RENGİ — her sekme yolun bir durağı.
+     Soldan sağa gezinirken renk kırmızıdan maviye yürüyor.
+     Panelin "şu an neredeyim" göstergesi bu. */
+  --vurgu:#ff2d55;
+  --vurgu-2:#ff5b7a;
+
   --mono:"JetBrains Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;
   --sans:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
 
@@ -113,9 +119,11 @@
 
   --bg:#050507;
   --bg-tint:#0b0b10;
-  --card:#0c0c11;
-  --card-2:#101018;
-  --soft:#141420;
+  /* Saydam: arkadaki yıldızlar kartların içinden hafifçe görünüyor.
+     Bulanıklık (backdrop-filter) yok — telefonda bedava değil. */
+  --card:rgba(11,11,17,.80);
+  --card-2:rgba(17,17,26,.80);
+  --soft:rgba(21,21,33,.85);
   --line:#1f1f2b;
   --line-2:#33334a;
 
@@ -752,4 +760,205 @@ h2::before{box-shadow:0 0 12px -1px var(--blue);}
   h1{line-height:.9;}
   .stat-n{font-size:30px;}
   .prog-n{font-size:28px;}
+}
+
+/* ============================================================
+   17. REV 10 — UZAY, SEKME RENKLERİ, RENK KURALI
+
+   RENK KURALI (nerede hangi renk, ne oranda)
+
+   ~70%  Nötr      siyah zemin, beyaz yazı, gri ikincil metin
+   ~20%  Sekme     bulunduğun sekmenin rengi — başlık, halka,
+                   aktif sekme, kart çizgisi, düğme
+   ~10%  Gradyan   SADECE zamanla ilgili şeyler: yol, ilerleme
+                   çubukları, yıl ızgarası, geri sayım
+
+   Yani: tek bir renk her yeri kaplamıyor, gradyan da her yere
+   serpilmiyor. Gradyan "yol", düz renk "buradasın", nötr "oku".
+
+   Etiketler (YKS / SPOR / TEMEL) kendi anlamlarını koruyor ama
+   sessiz: içi boş, ince kenarlı. Yüksek sesle konuşan tek renk
+   sekmenin rengi olsun ki göz nereye bakacağını bilsin.
+   ============================================================ */
+
+:root[data-tab="bugun"]  { --vurgu:#ff2d55; --vurgu-2:#ff5b7a; }
+:root[data-tab="yks"]    { --vurgu:#f5479b; --vurgu-2:#ff6fb5; }
+:root[data-tab="rutin"]  { --vurgu:#c65cd8; --vurgu-2:#d97fe8; }
+:root[data-tab="gelisim"]{ --vurgu:#8a6ff0; --vurgu-2:#a58fff; }
+:root[data-tab="kitap"]  { --vurgu:#5c7fff; --vurgu-2:#829eff; }
+:root[data-tab="yedek"]  { --vurgu:#3d8bff; --vurgu-2:#6aa8ff; }
+
+/* Açık temada aynı yürüyüş, koyulaştırılmış tonlarla */
+:root[data-theme="light"][data-tab="bugun"]  { --vurgu:#d11239; --vurgu-2:#e8305a; }
+:root[data-theme="light"][data-tab="yks"]    { --vurgu:#c31a72; --vurgu-2:#dd3d90; }
+:root[data-theme="light"][data-tab="rutin"]  { --vurgu:#9333a8; --vurgu-2:#ae4dc4; }
+:root[data-theme="light"][data-tab="gelisim"]{ --vurgu:#5b41c9; --vurgu-2:#7460e0; }
+:root[data-theme="light"][data-tab="kitap"]  { --vurgu:#2f52d6; --vurgu-2:#4d72ee; }
+:root[data-theme="light"][data-tab="yedek"]  { --vurgu:#0b5fd6; --vurgu-2:#2f83f5; }
+
+/* --- Uzay tüm sayfada --- */
+#heroCanvas{
+  position:fixed; inset:0; width:100%; height:100%;
+  z-index:0; pointer-events:none;
+}
+.hero-band,.tabs-w,.wrap,footer{position:relative; z-index:1;}
+.hero-band{background:transparent; border-bottom:0;}
+.hero-band::after{display:none;}
+.tabs-w{background:transparent;}
+body{background:var(--hero-bg);}
+body::before{
+  background:
+    radial-gradient(1000px 560px at 6% 0%, color-mix(in srgb,var(--vurgu) 13%,transparent), transparent 60%),
+    radial-gradient(900px 520px at 96% 6%, color-mix(in srgb,var(--blue) 12%,transparent), transparent 60%);
+  transition:background .5s ease;
+}
+
+/* --- Sekme rengi nereye uyguluyoruz --- */
+
+h2::before{background:linear-gradient(var(--vurgu),var(--vurgu-2));
+  box-shadow:0 0 14px -1px var(--vurgu);}
+h3{color:var(--vurgu);}
+h3::after{background:linear-gradient(90deg,color-mix(in srgb,var(--vurgu) 45%,transparent),transparent);}
+
+.card::before{background:linear-gradient(90deg,var(--vurgu),var(--vurgu-2)); opacity:.9;
+  box-shadow:0 0 10px -1px var(--vurgu);}
+
+.ring .r-fg{stroke:var(--vurgu);}
+.prog-n{color:var(--vurgu);}
+
+.chk input:checked,.rrow input:checked{
+  background:var(--vurgu); border-color:transparent;
+  box-shadow:0 0 10px -2px var(--vurgu);}
+.chk input:hover,.rrow input:hover{border-color:var(--vurgu);}
+.rrow.today{background:color-mix(in srgb,var(--vurgu) 12%,transparent);
+  box-shadow:inset 3px 0 0 var(--vurgu);}
+
+.acc[open]{border-color:color-mix(in srgb,var(--vurgu) 40%,transparent);}
+.acc[open] > summary{background:color-mix(in srgb,var(--vurgu) 10%,transparent);}
+.acc[open] > summary .acc-n{color:var(--vurgu);}
+.acc-c{color:var(--vurgu); background:color-mix(in srgb,var(--vurgu) 12%,transparent);
+  border-color:color-mix(in srgb,var(--vurgu) 32%,transparent);}
+
+th{color:var(--vurgu); background:color-mix(in srgb,var(--vurgu) 8%,transparent);
+  border-bottom-color:color-mix(in srgb,var(--vurgu) 26%,transparent);}
+td.hi{color:var(--vurgu);}
+
+.note{background:color-mix(in srgb,var(--vurgu) 7%,transparent);
+  border-color:color-mix(in srgb,var(--vurgu) 20%,transparent);
+  border-left-color:var(--vurgu);}
+
+.ck::after{color:var(--vurgu);}
+.kota-i:focus{border-color:var(--vurgu); box-shadow:0 0 0 3px color-mix(in srgb,var(--vurgu) 20%,transparent);}
+.bugun-d{color:var(--vurgu); background:color-mix(in srgb,var(--vurgu) 11%,transparent);
+  border-color:color-mix(in srgb,var(--vurgu) 30%,transparent);}
+.seri{background:color-mix(in srgb,var(--vurgu) 10%,transparent);
+  border-color:color-mix(in srgb,var(--vurgu) 26%,transparent);}
+.seri::before{background:var(--vurgu);
+  box-shadow:0 0 0 4px color-mix(in srgb,var(--vurgu) 22%,transparent), 0 0 14px 2px var(--vurgu);}
+.alarm{background:color-mix(in srgb,var(--cherry) 12%,transparent);
+  border-color:color-mix(in srgb,var(--cherry) 30%,transparent);}
+.btn.primary,.checkin{background:linear-gradient(96deg,var(--vurgu),var(--vurgu-2));
+  box-shadow:0 0 26px -6px var(--vurgu);}
+.pt-i{background:linear-gradient(140deg,var(--vurgu),var(--vurgu-2));}
+:focus-visible{outline-color:var(--vurgu);}
+
+/* Aktif sekme kendi rengini taşır; diğerleri sessiz */
+.tab.on{background:linear-gradient(96deg,var(--vurgu),var(--vurgu-2));
+  box-shadow:0 0 24px -5px var(--vurgu);}
+
+/* Etiketler sessizleşti: içi boş, ince kenar. Anlamları duruyor. */
+.tag{background:transparent; border-width:1px;}
+.t-yks{background:transparent; color:var(--cherry); border-color:color-mix(in srgb,var(--cherry) 45%,transparent);}
+.t-spor,.t-dil,.t-genel{background:transparent; color:var(--blue);
+  border-color:color-mix(in srgb,var(--blue) 40%,transparent);}
+.t-beslenme,.t-temel{background:transparent; color:var(--silver);
+  border-color:color-mix(in srgb,var(--silver) 38%,transparent);}
+
+/* Gradyan SADECE zamanla ilgili yerlerde kalıyor */
+.bar i{background:var(--yol);}
+.cd-u:first-child{background:linear-gradient(120deg,var(--cherry),var(--blue));}
+.top .brand-m{background:linear-gradient(120deg,var(--cherry),var(--blue));}
+
+/* Sekme değişince panel biraz daha belirgin girsin */
+.panel.on{animation:gir .34s cubic-bezier(.2,0,.2,1);}
+@keyframes gir{
+  from{opacity:0; transform:translateY(12px) scale(.995);}
+  to{opacity:1; transform:none;}
+}
+
+/* ============================================================
+   18. REV 11 — SEKMELER ÜSTTE, HER SEKME KENDİ SAYFASI
+   ============================================================ */
+
+/* Marka + sekmeler tek blok, sayfanın tepesinde sabit.
+   Kahraman şerit artık onların altında akıyor. */
+.head-fix{
+  position:sticky; top:0; z-index:50;
+  background:color-mix(in srgb, var(--hero-bg) 78%, transparent);
+  backdrop-filter:blur(18px) saturate(1.4);
+  -webkit-backdrop-filter:blur(18px) saturate(1.4);
+  border-bottom:1px solid rgba(255,255,255,.07);
+}
+.head-fix .top{position:static; background:transparent; border:0; box-shadow:none;}
+.head-fix .tabs-w{position:static; background:transparent; border-bottom:0;}
+.head-fix .tabs{padding-top:2px; padding-bottom:11px;}
+/* Sekme çubuğunun altında ince bir renk izi: hangi sekmedesin. */
+.head-fix::after{
+  content:""; position:absolute; left:0; right:0; bottom:-1px; height:1px;
+  background:linear-gradient(90deg,transparent,var(--vurgu),transparent);
+  opacity:.55;
+}
+
+.hero{padding:40px 0 150px;}
+
+/* --- Sekme başlığı: kicker + başlık + şerit --- */
+
+.pkick{
+  display:flex; align-items:center; gap:11px; margin:26px 0 10px;
+  font-family:var(--mono); font-size:9.5px; font-weight:700;
+  letter-spacing:0.20em; text-transform:uppercase; color:var(--vurgu);
+}
+.pkick i{
+  font-style:normal; font-size:9.5px; letter-spacing:0.08em;
+  padding:3px 8px; border-radius:99px;
+  color:var(--vurgu); background:color-mix(in srgb,var(--vurgu) 14%,transparent);
+  border:1px solid color-mix(in srgb,var(--vurgu) 34%,transparent);
+}
+.pkick::after{
+  content:""; flex:1; height:1px;
+  background:linear-gradient(90deg,color-mix(in srgb,var(--vurgu) 35%,transparent),transparent);
+}
+.panel h2{margin-top:0;}
+
+/* Sekmeye özel özet şeridi — o sekmenin üç rakamı */
+.pstrip{
+  display:grid; grid-template-columns:repeat(3,1fr); gap:1px;
+  background:color-mix(in srgb,var(--vurgu) 22%,transparent);
+  border:1px solid color-mix(in srgb,var(--vurgu) 26%,transparent);
+  border-radius:var(--r); overflow:hidden; margin:0 0 22px;
+}
+.ps{
+  background:var(--hero-bg); padding:14px 16px 13px;
+  display:flex; flex-direction:column; gap:6px; min-width:0;
+}
+.ps b{
+  font-family:var(--mono); font-size:19px; font-weight:700; line-height:1.05;
+  letter-spacing:-0.035em; color:var(--ink); font-variant-numeric:tabular-nums;
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+}
+.ps:first-child b{color:var(--vurgu);}
+.ps span{
+  font-family:var(--mono); font-size:8.5px; font-weight:600; letter-spacing:0.14em;
+  text-transform:uppercase; color:var(--ink-3);
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+}
+
+@media(max-width:680px){
+  .head-fix .tabs{padding-bottom:9px;}
+  .hero{padding:26px 0 120px;}
+  .pkick{margin:18px 0 9px; font-size:9px; letter-spacing:0.16em;}
+  .pstrip{grid-template-columns:1fr;}
+  .ps{flex-direction:row; align-items:baseline; gap:11px; padding:11px 14px;}
+  .ps b{font-size:17px; flex:none;}
+  .ps span{flex:1;}
 }

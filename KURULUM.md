@@ -1,24 +1,13 @@
-# TR → ABD Paneli · REV 9.0
+# TR → ABD Paneli · REV 11.0
 
 Tek sayfalık operasyon paneli. Bağımlılık yok, derleme yok, sunucu yok —
 düz statik dosyalar. GitHub Pages'te olduğu gibi çalışır.
 
 ## Tasarım fikri
 
-Panelin tek cümlesi var: kırmızıdan maviye gitmek. Kırmızı (Dark Cherry)
-Türkiye, mavi (Light Blue) ABD. Her ilerleme çubuğu, yıl ızgarasındaki
-her kare kırmızıdan başlayıp maviye gidiyor — renk dekor değil, yön.
-Palet iPhone 18 Pro bitişlerinden alındı.
+Siyah uzay, kocaman tipografi, kırmızıdan maviye giden bir yol.
 
-Etiketler de gökkuşağı değil, üç anlam katmanı:
-kiraz = asıl iş (YKS) · mavi = yatırım (spor, dil, kültür) ·
-gümüş = altyapı (uyku, beslenme, temel).
-
-## Tasarım fikri
-
-Siyah zemin, kocaman tipografi, kırmızı ve mavi ışıltı.
-
-Kahraman şeridin altındaki yol süs değil, panelin verisi:
+Kahraman şeridin altındaki yay süs değil, panelin verisi:
 
 - Yay soldan (TR) sağa (ABD) uzanıyor.
 - Parlak kısım geçen zaman kadar; kırmızıdan maviye dönüyor.
@@ -26,15 +15,43 @@ Kahraman şeridin altındaki yol süs değil, panelin verisi:
   bir ışık daha ekliyor.
 - Baştaki beyaz nokta bugünkü konumun, nabız gibi atıyor.
 
-Kütüphane yok, üçüncü parti yok — saf canvas, birkaç kilobayt. Sayfa
-açılır açılmaz çalışır. Sekme arkadayken ve işletim sisteminde "hareketi
-azalt" açıkken çizim durur, batarya yemez.
+Yıldızlar tüm sayfayı kaplıyor; kaydırdıkça hafif paralaksla akıyorlar.
+Kartlar saydam, uzay içlerinden görünüyor.
 
-Etiketler üç anlam katmanı: kırmızı = asıl iş (YKS), mavi = yatırım
-(spor, dil, kültür), gri = altyapı (uyku, beslenme, temel).
+Kütüphane yok, üçüncü parti yok — saf canvas, birkaç kilobayt. Sekme
+arkadayken, yol ekrandan çıktığında ve "hareketi azalt" açıkken çizim
+durur.
 
-Varsayılan tema siyah. Açık tema düğmesi duruyor ama panelin kimliği
-siyah üzerine kurulu.
+## Renk kuralı
+
+Nerede hangi renk, ne oranda:
+
+| Oran | Ne | Nerede |
+|---|---|---|
+| ~70% | Nötr | Siyah zemin, beyaz başlık, gri ikincil metin |
+| ~20% | Sekme rengi | Başlık çubuğu, alt başlıklar, halka, yüzde, kart çizgisi, kutucuklar, aktif sekme, düğme |
+| ~10% | Gradyan | Sadece zamanla ilgili şeyler: yol, ilerleme çubukları, yıl ızgarası, geri sayım, logo |
+
+**Sekme rengi yolun neresinde olduğunu gösteriyor.** Soldan sağa
+gezinirken renk kırmızıdan maviye yürüyor:
+
+| Sekme | Renk |
+|---|---|
+| Bugün | `#ff2d55` kırmızı |
+| YKS | `#f5479b` pembe |
+| Rutin | `#c65cd8` mor |
+| Gelişim | `#8a6ff0` menekşe |
+| Kitaplar | `#5c7fff` mavi-mor |
+| Yedek | `#3d8bff` mavi |
+
+Etiketler (YKS / SPOR / TEMEL) kendi anlamlarını koruyor ama sessiz:
+içi boş, ince kenarlı. Yüksek sesle konuşan tek renk sekmenin rengi
+olsun ki göz nereye bakacağını bilsin.
+
+Kırmızı = asıl iş · mavi = yatırım (spor, dil, kültür) · gri = altyapı.
+
+Varsayılan tema siyah. Açık tema düğmesi duruyor ve aynı yürüyüşü
+koyulaştırılmış tonlarla yapıyor.
 
 ## Arka plan fotoğrafı
 
@@ -49,8 +66,17 @@ bir görsel kullan.
 ## Nasıl çalışır
 
 Sayfa **sekmeli**: Bugün · YKS · Rutin · Gelişim · Kitaplar · Yedek.
-Panel her açıldığında Bugün gelir — günlük iş orası. Sekme başlıklarındaki
-küçük rozetler o bölümün durumunu sekmeye girmeden gösterir.
+Sekmeler sayfanın en üstünde, marka satırının altında sabit duruyor —
+nereye kaydırırsan kaydır elinin altında.
+
+Panel her açıldığında Bugün gelir; günlük iş orası. Sekme
+rozetleri (%8, %32, 2/21) o bölümün durumunu girmeden gösterir.
+
+**Her sekme kendi sayfası gibi:** kendi numarası ve üst yazısı
+(01 GÜNLÜK KONTROL, 02 ASIL İŞ, 03 GÜNÜN İSKELETİ…), kendi rengi ve
+kendi üç rakamlık özet şeridi var. Sekme değişince sayfanın tamamı —
+başlıklar, halkalar, kutucuklar, arka plan ışıltısı — o renge geçiyor.
+
 Sık bakılmayan içerik (kaynaklar, denemeler, hedef tabloları) YKS
 sekmesinde kapalı akordiyonların içinde.
 

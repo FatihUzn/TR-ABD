@@ -6,7 +6,7 @@
         eski durumu gösterir ve senkronun anlamı kalmaz.
    Panelde değişiklik yaptığında SURUM'u bir artır.
    ============================================================ */
-const SURUM = 'panel-v9';
+const SURUM = 'panel-v11';
 const KABUK = [
   './',
   './index.html',

@@ -38,9 +38,8 @@
   </linearGradient>
 </defs></svg>
 
-<div class="hero-band" id="heroBand">
-<canvas id="heroCanvas" aria-hidden="true"></canvas>
-<header class="top" id="topBar">
+<div class="head-fix" id="topBar">
+<header class="top">
   <div class="top-in">
     <a class="brand" href="#bugun">
       <span class="brand-m" aria-hidden="true">→</span>
@@ -63,6 +62,21 @@
     </div>
   </div>
 </header>
+<div class="tabs-w">
+  <div class="tabs" id="tabs">
+    <button type="button" class="tab on" data-tab="bugun"><span data-tr="Bugün" data-es="Hoy">Bugün</span></button>
+    <button type="button" class="tab" data-tab="yks"><span>YKS</span><span class="tab-n" id="tnYks"></span></button>
+    <button type="button" class="tab" data-tab="rutin"><span data-tr="Rutin" data-es="Rutina">Rutin</span><span class="tab-n" id="tnRutin"></span></button>
+    <button type="button" class="tab" data-tab="gelisim"><span data-tr="Gelişim" data-es="Desarrollo">Gelişim</span><span class="tab-n" id="tnGelisim"></span></button>
+    <button type="button" class="tab" data-tab="kitap"><span data-tr="Kitaplar" data-es="Libros">Kitaplar</span><span class="tab-n" id="tnKitap"></span></button>
+    <button type="button" class="tab" data-tab="yedek"><span data-tr="Yedek" data-es="Copia">Yedek</span></button>
+  </div>
+</div>
+</div>
+
+<div class="hero-band" id="heroBand">
+<canvas id="heroCanvas" aria-hidden="true"></canvas>
+
 
 <div class="wrap hero">
     <div class="hero-top">
@@ -98,21 +112,20 @@
 </div>
 </div>
 
-<div class="tabs-w">
-  <div class="tabs" id="tabs">
-    <button type="button" class="tab on" data-tab="bugun"><span data-tr="Bugün" data-es="Hoy">Bugün</span></button>
-    <button type="button" class="tab" data-tab="yks"><span>YKS</span><span class="tab-n" id="tnYks"></span></button>
-    <button type="button" class="tab" data-tab="rutin"><span data-tr="Rutin" data-es="Rutina">Rutin</span><span class="tab-n" id="tnRutin"></span></button>
-    <button type="button" class="tab" data-tab="gelisim"><span data-tr="Gelişim" data-es="Desarrollo">Gelişim</span><span class="tab-n" id="tnGelisim"></span></button>
-    <button type="button" class="tab" data-tab="kitap"><span data-tr="Kitaplar" data-es="Libros">Kitaplar</span><span class="tab-n" id="tnKitap"></span></button>
-    <button type="button" class="tab" data-tab="yedek"><span data-tr="Yedek" data-es="Copia">Yedek</span></button>
-  </div>
-</div>
+
 
 <div class="wrap">
 
   <!-- ==================== BUGÜN ==================== -->
   <section class="panel on" id="p-bugun">
+    <p class="pkick"><i>01</i><span data-tr="Günlük kontrol" data-es="Control diario">Günlük kontrol</span></p>
+    <h2 data-tr="Bugün" data-es="Hoy">Bugün</h2>
+    <p class="sub" data-tr="Gün 04:00'te biter — gece geç işaretlersen hâlâ dünkü güne yazılır." data-es="El día termina a las 04:00: si marcas de madrugada, cuenta para el día anterior.">Gün 04:00'te biter — gece geç işaretlersen hâlâ dünkü güne yazılır.</p>
+    <div class="pstrip">
+      <div class="ps"><b id="ps-bugun-1">–</b><span data-tr="Rutin" data-es="Rutina">Rutin</span></div>
+      <div class="ps"><b id="ps-bugun-2">–</b><span data-tr="Bu yıl işaretlenen" data-es="Marcados este año">Bu yıl işaretlenen</span></div>
+      <div class="ps"><b id="ps-bugun-3">–</b><span data-tr="Kalan hafta" data-es="Semanas restantes">Kalan hafta</span></div>
+    </div>
     <div class="alarm" id="yedekAlarm" hidden>
       <span class="alarm-i">!</span>
       <span id="yedekAlarmTxt"></span>
@@ -163,8 +176,14 @@
 
   <!-- ==================== YKS ==================== -->
   <section class="panel" id="p-yks">
+    <p class="pkick"><i>02</i><span data-tr="Asıl iş" data-es="El trabajo principal">Asıl iş</span></p>
     <h2 data-tr="YKS" data-es="YKS">YKS</h2>
     <p class="sub" data-tr="19 Haziran 2027 · Hedef: Koç Üniversitesi Endüstri Mühendisliği (burslu)" data-es="19 de junio de 2027 · Objetivo: Ingeniería Industrial en la Universidad Koç (con beca)">19 Haziran 2027 · Hedef: Koç Üniversitesi Endüstri Mühendisliği (burslu)</p>
+    <div class="pstrip">
+      <div class="ps"><b id="ps-yks-1">–</b><span data-tr="Tamamlanan konu" data-es="Temas completados">Tamamlanan konu</span></div>
+      <div class="ps"><b id="ps-yks-2">–</b><span data-tr="Bu hafta soru" data-es="Preguntas esta semana">Bu hafta soru</span></div>
+      <div class="ps"><b id="ps-yks-3">–</b><span data-tr="Sıradaki" data-es="Siguiente">Sıradaki</span></div>
+    </div>
 
     <div class="cd">
       <div class="cd-u"><div class="cd-n" id="cdG">00</div><div class="cd-k" data-tr="Gün" data-es="Días">Gün</div></div>
@@ -337,8 +356,14 @@
 
   <!-- ==================== RUTİN ==================== -->
   <section class="panel" id="p-rutin">
+    <p class="pkick"><i>03</i><span data-tr="Günün iskeleti" data-es="El esqueleto del día">Günün iskeleti</span></p>
     <h2 data-tr="Rutin" data-es="Rutina">Rutin</h2>
     <p class="sub" data-tr="Kutucuklar her sabah sıfırlanır. Önemli olan tek bir mükemmel gün değil, üst üste gelen sıradan günler." data-es="Las casillas se reinician cada mañana. Lo que cuenta no es un día perfecto, sino muchos días corrientes seguidos.">Kutucuklar her sabah sıfırlanır. Önemli olan tek bir mükemmel gün değil, üst üste gelen sıradan günler.</p>
+    <div class="pstrip">
+      <div class="ps"><b id="ps-rutin-1">–</b><span data-tr="Bugün" data-es="Hoy">Bugün</span></div>
+      <div class="ps"><b id="ps-rutin-2">–</b><span data-tr="Rutin serisi" data-es="Racha de rutina">Rutin serisi</span></div>
+      <div class="ps"><b id="ps-rutin-3">–</b><span data-tr="Bugünün sporu" data-es="Deporte de hoy">Bugünün sporu</span></div>
+    </div>
 
     <div class="card" style="margin-bottom:16px;">
       <div class="ring-w">
@@ -373,8 +398,14 @@
 
   <!-- ==================== GELİŞİM ==================== -->
   <section class="panel" id="p-gelisim">
+    <p class="pkick"><i>04</i><span data-tr="Yan yatırımlar" data-es="Inversiones paralelas">Yan yatırımlar</span></p>
     <h2 data-tr="Gelişim" data-es="Desarrollo">Gelişim</h2>
     <p class="sub" data-tr="Bu yılın odağı: genel kültür, dil, spor, YKS. Siber ve kod düşük tempoda, WSL üzerinden. YL hazırlığı zemin seviyesinde." data-es="El foco de este año: cultura general, idioma, deporte y YKS. Ciberseguridad y código a ritmo bajo. La preparación del máster, a nivel de base.">Bu yılın odağı: genel kültür, dil, spor, YKS. Siber ve kod düşük tempoda, WSL üzerinden. YL hazırlığı zemin seviyesinde.</p>
+    <div class="pstrip">
+      <div class="ps"><b id="ps-gelisim-1">–</b><span data-tr="Tamamlanan madde" data-es="Puntos completados">Tamamlanan madde</span></div>
+      <div class="ps"><b id="ps-gelisim-2">–</b><span data-tr="Biten başlık" data-es="Títulos cerrados">Biten başlık</span></div>
+      <div class="ps"><b id="ps-gelisim-3">–</b><span data-tr="Sıradaki alan" data-es="Siguiente área">Sıradaki alan</span></div>
+    </div>
 
     <div class="card" style="margin-bottom:16px;">
       <div class="ring-w">
@@ -399,16 +430,28 @@
 
   <!-- ==================== KİTAPLAR ==================== -->
   <section class="panel" id="p-kitap">
+    <p class="pkick"><i>05</i><span data-tr="Paragrafın yakıtı" data-es="El combustible de la lectura">Paragrafın yakıtı</span></p>
     <h2 data-tr="Kitaplar" data-es="Libros">Kitaplar</h2>
     <p class="sub" id="kitapSub">—</p>
+    <div class="pstrip">
+      <div class="ps"><b id="ps-kitap-1">–</b><span data-tr="Biten kitap" data-es="Libros terminados">Biten kitap</span></div>
+      <div class="ps"><b id="ps-kitap-2">–</b><span data-tr="Biten kategori" data-es="Categorías cerradas">Biten kategori</span></div>
+      <div class="ps"><b id="ps-kitap-3">–</b><span data-tr="Sıradaki" data-es="Siguiente">Sıradaki</span></div>
+    </div>
     <div id="kitapList"></div>
     <p class="note" data-tr="Hepsi Storytel Türkiye'de mevcut (katalog değişebilir, bulamazsan atla). Sesli dinlemek de sayılır — spor yaparken ve yolda dinlemek günde bir saat kazandırır. Türk edebiyatı kategorisi doğrudan TYT Türkçe paragraf netine yarar." data-es="Todos están en Storytel Turquía. Escuchar también cuenta. La categoría de literatura turca sube directamente los netos de comprensión lectora del TYT.">Hepsi Storytel Türkiye'de mevcut (katalog değişebilir, bulamazsan atla). Sesli dinlemek de sayılır — spor yaparken ve yolda dinlemek günde bir saat kazandırır. Türk edebiyatı kategorisi doğrudan TYT Türkçe paragraf netine yarar.</p>
   </section>
 
   <!-- ==================== YEDEK ==================== -->
   <section class="panel" id="p-yedek">
+    <p class="pkick"><i>06</i><span data-tr="Sigorta" data-es="El seguro">Sigorta</span></p>
     <h2 data-tr="Yedekleme" data-es="Copia de seguridad">Yedekleme</h2>
     <p class="sub" data-tr="Panelin tüm verisi yalnızca bu tarayıcının hafızasında. Tarayıcı verisini temizlemek ya da cihaz değiştirmek bir yıllık kaydı siler." data-es="Todos los datos del panel están solo en la memoria de este navegador. Borrarlos elimina un año de registro.">Panelin tüm verisi yalnızca bu tarayıcının hafızasında. Tarayıcı verisini temizlemek ya da cihaz değiştirmek bir yıllık kaydı siler.</p>
+    <div class="pstrip">
+      <div class="ps"><b id="ps-yedek-1">–</b><span data-tr="Son yedek" data-es="Última copia">Son yedek</span></div>
+      <div class="ps"><b id="ps-yedek-2">–</b><span data-tr="Kayıtlı gün" data-es="Días registrados">Kayıtlı gün</span></div>
+      <div class="ps"><b id="ps-yedek-3">–</b><span data-tr="Veri boyutu" data-es="Tamaño de datos">Veri boyutu</span></div>
+    </div>
 
     <div class="pts" style="margin-bottom:16px;">
       <div class="pt">
@@ -431,7 +474,7 @@
 
   <footer>
     <span data-tr="Kişisel operasyon paneli" data-es="Panel personal de operaciones">Kişisel operasyon paneli</span>
-    <span>REV 9.0</span>
+    <span>REV 11.0</span>
   </footer>
 
 </div>

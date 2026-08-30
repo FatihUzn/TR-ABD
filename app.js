@@ -994,6 +994,92 @@
   }
 
   // ============================================================
+  // 10f. SEKME ÖZET ŞERİTLERİ
+  // Her sekmenin kendi üç rakamı. Sekme sadece renk değiştirmiyor,
+  // kendi durumunu da baştan söylüyor.
+  // ============================================================
+  function ps(tab, i, tr, es) {
+    t(document.getElementById('ps-' + tab + '-' + i), tr, es === undefined ? tr : es);
+  }
+
+  function renderStrips() {
+    const tk = todayKey();
+
+    // --- Bugün ---
+    const rp = rutinPct(S.rutin[tk]);
+    ps('bugun', 1, '%' + rp.pct);
+    const c = checkins();
+    let isaret = 0;
+    Object.keys(c).forEach(function (k) { if (c[k]) isaret++; });
+    ps('bugun', 2, isaret + ' gün', isaret + ' días');
+    const hafta = Math.max(0, Math.ceil((EXAM - Date.now()) / 604800000));
+    ps('bugun', 3, hafta + ' hafta', hafta + ' semanas');
+
+    // --- YKS ---
+    const yt = totalOf(YKS_DATA.TYT.concat(YKS_DATA.AYT), S.yks);
+    ps('yks', 1, yt.done + ' / ' + yt.total);
+    let sv = 0, st = 0;
+    document.querySelectorAll('tr[data-key]').forEach(function (tr2) {
+      sv += Number(S.yksHafta[tr2.dataset.key]) || 0;
+      st += Number(tr2.dataset.hedef) || 0;
+    });
+    ps('yks', 2, sv + ' / ' + st);
+    const n = nextYksTopic();
+    ps('yks', 3, n ? n.konu : 'Bitti', n ? n.konu : 'Hecho');
+
+    // --- Rutin ---
+    ps('rutin', 1, '%' + rp.pct);
+    const rs = rutinStreak();
+    ps('rutin', 2, rs + ' gün', rs + ' días');
+    const jd = new Date().getDay();
+    const bugunSpor = SPOR_HAFTA[jd === 0 ? 6 : jd - 1];
+    ps('rutin', 3, bugunSpor ? bugunSpor.tur : '—');
+
+    // --- Gelişim ---
+    const gt = totalOf(GELISIM_DATA, S.gelisim);
+    ps('gelisim', 1, gt.done + ' / ' + gt.total);
+    let bitenBaslik = 0, toplamBaslik = 0, siradaki = null;
+    GELISIM_DATA.forEach(function (g) {
+      (g.konular || []).forEach(function (k) {
+        toplamBaslik++;
+        const ids = leafIds(k);
+        const tam = ids.every(function (id) { return S.gelisim[id]; });
+        if (tam) bitenBaslik++;
+        else if (!siradaki) siradaki = g.ad;
+      });
+    });
+    ps('gelisim', 2, bitenBaslik + ' / ' + toplamBaslik);
+    ps('gelisim', 3, siradaki || 'Bitti', siradaki || 'Hecho');
+
+    // --- Kitaplar ---
+    const kc = kitapCounts();
+    ps('kitap', 1, kc.done + ' / ' + kc.total);
+    let bitenKat = 0, siradakiKitap = null;
+    KITAP_DATA.forEach(function (kat) {
+      const hepsi = kat.kitaplar.every(function (b) { return S.kitap[b.id]; });
+      if (hepsi) bitenKat++;
+      if (!siradakiKitap) {
+        const ilk = kat.kitaplar.find(function (b) { return !S.kitap[b.id]; });
+        if (ilk) siradakiKitap = ilk.ad;
+      }
+    });
+    ps('kitap', 2, bitenKat + ' / ' + KITAP_DATA.length);
+    ps('kitap', 3, siradakiKitap || 'Bitti', siradakiKitap || 'Hecho');
+
+    // --- Yedek ---
+    const yd = yedekTarihi();
+    const gun = yd ? Math.floor((Date.now() - yd.getTime()) / 86400000) : null;
+    ps('yedek', 1, gun === null ? 'Hiç' : (gun === 0 ? 'Bugün' : gun + ' gün önce'),
+                   gun === null ? 'Nunca' : (gun === 0 ? 'Hoy' : 'hace ' + gun + ' días'));
+    ps('yedek', 2, Object.keys(S.rutin).length + ' gün', Object.keys(S.rutin).length + ' días');
+    let bayt = 0;
+    Object.values(K).forEach(function (key) {
+      try { const v = localStorage.getItem(key); if (v) bayt += v.length; } catch (e) {}
+    });
+    ps('yedek', 3, bayt < 1024 ? bayt + ' B' : (bayt / 1024).toFixed(1) + ' KB');
+  }
+
+  // ============================================================
   // 11. BUGÜN KARTLARI
   // ============================================================
   function renderBugun() {
@@ -1019,6 +1105,7 @@
       k.done + ' kitap bitti', k.done + ' libros terminados');
 
     renderTabCounts();
+    renderStrips();
   }
 
   // ============================================================
@@ -1192,6 +1279,8 @@
       b.classList.toggle('on', b.dataset.tab === ad);
       b.setAttribute('aria-selected', b.dataset.tab === ad ? 'true' : 'false');
     });
+    // Sekme rengi sistemi buna bakıyor: :root[data-tab="..."]
+    document.documentElement.setAttribute('data-tab', ad);
     if (kaydir) window.scrollTo(0, 0);
     try { history.replaceState(null, '', '#' + ad); } catch (e) {}
   }
@@ -1257,19 +1346,31 @@
       catch (e) { return false; }
     })();
 
+    // Canvas artık tüm ekranı kaplıyor (position:fixed). Yıldızlar
+    // her yerde, yol ise sadece kahraman şeridin bulunduğu bantta.
+    let bandY = 0, bandH = 400;
+
+    function bandiOlc() {
+      const band = document.getElementById('heroBand');
+      if (!band) return;
+      const r = band.getBoundingClientRect();
+      bandY = r.top;
+      bandH = r.height;
+    }
+
     function boyutla() {
-      const r = cv.getBoundingClientRect();
       DPR = Math.min(2, window.devicePixelRatio || 1);
-      W = Math.max(1, Math.round(r.width));
-      H = Math.max(1, Math.round(r.height));
+      W = Math.max(1, window.innerWidth);
+      H = Math.max(1, window.innerHeight);
       cv.width = W * DPR; cv.height = H * DPR;
       ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+      bandiOlc();
       yildizVer();
     }
 
     function yildizVer() {
       yildizlar = [];
-      const n = Math.round(Math.min(150, (W * H) / 5200));
+      const n = Math.round(Math.min(190, (W * H) / 6200));
       for (let i = 0; i < n; i++) {
         yildizlar.push({
           x: Math.random() * W,
@@ -1285,8 +1386,8 @@
     // Yol: şeridin alt bandında, içeriğin altından geçiyor.
     // Kendi alanı var ki kartların arkasında kaybolmasın.
     function P(u) {
-      const taban = H - 34;              // yolun oturduğu çizgi
-      const yay   = Math.min(96, H * 0.17); // kavis yüksekliği
+      const taban = bandY + bandH - 34;        // yolun oturduğu çizgi
+      const yay   = Math.min(96, bandH * 0.17); // kavis yüksekliği
       const x0 = W * 0.07, y0 = taban;
       const cx = W * 0.50, cy = taban - yay * 2;
       const x1 = W * 0.93, y1 = taban - yay * 0.55;
@@ -1318,17 +1419,27 @@
     function ciz(zaman) {
       const t = (zaman - t0) / 1000;
       ctx.clearRect(0, 0, W, H);
+      bandiOlc();
 
-      // 1. Yıldızlar
+      // 1. Yıldızlar — kaydırdıkça hafif paralaks, uzay derinlik kazansın
+      const kay = (window.scrollY || 0) * 0.06;
       for (let i = 0; i < yildizlar.length; i++) {
         const s = yildizlar[i];
         const p = azHareket ? 1 : 0.55 + 0.45 * Math.sin(t * s.h + i);
+        let y = s.y - kay * (0.4 + s.r * 0.5);
+        y = ((y % (H + 40)) + H + 40) % (H + 40) - 20;
         ctx.globalAlpha = s.a * p;
         ctx.fillStyle = i % 7 === 0 ? '#ff5b7a' : (i % 5 === 0 ? '#6aa8ff' : '#ffffff');
-        ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, 6.2832); ctx.fill();
+        ctx.beginPath(); ctx.arc(s.x, y, s.r, 0, 6.2832); ctx.fill();
         if (!azHareket) { s.x += s.v; if (s.x > W + 2) s.x = -2; }
       }
       ctx.globalAlpha = 1;
+
+      // Yol ekrandan çıktıysa çizme
+      if (bandY + bandH < -40 || bandY > H + 40) {
+        if (calisiyor) requestAnimationFrame(ciz);
+        return;
+      }
 
       // 2. Yayın tamamı — sönük
       ctx.beginPath();
