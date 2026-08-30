@@ -1,26 +1,27 @@
-# TR → ABD Paneli · REV 12.0
+# TR → ABD Paneli · REV 13.0
 
 Tek sayfalık operasyon paneli. Bağımlılık yok, derleme yok, sunucu yok —
 düz statik dosyalar. GitHub Pages'te olduğu gibi çalışır.
 
 ## Tasarım fikri
 
-Siyah uzay, kocaman tipografi, kırmızıdan maviye giden bir yol.
+Açık zemin, boydan boya arka plan görseli, kutusuz düzen.
 
-Kahraman şeridin altındaki yay süs değil, panelin verisi:
+Zemindeki görsel `arka.svg` — kendi çizdiğim bir sahne: gökyüzü, uzak
+şehir silueti ve önde kubbeli, sütunlu bir üniversite binası. Hedefin
+kendisi arka planda duruyor. Telifi yok.
 
-- Yay soldan (TR) sağa (ABD) uzanıyor.
-- Parlak kısım geçen zaman kadar; kırmızıdan maviye dönüyor.
-- Yay üzerindeki ışıklı noktalar **işaretlediğin günler.** Her check-in
-  bir ışık daha ekliyor.
-- Baştaki beyaz nokta bugünkü konumun, nabız gibi atıyor.
+**Kendi fotoğrafını koymak için:** klasöre `arka.jpg` bırak, panel
+onu bulur ve zemin olarak kullanır. Üstündeki beyaz perde sayesinde
+hangi fotoğrafı koyarsan koy yazılar okunur kalır. Silersen çizim
+geri gelir.
 
-Yıldızlar tüm sayfayı kaplıyor; kaydırdıkça hafif paralaksla akıyorlar.
-Kartlar saydam, uzay içlerinden görünüyor.
+Kart, çerçeve ve gölge yok. Ayırıcı olarak sadece saç teli çizgiler
+ve boşluk var, böylece arka plan görseli baştan sona görünüyor.
 
-Kütüphane yok, üçüncü parti yok — saf canvas, birkaç kilobayt. Sekme
-arkadayken, yol ekrandan çıktığında ve "hareketi azalt" açıkken çizim
-durur.
+Kahraman alandaki yol yine panelin verisi: soldan (TR) sağa (ABD)
+uzanan yay, parlak kısmı geçen zaman kadar, üzerindeki noktalar
+işaretlediğin günler.
 
 ## Renk kuralı
 
@@ -28,21 +29,26 @@ Nerede hangi renk, ne oranda:
 
 | Oran | Ne | Nerede |
 |---|---|---|
-| ~70% | Nötr | Siyah zemin, beyaz başlık, gri ikincil metin |
+| ~70% | Nötr | Açık zemin, koyu lacivert metin, gri ikincil metin |
 | ~20% | Sekme rengi | Başlık çubuğu, alt başlıklar, halka, yüzde, kart çizgisi, kutucuklar, aktif sekme, düğme |
 | ~10% | Gradyan | Sadece zamanla ilgili şeyler: yol, ilerleme çubukları, yıl ızgarası, geri sayım, logo |
+
+**Mavi taşıyıcı, kırmızı vurgu.** Kırmızı büyük ve kalın olduğu yerde
+kullanılıyor: ana başlıklar, rakamlar, ilerleme, ok. Gövde metni koyu
+lacivert — kırmızı 13 punto metinde göz yorar ve bu panel bir yıl
+okunacak.
 
 **Sekme rengi yolun neresinde olduğunu gösteriyor.** Soldan sağa
 gezinirken renk kırmızıdan maviye yürüyor:
 
 | Sekme | Renk |
 |---|---|
-| Bugün | `#ff2d55` kırmızı |
-| YKS | `#f5479b` pembe |
-| Rutin | `#c65cd8` mor |
-| Gelişim | `#8a6ff0` menekşe |
-| Kitaplar | `#5c7fff` mavi-mor |
-| Yedek | `#3d8bff` mavi |
+| Bugün | `#c8102e` kırmızı |
+| YKS | `#b01050` bordo-pembe |
+| Rutin | `#8a1a86` mor |
+| Gelişim | `#5b2aa8` menekşe |
+| Kitaplar | `#2a3fb4` lacivert |
+| Yedek | `#0a4fb4` mavi |
 
 Etiketler (YKS / SPOR / TEMEL) kendi anlamlarını koruyor ama sessiz:
 içi boş, ince kenarlı. Yüksek sesle konuşan tek renk sekmenin rengi
@@ -50,7 +56,7 @@ olsun ki göz nereye bakacağını bilsin.
 
 Kırmızı = asıl iş · mavi = yatırım (spor, dil, kültür) · gri = altyapı.
 
-Varsayılan tema siyah. Açık tema düğmesi duruyor ve aynı yürüyüşü
+Varsayılan tema açık. Açık tema düğmesi duruyor ve aynı yürüyüşü
 koyulaştırılmış tonlarla yapıyor.
 
 ## Arka plan fotoğrafı

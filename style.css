@@ -1,5 +1,5 @@
 /* ============================================================
-   style.css — TR→ABD operasyon paneli · REV 12.0
+   style.css — TR→ABD operasyon paneli · REV 13.0
 
    FİKİR
    Panelin tek cümlesi var: kırmızıdan maviye gitmek.
@@ -1068,3 +1068,262 @@ h1{
 .hero{padding-bottom:82px;}
 @media(max-width:680px){ .hero{padding-bottom:76px;} }
 .bugun-h{justify-content:flex-start; gap:16px;}
+
+/* ============================================================
+   20. REV 13 — AÇIK TEMA, MAVİ ANA RENK, KUTUSUZ DÜZEN
+
+   · Zemin: boydan boya görsel (arka.svg — özgün çizim; klasöre
+     arka.jpg konursa onun yerine geçer). Üstünde beyaz bir perde
+     var, yoksa yazı okunmuyor.
+   · Mavi taşıyıcı renk: yapı, başlıklar, aktif durumlar.
+   · Kırmızı vurgu: rakamlar, ana başlıklar, ilerleme, ok.
+   · Kutu yok: kart, çerçeve ve gölge kalktı. Ayırıcı olarak
+     sadece saç teli çizgiler ve boşluk kullanılıyor.
+
+   NOT: Gövde metnini kırmızı yapmadım. Kırmızı 13 punto metinde
+   göz yoruyor ve bu paneli bir yıl okuyacaksın. Kırmızı büyük ve
+   kalın olduğu yerde — başlıklar, rakamlar, vurgular — güçlü;
+   satır satır metinde okunaksız. Gövde koyu lacivert.
+   ============================================================ */
+
+:root,
+:root[data-theme="light"]{
+  color-scheme:light;
+
+  --bg:transparent;
+  --card:transparent;
+  --card-2:transparent;
+  --soft:rgba(14,34,64,.045);
+  --line:rgba(14,34,64,.14);
+  --line-2:rgba(14,34,64,.26);
+
+  --ink:#0e2240;
+  --ink-2:#3c4f6d;
+  --ink-3:#71829c;
+
+  --cherry:#c8102e;
+  --cherry-2:#e12844;
+  --cherry-soft:rgba(200,16,46,.09);
+  --cherry-line:rgba(200,16,46,.28);
+
+  --blue:#0a4fb4;
+  --blue-2:#1a6fdc;
+  --blue-soft:rgba(10,79,180,.09);
+  --blue-line:rgba(10,79,180,.26);
+
+  --silver:#5b6b83;
+  --silver-soft:rgba(14,34,64,.05);
+  --silver-line:rgba(14,34,64,.18);
+
+  --on-fill:#ffffff;
+  --hero-bg:transparent;
+
+  --sh-1:none; --sh-2:none; --sh-3:none;
+
+  --vurgu:#0a4fb4;
+  --vurgu-2:#1a6fdc;
+
+  --yol:linear-gradient(90deg,var(--cherry) 0%,var(--cherry-2) 34%,var(--blue) 100%);
+}
+
+/* Sekme rengi yürüyüşü — açık zeminde okunur tonlarla */
+:root[data-tab="bugun"],  :root[data-theme="light"][data-tab="bugun"]  { --vurgu:#c8102e; --vurgu-2:#e12844; }
+:root[data-tab="yks"],    :root[data-theme="light"][data-tab="yks"]    { --vurgu:#b01050; --vurgu-2:#cf246c; }
+:root[data-tab="rutin"],  :root[data-theme="light"][data-tab="rutin"]  { --vurgu:#8a1a86; --vurgu-2:#a832a4; }
+:root[data-tab="gelisim"],:root[data-theme="light"][data-tab="gelisim"]{ --vurgu:#5b2aa8; --vurgu-2:#7444c8; }
+:root[data-tab="kitap"],  :root[data-theme="light"][data-tab="kitap"]  { --vurgu:#2a3fb4; --vurgu-2:#4059d4; }
+:root[data-tab="yedek"],  :root[data-theme="light"][data-tab="yedek"]  { --vurgu:#0a4fb4; --vurgu-2:#1a6fdc; }
+
+/* --- Boydan boya zemin görseli --- */
+
+html{background:#eef3fa;}
+
+body{
+  background-color:transparent;
+  color:var(--ink);
+}
+body::before{
+  content:""; position:fixed; inset:0; z-index:-2;
+  background-image:var(--foto,url(arka.svg));
+  background-size:cover; background-position:center 30%;
+  background-repeat:no-repeat;
+}
+/* Perde: görsel görünsün ama yazı okunsun. Üstte açık, metnin
+   yoğunlaştığı aşağıda daha kapalı. */
+body::after{
+  content:""; position:fixed; inset:0; z-index:-1; pointer-events:none;
+  background:
+    linear-gradient(180deg,
+      rgba(255,255,255,.52) 0%,
+      rgba(255,255,255,.72) 30%,
+      rgba(255,255,255,.90) 62%,
+      rgba(255,255,255,.96) 100%),
+    radial-gradient(900px 500px at 8% 0%, color-mix(in srgb,var(--vurgu) 9%,transparent), transparent 62%);
+  transition:background .5s ease;
+}
+
+/* Yıldız canvas'ı açık temada kapalı — gündüz gökyüzünde yıldız olmaz */
+#heroCanvas{opacity:.9;}
+
+/* --- KUTULAR KALKTI --- */
+
+.card,.acc,.tw,.pts,.stat,.cd-u,.cd-w,.simdi,.hero-bar,.pstrip,.ps,
+.alarm,.seri,.note,.bugun-d,.tab,.btn,.lang,.theme-btn,.head-fix{
+  background:transparent; box-shadow:none;
+}
+.card,.tw,.pts,.cd-w,.hero-bar{border:0; border-radius:0; padding-left:0; padding-right:0;}
+.card::before{display:none;}
+.stat{border:0; border-radius:0; padding:0; backdrop-filter:none; -webkit-backdrop-filter:none;}
+.stat::before{display:none;}
+.cd-u{border:0; border-radius:0; padding:0 22px 0 0; min-width:0;}
+.cd-u:first-child{background:transparent; box-shadow:none;}
+.cd-u:first-child .cd-n{color:var(--cherry);}
+.cd-u:first-child .cd-k{color:var(--ink-3);}
+.simdi{border:0; border-left:3px solid var(--cherry); border-radius:0;
+  background:transparent; padding:2px 0 2px 16px;}
+.pstrip{border:0; border-radius:0; gap:0; background:transparent;
+  border-top:1px solid var(--line); border-bottom:1px solid var(--line);}
+.ps{background:transparent; padding:15px 22px 15px 0;}
+.ps + .ps{border-left:1px solid var(--line); padding-left:22px;}
+.alarm{border:0; border-left:3px solid var(--cherry); border-radius:0; padding:10px 0 10px 16px;}
+.seri{border:0; border-left:3px solid var(--vurgu); border-radius:0; padding:9px 0 9px 16px;}
+.note{border:0; border-left:2px solid var(--blue-line); border-radius:0;
+  padding:6px 0 6px 16px; background:transparent; color:var(--ink-2);}
+.bugun-d{border:0; padding:0; background:transparent; color:var(--ink-3);}
+
+/* Akordiyon: çerçeve yerine tek çizgi */
+.acc{border:0; border-radius:0; border-bottom:1px solid var(--line); margin-bottom:0;}
+.acc:hover{border-color:var(--line);}
+.acc[open]{border-color:var(--line);}
+.acc summary{padding:15px 2px;}
+.acc summary:hover{background:transparent;}
+.acc[open] > summary{background:transparent;}
+.acc-b{padding:0 2px 20px;}
+.acc.ref{border-style:solid; background:transparent;}
+.acc-c{background:transparent; border:0; color:var(--vurgu); padding:0; font-weight:700;}
+
+/* Tablolar: sadece satır çizgileri */
+.tw{overflow-x:auto;}
+th{background:transparent; border-bottom:1px solid var(--line-2); color:var(--vurgu);}
+td{border-bottom:1px solid var(--line);}
+tbody tr:hover td{background:var(--soft);}
+tr.sum td{background:transparent; border-top:1px solid var(--line-2); font-weight:700;}
+tr.sum:hover td{background:transparent;}
+
+/* Üst şerit ve sekmeler: cam yerine ince çizgi */
+.head-fix{
+  background:rgba(255,255,255,.72);
+  backdrop-filter:blur(14px) saturate(1.2);
+  -webkit-backdrop-filter:blur(14px) saturate(1.2);
+  border-bottom:1px solid var(--line);
+}
+.head-fix::after{opacity:.9;}
+.top .brand,.top .brand-tr,.top .brand-us{color:var(--ink);}
+.top .brand-tr{color:var(--cherry);}
+.top .brand-us{color:var(--blue);}
+.top .brand-ar{color:var(--ink-3);}
+.top .brand-m{background:linear-gradient(120deg,var(--cherry),var(--blue)); border:0;}
+.top .theme-btn{background:transparent; border:1px solid var(--line); color:var(--ink-2);}
+.top .theme-btn:hover{background:var(--soft); color:var(--ink);}
+.top .lang{background:var(--soft);}
+.top .lang-btn{color:var(--ink-3);}
+.top .lang-btn.on{background:#fff; color:var(--ink);}
+
+/* Sekmeler: dolgu yerine alt çizgi */
+.tab{border:0; border-radius:0; padding:9px 14px 11px; color:var(--ink-3);
+  position:relative; background:transparent;}
+.tab:hover{background:transparent; color:var(--ink);}
+.tab.on{background:transparent; color:var(--vurgu); box-shadow:none; font-weight:700;}
+.tab.on::after{
+  content:""; position:absolute; left:12px; right:12px; bottom:0; height:2px;
+  border-radius:2px; background:var(--vurgu); transform:none;
+}
+.tab-n{background:transparent; border:0; color:var(--ink-3); padding:0 0 0 2px;}
+.tab.on .tab-n{background:transparent; border:0; color:var(--vurgu);}
+
+/* --- KIRMIZI NEREDE --- */
+
+h1{color:var(--ink);}
+h1 .tr{color:var(--cherry);}
+h1 .us{color:var(--blue);}
+h1 .ar{color:var(--cherry);}
+h2{color:var(--cherry); padding-left:0;}
+h2::before{display:none;}
+.stat-n{color:var(--cherry);}
+.stat.s-us .stat-n{color:var(--blue);}
+.stat.s-yol .stat-n{color:var(--ink);}
+.stat-k{color:var(--ink-3);}
+.cd-n{color:var(--ink);}
+.prog-n{color:var(--cherry);}
+.ps b{color:var(--ink);}
+.ps:first-child b{color:var(--cherry);}
+.cv{color:var(--ink);}
+.simdi-v{color:var(--ink);}
+.simdi-k{color:var(--cherry);}
+.hero-kick{color:var(--ink-3);}
+.hero-kick em{color:var(--ink);}
+.hk-dot{background:var(--cherry); box-shadow:0 0 0 3px var(--cherry-soft);}
+.lede{color:var(--ink-2);}
+.hero-bar .bar{background:var(--soft); border-color:var(--line);}
+.hero-bar .bar i{background:var(--yol); box-shadow:none;}
+.hero-bar .prog-s{color:var(--ink-3);}
+.hb-uc .u-tr{color:var(--cherry);}
+.hb-uc .u-us{color:var(--blue);}
+.pkick{color:var(--cherry);}
+.pkick i{background:transparent; border-color:var(--cherry-line); color:var(--cherry);}
+.pkick::after{background:linear-gradient(90deg,var(--cherry-line),transparent);}
+.pt-i{background:var(--cherry); color:#fff;}
+.alarm-i{background:var(--cherry); color:#fff;}
+.yg i.now{box-shadow:0 0 0 2px #fff, 0 0 0 3.5px var(--ink);}
+.yg i{background:rgba(14,34,64,.07); border-color:transparent;}
+.yg i.fut{background:transparent; border:1px dashed var(--line);}
+.yg i.on{box-shadow:none;}
+
+/* Düğmeler: dolgu sadece ana eylemde */
+.checkin{background:var(--cherry); color:#fff; box-shadow:none; border:0;}
+.checkin:hover{background:var(--cherry-2); filter:none;}
+.checkin::after{display:none;}
+.checkin.done{background:transparent; color:var(--ink-3);
+  border:1px solid var(--line-2); box-shadow:none;}
+.btn{border:1px solid var(--line-2); color:var(--ink-2); background:transparent;}
+.btn:hover{background:var(--soft); color:var(--ink); transform:none;}
+.btn.primary{background:var(--blue); color:#fff; border-color:transparent;}
+.btn.primary:hover{background:var(--blue-2); color:#fff;}
+
+/* Kutucuklar (checkbox) kalsın — onlar kutu değil, kontrol */
+.chk input,.rrow input{background:#fff; border-color:var(--line-2);}
+.chk input:checked,.rrow input:checked{background:var(--blue); border-color:var(--blue); box-shadow:none;}
+.rrow.today{background:var(--blue-soft); box-shadow:inset 3px 0 0 var(--blue);}
+
+/* Etiketler */
+.tag{background:transparent;}
+.t-yks{color:var(--cherry); border-color:var(--cherry-line);}
+.t-spor,.t-dil,.t-genel{color:var(--blue); border-color:var(--blue-line);}
+.t-beslenme,.t-temel{color:var(--silver); border-color:var(--silver-line);}
+
+footer{border-top:1px solid var(--line); color:var(--ink-3);}
+::selection{background:var(--cherry-soft); color:var(--ink);}
+
+@media(max-width:680px){
+  .ps + .ps{border-left:0; border-top:1px solid var(--line); padding-left:0;}
+  .ps{padding:12px 0;}
+  .cd-u{padding-right:16px;}
+}
+
+/* Açık zeminde küçük mono etiketler kayboluyordu: kontrast artırıldı.
+   Bunlar koyu temadan kalma beyaz renkleri taşıyordu. */
+:root,:root[data-theme="light"]{ --ink-3:#5c6d89; }
+.cd-t,
+.simdi-a span:first-child,
+.hero-bar .prog-s,
+.stat-k,.cd-k,.prog-l,.ck,.yg-t,.grp-h,.rnote,.ca,.bnote,.prog-s{
+  color:var(--ink-3);
+}
+.cd-t,.prog-l,.stat-k,.yg-t,.simdi-k{font-weight:700;}
+.rt{color:var(--ink-2);}
+.acc-n,.chk-t,.rn{color:var(--ink);}
+
+/* .hero kendi padding'ini yazınca .wrap'in yan boşluğunu eziyordu;
+   kutular kalkınca içerik ekranın kenarına yapıştı. */
+.hero{padding-left:22px; padding-right:22px;}
+@media(max-width:680px){ .hero{padding-left:16px; padding-right:16px;} }

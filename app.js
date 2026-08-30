@@ -435,9 +435,8 @@
     try { const v = localStorage.getItem('panel_theme'); return (v === 'dark' || v === 'light') ? v : null; }
     catch (e) { return null; }
   }
-  // Varsayılan siyah. Panelin kimliği siyah üzerine kurulu; açık tema
-  // isteyerek seçilen bir seçenek, sistemin dayattığı değil.
-  function systemTheme() { return 'dark'; }
+  // Varsayılan açık tema.
+  function systemTheme() { return 'light'; }
   // Başlatma bitmeden yeniden çizim yapılamaz: aşağıdaki sabitler
   // (YG_PITCH gibi) henüz tanımlı olmuyor.
   let HAZIR = false;
@@ -1369,7 +1368,8 @@
     // konsolu gereksiz 404'lerle dolduruyordu.
     const im = new Image();
     im.onload = function () {
-      band.style.setProperty('--foto', 'url("arka.jpg")');
+      // Zemin görseli body'de; değişkeni kök öğeye yazıyoruz.
+      document.documentElement.style.setProperty('--foto', 'url("arka.jpg")');
       band.classList.add('foto');
     };
     im.src = 'arka.jpg';
@@ -1480,9 +1480,12 @@
       ctx.clearRect(0, 0, W, H);
       bandiOlc();
 
+      // Açık temada yıldız çizilmiyor: gündüz gökyüzünde yıldız olmaz.
+      const acik = document.documentElement.getAttribute('data-theme') !== 'dark';
+
       // 1. Yıldızlar — kaydırdıkça hafif paralaks, uzay derinlik kazansın
       const kay = (window.scrollY || 0) * 0.06;
-      for (let i = 0; i < yildizlar.length; i++) {
+      for (let i = 0; acik ? false : i < yildizlar.length; i++) {
         const s = yildizlar[i];
         const p = azHareket ? 1 : 0.55 + 0.45 * Math.sin(t * s.h + i);
         let y = s.y - kay * (0.4 + s.r * 0.5);
@@ -1506,7 +1509,7 @@
         const q = P(u);
         if (u === 0) ctx.moveTo(q.x, q.y); else ctx.lineTo(q.x, q.y);
       }
-      ctx.strokeStyle = 'rgba(255,255,255,0.10)';
+      ctx.strokeStyle = acik ? 'rgba(14,34,64,0.20)' : 'rgba(255,255,255,0.10)';
       ctx.lineWidth = 1.25;
       ctx.setLineDash([5, 7]);
       ctx.stroke();
@@ -1517,8 +1520,8 @@
       if (ilerleme > 0.002) {
         const a = P(0), b = P(ilerleme);
         const g = ctx.createLinearGradient(a.x, a.y, b.x, b.y);
-        g.addColorStop(0, '#ff2d55');
-        g.addColorStop(1, '#3d8bff');
+        g.addColorStop(0, acik ? '#c8102e' : '#ff2d55');
+        g.addColorStop(1, acik ? '#0a4fb4' : '#3d8bff');
         ctx.beginPath();
         for (let u = 0; u <= ilerleme; u += 0.004) {
           const q = P(u);
@@ -1527,8 +1530,8 @@
         ctx.strokeStyle = g;
         ctx.lineWidth = 2.4;
         ctx.lineCap = 'round';
-        ctx.shadowColor = 'rgba(255,45,85,0.85)';
-        ctx.shadowBlur = 16;
+        ctx.shadowColor = acik ? 'rgba(200,16,46,0.35)' : 'rgba(255,45,85,0.85)';
+        ctx.shadowBlur = acik ? 8 : 16;
         ctx.stroke();
         ctx.shadowBlur = 0;
       }
@@ -1540,9 +1543,11 @@
         const q = P(u);
         const par = azHareket ? 1 : 0.75 + 0.25 * Math.sin(t * 1.6 + i * 0.7);
         const kar = u;  // yolun neresinde: kırmızıdan maviye
-        const R = Math.round(255 + (61 - 255) * kar);
-        const G = Math.round(45 + (139 - 45) * kar);
-        const B = Math.round(85 + (255 - 85) * kar);
+        const c1 = acik ? [200, 16, 46] : [255, 45, 85];
+        const c2 = acik ? [10, 79, 180] : [61, 139, 255];
+        const R = Math.round(c1[0] + (c2[0] - c1[0]) * kar);
+        const G = Math.round(c1[1] + (c2[1] - c1[1]) * kar);
+        const B = Math.round(c1[2] + (c2[2] - c1[2]) * kar);
         ctx.beginPath();
         ctx.arc(q.x, q.y, 2.6, 0, 6.2832);
         ctx.fillStyle = 'rgba(' + R + ',' + G + ',' + B + ',' + (0.85 * par) + ')';
@@ -1558,19 +1563,20 @@
         const nabiz = azHareket ? 0 : (Math.sin(t * 2.1) + 1) / 2;
         ctx.beginPath();
         ctx.arc(q.x, q.y, 6 + nabiz * 9, 0, 6.2832);
-        ctx.fillStyle = 'rgba(255,45,85,' + (0.16 - nabiz * 0.12) + ')';
+        ctx.fillStyle = (acik ? 'rgba(200,16,46,' : 'rgba(255,45,85,') + (0.18 - nabiz * 0.13) + ')';
         ctx.fill();
         ctx.beginPath();
         ctx.arc(q.x, q.y, 4.2, 0, 6.2832);
-        ctx.fillStyle = '#ffffff';
-        ctx.shadowColor = '#ff2d55'; ctx.shadowBlur = 18;
+        ctx.fillStyle = acik ? '#c8102e' : '#ffffff';
+        ctx.shadowColor = acik ? 'rgba(200,16,46,.6)' : '#ff2d55';
+        ctx.shadowBlur = acik ? 10 : 18;
         ctx.fill(); ctx.shadowBlur = 0;
       }
 
       // 6. İki uç: TR ve ABD
       const uc = [
-        { p: P(0), c: '#ff2d55', ad: 'TR',  hiza: 'left'  },
-        { p: P(1), c: '#3d8bff', ad: 'ABD', hiza: 'right' }
+        { p: P(0), c: acik ? '#c8102e' : '#ff2d55', ad: 'TR',  hiza: 'left'  },
+        { p: P(1), c: acik ? '#0a4fb4' : '#3d8bff', ad: 'ABD', hiza: 'right' }
       ];
       for (let i = 0; i < uc.length; i++) {
         const e = uc[i];
@@ -1578,7 +1584,7 @@
         ctx.fillStyle = e.c; ctx.shadowColor = e.c; ctx.shadowBlur = 14;
         ctx.fill(); ctx.shadowBlur = 0;
         ctx.font = '600 10px ui-monospace, "JetBrains Mono", monospace';
-        ctx.fillStyle = 'rgba(255,255,255,0.40)';
+        ctx.fillStyle = acik ? 'rgba(14,34,64,0.55)' : 'rgba(255,255,255,0.40)';
         ctx.textAlign = e.hiza === 'left' ? 'left' : 'right';
         ctx.fillText(e.ad, e.p.x + (e.hiza === 'left' ? 10 : -10), e.p.y + 3.5);
       }
