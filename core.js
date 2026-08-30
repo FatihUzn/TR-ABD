@@ -1,11 +1,11 @@
 // ============================================================
 // core.js — Tüm sayfalarda ortak: dil değişimi, nav, saatler,
 // motivasyon çekirdeği (boot/rozet/kanıt sayaçları/izleme linki),
-// ve YKS/EVRAK veri tanımları.
+// ve YKS veri tanımları.
 //
-// ÖNEMLİ: YKS_DATA ve EVRAK_CHECKLIST burada duruyor çünkü kanıt
-// sayaçları + rozet sistemi bu veriye HER sayfada ihtiyaç duyuyor
-// (yks.html/evrak.html'e özel değil). Bu dosya her sayfada,
+// ÖNEMLİ: YKS_DATA burada duruyor çünkü kanıt sayaçları + rozet
+// sistemi bu veriye HER sayfada ihtiyaç duyuyor (yks.html'e özel
+// değil). Bu dosya her sayfada,
 // diğer script'lerden ÖNCE yüklenmeli.
 // ============================================================
 
@@ -42,7 +42,6 @@
     });
     document.documentElement.setAttribute('lang', lang);
     try { localStorage.setItem(LANG_KEY, lang); } catch (e) {}
-    if (typeof renderAlmancaTeaser === 'function') renderAlmancaTeaser();
   }
 
   // Kayıtlı dili uygula. Sayfaya özel script'ler core.js'ten SONRA
@@ -56,7 +55,7 @@
   window.addEventListener('load', applySavedLang);
 
   // --- Çok Sayfalı Site Nav: aktif sayfayı işaretle ---
-  // Her sayfanın <body> etiketinde data-page="sistem|yks|finans|evrak|blog" olmalı.
+  // Her sayfanın <body> etiketinde data-page="sistem|yks|rutin|gelisim|blog" olmalı.
   (function highlightActiveNavLink() {
     const current = document.body.dataset.page;
     if (!current) return;
@@ -77,8 +76,8 @@
   let _liveRates = { EURTRY: null, USDTRY: null, GBPTRY: null, CHFTRY: null, AUDTRY: null, goldTRY: null, goldEUR: null };
 
   // --- Sabit Tarihler ---
-  const JOB_START = new Date('2026-10-01T00:00:00');
-  const JOB_END   = new Date('2027-09-30T23:59:59');
+  const JOB_START = new Date('2026-07-29T00:00:00'); // çalışmaya başlangıç
+  const JOB_END   = new Date('2027-09-30T23:59:59'); // üniversite başlangıcı
   const YKS_COUNT_START = new Date('2026-07-29T00:00:00'); 
   const YKS_EXAM_DAY  = new Date('2027-06-19T10:15:00');
 
@@ -108,7 +107,7 @@
     // Nav rozeti: her sayfada üstte görünen kompakt "%X · FAZ 1" göstergesi
     const badgeEl = document.getElementById('navProgressBadge');
     if (badgeEl) {
-      const faz = now < JOB_START ? 'FAZ 1' : (now < new Date('2027-10-01T00:00:00') ? 'FAZ 2' : 'FAZ 3');
+      const faz = now < new Date('2027-05-01T00:00:00') ? 'FAZ 1' : (now < new Date('2027-07-01T00:00:00') ? 'FAZ 2' : 'FAZ 3');
       badgeEl.textContent = '%' + Math.round(opProgressPct) + ' · ' + faz;
     }
 
@@ -179,7 +178,7 @@
 
   function currentPhaseLabel(now) {
     now = now || new Date();
-    return now < JOB_START ? 'FAZ 1' : (now < new Date('2027-10-01T00:00:00') ? 'FAZ 2' : 'FAZ 3');
+    return now < new Date('2027-05-01T00:00:00') ? 'FAZ 1' : (now < new Date('2027-07-01T00:00:00') ? 'FAZ 2' : 'FAZ 3');
   }
 
   // --- 1. Terminal boot sekansı: sadece ana sayfada, oturum başına bir kez ---
@@ -194,7 +193,7 @@
     overlay.innerHTML =
       '<div class="boot-card">' +
         '<div class="boot-emblem">' +
-          '<div class="boot-emblem-mark">ALMANYA<span class="arrow">→</span>TU BERLIN</div>' +
+          '<div class="boot-emblem-mark">TR<span class="arrow">→</span>ABD</div>' +
           '<div class="boot-emblem-sub">OPERASYON PANELİ</div>' +
         '</div>' +
         '<div class="boot-lines" id="bootLines"></div>' +
@@ -362,12 +361,12 @@
   // ============================================================
   // MOTİVASYON ÇEKİRDEĞİ — Aşama 2 (site geneli sabit bileşenler)
   // ============================================================
-  const REASON_TEXT_TR = 'Bunu neden yapıyorsun: TU Berlin Mekatronik Mühendisliği.\n\nBu bir yıllık köprü dönemi zor olacak ama geçici. Şu an attığın her adım, bir yıl sonraki sana ait bir kapıyı açıyor. Bugün yorulman normal — bırakman değil.';
-  const REASON_TEXT_DE = 'Warum du das machst: Mechatronik-Ingenieurwesen an der TU Berlin.\n\nDiese einjährige Übergangsphase wird hart, aber sie ist vorübergehend. Jeder Schritt, den du jetzt gehst, öffnet dir in einem Jahr eine Tür. Heute müde zu sein ist normal — aufzugeben nicht.';
+  const REASON_TEXT_TR = 'Bunu neden yapıyorsun: ABD\'de İktisat/İşletme yüksek lisansı.\n\nBu bir yıl zor olacak ama geçici. Şu an attığın her adım, bir yıl sonraki sana ait bir kapıyı açıyor. Bugün yorulman normal — bırakman değil. Kimseye bel bağlamadan, kendi başarınla.';
+  const REASON_TEXT_DE = 'Warum du das machst: ein Wirtschafts-Master in den USA.\n\nDieses Jahr wird hart, aber es ist vorübergehend. Jeder Schritt, den du jetzt gehst, öffnet dir in einem Jahr eine Tür. Heute müde zu sein ist normal — aufzugeben nicht.';
 
   const EMPATHY_MESSAGES = {
-    evrak: { tr: 'Bu kısım sıkıcı ve bürokratik ama gerekli. Bitince vize sürecine bir adım daha yaklaşmış olacaksın.', de: 'Dieser Teil ist mühsam und bürokratisch, aber notwendig. Danach bist du dem Visumsprozess einen Schritt näher.' },
-    finans: { tr: 'Sayılarla uğraşmak yorucu olabilir ama her satır, planının ne kadar sağlam olduğunun kanıtı.', de: 'Mit Zahlen zu jonglieren kann anstrengend sein, aber jede Zeile ist ein Beweis dafür, wie solide dein Plan ist.' }
+    gelisim: { tr: 'Bu sayfa acil değil ama önemli. YKS bittiğinde seni diğerlerinden ayıracak şeyler burada birikiyor.', de: 'Diese Seite ist nicht dringend, aber wichtig. Hier sammelt sich an, was dich nach der Prüfung von anderen unterscheidet.' },
+    rutin: { tr: 'Mükemmel gün diye bir şey yok. Bugün yarısını yaptıysan, bu da sayılır — yarın devam.', de: 'Den perfekten Tag gibt es nicht. Wenn du heute die Hälfte geschafft hast, zählt das auch — morgen weiter.' }
   };
 
   // --- 16. Ses geri bildirimi (kısa, rahatsız etmeyen "tık") ---
@@ -611,7 +610,7 @@
   // ============================================================
   // MOTİVASYON ÇEKİRDEĞİ — Aşama 3 (sistem günlüğü, kanıt sayaçları, rozetler)
   // NOT: motivationInitStage3() dosyanın SONUNDA çağrılır, çünkü YKS_DATA
-  // ve EVRAK_CHECKLIST bu noktadan sonra tanımlanıyor.
+  // bu noktadan sonra tanımlanıyor.
   // ============================================================
   const BADGE_DEFS = [
     { id: 'ilk-checkin', icon: '🥇', title: 'İlk Adım', desc: 'İlk check-in yapıldı.' },
@@ -619,12 +618,13 @@
     { id: 'streak-30', icon: '🔥', title: 'Bir Ay', desc: '30 gün üst üste check-in yaptın.' },
     { id: 'yks-ilk', icon: '📚', title: 'YKS Başlangıcı', desc: 'İlk YKS konusunu tamamladın.' },
     { id: 'yks-yarim', icon: '📖', title: 'Yarı Yol · YKS', desc: 'YKS konularının yarısını bitirdin.' },
-    { id: 'evrak-tr', icon: '📋', title: 'Türkiye Evrakı Tamam', desc: 'Türkiye tarafındaki tüm evraklar tamam.' },
-    { id: 'evrak-de', icon: '📋', title: 'Almanya Evrakı Tamam', desc: 'Almanya tarafındaki tüm evraklar tamam.' },
+    { id: 'gelisim-10', icon: '🌱', title: 'Gelişim Başladı', desc: '10 gelişim maddesi tamamlandı.' },
+    { id: 'gelisim-50', icon: '🌳', title: 'Gelişim Ustası', desc: '50 gelişim maddesi tamamlandı.' },
+    { id: 'rutin-7', icon: '⏱️', title: 'Düzen Kuruldu', desc: '7 gün rutin işaretlendi.' },
     { id: 'gun-30', icon: '📅', title: '30 Gün', desc: 'Operasyonun 30. gününe ulaştın.' },
     { id: 'gun-100', icon: '📅', title: '100 Gün', desc: 'Operasyonun 100. gününe ulaştın.' },
-    { id: 'faz2', icon: '🚀', title: 'FAZ 2', desc: 'Vize dönüşüm fazına geçtin.' },
-    { id: 'faz3', icon: '🎓', title: 'FAZ 3 · TU Berlin', desc: 'Son faza ulaştın.' }
+    { id: 'faz2', icon: '🚀', title: 'FAZ 2 · Sınav', desc: 'Sınav fazına geçtin.' },
+    { id: 'faz3', icon: '🎓', title: 'FAZ 3 · Başvuru', desc: 'Başvuru fazına ulaştın.' }
   ];
 
   // --- 5. Sistem günlüğü ---
@@ -663,7 +663,7 @@
     return [konu.id];
   }
 
-  // --- 14. Somut kanıt sayaçları (yks/evrak state'lerini doğrudan okur) ---
+  // --- 14. Somut kanıt sayaçları (yks/gelisim/rutin state'lerini doğrudan okur) ---
   function motivationYksTotals() {
     try {
       const raw = localStorage.getItem('yksChecklistState');
@@ -683,17 +683,31 @@
     } catch (e) { return { done: 0, total: 0 }; }
   }
 
-  function motivationEvrakTotals() {
+  // Gelişim: gelisim.js'in yazdığı state'te işaretli madde sayısı.
+  // Toplam sayı core.js'te tutulmuyor (veri gelisim.js'te) — bu yüzden
+  // kesir yerine ham sayı gösteriliyor.
+  function motivationGelisimTotals() {
     try {
-      const raw = localStorage.getItem('evrakChecklistState');
-      const evrakState = raw ? JSON.parse(raw) : {};
-      let trDone = 0, deDone = 0;
-      const trTotal = EVRAK_CHECKLIST.turkiye.kalemler.length;
-      const deTotal = EVRAK_CHECKLIST.almanya.kalemler.length;
-      EVRAK_CHECKLIST.turkiye.kalemler.forEach(function (k) { if (evrakState[k.id]) trDone++; });
-      EVRAK_CHECKLIST.almanya.kalemler.forEach(function (k) { if (evrakState[k.id]) deDone++; });
-      return { trDone: trDone, trTotal: trTotal, deDone: deDone, deTotal: deTotal };
-    } catch (e) { return { trDone: 0, trTotal: 0, deDone: 0, deTotal: 0 }; }
+      const raw = localStorage.getItem('gelisimChecklistState');
+      const st = raw ? JSON.parse(raw) : {};
+      let done = 0;
+      Object.keys(st).forEach(function (k) { if (st[k]) done++; });
+      return { done: done };
+    } catch (e) { return { done: 0 }; }
+  }
+
+  // Rutin: en az bir madde işaretlenmiş gün sayısı.
+  function motivationRutinDays() {
+    try {
+      const raw = localStorage.getItem('rutinDailyState');
+      const st = raw ? JSON.parse(raw) : {};
+      let days = 0;
+      Object.keys(st).forEach(function (k) {
+        const d = st[k];
+        if (d && Object.keys(d).length > 0) days++;
+      });
+      return days;
+    } catch (e) { return 0; }
   }
 
   function motivationBuildProofContext() {
@@ -702,14 +716,14 @@
     const totalCheckins = Object.keys(checkins).length;
     const streak = motivationComputeStreak(checkins);
     const yks = motivationYksTotals();
-    const evrak = motivationEvrakTotals();
+    const gelisimDone = motivationGelisimTotals().done;
+    const rutinDays = motivationRutinDays();
     const dayInfo = getOpDayInfo();
     const phase = currentPhaseLabel();
     return {
       totalCheckins: totalCheckins, streak: streak,
       yksDone: yks.done, yksTotal: yks.total,
-      evrakTrDone: evrak.trDone, evrakTrTotal: evrak.trTotal,
-      evrakDeDone: evrak.deDone, evrakDeTotal: evrak.deTotal,
+      gelisimDone: gelisimDone, rutinDays: rutinDays,
       elapsedDays: dayInfo.elapsedDays, phase: phase
     };
   }
@@ -725,14 +739,12 @@
   }
 
   function motivationRenderProofCounters(ctx) {
-    const evrakDone = ctx.evrakTrDone + ctx.evrakDeDone;
-    const evrakTotal = ctx.evrakTrTotal + ctx.evrakDeTotal;
     proofSetRow(document.getElementById('proofYks'),
       ctx.yksDone + '/' + ctx.yksTotal,
       ctx.yksTotal ? (ctx.yksDone / ctx.yksTotal) * 100 : 0);
-    proofSetRow(document.getElementById('proofEvrak'),
-      evrakDone + '/' + evrakTotal,
-      evrakTotal ? (evrakDone / evrakTotal) * 100 : 0);
+    // Gelişim barı: 60 madde barı doldurur (yol haritasının kabaca tamamı).
+    proofSetRow(document.getElementById('proofGelisim'),
+      String(ctx.gelisimDone), (ctx.gelisimDone / 60) * 100);
     // Check-in barı: 30 günlük işaretleme barı doldurur.
     proofSetRow(document.getElementById('proofCheckins'),
       String(ctx.totalCheckins), (ctx.totalCheckins / 30) * 100);
@@ -749,8 +761,9 @@
       case 'streak-30': return ctx.streak >= 30;
       case 'yks-ilk': return ctx.yksDone >= 1;
       case 'yks-yarim': return ctx.yksTotal > 0 && (ctx.yksDone / ctx.yksTotal) >= 0.5;
-      case 'evrak-tr': return ctx.evrakTrTotal > 0 && ctx.evrakTrDone === ctx.evrakTrTotal;
-      case 'evrak-de': return ctx.evrakDeTotal > 0 && ctx.evrakDeDone === ctx.evrakDeTotal;
+      case 'gelisim-10': return ctx.gelisimDone >= 10;
+      case 'gelisim-50': return ctx.gelisimDone >= 50;
+      case 'rutin-7': return ctx.rutinDays >= 7;
       case 'gun-30': return ctx.elapsedDays >= 30;
       case 'gun-100': return ctx.elapsedDays >= 100;
       case 'faz2': return ctx.phase === 'FAZ 2' || ctx.phase === 'FAZ 3';
@@ -938,49 +951,7 @@
     ]
   };
 
-  // ============================================================
-  // EVRAK_CHECKLIST — evrak verisi (evrak.js render eder, ama kanıt
-  // sayaçları/rozetler için burada, çekirdekte tanımlı)
-  // ============================================================
-  const EVRAK_CHECKLIST = {
-    turkiye: {
-      id: 'turkiye',
-      kalemler: [
-        { id:'tr-pasaport', ad:'Pasaport (en az 1 yıl geçerlilik)' },
-        { id:'tr-pasaport-foto', ad:'Biyometrik fotoğraf (3.5×4.5, beyaz fon)' },
-        { id:'tr-nufus-cuzdani', ad:'Nüfus cüzdanı fotokopisi' },
-        { id:'tr-nufus-kayit', ad:'Vukuatlı nüfus kayıt örneği (e-Devlet)' },
-        { id:'tr-adli-sicil', ad:'Adli sicil kaydı (sabıka kaydı, e-Devlet)' },
-        { id:'tr-ikametgah', ad:'Yerleşim yeri (ikametgâh) belgesi' },
-        { id:'tr-askerlik', ad:'Askerlik durum belgesi' },
-        { id:'tr-diploma', ad:'Lise diploması + noter onaylı Almanca/İngilizce tercüme' },
-        { id:'tr-is-sozlesmesi', ad:'İş sözleşmesi (Alman işvereninden, imzalı)' },
-        { id:'tr-vize-form', ad:'Vize başvuru formu (VIDEX çıktısı + imza)' },
-        { id:'tr-vize-randevu', ad:'Alman Başkonsolosluğu vize randevusu' },
-        { id:'tr-seyahat-sigorta', ad:'Seyahat sağlık sigortası (giriş için, Schengen uyumlu)' },
-        { id:'tr-konaklama', ad:"Almanya'da konaklama kanıtı (Limburgerhof)" },
-        { id:'tr-banka-dekont', ad:'Banka hesap özeti / mali yeterlilik kanıtı' },
-        { id:'tr-vize-harc', ad:'Vize harcı ödeme dekontu' }
-      ]
-    },
-    almanya: {
-      id: 'almanya',
-      kalemler: [
-        { id:'de-anmeldung', ad:'Anmeldung — ikamet kaydı (Bürgeramt, varıştan sonraki 14 gün içinde)' },
-        { id:'de-bank', ad:'Alman banka hesabı açılışı' },
-        { id:'de-kranken', ad:'Yasal sağlık sigortası (gesetzliche Krankenversicherung) kaydı' },
-        { id:'de-steuer-id', ad:'Steuer-ID (vergi kimlik no) — posta ile otomatik gelir' },
-        { id:'de-sozial', ad:'Sosyal güvenlik numarası (işveren üzerinden)' },
-        { id:'de-vhs-kayit', ad:'VHS dil kursu kayıt belgesi' },
-        { id:'de-rundfunk', ad:'Rundfunkbeitrag (yayın ücreti) kaydı' },
-        { id:'de-aufenthalt', ad:'İkamet izni (Aufenthaltstitel) başvurusu — Ausländerbehörde' },
-        { id:'de-16b', ad:"§16b'ye geçiş başvurusu (dil sertifikası + üniversite kabul belgesi ile)" },
-        { id:'de-tub-kabul', ad:'TU Berlin kabul belgesi (Zulassungsbescheid)' }
-      ]
-    }
-  };
-
-  // YKS_DATA ve EVRAK_CHECKLIST artık tanımlı olduğu için Aşama 3 burada başlatılır
+  // YKS_DATA artık tanımlı olduğu için Aşama 3 burada başlatılır
   motivationInitStage3();
 
   // --- Günlük anlık görüntü: her gün bir kez ilerleme durumunu kaydeder ---
@@ -993,12 +964,10 @@
     if (snapshots[key]) return;
     const ctx = motivationBuildProofContext();
     const yksPct = ctx.yksTotal > 0 ? Math.round((ctx.yksDone / ctx.yksTotal) * 100) : 0;
-    const evrakTotal = ctx.evrakTrTotal + ctx.evrakDeTotal;
-    const evrakDone = ctx.evrakTrDone + ctx.evrakDeDone;
-    const evrakPct = evrakTotal > 0 ? Math.round((evrakDone / evrakTotal) * 100) : 0;
+    const gelisimDone = ctx.gelisimDone;
     snapshots[key] = {
       checkins: ctx.totalCheckins, streak: ctx.streak,
-      yksPct: yksPct, evrakPct: evrakPct
+      yksPct: yksPct, gelisimDone: gelisimDone
     };
     state.snapshots = snapshots;
     motivationSaveState(state);
@@ -1010,7 +979,7 @@
   // Link, panelin o anki genel ilerleme özetini URL'ye küçük bir
   // base64 paket olarak gömer — sunucu/veritabanı gerekmez. Link açılan
   // kişiye normal panel yerine tıklanamaz, salt-okunur bir özet kartı
-  // gösterilir; finansal/evrak detayları asla pakete dahil edilmez.
+  // gösterilir; kişisel detaylar asla pakete dahil edilmez.
   // ============================================================
 
   function trackB64UrlEncode(str) {
@@ -1036,8 +1005,8 @@
       streak: ctx.streak,
       totalCheckins: ctx.totalCheckins,
       yksDone: ctx.yksDone, yksTotal: ctx.yksTotal,
-      evrakDone: ctx.evrakTrDone + ctx.evrakDeDone,
-      evrakTotal: ctx.evrakTrTotal + ctx.evrakDeTotal,
+      gelisimDone: ctx.gelisimDone,
+      rutinDays: ctx.rutinDays,
       badges: badges
     };
   }
@@ -1093,7 +1062,7 @@
     overlay.className = 'track-overlay';
     const genLabel = new Date(snap.gen).toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' });
     const yksPct = snap.yksTotal > 0 ? Math.round((snap.yksDone / snap.yksTotal) * 100) : 0;
-    const evrakPct = snap.evrakTotal > 0 ? Math.round((snap.evrakDone / snap.evrakTotal) * 100) : 0;
+    const gelisimDone = snap.gelisimDone || 0;
     const dayPct = snap.totalDays > 0 ? Math.min(100, Math.max(0, Math.round((snap.elapsedDays / snap.totalDays) * 100))) : 0;
     const badgesHTML = snap.badges.length
       ? snap.badges.map(function (id) { return '<span class="track-badge" title="' + id + '">' + motivationBadgeIconFor(id) + '</span>'; }).join('')
@@ -1109,7 +1078,7 @@
           '<div class="track-stat"><div class="track-stat-num">' + snap.totalCheckins + '</div><div class="track-stat-label">Check-in</div></div>' +
           '<div class="track-stat"><div class="track-stat-num">' + snap.streak + '</div><div class="track-stat-label">Seri (gün)</div></div>' +
           '<div class="track-stat"><div class="track-stat-num">' + yksPct + '%</div><div class="track-stat-label">YKS</div></div>' +
-          '<div class="track-stat"><div class="track-stat-num">' + evrakPct + '%</div><div class="track-stat-label">Evrak</div></div>' +
+          '<div class="track-stat"><div class="track-stat-num">' + gelisimDone + '</div><div class="track-stat-label">Gelişim</div></div>' +
         '</div>' +
         '<div class="track-badges">' + badgesHTML + '</div>' +
         '<a class="track-exit-link" href="' + location.pathname + '">Salt-okunur görünümü kapat</a>' +
@@ -1118,40 +1087,15 @@
     document.body.classList.add('track-active');
   }
 
-  // ============================================================
-  // ALMANCA TEASER — index.html'deki kompakt "Dil Yolculuğu" kartı
-  // almanca.js'in yazdığı 'almanca_summary_v1' önbelleğini okur.
-  // İlgili elementler sayfada yoksa sessizce çıkar.
-  // ============================================================
-  function renderAlmancaTeaser() {
-    const bar = document.getElementById('homeAlmBar');
-    if (!bar) return;
-    let summary = null;
-    try {
-      const raw = localStorage.getItem('almanca_summary_v1');
-      summary = raw ? JSON.parse(raw) : null;
-    } catch (e) {}
-    const lang = document.documentElement.getAttribute('lang') || 'tr';
-    const pctEl = document.getElementById('homeAlmPct');
-    const levelEl = document.getElementById('homeAlmLevel');
-    const streakEl = document.getElementById('homeAlmStreak');
-    const doneEl = document.getElementById('homeAlmLevelsDone');
-    if (!summary) {
-      if (pctEl) pctEl.textContent = '%0';
-      if (levelEl) levelEl.textContent = 'A1';
-      if (streakEl) streakEl.textContent = '0';
-      if (doneEl) doneEl.textContent = (lang === 'de' ? 'Noch nicht gestartet' : 'Henüz başlanmadı');
-      bar.style.width = '0%';
-      return;
-    }
-    if (pctEl) pctEl.textContent = '%' + summary.pct;
-    if (levelEl) levelEl.textContent = summary.level;
-    if (streakEl) streakEl.textContent = summary.streak;
-    if (doneEl) doneEl.textContent = summary.levelsDone + '/' + summary.levelsTotal + (lang === 'de' ? ' Stufen abgeschlossen' : ' seviye tamamlandı');
-    bar.style.width = summary.pct + '%';
-  }
-  renderAlmancaTeaser();
 
+
+  // --- Ana sayfa "Hedef" kartı: sınava kalan gün ---
+  (function renderHomeYksDays() {
+    const el = document.getElementById('homeYksDays');
+    if (!el) return;
+    const diff = YKS_EXAM_DAY - new Date();
+    el.textContent = diff > 0 ? String(Math.ceil(diff / 86400000)) : '0';
+  })();
 
   // ============================================================
   // YEDEKLEME — bütün panel verisi tek JSON dosyasında
@@ -1162,12 +1106,8 @@
     'almanya_motivation_v1',
     'yksChecklistState',
     'yksWeeklyQuestionProgress',
-    'evrakChecklistState',
-    'evrakFormState',
     'gelisimChecklistState',
     'rutinDailyState',
-    'almancaState_v1',
-    'almanca_summary_v1',
     'almanya_lang'
   ];
 
@@ -1296,20 +1236,6 @@
     return null;
   }
 
-  function todayNextEvrak() {
-    const st = todayReadJSON('evrakChecklistState') || {};
-    const sides = [
-      { label: 'Türkiye', list: EVRAK_CHECKLIST.turkiye.kalemler },
-      { label: 'Almanya', list: EVRAK_CHECKLIST.almanya.kalemler }
-    ];
-    for (let i = 0; i < sides.length; i++) {
-      for (let j = 0; j < sides[i].list.length; j++) {
-        if (!st[sides[i].list[j].id]) return { side: sides[i].label, ad: sides[i].list[j].ad };
-      }
-    }
-    return null;
-  }
-
   function motivationRenderToday() {
     const card = document.querySelector('.today-card');
     if (!card) return;
@@ -1337,20 +1263,19 @@
         : 'Seri henüz başlamadı — bugün ilk adımı at.';
     }
 
-    // --- Almanca: bugünkü kelime sayacı ---
-    const alm = todayReadJSON('almancaState_v1');
-    const almMain = document.getElementById('todayAlmMain');
-    const almMeta = document.getElementById('todayAlmMeta');
-    if (almMain) {
-      const target = (alm && alm.wordTarget) || 15;
-      const done = (alm && alm.wordLog && alm.wordLog[motivationTodayKey()]) || 0;
-      const studied = !!(alm && alm.studyDays && alm.studyDays[motivationTodayKey()]);
-      almMain.textContent = done + ' / ' + target + ' kelime';
-      almMain.parentElement.classList.toggle('is-done', done >= target && studied);
-      if (almMeta) {
-        almMeta.textContent = done >= target
-          ? (studied ? 'bugünlük tamam' : 'kelime tamam · çalışmayı işaretle')
-          : (target - done) + ' kelime kaldı';
+    // --- Rutin: bugünün tamamlanma oranı ---
+    const rut = todayReadJSON('rutinDailyState');
+    const rutMain = document.getElementById('todayRutinMain');
+    const rutMeta = document.getElementById('todayRutinMeta');
+    if (rutMain) {
+      const dayObj = (rut && rut[motivationTodayKey()]) || {};
+      const done = Object.keys(dayObj).filter(function (k) { return dayObj[k]; }).length;
+      const TOTAL = 22; // gün şablonu (16) + beslenme (6)
+      const pct = Math.round((done / TOTAL) * 100);
+      rutMain.textContent = done + ' / ' + TOTAL + ' madde';
+      rutMain.parentElement.classList.toggle('is-done', pct >= 70);
+      if (rutMeta) {
+        rutMeta.textContent = pct >= 70 ? 'bugün seriye sayıldı' : '%' + pct + ' · %70\'te seriye sayılır';
       }
     }
 
@@ -1369,18 +1294,14 @@
       }
     }
 
-    // --- Evrak: sıradaki madde ---
-    const evMain = document.getElementById('todayEvrakMain');
-    const evMeta = document.getElementById('todayEvrakMeta');
-    if (evMain) {
-      const next = todayNextEvrak();
-      if (next) {
-        evMain.textContent = next.ad;
-        if (evMeta) evMeta.textContent = next.side + ' cephesi';
-      } else {
-        evMain.textContent = 'Evrak cephesi tamam';
-        evMain.parentElement.classList.add('is-done');
-        if (evMeta) evMeta.textContent = '';
+    // --- Gelişim: tamamlanan madde sayısı ---
+    const gelMain = document.getElementById('todayGelisimMain');
+    const gelMeta = document.getElementById('todayGelisimMeta');
+    if (gelMain) {
+      const done = motivationGelisimTotals().done;
+      gelMain.textContent = done + ' madde tamam';
+      if (gelMeta) {
+        gelMeta.textContent = done === 0 ? 'henüz başlanmadı' : 'genel kültür · kod · siber · YL';
       }
     }
   }

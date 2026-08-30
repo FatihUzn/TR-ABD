@@ -15,18 +15,19 @@
 
   const BLOG_POSTS = [
     {
-      slug: 'kabul-haberi',
+      slug: 'plan-degisti',
       draft: false,
-      date: '2026-08-09',
-      dateLabel: '09 Ağustos 2026',
-      title: 'Kabul Geldi',
-      excerpt: "Limburgerhof'taki fırın pozisyonundan resmi onay bugün geldi — operasyonun sıfır günü artık takvimde sabit bir tarih.",
-      image: 'Studio/castels/castle-04-neuschwanstein-aerial.webp',
+      date: '2026-08-30',
+      dateLabel: '30 Ağustos 2026',
+      title: 'Plan Değişti',
+      excerpt: "Almanya kapısı kapandı, ama hedef değişmedi — sadece ona giden yol yeniden çizildi: YKS, Koç Endüstri, sonra ABD.",
+      image: null,
       paragraphs: [
-        "Bugün beklenen e-posta geldi: Limburgerhof'taki pozisyon resmi olarak onaylandı. Aylardır kağıt üzerinde duran '01.10.2026' tarihi artık gerçek bir başlangıç günü oldu.",
-        "İlk tepkim rahatlama oldu, ikincisi biraz panik — çünkü artık her şey geri sayıma bağlandı: VHS kursuna kayıt, dil sertifikaları, evrak cephesi, hepsi bu tarihe göre hizalanacak.",
-        "Bu paneli tam da bunun için kurdum: tek bir yerden ritmi, bütçeyi ve evrakı takip edebilmek için. Bugünden itibaren buraya arada bir not düşeceğim — hem ilerlemeyi görmek hem de ileride geriye bakıp neyin işe yaradığını hatırlamak için.",
-        "Şimdilik plan net: Ekim'de vardiya ve VHS dil kursu başlıyor, hedef bir yıl içinde C1'i tamamlayıp §16b üzerinden TU Berlin'e geçiş yapmak. Bir sonraki yazı muhtemelen ilk hafta izlenimleri olacak."
+        "Almanya planı bu ay iptal oldu. Beklediğim iki haber daha var ama ikisi de düşük ihtimalli; artık o kapıya bakarak plan yapmıyorum.",
+        "İlk tepkim hayal kırıklığıydı, ama oturup baktığımda şunu gördüm: Almanya zaten nihai hedef değildi, sadece bir ara basamaktı. Nihai hedef ABD'de İktisat/İşletme yüksek lisansı — ve oraya giden başka, hatta daha kısa bir yol var.",
+        "Yeni plan: bir yıl YKS'ye çalışıp Koç Üniversitesi Endüstri Mühendisliği'ne burslu yerleşmek, yaz okullarıyla iki yılda bitirmek, sonra ABD'ye başvurmak. Öğrenci işleriyle konuştum, derslerin sayılmasıyla iki yıl mümkün görünüyor. 2026'da 1.5 aylık çalışmayla 28.000 yapmıştım; taban sağlam, mesafe uzun ama ölçülebilir.",
+        "Bu paneli de yeni plana göre baştan kurdum. Vize, evrak, Almanca sayfaları gitti; yerlerine YKS kaynakları, günlük rutin ve gelişim yol haritası geldi. Bu yılın tek işi sınav — spor, beslenme ve düzen onun altyapısı, kod ve dil ise sınavdan sonrasına hazırlık.",
+        "Kimseye bel bağlamadan, kendi başarımla. Bu bir yıllık boşluğun hayatımı değiştirmesi lazım."
       ]
     },
     {

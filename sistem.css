@@ -573,3 +573,24 @@ body[data-page="sistem"] .dash-photo-band .stat-report-card{width:100%;}
 .alm-teaser-meta b{color:var(--amber);}
 
 .alm-teaser-cta{font-family:var(--mono); font-size:11px; font-weight:700; color:var(--purple); white-space:nowrap;}
+
+
+/* ===== Ana sayfa "Hedef" kartı (eski fotoğraf kartının yerine) ===== */
+
+.metric-card--target{text-decoration:none; display:flex; flex-direction:column;}
+
+.metric-target-unit{
+  font-family:var(--mono); font-size:11px; color:var(--text-faint);
+  text-transform:uppercase; letter-spacing:0.07em; margin-left:6px;
+}
+
+.metric-target-list{display:flex; flex-direction:column; gap:5px; margin-top:10px;}
+
+.metric-target-row{
+  display:flex; justify-content:space-between; gap:10px;
+  font-family:var(--mono); font-size:11px; line-height:1.4;
+}
+
+.metric-target-k{color:var(--text-faint); text-transform:uppercase; letter-spacing:0.05em;}
+
+.metric-target-v{color:var(--text-dim); font-weight:600; text-align:right;}

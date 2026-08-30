@@ -298,7 +298,7 @@ body.boot-active{overflow:hidden;}
 
 /* --- Biriken gün sayacı --- */
 
-/* --- Rota haritası (Türkiye → Limburgerhof) --- */
+/* --- Rota haritası (Türkiye → ABD) --- */
 
 @keyframes routeDash{to{stroke-dashoffset:-400;}}
 
@@ -892,7 +892,7 @@ td.gold{color:var(--purple-dim);}
 
 tr.milestone td{background:rgba(52,211,153,0.14);}
 
-tr.milestone td.cash{color:#6ee7b7;}
+tr.milestone td.cash{color:#34d399; font-weight:700;}
 
 /* ===== FOOTER ===== */
 
@@ -1710,7 +1710,7 @@ details.acc-section > .acc-summary:hover{color:#ffffff;}
 details.acc-section[open] > .acc-summary .acc-status{opacity:0.45;}
 
 .acc-note{
-  font-family:var(--mono); font-size:10px; color:#f0a35e; letter-spacing:0.04em;
+  font-family:var(--mono); font-size:10px; color:#ffb877; letter-spacing:0.04em; font-weight:600;
   text-transform:none;
 }
 
