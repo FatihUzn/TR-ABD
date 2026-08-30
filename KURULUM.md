@@ -1,9 +1,27 @@
-# TR → ABD Paneli · REV 6.1
+# TR → ABD Paneli · REV 7.0
 
 Tek sayfalık operasyon paneli. Bağımlılık yok, derleme yok, sunucu yok —
-düz statik dosyalar. Açman için hiçbir kurulum gerekmiyor.
+düz statik dosyalar. GitHub Pages'te olduğu gibi çalışır.
+
+## Tasarım fikri
+
+Panelin tek cümlesi var: kırmızıdan maviye gitmek. Kırmızı (Dark Cherry)
+Türkiye, mavi (Light Blue) ABD. Her ilerleme çubuğu, yıl ızgarasındaki
+her kare kırmızıdan başlayıp maviye gidiyor — renk dekor değil, yön.
+Palet iPhone 18 Pro bitişlerinden alındı.
+
+Etiketler de gökkuşağı değil, üç anlam katmanı:
+kiraz = asıl iş (YKS) · mavi = yatırım (spor, dil, kültür) ·
+gümüş = altyapı (uyku, beslenme, temel).
 
 ## Nasıl çalışır
+
+Sayfa **sekmeli**: Bugün · YKS · Rutin · Gelişim · Kitaplar · Yedek.
+Panel her açıldığında Bugün gelir — günlük iş orası. Sekme başlıklarındaki
+küçük rozetler o bölümün durumunu sekmeye girmeden gösterir.
+Sık bakılmayan içerik (kaynaklar, denemeler, hedef tabloları) YKS
+sekmesinde kapalı akordiyonların içinde.
+
 
 - **Bilgisayarda:** `index.html` dosyasını çift tıkla.
 - **Telefonda:** GitHub Pages adresini aç, tarayıcı menüsünden
@@ -18,7 +36,7 @@ Veri tarayıcının localStorage'ında durduğu için **her cihaz kendi kaydın�
 tutar.** Bilgisayarda işaretlediğin telefona gelmez, telefonda
 işaretlediğin bilgisayara gelmez.
 
-Geçici çözüm: **Yedekleme → Yedek al** ile JSON indir, öbür cihazda
+Şimdilik çözüm: **Yedekleme → Yedek al** ile JSON indir, öbür cihazda
 **Yedekten geri yükle** ile aç. Kalıcı senkron sonra kurulacak.
 
 ## Yedekleme
@@ -26,14 +44,12 @@ Geçici çözüm: **Yedekleme → Yedek al** ile JSON indir, öbür cihazda
 Panel 30 gün yedek alınmazsa Bugün bölümünde uyarır.
 Tarayıcı verisini temizlemek bir yıllık kaydı siler — yedeği ciddiye al.
 
-## Yayınlamak (GitHub web arayüzü)
+## Yayınlamak
 
-Depo: `FatihUzn/almanya-paneli` · Ayarlar → Pages → `main` / `(root)`
+`yayinla.bat` dosyasını çift tıkla. Değişiklikleri commit'leyip GitHub'a
+gönderir; site birkaç dakika içinde güncellenir.
 
-Değişen dosyaları GitHub'da **Add file → Upload files** ile at.
-`fonts` klasörünü olduğu gibi sürükleyebilirsin.
-
-**Önemli:** panelde değişiklik yapıp yüklerken `sw.js` içindeki `SURUM`
+**Önemli:** panelde değişiklik yapıp yayınlarken `sw.js` içindeki `SURUM`
 sabitini bir artır. Yoksa telefon eski sürümü önbellekten göstermeye
 devam eder.
 
@@ -46,9 +62,8 @@ devam eder.
 | `app.js` | Veri (YKS konuları, rutin, kitaplar), durum, çizim |
 | `sw.js` | Çevrimdışı çalışma — değişiklikte `SURUM`'u artır |
 | `manifest.webmanifest` | Telefona kurulum bilgisi |
-| `icon*.png`, `icon.svg` | Uygulama ikonları |
 | `fonts/` | Inter + JetBrains Mono (yerel, internet gerekmez) |
-| `.nojekyll` | GitHub Pages'in dosyalara karışmaması için |
+| `yayinla.bat` | Tek tıkla GitHub'a gönderme |
 
 ## Sabitler (`app.js` başı)
 

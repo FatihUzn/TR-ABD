@@ -25,7 +25,7 @@
   const RUTIN_ESIK = 70;
 
   // İlerleme halkası çevresi (r = 27)
-  const RING_C = 2 * Math.PI * 27;
+  const RING_C = 2 * Math.PI * 28;
 
   // Son yedek tarihi — K sözlüğünün dışında tutuluyor ki geri yükleme
   // eski yedeğin tarihini geri getirmesin.
@@ -439,8 +439,29 @@
     try { return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'; }
     catch (e) { return 'light'; }
   }
+  // Başlatma bitmeden yeniden çizim yapılamaz: aşağıdaki sabitler
+  // (YG_PITCH gibi) henüz tanımlı olmuyor.
+  let HAZIR = false;
+
   function applyTheme(v) {
     document.documentElement.setAttribute('data-theme', v);
+    // Yıl ızgarasının renkleri temadan geliyor; tema değişince yeniden çiz.
+    if (HAZIR) renderYearGrid();
+  }
+
+  // CSS değişkeninden renk okuyup iki renk arasında karışım yapar.
+  // Yıl ızgarasında her günün rengi, yolun neresinde olduğunu gösteriyor.
+  function cssVar(n) {
+    return getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+  }
+  function hex2rgb(h) {
+    h = h.replace('#', '');
+    if (h.length === 3) h = h[0]+h[0]+h[1]+h[1]+h[2]+h[2];
+    const v = parseInt(h, 16);
+    return [(v >> 16) & 255, (v >> 8) & 255, v & 255];
+  }
+  function karis(a, b, t) {
+    return 'rgb(' + a.map((x, i) => Math.round(x + (b[i] - x) * t)).join(',') + ')';
   }
   function toggleTheme() {
     const cur = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
@@ -842,18 +863,26 @@
     const days = [];
     for (let d = new Date(first); d <= EXAM; d.setDate(d.getDate() + 1)) days.push(new Date(d));
 
+    const c1 = hex2rgb(cssVar('--cherry') || '#7a2338');
+    const c2 = hex2rgb(cssVar('--blue')   || '#2b6d9e');
+    const yolGun = Math.max(1, Math.round((EXAM - START) / 86400000));
+
     let toplam = 0, dolu = 0;
     const cells = days.map(d => {
       const k = dateKey(d);
       const cls = [];
+      let stil = '';
       if (d < START) cls.push('pre');
       else {
         toplam++;
-        if (c[k]) { cls.push('on'); dolu++; }
-        else if (k > tk) cls.push('fut');
+        if (c[k]) {
+          cls.push('on'); dolu++;
+          const t = Math.min(1, Math.max(0, (d - START) / 86400000 / yolGun));
+          stil = ' style="--c:' + karis(c1, c2, t) + '"';
+        } else if (k > tk) cls.push('fut');
       }
       if (k === tk) cls.push('now');
-      return '<i class="' + cls.join(' ') + '" title="' + k + '"></i>';
+      return '<i class="' + cls.join(' ') + '"' + stil + ' title="' + k + '"></i>';
     });
     grid.innerHTML = cells.join('');
 
@@ -947,6 +976,25 @@
   }
 
   // ============================================================
+  // 10e. SEKME SAYAÇLARI — hangi sekmede ne durumda olduğun
+  // sekmeye tıklamadan görünsün.
+  // ============================================================
+  function renderTabCounts() {
+    const set = (id, v) => { const e = document.getElementById(id); if (e) e.textContent = v; };
+
+    const yt = totalOf(YKS_DATA.TYT.concat(YKS_DATA.AYT), S.yks);
+    set('tnYks', '%' + (yt.total ? Math.round((yt.done / yt.total) * 100) : 0));
+
+    set('tnRutin', '%' + rutinPct(S.rutin[todayKey()]).pct);
+
+    const gt = totalOf(GELISIM_DATA, S.gelisim);
+    set('tnGelisim', '%' + (gt.total ? Math.round((gt.done / gt.total) * 100) : 0));
+
+    const kc = kitapCounts();
+    set('tnKitap', kc.done + '/' + kc.total);
+  }
+
+  // ============================================================
   // 11. BUGÜN KARTLARI
   // ============================================================
   function renderBugun() {
@@ -970,6 +1018,8 @@
     const k = kitapCounts();
     t(document.getElementById('bGelisimAlt'),
       k.done + ' kitap bitti', k.done + ' libros terminados');
+
+    renderTabCounts();
   }
 
   // ============================================================
@@ -1126,21 +1176,37 @@
     rd.readAsText(f);
   });
 
-  // Bölüm navigasyonu — kaydırdıkça aktif başlığı işaretle
-  (function navSpy() {
-    const links = Array.from(document.querySelectorAll('.nav-a'));
-    if (!links.length) return;
-    const secs = links.map(a => document.querySelector(a.getAttribute('href'))).filter(Boolean);
+  // ============================================================
+  // 12b. SEKMELER
+  // Sayfa tek uzun kaydırma değil: her sekme ayrı bir ekran.
+  // Panel her açıldığında "Bugün" gelir — günlük iş orası.
+  // ============================================================
+  const SEKMELER = ['bugun', 'yks', 'rutin', 'gelisim', 'kitap', 'yedek'];
+
+  function setTab(ad, kaydir) {
+    if (SEKMELER.indexOf(ad) === -1) ad = 'bugun';
+    document.querySelectorAll('.panel').forEach(function (p) {
+      p.classList.toggle('on', p.id === 'p-' + ad);
+    });
+    document.querySelectorAll('.tab').forEach(function (b) {
+      b.classList.toggle('on', b.dataset.tab === ad);
+      b.setAttribute('aria-selected', b.dataset.tab === ad ? 'true' : 'false');
+    });
+    if (kaydir) window.scrollTo(0, 0);
+    try { history.replaceState(null, '', '#' + ad); } catch (e) {}
+  }
+
+  document.addEventListener('click', function (e) {
+    const tb = e.target.closest('.tab');
+    if (tb) { setTab(tb.dataset.tab, true); return; }
+    const go = e.target.closest('[data-go]');
+    if (go) { e.preventDefault(); setTab(go.dataset.go, true); }
+  });
+
+  window.addEventListener('scroll', function () {
     const bar = document.getElementById('topBar');
-    function upd() {
-      let cur = 0;
-      secs.forEach((s, i) => { if (s.getBoundingClientRect().top <= 120) cur = i; });
-      links.forEach((a, i) => a.classList.toggle('on', i === cur));
-      if (bar) bar.classList.toggle('stuck', window.scrollY > 8);
-    }
-    window.addEventListener('scroll', upd, { passive: true });
-    upd();
-  })();
+    if (bar) bar.classList.toggle('stuck', window.scrollY > 8);
+  }, { passive: true });
 
   // ============================================================
   // 13. BAŞLAT
@@ -1159,7 +1225,9 @@
     applyLang(getLang());
   }
 
+  HAZIR = true;
   renderAll(false);
+  setTab((location.hash || '').replace('#', '') || 'bugun', false);
   setInterval(renderCounters, 1000);
 
 })();

@@ -6,8 +6,8 @@
 <title>TR → ABD · Operasyon Paneli</title>
 <meta name="description" content="YKS hazırlığı, günlük rutin, spor, dil ve kitap takibi. Hedef: ABD'de İktisat/İşletme yüksek lisansı.">
 
-<meta name="theme-color" content="#f6f6f3" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#0e100f" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#f4f5f7" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0e1013" media="(prefers-color-scheme: dark)">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -17,7 +17,6 @@
 <link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="icon-180.png">
 
-<!-- Temayı CSS'ten önce uygula: sayfa açılırken beyaz parlama olmasın. -->
 <script>
 (function(){
   try{
@@ -33,20 +32,20 @@
 </head>
 <body>
 
+<!-- İlerleme halkalarının kirazdan maviye geçişi -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <linearGradient id="yolGrad" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" style="stop-color:var(--cherry)"></stop>
+    <stop offset="100%" style="stop-color:var(--blue)"></stop>
+  </linearGradient>
+</defs></svg>
+
 <header class="top" id="topBar">
   <div class="top-in">
-    <a class="brand" href="#ust">
+    <a class="brand" href="#bugun">
       <span class="brand-m" aria-hidden="true">→</span>
-      TR <span>→</span> ABD
+      <span class="brand-tr">TR</span><span class="brand-ar">→</span><span class="brand-us">ABD</span>
     </a>
-    <nav class="nav">
-      <a class="nav-a" href="#bugun" data-tr="Bugün" data-es="Hoy">Bugün</a>
-      <a class="nav-a" href="#yks" data-tr="YKS" data-es="YKS">YKS</a>
-      <a class="nav-a" href="#rutin" data-tr="Rutin" data-es="Rutina">Rutin</a>
-      <a class="nav-a" href="#gelisim" data-tr="Gelişim" data-es="Desarrollo">Gelişim</a>
-      <a class="nav-a" href="#kitap" data-tr="Kitaplar" data-es="Libros">Kitaplar</a>
-      <a class="nav-a" href="#yedek" data-tr="Yedek" data-es="Copia">Yedek</a>
-    </nav>
     <div class="top-r">
       <button type="button" class="theme-btn" id="themeBtn" title="Tema" aria-label="Tema değiştir">
         <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
@@ -65,38 +64,54 @@
   </div>
 </header>
 
+<div class="tabs-w">
+  <div class="tabs" id="tabs">
+    <button type="button" class="tab on" data-tab="bugun"><span data-tr="Bugün" data-es="Hoy">Bugün</span></button>
+    <button type="button" class="tab" data-tab="yks"><span>YKS</span><span class="tab-n" id="tnYks"></span></button>
+    <button type="button" class="tab" data-tab="rutin"><span data-tr="Rutin" data-es="Rutina">Rutin</span><span class="tab-n" id="tnRutin"></span></button>
+    <button type="button" class="tab" data-tab="gelisim"><span data-tr="Gelişim" data-es="Desarrollo">Gelişim</span><span class="tab-n" id="tnGelisim"></span></button>
+    <button type="button" class="tab" data-tab="kitap"><span data-tr="Kitaplar" data-es="Libros">Kitaplar</span><span class="tab-n" id="tnKitap"></span></button>
+    <button type="button" class="tab" data-tab="yedek"><span data-tr="Yedek" data-es="Copia">Yedek</span></button>
+  </div>
+</div>
+
 <div class="wrap">
 
-  <div class="hero" id="ust">
-    <p class="eyebrow" data-tr="Tek hedef · ABD'de yüksek lisans" data-es="Un solo objetivo · máster en EE. UU.">Tek hedef · ABD'de yüksek lisans</p>
-    <h1>TR <i>→</i> ABD</h1>
-    <p class="lede" data-tr="Bir yıl YKS. Sonra Koç Üniversitesi Endüstri Mühendisliği, burslu, iki yılda. Sonra ABD'de İktisat/İşletme yüksek lisansı. Kimseye bel bağlamadan, kendi başarımla." data-es="Un año de YKS. Después, Ingeniería Industrial en la Universidad Koç, con beca, en dos años. Después, un máster en Economía/Empresariales en EE. UU. Sin depender de nadie, con mi propio mérito.">Bir yıl YKS. Sonra Koç Üniversitesi Endüstri Mühendisliği, burslu, iki yılda. Sonra ABD'de İktisat/İşletme yüksek lisansı. Kimseye bel bağlamadan, kendi başarımla.</p>
+  <div class="hero">
+    <div class="hero-top">
+      <div>
+        <h1><span class="tr">TR</span><i class="ar">→</i><span class="us">ABD</span></h1>
+        <p class="lede" data-tr="Bir yıl YKS. Sonra Koç Endüstri, burslu, iki yılda. Sonra ABD'de İktisat/İşletme yüksek lisansı. Kendi başarımla." data-es="Un año de YKS. Después Ingeniería Industrial en Koç, con beca, en dos años. Después un máster en Economía/Empresariales en EE. UU. Con mi propio mérito.">Bir yıl YKS. Sonra Koç Endüstri, burslu, iki yılda. Sonra ABD'de İktisat/İşletme yüksek lisansı. Kendi başarımla.</p>
+      </div>
+    </div>
 
     <div class="stats">
-      <div class="stat hot">
+      <div class="stat s-tr">
         <div class="stat-n" id="statKalan">–</div>
         <div class="stat-k" data-tr="Sınava kalan gün" data-es="Días para el examen">Sınava kalan gün</div>
       </div>
-      <div class="stat">
+      <div class="stat s-us">
         <div class="stat-n" id="statGecen">–</div>
         <div class="stat-k" data-tr="Emek verilen gün" data-es="Días invertidos">Emek verilen gün</div>
       </div>
-      <div class="stat">
+      <div class="stat s-yol">
         <div class="stat-n" id="statSeri">–</div>
         <div class="stat-k" data-tr="Günlük seri" data-es="Racha diaria">Günlük seri</div>
       </div>
     </div>
 
     <div class="hero-bar">
+      <div class="hb-uc">
+        <span class="u-tr" data-tr="29 Tem 2026 · Başlangıç" data-es="29 jul 2026 · Inicio">29 Tem 2026 · Başlangıç</span>
+        <span class="u-us" data-tr="19 Haz 2027 · Sınav" data-es="19 jun 2027 · Examen">19 Haz 2027 · Sınav</span>
+      </div>
       <div class="bar"><i id="yilBar"></i></div>
       <div class="prog-s" id="yilBarNot"></div>
     </div>
   </div>
 
-  <section id="bugun">
-    <h2 data-no="01" data-tr="Bugün" data-es="Hoy">Bugün</h2>
-    <p class="sub" data-tr="Gün 04:00'te biter — gece geç işaretlersen hâlâ dünkü güne yazılır." data-es="El día termina a las 04:00: si marcas de madrugada, cuenta para el día anterior.">Gün 04:00'te biter — gece geç işaretlersen hâlâ dünkü güne yazılır.</p>
-
+  <!-- ==================== BUGÜN ==================== -->
+  <section class="panel on" id="p-bugun">
     <div class="alarm" id="yedekAlarm" hidden>
       <span class="alarm-i">!</span>
       <span id="yedekAlarmTxt"></span>
@@ -108,17 +123,17 @@
     </div>
 
     <div class="cards">
-      <a class="card" href="#rutin">
+      <a class="card" href="#rutin" data-go="rutin">
         <div class="ck" data-tr="Rutin" data-es="Rutina">Rutin</div>
         <div class="cv" id="bRutin">—</div>
         <div class="ca" id="bRutinAlt"></div>
       </a>
-      <a class="card" href="#yks">
+      <a class="card" href="#yks" data-go="yks">
         <div class="ck" data-tr="Sıradaki YKS konusu" data-es="Siguiente tema del YKS">Sıradaki YKS konusu</div>
         <div class="cv" id="bYks">—</div>
         <div class="ca" id="bYksAlt"></div>
       </a>
-      <a class="card" href="#gelisim">
+      <a class="card" href="#gelisim" data-go="gelisim">
         <div class="ck" data-tr="Gelişim" data-es="Desarrollo">Gelişim</div>
         <div class="cv" id="bGelisim">—</div>
         <div class="ca" id="bGelisimAlt"></div>
@@ -128,9 +143,9 @@
     <div class="seri" id="seriNot"></div>
 
     <h3 data-tr="Bu yıl" data-es="Este año">Bu yıl</h3>
-    <div class="card yg-w">
+    <div class="card">
       <div class="yg-h">
-        <span class="yg-t" data-tr="Başlangıçtan sınava · her kare bir gün" data-es="Del inicio al examen · cada cuadro es un día">Başlangıçtan sınava · her kare bir gün</span>
+        <span class="yg-t" data-tr="Her kare bir gün · renk yolun neresinde olduğunu gösterir" data-es="Cada cuadro es un día · el color muestra dónde estás del camino">Her kare bir gün · renk yolun neresinde olduğunu gösterir</span>
         <span class="yg-n" id="ygSayi"></span>
       </div>
       <div class="yg-scroll">
@@ -139,13 +154,15 @@
       </div>
       <div class="yg-key">
         <i></i><span data-tr="işaretlenmedi" data-es="sin marcar">işaretlenmedi</span>
-        <i class="on" style="margin-left:8px;"></i><span data-tr="işaretlendi" data-es="marcado">işaretlendi</span>
+        <i class="k1" style="margin-left:10px;"></i><span data-tr="başlangıç" data-es="inicio">başlangıç</span>
+        <i class="k2" style="margin-left:10px;"></i><span data-tr="sınav" data-es="examen">sınav</span>
       </div>
     </div>
   </section>
 
-  <section id="yks">
-    <h2 data-no="02" data-tr="YKS" data-es="YKS">YKS</h2>
+  <!-- ==================== YKS ==================== -->
+  <section class="panel" id="p-yks">
+    <h2 data-tr="YKS" data-es="YKS">YKS</h2>
     <p class="sub" data-tr="19 Haziran 2027 · Hedef: Koç Üniversitesi Endüstri Mühendisliği (burslu)" data-es="19 de junio de 2027 · Objetivo: Ingeniería Industrial en la Universidad Koç (con beca)">19 Haziran 2027 · Hedef: Koç Üniversitesi Endüstri Mühendisliği (burslu)</p>
 
     <div class="cd">
@@ -155,44 +172,12 @@
       <div class="cd-u"><div class="cd-n" id="cdSn">00</div><div class="cd-k" data-tr="Saniye" data-es="Segundos">Saniye</div></div>
     </div>
 
-    <h3 data-tr="Nereye gidiyoruz" data-es="Adónde vamos">Nereye gidiyoruz</h3>
-    <div class="tw">
-      <table>
-        <thead><tr>
-          <th data-tr="Bölüm" data-es="Parte">Bölüm</th>
-          <th data-tr="Soru" data-es="Preguntas">Soru</th>
-          <th data-tr="İlk 100 hedefi" data-es="Objetivo top 100">İlk 100 hedefi</th>
-          <th data-tr="Koç için tahmini" data-es="Estimado para Koç">Koç için tahmini</th>
-        </tr></thead>
-        <tbody>
-          <tr><td>TYT</td><td>120</td><td class="hi">115–119</td><td>~105–112</td></tr>
-          <tr><td>AYT</td><td>80</td><td class="hi">75–80</td><td>~62–70</td></tr>
-          <tr class="sum"><td data-tr="Anlamı" data-es="Significa">Anlamı</td><td>200</td><td class="hi" data-tr="~8 soru hata payı" data-es="~8 preguntas de margen">~8 soru hata payı</td><td data-tr="~25 soru hata payı" data-es="~25 preguntas de margen">~25 soru hata payı</td></tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="pts">
-      <div class="pt">
-        <div class="pt-i">!</div>
-        <div class="pt-t" data-html="1" data-tr="&lt;b&gt;İki hedefi karıştırma.&lt;/b&gt; Koç Endüstri'nin son 6 yıllık bandı 495–1126 sıralama. İlk 100'ü güvenlik payı olarak hedeflemek doğru, ama son 400 sıralık farkı kovalarken kendini tüketme — kırmızı çizgi ilk 1000'in içinde rahat bitirmek." data-es="&lt;b&gt;No confundas los dos objetivos.&lt;/b&gt; La banda de los últimos seis años de Ing. Industrial en Koç es 495–1126. Apuntar al top 100 como margen está bien, pero no te agotes persiguiendo los últimos 400 puestos: la línea roja es terminar holgadamente dentro de los 1000 primeros."><b>İki hedefi karıştırma.</b> Koç Endüstri'nin son 6 yıllık bandı 495–1126 sıralama. İlk 100'ü güvenlik payı olarak hedeflemek doğru, ama son 400 sıralık farkı kovalarken kendini tüketme — kırmızı çizgi ilk 1000'in içinde rahat bitirmek.</div>
-      </div>
-      <div class="pt">
-        <div class="pt-i">+</div>
-        <div class="pt-t" data-html="1" data-tr="&lt;b&gt;Elindeki avantaj.&lt;/b&gt; OBP 98.7 ve tam katsayı beklentisiyle yerleştirme puanına ~59 puan geliyor. Aynı neti yapan ama diploma notu düşük bir rakibin önünde başlıyorsun." data-es="&lt;b&gt;Tu ventaja.&lt;/b&gt; Con un OBP de 98,7 y el coeficiente completo, se suman unos 59 puntos a la nota de admisión. Empiezas por delante de quien saque los mismos netos con peor nota de bachillerato."><b>Elindeki avantaj.</b> OBP 98.7 ve tam katsayı beklentisiyle yerleştirme puanına ~59 puan geliyor. Aynı neti yapan ama diploma notu düşük bir rakibin önünde başlıyorsun.</div>
-      </div>
-      <div class="pt">
-        <div class="pt-i">↗</div>
-        <div class="pt-t" data-html="1" data-tr="&lt;b&gt;Mesafe.&lt;/b&gt; 1.5 ayda 28.000 yaptın; taban sağlam. Buradan hedefe kabaca TYT'de +30, AYT'de +30 net var. Bir yıllık tam zamanlı çalışmayla ulaşılabilir — ama netlerin aylık ölçülmesi şartıyla." data-es="&lt;b&gt;La distancia.&lt;/b&gt; En mes y medio llegaste al puesto 28.000; la base es sólida. De aquí al objetivo faltan unos +30 netos en TYT y +30 en AYT. Es alcanzable con un año a tiempo completo, siempre que midas los netos cada mes."><b>Mesafe.</b> 1.5 ayda 28.000 yaptın; taban sağlam. Buradan hedefe kabaca TYT'de +30, AYT'de +30 net var. Bir yıllık tam zamanlı çalışmayla ulaşılabilir — ama netlerin aylık ölçülmesi şartıyla.</div>
-      </div>
-    </div>
-
     <h3 data-tr="Konu takibi" data-es="Seguimiento de temas">Konu takibi</h3>
     <div class="card" style="margin-bottom:16px;">
       <div class="ring-w">
-        <svg class="ring" viewBox="0 0 64 64" aria-hidden="true">
-          <circle class="r-bg" cx="32" cy="32" r="27"></circle>
-          <circle class="r-fg" id="yksRing" cx="32" cy="32" r="27"></circle>
+        <svg class="ring" viewBox="0 0 66 66" aria-hidden="true">
+          <circle class="r-bg" cx="33" cy="33" r="28"></circle>
+          <circle class="r-fg" id="yksRing" cx="33" cy="33" r="28"></circle>
         </svg>
         <div style="flex:1; min-width:0;">
           <div class="prog-top">
@@ -205,13 +190,13 @@
       </div>
       <div style="margin-top:18px;" id="yksBars"></div>
     </div>
+
     <h3>TYT</h3>
     <div id="yksTyt"></div>
     <h3 data-tr="AYT (Sayısal)" data-es="AYT (Ciencias)">AYT (Sayısal)</h3>
     <div id="yksAyt"></div>
 
     <h3 data-tr="Haftalık soru kotası" data-es="Cuota semanal de preguntas">Haftalık soru kotası</h3>
-    <p class="note" data-tr="Taslak: sınavdaki soru ağırlığının 3 katı. Kendi tempona göre değiştir. Haftayı sen sıfırlarsın." data-es="Borrador: el triple del peso de preguntas del examen. Ajústalo a tu ritmo. La semana la reinicias tú.">Taslak: sınavdaki soru ağırlığının 3 katı. Kendi tempona göre değiştir. Haftayı sen sıfırlarsın.</p>
     <div class="tw">
       <table>
         <thead><tr>
@@ -248,68 +233,117 @@
         </tbody>
       </table>
     </div>
+    <p class="note" data-tr="Taslak: sınavdaki soru ağırlığının 3 katı. Kendi tempona göre değiştir, haftayı sen sıfırlarsın." data-es="Borrador: el triple del peso de preguntas del examen. Ajústalo a tu ritmo; la semana la reinicias tú.">Taslak: sınavdaki soru ağırlığının 3 katı. Kendi tempona göre değiştir, haftayı sen sıfırlarsın.</p>
 
-    <h3 data-tr="Kaynaklar" data-es="Materiales">Kaynaklar</h3>
-    <p class="note" data-tr="Kural: kaynak seni dövmek için değil, eksiğini göstermek için. Şu anki netinin bir seviye üstünden başla ve o kaynağı bitirmeden bir üste geçme. Mekatronik okuduğun için AYT Matematik ve Fizik'te doğrudan İleri sütunundan girmeyi dene; Türkçe ve Biyoloji'de ego yapmadan alttan başla." data-es="Regla: el material no está para machacarte, sino para mostrarte lo que te falta. Empieza un nivel por encima de tus netos actuales y no pases al siguiente sin terminar el anterior. Como estudias Mecatrónica, prueba a entrar directamente por la columna Avanzado en Matemáticas y Física de AYT; en Lengua turca y Biología, empieza desde abajo sin orgullo.">Kural: kaynak seni dövmek için değil, eksiğini göstermek için. Şu anki netinin bir seviye üstünden başla ve o kaynağı bitirmeden bir üste geçme. Mekatronik okuduğun için AYT Matematik ve Fizik'te doğrudan İleri sütunundan girmeyi dene; Türkçe ve Biyoloji'de ego yapmadan alttan başla.</p>
-    <div class="tw">
-      <table>
-        <thead><tr>
-          <th data-tr="Ders" data-es="Asignatura">Ders</th>
-          <th data-tr="Başlangıç" data-es="Inicial">Başlangıç</th>
-          <th data-tr="Orta" data-es="Medio">Orta</th>
-          <th data-tr="İleri" data-es="Avanzado">İleri</th>
-          <th data-tr="Çok ileri" data-es="Muy avanzado">Çok ileri</th>
-        </tr></thead>
-        <tbody>
-          <tr><td><b>TYT Mat</b></td><td>Alt Yapı, Yarı Çap</td><td>Merkez, BES Ulti</td><td>Orijinal, Bilgi Sarmal</td><td class="hi">Acil, Apotemi</td></tr>
-          <tr><td><b>TYT Türkçe</b></td><td>ENS</td><td>Merkez, Hız ve Renk</td><td>ÇAP, Bilgi Sarmal</td><td class="hi">Paragrafik, Yayın Denizi PRO</td></tr>
-          <tr><td><b>TYT Fen</b></td><td>Hız ve Renk</td><td>Palme</td><td>Bilgi Sarmal</td><td class="hi">3D</td></tr>
-          <tr><td><b>AYT Mat</b></td><td>Birey B</td><td>Orijinal, Aktif</td><td>Bilgi Sarmal, Limit</td><td class="hi">Karekök, Apotemi, Endemik</td></tr>
-          <tr><td><b>AYT Fen</b></td><td>Esen</td><td>Palme</td><td>Kafadengi</td><td class="hi">Aydın</td></tr>
-        </tbody>
-      </table>
-    </div>
-    <div class="tw">
-      <table>
-        <thead><tr>
-          <th data-tr="Deneme seviyesi" data-es="Nivel de simulacro">Deneme seviyesi</th>
-          <th>TYT</th>
-          <th>AYT</th>
-          <th data-tr="Ne zaman" data-es="Cuándo">Ne zaman</th>
-        </tr></thead>
-        <tbody>
-          <tr><td><b data-tr="Başlangıç" data-es="Inicial">Başlangıç</b></td><td>Endemik, Bilgi Sarmal Pusula, Miray</td><td>Endemik, Hız ve Renk, Biyotik</td><td data-tr="Konu bitirme dönemi" data-es="Mientras cierras temas">Konu bitirme dönemi</td></tr>
-          <tr><td><b data-tr="Orta" data-es="Medio">Orta</b></td><td>Toprak, Bilgi Sarmal Kontrol, Aydın</td><td>Toprak, Bilgi Sarmal, Limit</td><td data-tr="Netleri oturtma dönemi" data-es="Para asentar netos">Netleri oturtma dönemi</td></tr>
-          <tr><td><b data-tr="ÖSYM benzeri" data-es="Estilo ÖSYM">ÖSYM benzeri</b></td><td>345, 3D, Deneme Deposu</td><td>345, Aydın, Orijinal</td><td class="hi" data-tr="Asıl referansın bu" data-es="Tu referencia real">Asıl referansın bu</td></tr>
-          <tr class="sum"><td><b data-tr="Zor" data-es="Difícil">Zor</b></td><td>Apotemi, 3D, Ulti, Paragrafya</td><td>3D, Apotemi, Barış, Acil</td><td data-tr="Son 3–4 ay" data-es="Últimos 3–4 meses">Son 3–4 ay</td></tr>
-        </tbody>
-      </table>
-    </div>
-    <div class="pts">
-      <div class="pt">
-        <div class="pt-i">1</div>
-        <div class="pt-t" data-html="1" data-tr="&lt;b&gt;Deneme temposu.&lt;/b&gt; İlk 3 ay: 2 haftada 1. 4.–8. ay: haftada 1 TYT + 1 AYT. Son 4 ay: haftada 2+2, mümkünse gerçek sınav saatinde (TYT 10:15)." data-es="&lt;b&gt;Ritmo de simulacros.&lt;/b&gt; Primeros 3 meses: uno cada dos semanas. Meses 4–8: uno de TYT y uno de AYT por semana. Últimos 4 meses: 2+2 por semana, a ser posible a la hora real del examen (TYT 10:15)."><b>Deneme temposu.</b> İlk 3 ay: 2 haftada 1. 4.–8. ay: haftada 1 TYT + 1 AYT. Son 4 ay: haftada 2+2, mümkünse gerçek sınav saatinde (TYT 10:15).</div>
+    <h3 data-tr="Referans" data-es="Referencia">Referans</h3>
+
+    <details class="acc ref">
+      <summary><span class="acc-n" data-tr="Hedef ve mesafe" data-es="Objetivo y distancia">Hedef ve mesafe</span></summary>
+      <div class="acc-b">
+        <div class="tw">
+          <table>
+            <thead><tr>
+              <th data-tr="Bölüm" data-es="Parte">Bölüm</th>
+              <th data-tr="Soru" data-es="Preguntas">Soru</th>
+              <th data-tr="İlk 100 hedefi" data-es="Objetivo top 100">İlk 100 hedefi</th>
+              <th data-tr="Koç için tahmini" data-es="Estimado para Koç">Koç için tahmini</th>
+            </tr></thead>
+            <tbody>
+              <tr><td>TYT</td><td>120</td><td class="hi">115–119</td><td>~105–112</td></tr>
+              <tr><td>AYT</td><td>80</td><td class="hi">75–80</td><td>~62–70</td></tr>
+              <tr class="sum"><td data-tr="Anlamı" data-es="Significa">Anlamı</td><td>200</td><td class="hi" data-tr="~8 soru hata payı" data-es="~8 preguntas de margen">~8 soru hata payı</td><td data-tr="~25 soru hata payı" data-es="~25 preguntas de margen">~25 soru hata payı</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="pts">
+          <div class="pt">
+            <div class="pt-i">!</div>
+            <div class="pt-t" data-html="1" data-tr="&lt;b&gt;İki hedefi karıştırma.&lt;/b&gt; Koç Endüstri'nin son 6 yıllık bandı 495–1126 sıralama. İlk 100'ü güvenlik payı olarak hedeflemek doğru, ama son 400 sıralık farkı kovalarken kendini tüketme — kırmızı çizgi ilk 1000'in içinde rahat bitirmek." data-es="&lt;b&gt;No confundas los dos objetivos.&lt;/b&gt; La banda de los últimos seis años de Ing. Industrial en Koç es 495–1126. Apuntar al top 100 como margen está bien, pero no te agotes persiguiendo los últimos 400 puestos."><b>İki hedefi karıştırma.</b> Koç Endüstri'nin son 6 yıllık bandı 495–1126 sıralama. İlk 100'ü güvenlik payı olarak hedeflemek doğru, ama son 400 sıralık farkı kovalarken kendini tüketme — kırmızı çizgi ilk 1000'in içinde rahat bitirmek.</div>
+          </div>
+          <div class="pt">
+            <div class="pt-i">+</div>
+            <div class="pt-t" data-html="1" data-tr="&lt;b&gt;Elindeki avantaj.&lt;/b&gt; OBP 98.7 ve tam katsayı beklentisiyle yerleştirme puanına ~59 puan geliyor. Aynı neti yapan ama diploma notu düşük bir rakibin önünde başlıyorsun." data-es="&lt;b&gt;Tu ventaja.&lt;/b&gt; Con un OBP de 98,7 y el coeficiente completo, se suman unos 59 puntos a la nota de admisión."><b>Elindeki avantaj.</b> OBP 98.7 ve tam katsayı beklentisiyle yerleştirme puanına ~59 puan geliyor. Aynı neti yapan ama diploma notu düşük bir rakibin önünde başlıyorsun.</div>
+          </div>
+          <div class="pt">
+            <div class="pt-i">↗</div>
+            <div class="pt-t" data-html="1" data-tr="&lt;b&gt;Mesafe.&lt;/b&gt; 1.5 ayda 28.000 yaptın; taban sağlam. Buradan hedefe kabaca TYT'de +30, AYT'de +30 net var. Bir yıllık tam zamanlı çalışmayla ulaşılabilir — ama netlerin aylık ölçülmesi şartıyla." data-es="&lt;b&gt;La distancia.&lt;/b&gt; En mes y medio llegaste al puesto 28.000. De aquí al objetivo faltan unos +30 netos en TYT y +30 en AYT."><b>Mesafe.</b> 1.5 ayda 28.000 yaptın; taban sağlam. Buradan hedefe kabaca TYT'de +30, AYT'de +30 net var. Bir yıllık tam zamanlı çalışmayla ulaşılabilir — ama netlerin aylık ölçülmesi şartıyla.</div>
+          </div>
+        </div>
       </div>
-      <div class="pt">
-        <div class="pt-i">2</div>
-        <div class="pt-t" data-html="1" data-tr="&lt;b&gt;Denemenin asıl işi çözmek değil, analiz.&lt;/b&gt; Her yanlışı deftere yaz: konu adı + neden yanlış (bilgi mi, dikkat mi, zaman mı). İlk 100 bandındaki farkı yaratan şey daha çok soru çözmek değil, aynı hatayı ikinci kez yapmamak." data-es="&lt;b&gt;El trabajo del simulacro no es resolverlo, sino analizarlo.&lt;/b&gt; Anota cada fallo: tema + causa (falta de conocimiento, despiste o tiempo). Lo que marca la diferencia en el top 100 no es hacer más preguntas, sino no repetir el mismo error."><b>Denemenin asıl işi çözmek değil, analiz.</b> Her yanlışı deftere yaz: konu adı + neden yanlış (bilgi mi, dikkat mi, zaman mı). İlk 100 bandındaki farkı yaratan şey daha çok soru çözmek değil, aynı hatayı ikinci kez yapmamak.</div>
+    </details>
+
+    <details class="acc ref">
+      <summary><span class="acc-n" data-tr="Kaynaklar" data-es="Materiales">Kaynaklar</span></summary>
+      <div class="acc-b">
+        <p class="note" data-tr="Kural: kaynak seni dövmek için değil, eksiğini göstermek için. Şu anki netinin bir seviye üstünden başla ve bitirmeden bir üste geçme. Mekatronik okuduğun için AYT Matematik ve Fizik'te doğrudan İleri sütunundan girmeyi dene; Türkçe ve Biyoloji'de ego yapmadan alttan başla." data-es="Regla: el material no está para machacarte, sino para mostrarte lo que te falta. Empieza un nivel por encima de tus netos y no pases al siguiente sin terminar el anterior.">Kural: kaynak seni dövmek için değil, eksiğini göstermek için. Şu anki netinin bir seviye üstünden başla ve bitirmeden bir üste geçme. Mekatronik okuduğun için AYT Matematik ve Fizik'te doğrudan İleri sütunundan girmeyi dene; Türkçe ve Biyoloji'de ego yapmadan alttan başla.</p>
+        <div class="tw">
+          <table>
+            <thead><tr>
+              <th data-tr="Ders" data-es="Asignatura">Ders</th>
+              <th data-tr="Başlangıç" data-es="Inicial">Başlangıç</th>
+              <th data-tr="Orta" data-es="Medio">Orta</th>
+              <th data-tr="İleri" data-es="Avanzado">İleri</th>
+              <th data-tr="Çok ileri" data-es="Muy avanzado">Çok ileri</th>
+            </tr></thead>
+            <tbody>
+              <tr><td><b>TYT Mat</b></td><td>Alt Yapı, Yarı Çap</td><td>Merkez, BES Ulti</td><td>Orijinal, Bilgi Sarmal</td><td class="hi">Acil, Apotemi</td></tr>
+              <tr><td><b>TYT Türkçe</b></td><td>ENS</td><td>Merkez, Hız ve Renk</td><td>ÇAP, Bilgi Sarmal</td><td class="hi">Paragrafik, Yayın Denizi PRO</td></tr>
+              <tr><td><b>TYT Fen</b></td><td>Hız ve Renk</td><td>Palme</td><td>Bilgi Sarmal</td><td class="hi">3D</td></tr>
+              <tr><td><b>AYT Mat</b></td><td>Birey B</td><td>Orijinal, Aktif</td><td>Bilgi Sarmal, Limit</td><td class="hi">Karekök, Apotemi, Endemik</td></tr>
+              <tr><td><b>AYT Fen</b></td><td>Esen</td><td>Palme</td><td>Kafadengi</td><td class="hi">Aydın</td></tr>
+            </tbody>
+          </table>
+        </div>
       </div>
-      <div class="pt">
-        <div class="pt-i">3</div>
-        <div class="pt-t" data-html="1" data-tr="&lt;b&gt;Yayın listeleri her yıl değişir.&lt;/b&gt; Kitap almadan önce o yılın baskısına ve güncel yorumlara bak. Kaynak seçimi, doğru kaynağı bulmaktan çok seçtiğini bitirmekle ilgili." data-es="&lt;b&gt;Las listas de editoriales cambian cada año.&lt;/b&gt; Antes de comprar, mira la edición del año y las reseñas actuales. Elegir material va menos de encontrar el perfecto que de terminar el que elegiste."><b>Yayın listeleri her yıl değişir.</b> Kitap almadan önce o yılın baskısına ve güncel yorumlara bak. Kaynak seçimi, doğru kaynağı bulmaktan çok seçtiğini bitirmekle ilgili.</div>
+    </details>
+
+    <details class="acc ref">
+      <summary><span class="acc-n" data-tr="Denemeler" data-es="Simulacros">Denemeler</span></summary>
+      <div class="acc-b">
+        <div class="tw">
+          <table>
+            <thead><tr>
+              <th data-tr="Seviye" data-es="Nivel">Seviye</th>
+              <th>TYT</th>
+              <th>AYT</th>
+              <th data-tr="Ne zaman" data-es="Cuándo">Ne zaman</th>
+            </tr></thead>
+            <tbody>
+              <tr><td><b data-tr="Başlangıç" data-es="Inicial">Başlangıç</b></td><td>Endemik, Bilgi Sarmal Pusula, Miray</td><td>Endemik, Hız ve Renk, Biyotik</td><td data-tr="Konu bitirme dönemi" data-es="Mientras cierras temas">Konu bitirme dönemi</td></tr>
+              <tr><td><b data-tr="Orta" data-es="Medio">Orta</b></td><td>Toprak, Bilgi Sarmal Kontrol, Aydın</td><td>Toprak, Bilgi Sarmal, Limit</td><td data-tr="Netleri oturtma dönemi" data-es="Para asentar netos">Netleri oturtma dönemi</td></tr>
+              <tr><td><b data-tr="ÖSYM benzeri" data-es="Estilo ÖSYM">ÖSYM benzeri</b></td><td>345, 3D, Deneme Deposu</td><td>345, Aydın, Orijinal</td><td class="hi" data-tr="Asıl referansın bu" data-es="Tu referencia real">Asıl referansın bu</td></tr>
+              <tr class="sum"><td><b data-tr="Zor" data-es="Difícil">Zor</b></td><td>Apotemi, 3D, Ulti, Paragrafya</td><td>3D, Apotemi, Barış, Acil</td><td data-tr="Son 3–4 ay" data-es="Últimos 3–4 meses">Son 3–4 ay</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="pts">
+          <div class="pt">
+            <div class="pt-i">1</div>
+            <div class="pt-t" data-html="1" data-tr="&lt;b&gt;Tempo.&lt;/b&gt; İlk 3 ay: 2 haftada 1. 4.–8. ay: haftada 1 TYT + 1 AYT. Son 4 ay: haftada 2+2, mümkünse gerçek sınav saatinde (TYT 10:15)." data-es="&lt;b&gt;Ritmo.&lt;/b&gt; Primeros 3 meses: uno cada dos semanas. Meses 4–8: uno de TYT y uno de AYT por semana. Últimos 4 meses: 2+2."><b>Tempo.</b> İlk 3 ay: 2 haftada 1. 4.–8. ay: haftada 1 TYT + 1 AYT. Son 4 ay: haftada 2+2, mümkünse gerçek sınav saatinde (TYT 10:15).</div>
+          </div>
+          <div class="pt">
+            <div class="pt-i">2</div>
+            <div class="pt-t" data-html="1" data-tr="&lt;b&gt;Asıl iş çözmek değil, analiz.&lt;/b&gt; Her yanlışı deftere yaz: konu adı + neden yanlış (bilgi mi, dikkat mi, zaman mı). Farkı yaratan şey daha çok soru çözmek değil, aynı hatayı ikinci kez yapmamak." data-es="&lt;b&gt;El trabajo no es resolver, es analizar.&lt;/b&gt; Anota cada fallo: tema y causa. Lo que marca la diferencia es no repetir el mismo error."><b>Asıl iş çözmek değil, analiz.</b> Her yanlışı deftere yaz: konu adı + neden yanlış (bilgi mi, dikkat mi, zaman mı). Farkı yaratan şey daha çok soru çözmek değil, aynı hatayı ikinci kez yapmamak.</div>
+          </div>
+          <div class="pt">
+            <div class="pt-i">3</div>
+            <div class="pt-t" data-html="1" data-tr="&lt;b&gt;Yayın listeleri her yıl değişir.&lt;/b&gt; Kitap almadan önce o yılın baskısına ve güncel yorumlara bak. Kaynak seçimi, doğru kaynağı bulmaktan çok seçtiğini bitirmekle ilgili." data-es="&lt;b&gt;Las listas cambian cada año.&lt;/b&gt; Mira la edición del año antes de comprar. Elegir material va de terminar el que elegiste."><b>Yayın listeleri her yıl değişir.</b> Kitap almadan önce o yılın baskısına ve güncel yorumlara bak. Kaynak seçimi, doğru kaynağı bulmaktan çok seçtiğini bitirmekle ilgili.</div>
+          </div>
+        </div>
       </div>
-    </div>
+    </details>
   </section>
 
-  <section id="rutin">
-    <h2 data-no="03" data-tr="Rutin" data-es="Rutina">Rutin</h2>
+  <!-- ==================== RUTİN ==================== -->
+  <section class="panel" id="p-rutin">
+    <h2 data-tr="Rutin" data-es="Rutina">Rutin</h2>
     <p class="sub" data-tr="Kutucuklar her sabah sıfırlanır. Önemli olan tek bir mükemmel gün değil, üst üste gelen sıradan günler." data-es="Las casillas se reinician cada mañana. Lo que cuenta no es un día perfecto, sino muchos días corrientes seguidos.">Kutucuklar her sabah sıfırlanır. Önemli olan tek bir mükemmel gün değil, üst üste gelen sıradan günler.</p>
 
     <div class="card" style="margin-bottom:16px;">
       <div class="ring-w">
-        <svg class="ring" viewBox="0 0 64 64" aria-hidden="true">
-          <circle class="r-bg" cx="32" cy="32" r="27"></circle>
-          <circle class="r-fg" id="rutinRing" cx="32" cy="32" r="27"></circle>
+        <svg class="ring" viewBox="0 0 66 66" aria-hidden="true">
+          <circle class="r-bg" cx="33" cy="33" r="28"></circle>
+          <circle class="r-fg" id="rutinRing" cx="33" cy="33" r="28"></circle>
         </svg>
         <div style="flex:1; min-width:0;">
           <div class="prog-top">
@@ -324,27 +358,28 @@
     </div>
 
     <h3 data-tr="Gün şablonu" data-es="Plantilla del día">Gün şablonu</h3>
-    <p class="note" data-tr="Saatler kutsal değil, sıra kutsal: en zor iş güne en yakın, spor akşam bloğunun yakıtı, dil kısa ama asla atlanmayan bir alışkanlık. Bir bloğu kaçırdığın gün, o günü tamamen çöpe atma — kalan blokları yine işaretle." data-es="Las horas no son sagradas, el orden sí: la tarea más difícil al principio del día, el deporte como combustible del bloque de la tarde y el idioma como un hábito corto que nunca se salta. El día que te saltes un bloque, no tires el día entero: marca igualmente los demás.">Saatler kutsal değil, sıra kutsal: en zor iş güne en yakın, spor akşam bloğunun yakıtı, dil kısa ama asla atlanmayan bir alışkanlık. Bir bloğu kaçırdığın gün, o günü tamamen çöpe atma — kalan blokları yine işaretle.</p>
     <div class="card" id="rutinGun"></div>
+    <p class="note" data-tr="Saatler kutsal değil, sıra kutsal: en zor iş güne en yakın, spor akşam bloğunun yakıtı, dil kısa ama asla atlanmayan bir alışkanlık. Bir bloğu kaçırdığın gün, o günü tamamen çöpe atma — kalan blokları yine işaretle." data-es="Las horas no son sagradas, el orden sí. El día que te saltes un bloque, no tires el día entero: marca igualmente los demás.">Saatler kutsal değil, sıra kutsal: en zor iş güne en yakın, spor akşam bloğunun yakıtı, dil kısa ama asla atlanmayan bir alışkanlık. Bir bloğu kaçırdığın gün, o günü tamamen çöpe atma — kalan blokları yine işaretle.</p>
 
     <h3 data-tr="Haftalık spor" data-es="Deporte semanal">Haftalık spor</h3>
-    <p class="note" data-tr="Bugünün satırı vurgulu. Kuvvet günleri arasında en az bir gün boşluk var — kas antrenmanda değil, dinlenirken büyüyor. Pazar tam dinlenme: programın parçası, kaçamak değil." data-es="La fila de hoy está resaltada. Entre los días de fuerza hay al menos un día de descanso: el músculo no crece entrenando, sino descansando. El domingo es descanso total: parte del programa, no una excusa.">Bugünün satırı vurgulu. Kuvvet günleri arasında en az bir gün boşluk var — kas antrenmanda değil, dinlenirken büyüyor. Pazar tam dinlenme: programın parçası, kaçamak değil.</p>
     <div class="card" id="rutinSpor"></div>
+    <p class="note" data-tr="Bugünün satırı vurgulu. Kuvvet günleri arasında en az bir gün boşluk var — kas antrenmanda değil, dinlenirken büyüyor. Pazar tam dinlenme: programın parçası, kaçamak değil." data-es="La fila de hoy está resaltada. El músculo no crece entrenando, sino descansando. El domingo es descanso total: parte del programa.">Bugünün satırı vurgulu. Kuvvet günleri arasında en az bir gün boşluk var — kas antrenmanda değil, dinlenirken büyüyor. Pazar tam dinlenme: programın parçası, kaçamak değil.</p>
 
     <h3 data-tr="Beslenme" data-es="Alimentación">Beslenme</h3>
-    <p class="note" data-tr="Kısıtlayıcı bir diyet değil — çalışma performansını ayakta tutan birkaç sade alışkanlık. Amaç kilo vermek ya da bir şeyi yasaklamak değil, gün boyu enerjinin dalgalanmasını engellemek. Haftada bir serbest öğün bu düzenin düşmanı değil, sürdürülebilir olmasının şartı." data-es="No es una dieta restrictiva, sino unos pocos hábitos que sostienen tu rendimiento. El objetivo no es adelgazar ni prohibir nada, sino evitar los altibajos de energía. Una comida libre por semana no es enemiga de este orden: es la condición para que dure.">Kısıtlayıcı bir diyet değil — çalışma performansını ayakta tutan birkaç sade alışkanlık. Amaç kilo vermek ya da bir şeyi yasaklamak değil, gün boyu enerjinin dalgalanmasını engellemek. Haftada bir serbest öğün bu düzenin düşmanı değil, sürdürülebilir olmasının şartı.</p>
     <div class="card" id="rutinBeslenme"></div>
+    <p class="note" data-tr="Kısıtlayıcı bir diyet değil — çalışma performansını ayakta tutan birkaç sade alışkanlık. Amaç kilo vermek değil, gün boyu enerjinin dalgalanmasını engellemek. Haftada bir serbest öğün bu düzenin düşmanı değil, sürdürülebilir olmasının şartı." data-es="No es una dieta restrictiva. El objetivo no es adelgazar, sino evitar los altibajos de energía. Una comida libre por semana es la condición para que dure.">Kısıtlayıcı bir diyet değil — çalışma performansını ayakta tutan birkaç sade alışkanlık. Amaç kilo vermek değil, gün boyu enerjinin dalgalanmasını engellemek. Haftada bir serbest öğün bu düzenin düşmanı değil, sürdürülebilir olmasının şartı.</p>
   </section>
 
-  <section id="gelisim">
-    <h2 data-no="04" data-tr="Gelişim" data-es="Desarrollo">Gelişim</h2>
-    <p class="sub" data-tr="Bu yılın odağı: genel kültür, dil, spor, YKS. Siber ve kod düşük tempoda, WSL üzerinden. YL hazırlığı zemin seviyesinde." data-es="El foco de este año: cultura general, idioma, deporte y YKS. Ciberseguridad y código a ritmo bajo, vía WSL. La preparación del máster, a nivel de base.">Bu yılın odağı: genel kültür, dil, spor, YKS. Siber ve kod düşük tempoda, WSL üzerinden. YL hazırlığı zemin seviyesinde.</p>
+  <!-- ==================== GELİŞİM ==================== -->
+  <section class="panel" id="p-gelisim">
+    <h2 data-tr="Gelişim" data-es="Desarrollo">Gelişim</h2>
+    <p class="sub" data-tr="Bu yılın odağı: genel kültür, dil, spor, YKS. Siber ve kod düşük tempoda, WSL üzerinden. YL hazırlığı zemin seviyesinde." data-es="El foco de este año: cultura general, idioma, deporte y YKS. Ciberseguridad y código a ritmo bajo. La preparación del máster, a nivel de base.">Bu yılın odağı: genel kültür, dil, spor, YKS. Siber ve kod düşük tempoda, WSL üzerinden. YL hazırlığı zemin seviyesinde.</p>
 
     <div class="card" style="margin-bottom:16px;">
       <div class="ring-w">
-        <svg class="ring" viewBox="0 0 64 64" aria-hidden="true">
-          <circle class="r-bg" cx="32" cy="32" r="27"></circle>
-          <circle class="r-fg" id="gelisimRing" cx="32" cy="32" r="27"></circle>
+        <svg class="ring" viewBox="0 0 66 66" aria-hidden="true">
+          <circle class="r-bg" cx="33" cy="33" r="28"></circle>
+          <circle class="r-fg" id="gelisimRing" cx="33" cy="33" r="28"></circle>
         </svg>
         <div style="flex:1; min-width:0;">
           <div class="prog-top">
@@ -361,25 +396,27 @@
     <div id="gelisimList"></div>
   </section>
 
-  <section id="kitap">
-    <h2 data-no="05" data-tr="Kitaplar" data-es="Libros">Kitaplar</h2>
+  <!-- ==================== KİTAPLAR ==================== -->
+  <section class="panel" id="p-kitap">
+    <h2 data-tr="Kitaplar" data-es="Libros">Kitaplar</h2>
     <p class="sub" id="kitapSub">—</p>
-    <p class="note" data-tr="Hepsi Storytel Türkiye'de mevcut (katalog değişebilir, bulamazsan atla). Sesli dinlemek de sayılır — spor yaparken ve yolda dinlemek, günde ekstra bir saat kazandırır. Türk edebiyatı kategorisi doğrudan TYT Türkçe paragraf netine yarar: paragrafı yükselten şey soru bankası değil, düzenli nitelikli okumadır." data-es="Todos están en Storytel Turquía (el catálogo cambia; si no lo encuentras, sáltalo). Escuchar también cuenta: hacerlo mientras entrenas o vas de camino te regala una hora extra al día. La categoría de literatura turca sube directamente los netos de comprensión lectora del TYT: lo que mejora esa parte no son los cuadernillos, sino la lectura regular de calidad.">Hepsi Storytel Türkiye'de mevcut (katalog değişebilir, bulamazsan atla). Sesli dinlemek de sayılır — spor yaparken ve yolda dinlemek, günde ekstra bir saat kazandırır. Türk edebiyatı kategorisi doğrudan TYT Türkçe paragraf netine yarar: paragrafı yükselten şey soru bankası değil, düzenli nitelikli okumadır.</p>
     <div id="kitapList"></div>
+    <p class="note" data-tr="Hepsi Storytel Türkiye'de mevcut (katalog değişebilir, bulamazsan atla). Sesli dinlemek de sayılır — spor yaparken ve yolda dinlemek günde bir saat kazandırır. Türk edebiyatı kategorisi doğrudan TYT Türkçe paragraf netine yarar." data-es="Todos están en Storytel Turquía. Escuchar también cuenta. La categoría de literatura turca sube directamente los netos de comprensión lectora del TYT.">Hepsi Storytel Türkiye'de mevcut (katalog değişebilir, bulamazsan atla). Sesli dinlemek de sayılır — spor yaparken ve yolda dinlemek günde bir saat kazandırır. Türk edebiyatı kategorisi doğrudan TYT Türkçe paragraf netine yarar.</p>
   </section>
 
-  <section id="yedek">
-    <h2 data-no="06" data-tr="Yedekleme ve senkron" data-es="Copia y sincronización">Yedekleme ve senkron</h2>
-    <p class="sub" data-tr="Panelin tüm verisi yalnızca bu tarayıcının hafızasında. Tarayıcı verisini temizlemek ya da cihaz değiştirmek bir yıllık kaydı siler." data-es="Todos los datos del panel están solo en la memoria de este navegador. Borrar los datos del navegador o cambiar de dispositivo elimina un año de registro.">Panelin tüm verisi yalnızca bu tarayıcının hafızasında. Tarayıcı verisini temizlemek ya da cihaz değiştirmek bir yıllık kaydı siler.</p>
+  <!-- ==================== YEDEK ==================== -->
+  <section class="panel" id="p-yedek">
+    <h2 data-tr="Yedekleme" data-es="Copia de seguridad">Yedekleme</h2>
+    <p class="sub" data-tr="Panelin tüm verisi yalnızca bu tarayıcının hafızasında. Tarayıcı verisini temizlemek ya da cihaz değiştirmek bir yıllık kaydı siler." data-es="Todos los datos del panel están solo en la memoria de este navegador. Borrarlos elimina un año de registro.">Panelin tüm verisi yalnızca bu tarayıcının hafızasında. Tarayıcı verisini temizlemek ya da cihaz değiştirmek bir yıllık kaydı siler.</p>
 
     <div class="pts" style="margin-bottom:16px;">
       <div class="pt">
         <div class="pt-i">↓</div>
-        <div class="pt-t" data-html="1" data-tr="&lt;b&gt;Yedek al&lt;/b&gt; — tüm veriyi JSON olarak indirir. Ayda bir yeterli; panel 30 gün geçince Bugün bölümünde seni uyarır." data-es="&lt;b&gt;Descargar copia&lt;/b&gt;: guarda todos los datos en JSON. Una vez al mes basta; el panel te avisa en la sección Hoy pasados 30 días."><b>Yedek al</b> — tüm veriyi JSON olarak indirir. Ayda bir yeterli; panel 30 gün geçince Bugün bölümünde seni uyarır.</div>
+        <div class="pt-t" data-html="1" data-tr="&lt;b&gt;Yedek al&lt;/b&gt; — tüm veriyi JSON olarak indirir. Ayda bir yeterli; panel 30 gün geçince Bugün sekmesinde uyarır." data-es="&lt;b&gt;Descargar copia&lt;/b&gt;: guarda todo en JSON. Una vez al mes basta; el panel avisa pasados 30 días."><b>Yedek al</b> — tüm veriyi JSON olarak indirir. Ayda bir yeterli; panel 30 gün geçince Bugün sekmesinde uyarır.</div>
       </div>
       <div class="pt">
         <div class="pt-i">!</div>
-        <div class="pt-t" data-html="1" data-tr="&lt;b&gt;Her cihaz kendi kaydını tutuyor.&lt;/b&gt; Bilgisayarda işaretlediğin telefona, telefonda işaretlediğin bilgisayara gelmez — henüz senkron yok. İki cihazı birden kullanacaksan şimdilik burada yedek al, öbür cihazda geri yükle. Kalıcı çözüm sonra kurulacak." data-es="&lt;b&gt;Cada dispositivo guarda su propio registro.&lt;/b&gt; Lo que marcas en el ordenador no llega al móvil ni al revés: todavía no hay sincronización. Si vas a usar ambos, de momento descarga la copia aquí y restáurala en el otro. La solución definitiva vendrá después."><b>Her cihaz kendi kaydını tutuyor.</b> Bilgisayarda işaretlediğin telefona, telefonda işaretlediğin bilgisayara gelmez — henüz senkron yok. İki cihazı birden kullanacaksan şimdilik burada yedek al, öbür cihazda geri yükle. Kalıcı çözüm sonra kurulacak.</div>
+        <div class="pt-t" data-html="1" data-tr="&lt;b&gt;Her cihaz kendi kaydını tutuyor.&lt;/b&gt; Bilgisayarda işaretlediğin telefona gelmez, tersi de öyle — henüz senkron yok. İki cihazı birden kullanacaksan burada yedek al, öbür cihazda geri yükle." data-es="&lt;b&gt;Cada dispositivo guarda su propio registro.&lt;/b&gt; Todavía no hay sincronización. Descarga la copia aquí y restáurala en el otro."><b>Her cihaz kendi kaydını tutuyor.</b> Bilgisayarda işaretlediğin telefona gelmez, tersi de öyle — henüz senkron yok. İki cihazı birden kullanacaksan burada yedek al, öbür cihazda geri yükle.</div>
       </div>
     </div>
 
@@ -392,8 +429,8 @@
   </section>
 
   <footer>
-    <span data-tr="© 2026 · Kişisel operasyon paneli" data-es="© 2026 · Panel personal de operaciones">© 2026 · Kişisel operasyon paneli</span>
-    <span>REV 6.1</span>
+    <span data-tr="Kişisel operasyon paneli" data-es="Panel personal de operaciones">Kişisel operasyon paneli</span>
+    <span>REV 7.0</span>
   </footer>
 
 </div>
