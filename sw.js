@@ -6,7 +6,7 @@
         eski durumu gösterir ve senkronun anlamı kalmaz.
    Panelde değişiklik yaptığında SURUM'u bir artır.
    ============================================================ */
-const SURUM = 'panel-v6';
+const SURUM = 'panel-v6-1';
 const KABUK = [
   './',
   './index.html',
@@ -55,20 +55,6 @@ self.addEventListener('fetch', function (e) {
 
   const url = new URL(req.url);
   if (url.origin !== self.location.origin) return;
-
-  // Durum dosyası: önce ağ. Bayat veri göstermek, hiç göstermemekten kötü.
-  if (url.pathname.endsWith('/state.json')) {
-    e.respondWith(
-      fetch(req, { cache: 'no-store' })
-        .then(function (r) {
-          const kopya = r.clone();
-          caches.open(SURUM).then(function (c) { c.put(req, kopya); });
-          return r;
-        })
-        .catch(function () { return caches.match(req); })
-    );
-    return;
-  }
 
   // Diğer her şey: önbellekten ver, arka planda tazele.
   e.respondWith(
