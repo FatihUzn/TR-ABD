@@ -1325,52 +1325,103 @@ footer{border-top:1px solid var(--line); color:var(--ink-3);}
 .simdi.bitti .simdi-k{color:var(--ink-3);}
 .simdi.bitti .simdi-v{color:var(--ink-3); text-decoration-color:var(--line-2);}
 
-/* ============================================================
-   21. REV 16 — FOTOĞRAF KENDİ BOYUTUNDA, KARARTMA YOK
 
-   Fotoğraf 338×601. Tam ekran zemin yapılırsa altı kat büyür ve
-   bulanıklaşır; ayrıca dikey olduğu için geniş ekranda yüzü kırpar.
-   Bu yüzden kahraman şeridin sağında, kendi çözünürlüğünde duruyor.
-   Üzerinde hiçbir karartma yok — sol kenarı sayfaya eriyor, o kadar.
+
+/* ============================================================
+   23. REV 17 — FOTOĞRAF TÜM SAYFADA, İÇERİK OKUNUR SAYFADA
+
+   Fotoğraf sabit, boydan boya, sıfır karartma ve sıfır filtre.
+   Üst şerit ve kahraman alan doğrudan fotoğrafın üstünde duruyor —
+   orada az yazı var, beyaz hale ile okunuyor.
+
+   Sekmelerden aşağısı — asıl okuma alanı — kendi açık yüzeyinde.
+   Fotoğrafın üstüne serilmiş bir kağıt gibi: solda ve sağda fotoğraf
+   görünmeye devam ediyor. Fotoğrafa dokunmuyoruz, yazıyı fotoğraftan
+   çekiyoruz. Tek çalışan yol bu.
    ============================================================ */
 
-.hero-band{
-  position:relative;
-  isolation:isolate;
-  overflow:hidden;
-}
-
-.hero-band::before{
-  content:"";
-  position:absolute; top:0; right:0; bottom:0; left:auto;
-  width:min(38vw, 420px);
-  opacity:1; filter:none;
+body::before{
+  content:""; position:fixed; inset:0; z-index:-2;
   background-image:var(--foto,url(assets/arka.jpg));
-  background-size:auto 100%;
-  background-position:right top;
+  background-size:cover;
+  background-position:center 22%;
   background-repeat:no-repeat;
-  z-index:-1;
-  /* Sol kenar ve alt kenar sayfaya erisin — kesik durmasın */
-  -webkit-mask-image:
-    linear-gradient(90deg, transparent 0%, #000 34%, #000 100%),
-    linear-gradient(180deg, #000 0%, #000 72%, transparent 100%);
-  -webkit-mask-composite:source-in;
-  mask-image:
-    linear-gradient(90deg, transparent 0%, #000 34%, #000 100%),
-    linear-gradient(180deg, #000 0%, #000 72%, transparent 100%);
-  mask-composite:intersect;
+}
+body::after{display:none;}
+
+/* --- Fotoğrafın üstünde duran kısım: hale ile okunuyor --- */
+
+.head-fix{
+  background:rgba(255,255,255,.86);
+  backdrop-filter:blur(18px) saturate(1.3);
+  -webkit-backdrop-filter:blur(18px) saturate(1.3);
 }
 
-/* Fotoğraf sağda durduğu için metin sütunlarını sola çekiyoruz */
-.hero-grid{grid-template-columns:1.05fr .95fr; max-width:min(100%, 760px);}
-.stats{max-width:min(100%, 760px);}
-
-@media(max-width:1100px){
-  .hero-band::before{width:min(32vw, 320px); opacity:.9;}
-  .hero-grid,.stats{max-width:none;}
-  .hero-grid{grid-template-columns:1fr;}
+.hero-band{background:transparent;}
+.hero{
+  text-shadow:
+    0 0 4px rgba(255,255,255,.95),
+    0 0 14px rgba(255,255,255,.85),
+    0 1px 3px rgba(255,255,255,.92);
 }
+.hero h1{
+  text-shadow:
+    0 0 8px rgba(255,255,255,.98),
+    0 0 26px rgba(255,255,255,.9),
+    0 2px 5px rgba(255,255,255,.95);
+}
+.hero .lede,.hero .simdi-v,.hero .cd-n,.hero .stat-n{color:var(--ink);}
+.hero .bar{background:rgba(255,255,255,.55); border-color:rgba(14,34,64,.18);}
+.hero .simdi{border-left-color:var(--cherry);}
+
+/* --- Sekmelerden aşağısı: okuma yüzeyi --- */
+
+.wrap:not(.hero){
+  background:rgba(255,255,255,.93);
+  border-left:1px solid rgba(255,255,255,.6);
+  border-right:1px solid rgba(255,255,255,.6);
+  box-shadow:0 0 60px -20px rgba(14,34,64,.35);
+  padding-top:26px;
+  padding-bottom:8px;
+  text-shadow:none;
+}
+footer{
+  background:rgba(255,255,255,.93);
+  max-width:var(--w); margin:0 auto;
+  padding-left:22px; padding-right:22px;
+  box-shadow:0 0 60px -20px rgba(14,34,64,.35);
+}
+
+/* Okuma yüzeyinde çizgiler yumuşasın */
+.wrap:not(.hero){
+  --line:rgba(14,34,64,.13);
+  --line-2:rgba(14,34,64,.24);
+  --soft:rgba(14,34,64,.045);
+}
+
 @media(max-width:760px){
-  /* Dar ekranda fotoğraf metnin altında kalırdı: kapatıyoruz. */
-  .hero-band::before{display:none;}
+  body::before{background-position:center top;}
+  .wrap:not(.hero),footer{border-left:0; border-right:0;}
+}
+
+/* Kahraman alan da okuma yüzeyine dahil: koyu şapka ve yüz üzerinde
+   hale yetmiyordu. Artık üst şerit + kahraman + içerik tek bir sütun;
+   fotoğraf bu sütunun iki yanında ve arkasında görünüyor. */
+.hero-band{background:transparent;}
+.wrap.hero{
+  background:rgba(255,255,255,.93);
+  border-left:1px solid rgba(255,255,255,.6);
+  border-right:1px solid rgba(255,255,255,.6);
+  box-shadow:0 0 60px -20px rgba(14,34,64,.35);
+  text-shadow:none;
+}
+.hero,.hero h1{text-shadow:none;}
+.wrap:not(.hero){padding-top:4px;}
+.hero .bar{background:var(--soft); border-color:var(--line);}
+
+/* Fotoğraf sütunun yanlarında daha çok görünsün */
+:root{--w:880px;}
+
+@media(min-width:1000px){
+  .head-fix > .top,.head-fix > .tabs-w{max-width:calc(var(--w) + 44px); margin:0 auto;}
 }

@@ -61,20 +61,24 @@ koyulaştırılmış tonlarla yapıyor.
 
 ## Arka plan fotoğrafı
 
-Fotoğraf: **`assets/arka.jpg`**
+Fotoğraf: **`assets/arka.jpg`** — sabit, boydan boya, tüm sayfayı kaplıyor.
+Üzerinde hiçbir karartma, perde ya da renk filtresi yok.
 
-Kahraman şeridin sağında, kendi çözünürlüğünde duruyor. Üzerinde hiçbir
-karartma ya da renk filtresi yok — sadece sol ve alt kenarı sayfaya
-eriyor ki kesik durmasın.
+Yazıların okunması için fotoğrafa değil, içeriğe dokunuldu: panel
+fotoğrafın üstünde açık renkli bir sütun halinde duruyor, fotoğraf bu
+sütunun iki yanında ve arkasında (%7 saydamlıkla) görünüyor.
 
-**Değiştirmek için** o dosyanın üzerine yaz, adını `arka.jpg` bırak.
+Bunun sebebi basit: metin doğrudan fotoğrafın üstündeyse ya fotoğrafı
+karartırsın ya metin okunmaz. Üçüncü yol yok. Fotoğrafı karartmamak
+için metni fotoğraftan çektik.
 
-Boyut önerisi: dikey (portre) görseller bu yerleşime en iyi oturuyor,
-yaklaşık 2:3 oran. En az 700 piksel genişlik olsun — daha küçüğü
-büyütülünce bulanıklaşır. 1 MB'ın altında tut.
+**Değiştirmek için** `assets/arka.jpg` dosyasının üzerine yaz, adını
+değiştirme.
 
-Tam ekran zemin istersen söyle, tek satırla değişir; ama o zaman
-yazıların okunması için bir perde gerekir.
+Boyut önerisi: en az 1600 piksel genişlik. Daha küçüğü tam ekranda
+bulanıklaşır — mevcut görsel 338 pikselden 3 kat büyütüldü, o yüzden
+yumuşak duruyor. Dikey görseller telefonda, yatay görseller
+bilgisayarda daha iyi oturur. 1 MB'ın altında tut.
 
 Fotoğrafın telifine dikkat: depo herkese açık, oraya koyduğun her dosyayı
 isteyen indirebilir.
