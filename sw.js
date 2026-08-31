@@ -6,29 +6,29 @@
         eski durumu gösterir ve senkronun anlamı kalmaz.
    Panelde değişiklik yaptığında SURUM'u bir artır.
    ============================================================ */
-const SURUM = 'panel-v13';
+const SURUM = 'panel-v14';
 const KABUK = [
   './',
   './index.html',
   './style.css',
   './app.js',
   './manifest.webmanifest',
-  './icon.svg',
-  './arka.svg',
-  './icon-192.png',
-  './icon-512.png',
-  './fonts/inter-latin-400-normal.woff2',
-  './fonts/inter-latin-ext-400-normal.woff2',
-  './fonts/inter-latin-500-normal.woff2',
-  './fonts/inter-latin-ext-500-normal.woff2',
-  './fonts/inter-latin-600-normal.woff2',
-  './fonts/inter-latin-ext-600-normal.woff2',
-  './fonts/inter-latin-700-normal.woff2',
-  './fonts/inter-latin-ext-700-normal.woff2',
-  './fonts/jetbrains-mono-latin-400-normal.woff2',
-  './fonts/jetbrains-mono-latin-ext-400-normal.woff2',
-  './fonts/jetbrains-mono-latin-700-normal.woff2',
-  './fonts/jetbrains-mono-latin-ext-700-normal.woff2'
+  './assets/icon.svg',
+  './assets/arka.svg',
+  './assets/icon-192.png',
+  './assets/icon-512.png',
+  './assets/fonts/inter-latin-400-normal.woff2',
+  './assets/fonts/inter-latin-ext-400-normal.woff2',
+  './assets/fonts/inter-latin-500-normal.woff2',
+  './assets/fonts/inter-latin-ext-500-normal.woff2',
+  './assets/fonts/inter-latin-600-normal.woff2',
+  './assets/fonts/inter-latin-ext-600-normal.woff2',
+  './assets/fonts/inter-latin-700-normal.woff2',
+  './assets/fonts/inter-latin-ext-700-normal.woff2',
+  './assets/fonts/jetbrains-mono-latin-400-normal.woff2',
+  './assets/fonts/jetbrains-mono-latin-ext-400-normal.woff2',
+  './assets/fonts/jetbrains-mono-latin-700-normal.woff2',
+  './assets/fonts/jetbrains-mono-latin-ext-700-normal.woff2'
 ];
 
 self.addEventListener('install', function (e) {

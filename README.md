@@ -7,7 +7,7 @@ düz statik dosyalar. GitHub Pages'te olduğu gibi çalışır.
 
 Açık zemin, boydan boya arka plan görseli, kutusuz düzen.
 
-Zemindeki görsel `arka.svg` — kendi çizdiğim bir sahne: gökyüzü, uzak
+Zemindeki görsel `assets/arka.svg` — kendi çizdiğim bir sahne: gökyüzü, uzak
 şehir silueti ve önde kubbeli, sütunlu bir üniversite binası. Hedefin
 kendisi arka planda duruyor. Telifi yok.
 
