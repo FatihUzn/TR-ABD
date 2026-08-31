@@ -61,27 +61,25 @@ koyulaştırılmış tonlarla yapıyor.
 
 ## Arka plan fotoğrafı
 
-Fotoğraf: **`assets/arka.jpg`** — sabit, boydan boya, tüm sayfayı kaplıyor.
-Üzerinde hiçbir karartma, perde ya da renk filtresi yok.
+Fotoğraf: **`assets/arka.jpg`** — 2560×1440, sabit, tüm sayfayı kaplıyor.
 
-Yazıların okunması için fotoğrafa değil, içeriğe dokunuldu: panel
-fotoğrafın üstünde açık renkli bir sütun halinde duruyor, fotoğraf bu
-sütunun iki yanında ve arkasında (%7 saydamlıkla) görünüyor.
+Bu dosya ham fotoğraf değil, sayfaya göre kurulmuş bir kompozisyon:
 
-Bunun sebebi basit: metin doğrudan fotoğrafın üstündeyse ya fotoğrafı
-karartırsın ya metin okunmaz. Üçüncü yol yok. Fotoğrafı karartmamak
-için metni fotoğraftan çektik.
+- Özne sağda, keskin (3 kat Lanczos + keskinleştirme ile büyütüldü)
+- Sol taraf aynı fotoğraftan türetilmiş, ağır bulanıklaştırılmış açık alan
+- Fotoğrafın siyah noktası yukarı çekildi — **karartılmadı, aydınlatıldı**,
+  böylece koyu lacivert metin doğrudan üstünde okunuyor
+- Sayfada hiçbir perde, beyaz yüzey ya da kutu yok
 
-**Değiştirmek için** `assets/arka.jpg` dosyasının üzerine yaz, adını
-değiştirme.
+İçerik sütunu sola yaslı; sağdaki boşluk özne için ayrılmış. Dar
+ekranlarda (1080 px altı) fotoğrafın açık tarafı gösteriliyor.
 
-Boyut önerisi: en az 1600 piksel genişlik. Daha küçüğü tam ekranda
-bulanıklaşır — mevcut görsel 338 pikselden 3 kat büyütüldü, o yüzden
-yumuşak duruyor. Dikey görseller telefonda, yatay görseller
-bilgisayarda daha iyi oturur. 1 MB'ın altında tut.
+**Değiştirmek için** `assets/arka.jpg` üzerine yaz. Ham bir fotoğrafı
+doğrudan koyarsan muhtemelen okunmaz — yeniden kompozisyon gerekir,
+söyle yaparım. Hazır dosya koyacaksan: 16:9, en az 1920 px genişlik,
+sol tarafı açık ve sade, özne sağda.
 
-Fotoğrafın telifine dikkat: depo herkese açık, oraya koyduğun her dosyayı
-isteyen indirebilir.
+Fotoğrafın telifine dikkat: depo herkese açık.
 
 ## Nasıl çalışır
 

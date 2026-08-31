@@ -1327,101 +1327,80 @@ footer{border-top:1px solid var(--line); color:var(--ink-3);}
 
 
 
+
 /* ============================================================
-   23. REV 17 — FOTOĞRAF TÜM SAYFADA, İÇERİK OKUNUR SAYFADA
+   24. REV 18 — FOTOĞRAF SAYFAYA GÖRE KURULDU
 
-   Fotoğraf sabit, boydan boya, sıfır karartma ve sıfır filtre.
-   Üst şerit ve kahraman alan doğrudan fotoğrafın üstünde duruyor —
-   orada az yazı var, beyaz hale ile okunuyor.
+   Fotoğraf artık sayfanın ölçüsünde: 2560×1440, 16:9.
+   Özne sağda keskin; sol taraf aynı fotoğraftan türetilmiş açık bir
+   alan. Fotoğraf karartılmadı, tam tersi — siyah noktası yukarı
+   çekilip aydınlatıldı, böylece koyu lacivert metin doğrudan üstünde
+   okunuyor. Sayfada hiçbir perde, hiçbir beyaz yüzey yok.
 
-   Sekmelerden aşağısı — asıl okuma alanı — kendi açık yüzeyinde.
-   Fotoğrafın üstüne serilmiş bir kağıt gibi: solda ve sağda fotoğraf
-   görünmeye devam ediyor. Fotoğrafa dokunmuyoruz, yazıyı fotoğraftan
-   çekiyoruz. Tek çalışan yol bu.
+   İçerik sütunu sola yaslı; sağdaki boşluk özne için ayrılmış.
    ============================================================ */
 
 body::before{
   content:""; position:fixed; inset:0; z-index:-2;
   background-image:var(--foto,url(assets/arka.jpg));
   background-size:cover;
-  background-position:center 22%;
+  background-position:right center;
   background-repeat:no-repeat;
 }
 body::after{display:none;}
 
-/* --- Fotoğrafın üstünde duran kısım: hale ile okunuyor --- */
+/* Perde ve beyaz yüzeyler tamamen kalktı */
+.wrap,.wrap.hero,.wrap:not(.hero),footer{
+  background:transparent; box-shadow:none; border-left:0; border-right:0;
+}
+.hero,.hero h1,body{text-shadow:none;}
 
+/* İçerik sola yaslı; sağ kenarda özne için yer bırakılıyor */
+:root{--w:900px;}
+.wrap{margin-left:0; margin-right:auto;}
+@media(min-width:1080px){
+  .wrap{
+    max-width:min(var(--w), calc(100vw - 340px));
+    margin-left:max(24px, calc((100vw - 1320px) / 2));
+  }
+  .head-fix > .top,.head-fix > .tabs-w{
+    max-width:none;
+  }
+  .top-in,.tabs{
+    max-width:min(var(--w), calc(100vw - 340px));
+    margin-left:max(24px, calc((100vw - 1320px) / 2));
+    margin-right:auto;
+  }
+}
+
+/* Üst şerit: fotoğrafın üstünde ince bir cam */
 .head-fix{
-  background:rgba(255,255,255,.86);
-  backdrop-filter:blur(18px) saturate(1.3);
-  -webkit-backdrop-filter:blur(18px) saturate(1.3);
+  background:rgba(255,255,255,.62);
+  backdrop-filter:blur(16px) saturate(1.25);
+  -webkit-backdrop-filter:blur(16px) saturate(1.25);
+  border-bottom:1px solid rgba(14,34,64,.14);
 }
 
-.hero-band{background:transparent;}
-.hero{
-  text-shadow:
-    0 0 4px rgba(255,255,255,.95),
-    0 0 14px rgba(255,255,255,.85),
-    0 1px 3px rgba(255,255,255,.92);
+/* Açık zeminde çizgiler ve yüzeyler */
+:root,:root[data-theme="light"]{
+  --line:rgba(14,34,64,.16);
+  --line-2:rgba(14,34,64,.28);
+  --soft:rgba(255,255,255,.5);
 }
-.hero h1{
-  text-shadow:
-    0 0 8px rgba(255,255,255,.98),
-    0 0 26px rgba(255,255,255,.9),
-    0 2px 5px rgba(255,255,255,.95);
-}
-.hero .lede,.hero .simdi-v,.hero .cd-n,.hero .stat-n{color:var(--ink);}
-.hero .bar{background:rgba(255,255,255,.55); border-color:rgba(14,34,64,.18);}
-.hero .simdi{border-left-color:var(--cherry);}
+.hero .bar,.bar{background:rgba(255,255,255,.62); border-color:rgba(14,34,64,.16);}
+th{background:rgba(255,255,255,.45);}
+tbody tr:hover td{background:rgba(255,255,255,.5);}
+.note{background:rgba(255,255,255,.5);}
+.chk:hover,.rrow:hover{background:rgba(255,255,255,.55);}
+.acc[open] > summary{background:rgba(255,255,255,.5);}
+.top .lang{background:rgba(255,255,255,.55);}
 
-/* --- Sekmelerden aşağısı: okuma yüzeyi --- */
-
-.wrap:not(.hero){
-  background:rgba(255,255,255,.93);
-  border-left:1px solid rgba(255,255,255,.6);
-  border-right:1px solid rgba(255,255,255,.6);
-  box-shadow:0 0 60px -20px rgba(14,34,64,.35);
-  padding-top:26px;
-  padding-bottom:8px;
-  text-shadow:none;
-}
-footer{
-  background:rgba(255,255,255,.93);
-  max-width:var(--w); margin:0 auto;
-  padding-left:22px; padding-right:22px;
-  box-shadow:0 0 60px -20px rgba(14,34,64,.35);
+@media(max-width:1079px){
+  /* Dar ekranda özne için yer yok: fotoğrafın açık tarafı gösteriliyor */
+  body::before{background-position:left center;}
+  .wrap{margin-left:auto;}
 }
 
-/* Okuma yüzeyinde çizgiler yumuşasın */
-.wrap:not(.hero){
-  --line:rgba(14,34,64,.13);
-  --line-2:rgba(14,34,64,.24);
-  --soft:rgba(14,34,64,.045);
-}
-
-@media(max-width:760px){
-  body::before{background-position:center top;}
-  .wrap:not(.hero),footer{border-left:0; border-right:0;}
-}
-
-/* Kahraman alan da okuma yüzeyine dahil: koyu şapka ve yüz üzerinde
-   hale yetmiyordu. Artık üst şerit + kahraman + içerik tek bir sütun;
-   fotoğraf bu sütunun iki yanında ve arkasında görünüyor. */
-.hero-band{background:transparent;}
-.wrap.hero{
-  background:rgba(255,255,255,.93);
-  border-left:1px solid rgba(255,255,255,.6);
-  border-right:1px solid rgba(255,255,255,.6);
-  box-shadow:0 0 60px -20px rgba(14,34,64,.35);
-  text-shadow:none;
-}
-.hero,.hero h1{text-shadow:none;}
-.wrap:not(.hero){padding-top:4px;}
-.hero .bar{background:var(--soft); border-color:var(--line);}
-
-/* Fotoğraf sütunun yanlarında daha çok görünsün */
-:root{--w:880px;}
-
-@media(min-width:1000px){
-  .head-fix > .top,.head-fix > .tabs-w{max-width:calc(var(--w) + 44px); margin:0 auto;}
-}
+/* Sekme rozetleri (%8, %32, 2/21) fotoğrafın üstünde soluk kalıyordu */
+.tab-n{color:var(--ink-2); font-weight:700;}
+.tab.on .tab-n{color:var(--vurgu);}
