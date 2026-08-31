@@ -61,23 +61,23 @@ koyulaştırılmış tonlarla yapıyor.
 
 ## Arka plan fotoğrafı
 
-Zemindeki görsel: **`assets/arka.jpg`**
+Fotoğraf: **`assets/arka.jpg`**
 
-Şu an oradaki görsel geçici bir yer tutucu — kırmızıdan maviye giden
-yumuşak bir renk geçişi. Beğendiğin bir fotoğraf bulduğunda **o dosyanın
-üzerine yaz, adını `arka.jpg` olarak bırak.** Başka hiçbir şey
-değiştirmen gerekmiyor, panel açılışta onu kullanır.
+Kahraman şeridin sağında, kendi çözünürlüğünde duruyor. Üzerinde hiçbir
+karartma ya da renk filtresi yok — sadece sol ve alt kenarı sayfaya
+eriyor ki kesik durmasın.
 
-Öneriler:
-- En az 2000 piksel genişlik, yatay (16:9 ya da daha geniş)
-- Üst tarafı sade olsun — başlık ve rakamlar oraya oturuyor
-- 1 MB'ın altında tut, yoksa telefonda açılış yavaşlar
+**Değiştirmek için** o dosyanın üzerine yaz, adını `arka.jpg` bırak.
 
-Üstündeki beyaz perde sayesinde hangi fotoğrafı koyarsan koy yazılar
-okunur kalır; perde yukarıda ince, aşağı indikçe kalınlaşıyor.
+Boyut önerisi: dikey (portre) görseller bu yerleşime en iyi oturuyor,
+yaklaşık 2:3 oran. En az 700 piksel genişlik olsun — daha küçüğü
+büyütülünce bulanıklaşır. 1 MB'ın altında tut.
+
+Tam ekran zemin istersen söyle, tek satırla değişir; ama o zaman
+yazıların okunması için bir perde gerekir.
 
 Fotoğrafın telifine dikkat: depo herkese açık, oraya koyduğun her dosyayı
-isteyen indirebilir. Kendi çektiğin ya da lisansı uygun bir görsel kullan.
+isteyen indirebilir.
 
 ## Nasıl çalışır
 

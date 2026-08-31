@@ -262,12 +262,8 @@ body::before{
   background:var(--hero-bg);
   border-bottom:1px solid var(--line);
 }
-.hero-band::before{
-  content:""; position:absolute; inset:0;
-  background-image:var(--foto,none);
-  background-size:cover; background-position:center 55%;
-  opacity:.30; filter:grayscale(.4) contrast(1.1);
-}
+/* (Eski zemin fotoğrafı kuralı kaldırıldı — REV 16'da yerini
+   kahraman şeridin sağındaki fotoğraf aldı.) */
 #heroCanvas{
   position:absolute; inset:0; width:100%; height:100%;
   display:block; pointer-events:none;
@@ -1142,23 +1138,18 @@ body{
   background-color:transparent;
   color:var(--ink);
 }
+/* Karartma yok. Sayfa zemini temiz; fotoğraf sadece kahraman
+   şeridin sağında, kendi çözünürlüğünde duruyor. */
 body::before{
   content:""; position:fixed; inset:0; z-index:-2;
-  background-image:var(--foto,url(assets/arka.jpg));
-  background-size:cover; background-position:center 30%;
-  background-repeat:no-repeat;
+  background:
+    linear-gradient(180deg,#eef2f8 0%,#f6f7fa 42%,#fbfbfc 100%);
 }
-/* Perde: görsel görünsün ama yazı okunsun. Üstte açık, metnin
-   yoğunlaştığı aşağıda daha kapalı. */
 body::after{
   content:""; position:fixed; inset:0; z-index:-1; pointer-events:none;
   background:
-    linear-gradient(180deg,
-      rgba(255,255,255,.38) 0%,
-      rgba(255,255,255,.62) 28%,
-      rgba(255,255,255,.86) 60%,
-      rgba(255,255,255,.94) 100%),
-    radial-gradient(900px 500px at 8% 0%, color-mix(in srgb,var(--vurgu) 9%,transparent), transparent 62%);
+    radial-gradient(820px 460px at 6% 0%, color-mix(in srgb,var(--vurgu) 11%,transparent), transparent 62%),
+    radial-gradient(760px 440px at 96% 4%, color-mix(in srgb,var(--blue) 9%,transparent), transparent 62%);
   transition:background .5s ease;
 }
 
@@ -1333,3 +1324,53 @@ footer{border-top:1px solid var(--line); color:var(--ink-3);}
 .simdi.bitti{border-left-color:var(--line-2);}
 .simdi.bitti .simdi-k{color:var(--ink-3);}
 .simdi.bitti .simdi-v{color:var(--ink-3); text-decoration-color:var(--line-2);}
+
+/* ============================================================
+   21. REV 16 — FOTOĞRAF KENDİ BOYUTUNDA, KARARTMA YOK
+
+   Fotoğraf 338×601. Tam ekran zemin yapılırsa altı kat büyür ve
+   bulanıklaşır; ayrıca dikey olduğu için geniş ekranda yüzü kırpar.
+   Bu yüzden kahraman şeridin sağında, kendi çözünürlüğünde duruyor.
+   Üzerinde hiçbir karartma yok — sol kenarı sayfaya eriyor, o kadar.
+   ============================================================ */
+
+.hero-band{
+  position:relative;
+  isolation:isolate;
+  overflow:hidden;
+}
+
+.hero-band::before{
+  content:"";
+  position:absolute; top:0; right:0; bottom:0; left:auto;
+  width:min(38vw, 420px);
+  opacity:1; filter:none;
+  background-image:var(--foto,url(assets/arka.jpg));
+  background-size:auto 100%;
+  background-position:right top;
+  background-repeat:no-repeat;
+  z-index:-1;
+  /* Sol kenar ve alt kenar sayfaya erisin — kesik durmasın */
+  -webkit-mask-image:
+    linear-gradient(90deg, transparent 0%, #000 34%, #000 100%),
+    linear-gradient(180deg, #000 0%, #000 72%, transparent 100%);
+  -webkit-mask-composite:source-in;
+  mask-image:
+    linear-gradient(90deg, transparent 0%, #000 34%, #000 100%),
+    linear-gradient(180deg, #000 0%, #000 72%, transparent 100%);
+  mask-composite:intersect;
+}
+
+/* Fotoğraf sağda durduğu için metin sütunlarını sola çekiyoruz */
+.hero-grid{grid-template-columns:1.05fr .95fr; max-width:min(100%, 760px);}
+.stats{max-width:min(100%, 760px);}
+
+@media(max-width:1100px){
+  .hero-band::before{width:min(32vw, 320px); opacity:.9;}
+  .hero-grid,.stats{max-width:none;}
+  .hero-grid{grid-template-columns:1fr;}
+}
+@media(max-width:760px){
+  /* Dar ekranda fotoğraf metnin altında kalırdı: kapatıyoruz. */
+  .hero-band::before{display:none;}
+}

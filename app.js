@@ -1427,7 +1427,7 @@
       const yay   = Math.min(96, bandH * 0.17);
       const x0 = W * 0.07, y0 = taban;
       const cx = W * 0.50, cy = taban - yay * 2;
-      const x1 = W * 0.93, y1 = taban - yay * 0.55;
+      const x1 = W * 0.84, y1 = taban - yay * 0.55;  // sağdaki fotoğrafın altına girmesin
       const m = 1 - u;
       return {
         x: m * m * x0 + 2 * m * u * cx + u * u * x1,
