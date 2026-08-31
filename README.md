@@ -61,12 +61,13 @@ koyulaştırılmış tonlarla yapıyor.
 
 ## Arka plan fotoğrafı
 
-Fotoğraf: **`assets/arka.jpg`** — 2560×1440, sabit, tüm sayfayı kaplıyor.
+Fotoğraf: **`assets/arka.jpg`** — 3200×1800, sabit, tüm sayfayı kaplıyor.
 
 Bu dosya ham fotoğraf değil, sayfaya göre kurulmuş bir kompozisyon:
 
 - Özne sağda, keskin (3 kat Lanczos + keskinleştirme ile büyütüldü)
-- Sol taraf aynı fotoğraftan türetilmiş, ağır bulanıklaştırılmış açık alan
+- Özne sağ kenara tam dayalı; sol taraf fotoğrafın aynalanıp ağır
+  bulanıklaştırılmasıyla üretildi, sahnenin kendi tonları sürüyor
 - Fotoğrafın siyah noktası yukarı çekildi — **karartılmadı, aydınlatıldı**,
   böylece koyu lacivert metin doğrudan üstünde okunuyor
 - Sayfada hiçbir perde, beyaz yüzey ya da kutu yok
