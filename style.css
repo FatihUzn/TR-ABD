@@ -1072,9 +1072,9 @@ h1{
 /* ============================================================
    20. REV 13 — AÇIK TEMA, MAVİ ANA RENK, KUTUSUZ DÜZEN
 
-   · Zemin: boydan boya görsel (arka.svg — özgün çizim; klasöre
-     arka.jpg konursa onun yerine geçer). Üstünde beyaz bir perde
-     var, yoksa yazı okunmuyor.
+   · Zemin: boydan boya görsel — assets/arka.jpg. Üstünde beyaz bir
+     perde var, yoksa yazı okunmuyor. Fotoğrafı değiştirmek için o
+     dosyanın üzerine yaz, adı aynı kalsın.
    · Mavi taşıyıcı renk: yapı, başlıklar, aktif durumlar.
    · Kırmızı vurgu: rakamlar, ana başlıklar, ilerleme, ok.
    · Kutu yok: kart, çerçeve ve gölge kalktı. Ayırıcı olarak
@@ -1144,7 +1144,7 @@ body{
 }
 body::before{
   content:""; position:fixed; inset:0; z-index:-2;
-  background-image:var(--foto,url(assets/arka.svg));
+  background-image:var(--foto,url(assets/arka.jpg));
   background-size:cover; background-position:center 30%;
   background-repeat:no-repeat;
 }
@@ -1154,10 +1154,10 @@ body::after{
   content:""; position:fixed; inset:0; z-index:-1; pointer-events:none;
   background:
     linear-gradient(180deg,
-      rgba(255,255,255,.52) 0%,
-      rgba(255,255,255,.72) 30%,
-      rgba(255,255,255,.90) 62%,
-      rgba(255,255,255,.96) 100%),
+      rgba(255,255,255,.38) 0%,
+      rgba(255,255,255,.62) 28%,
+      rgba(255,255,255,.86) 60%,
+      rgba(255,255,255,.94) 100%),
     radial-gradient(900px 500px at 8% 0%, color-mix(in srgb,var(--vurgu) 9%,transparent), transparent 62%);
   transition:background .5s ease;
 }
@@ -1327,3 +1327,9 @@ footer{border-top:1px solid var(--line); color:var(--ink-3);}
    kutular kalkınca içerik ekranın kenarına yapıştı. */
 .hero{padding-left:22px; padding-right:22px;}
 @media(max-width:680px){ .hero{padding-left:16px; padding-right:16px;} }
+
+/* "Şu an" bloğu işaretlenmişse: koyu temadan kalma beyaz tonlar
+   açık zeminde görünmez oluyordu. */
+.simdi.bitti{border-left-color:var(--line-2);}
+.simdi.bitti .simdi-k{color:var(--ink-3);}
+.simdi.bitti .simdi-v{color:var(--ink-3); text-decoration-color:var(--line-2);}

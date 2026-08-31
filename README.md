@@ -61,13 +61,23 @@ koyulaştırılmış tonlarla yapıyor.
 
 ## Arka plan fotoğrafı
 
-Klasöre **`arka.jpg`** adında bir görsel koyarsan canvas'ın altına
-girer, sönük ve gri tonlu bir katman olarak. Dosya yoksa şerit saf
-siyah kalır.
+Zemindeki görsel: **`assets/arka.jpg`**
 
-Telifli bir fotoğrafı (üniversite tanıtım görselleri dahil) herkese açık
-bir depoya koymak hak ihlali olur — kendi çektiğin ya da lisansı uygun
-bir görsel kullan.
+Şu an oradaki görsel geçici bir yer tutucu — kırmızıdan maviye giden
+yumuşak bir renk geçişi. Beğendiğin bir fotoğraf bulduğunda **o dosyanın
+üzerine yaz, adını `arka.jpg` olarak bırak.** Başka hiçbir şey
+değiştirmen gerekmiyor, panel açılışta onu kullanır.
+
+Öneriler:
+- En az 2000 piksel genişlik, yatay (16:9 ya da daha geniş)
+- Üst tarafı sade olsun — başlık ve rakamlar oraya oturuyor
+- 1 MB'ın altında tut, yoksa telefonda açılış yavaşlar
+
+Üstündeki beyaz perde sayesinde hangi fotoğrafı koyarsan koy yazılar
+okunur kalır; perde yukarıda ince, aşağı indikçe kalınlaşıyor.
+
+Fotoğrafın telifine dikkat: depo herkese açık, oraya koyduğun her dosyayı
+isteyen indirebilir. Kendi çektiğin ya da lisansı uygun bir görsel kullan.
 
 ## Nasıl çalışır
 

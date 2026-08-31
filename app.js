@@ -1356,26 +1356,6 @@
   }, { passive: true });
 
   // ============================================================
-  // 12c. ARKA PLAN GÖRSELİ
-  // Klasörde arka.jpg / arka.png varsa kahraman şeridin zemini o olur.
-  // Yoksa çizilmiş kampüs cephesi (arka.svg) kalır. Fotoğraf konunca
-  // üstüne kiraz-mavi duotone örtü geliyor, yazı okunur kalsın diye.
-  // ============================================================
-  (function arkaFoto() {
-    const band = document.getElementById('heroBand');
-    if (!band) return;
-    // Tek dosya yokluyoruz (arka.jpg). Birden çok uzantı denemek
-    // konsolu gereksiz 404'lerle dolduruyordu.
-    const im = new Image();
-    im.onload = function () {
-      // Zemin görseli body'de; değişkeni kök öğeye yazıyoruz.
-      document.documentElement.style.setProperty('--foto', 'url("arka.jpg")');
-      band.classList.add('foto');
-    };
-    im.src = 'arka.jpg';
-  })();
-
-  // ============================================================
   // 12d. KAHRAMAN GÖRSELİ
   //
   // Kütüphane yok, üçüncü parti yok. Saf canvas, birkaç kilobayt,
@@ -1405,16 +1385,15 @@
       catch (e) { return false; }
     })();
 
-    // Canvas artık tüm ekranı kaplıyor (position:fixed). Yıldızlar
-    // her yerde, yol ise sadece kahraman şeridin bulunduğu bantta.
+    // Canvas tüm ekranı kaplıyor (position:fixed). Yıldızlar her yerde,
+    // yol ise sadece kahraman şeridin bulunduğu bantta.
     let bandY = 0, bandH = 400;
 
     function bandiOlc() {
       const band = document.getElementById('heroBand');
       if (!band) return;
       const r = band.getBoundingClientRect();
-      bandY = r.top;
-      bandH = r.height;
+      bandY = r.top; bandH = r.height;
     }
 
     function boyutla() {
@@ -1443,10 +1422,9 @@
     }
 
     // Yol: şeridin alt bandında, içeriğin altından geçiyor.
-    // Kendi alanı var ki kartların arkasında kaybolmasın.
     function P(u) {
-      const taban = bandY + bandH - 34;        // yolun oturduğu çizgi
-      const yay   = Math.min(96, bandH * 0.17); // kavis yüksekliği
+      const taban = bandY + bandH - 34;
+      const yay   = Math.min(96, bandH * 0.17);
       const x0 = W * 0.07, y0 = taban;
       const cx = W * 0.50, cy = taban - yay * 2;
       const x1 = W * 0.93, y1 = taban - yay * 0.55;
@@ -1483,7 +1461,7 @@
       // Açık temada yıldız çizilmiyor: gündüz gökyüzünde yıldız olmaz.
       const acik = document.documentElement.getAttribute('data-theme') !== 'dark';
 
-      // 1. Yıldızlar — kaydırdıkça hafif paralaks, uzay derinlik kazansın
+      // 1. Yıldızlar — kaydırdıkça hafif paralaks
       const kay = (window.scrollY || 0) * 0.06;
       for (let i = 0; acik ? false : i < yildizlar.length; i++) {
         const s = yildizlar[i];
@@ -1509,7 +1487,7 @@
         const q = P(u);
         if (u === 0) ctx.moveTo(q.x, q.y); else ctx.lineTo(q.x, q.y);
       }
-      ctx.strokeStyle = acik ? 'rgba(14,34,64,0.20)' : 'rgba(255,255,255,0.10)';
+      ctx.strokeStyle = acik ? 'rgba(14,34,64,0.22)' : 'rgba(255,255,255,0.10)';
       ctx.lineWidth = 1.25;
       ctx.setLineDash([5, 7]);
       ctx.stroke();
@@ -1543,11 +1521,11 @@
         const q = P(u);
         const par = azHareket ? 1 : 0.75 + 0.25 * Math.sin(t * 1.6 + i * 0.7);
         const kar = u;  // yolun neresinde: kırmızıdan maviye
-        const c1 = acik ? [200, 16, 46] : [255, 45, 85];
-        const c2 = acik ? [10, 79, 180] : [61, 139, 255];
-        const R = Math.round(c1[0] + (c2[0] - c1[0]) * kar);
-        const G = Math.round(c1[1] + (c2[1] - c1[1]) * kar);
-        const B = Math.round(c1[2] + (c2[2] - c1[2]) * kar);
+        const k1 = acik ? [200, 16, 46] : [255, 45, 85];
+        const k2 = acik ? [10, 79, 180] : [61, 139, 255];
+        const R = Math.round(k1[0] + (k2[0] - k1[0]) * kar);
+        const G = Math.round(k1[1] + (k2[1] - k1[1]) * kar);
+        const B = Math.round(k1[2] + (k2[2] - k1[2]) * kar);
         ctx.beginPath();
         ctx.arc(q.x, q.y, 2.6, 0, 6.2832);
         ctx.fillStyle = 'rgba(' + R + ',' + G + ',' + B + ',' + (0.85 * par) + ')';
